@@ -1,0 +1,16 @@
+{
+  "name": "sasame",
+  "version": "1.0.0",
+  "description": "sasasame",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Uriah Sanders",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1",
+    "pug": "^2.0.4"
+  }
+}
