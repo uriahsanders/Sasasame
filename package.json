@@ -4,13 +4,16 @@
   "description": "sasasame",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "author": "Uriah Sanders",
+  "author": "Uriah Sanders, Mohamed Hassan",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "mongoose": "^5.7.1",
     "pug": "^2.0.4"
+  },
+  "devDependencies": {
+    "ejs": "^2.7.1"
   }
 }
