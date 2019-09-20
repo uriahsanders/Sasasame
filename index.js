@@ -1,14 +1,25 @@
+'use strict';
 const express = require('express');
 const mongoose = require('mongoose');
 const ejs = require('ejs');
 
 var app = express();
-
 app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-mongoose.connect('mongodb://localhost/sasame');
+const options = {
+    useNewUrlParser: true
+};
+mongoose.connect('mongodb://localhost/sasame', { useNewUrlParser: true }, function(err){
+
+    if (err) {
+        return console.error(err);
+    }
+    setTimeout( () => {
+        mongoose.connect('mongodb://localhost/sasame', options);
+    }, 5000);
+});
 var postSchema = mongoose.Schema({
     author: String,
     rank: Number, //rank is the average of the array
@@ -21,9 +32,21 @@ app.get('/', function(req, res) {
         if(!err) {
             res.render('index', { posts });
         }
-    })
+    });
 });
 
+app.get('/about', function(req, res) {
+    res.render('about', { posts });
+});
+app.get('/blog', function(req, res) {
+    res.render('blog', { posts });
+});
+app.get('/team', function(req, res) {
+    res.render('blog', { posts });
+});
+app.get('/applications', function(req, res) {
+    res.render('blog', { posts });
+});
 var make_post = function(author, rank, content) {
     let post = new Post({
         author: author,
@@ -31,7 +54,7 @@ var make_post = function(author, rank, content) {
         content: content
     });
     post.save().then((data) => {
-        console.log("inserted", data.content)
+        console.log("inserted", data.content);
     }).catch((err) => {
         console.log(err);
     });
@@ -102,5 +125,5 @@ var branch = function(){
 };
 
 app.listen(3000, () => {
-    console.log("Sasame Started...")
+    console.log("Sasame Started...");
 });

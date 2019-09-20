@@ -1,3 +1,105 @@
 body {
     margin: 0;
+    background: #fff;
+    color: #fff;
+    width: 100%;
+    color: #FBFBFB;
+    font-family: 'Roboto Mono', monospace;
+}
+#top{
+    border: 1px solid black;
+    margin: auto;
+    text-align: center;
+    background: #353535;
+    padding: 20px;
+}
+#alpha{
+
+    margin: auto;
+    text-align: center;
+    font-size: .8em;
+    font-weight: 300;
+}
+#bottom{
+
+    text-align: center;
+    margin: auto;
+    padding: 20px;
+}
+
+#seed {
+    width: 100px;
+    margin: auto;
+    display: block;
+    margin-top: 50px;
+
+}
+#nav{
+    margin-top: 50px;
+}
+.nav_li{
+    display: inline;
+    margin: 20px;
+    font-weight: 300;
+    font-size: .8em;
+    margin-top: 40px;
+
+}
+.nav_a{
+    text-decoration: none;
+    color: #fff;
+
+}
+.inactive{
+    opacity: 0.5;
+    cursor: not-allowed;
+
+}
+#sasame_text_area{
+    margin: 10px;
+    padding: 10px;
+    width: 65%;
+    border: 1px dotted #353535;
+    height: 200px;
+}
+.sasame_button{
+    border: 3px solid #353535;
+    background: #353535;
+    color: #fff;
+    margin: 10px;
+    width: 120px;
+    padding: 10px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: .8em;
+}
+#hero{
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+#hero_sub{
+
+    font-weight: 300;
+    font-size: .8em;
+    word-spacing: -4px;
+}
+#hero_sub_seed{
+    color: #FFF1BB;
+
+}
+#main_sasame{
+    font-weight: 500;
+    font-size: 1.5em;
+}
+#version{
+    font-weight: 300;
+    font-size: .3em;
+}
+#about-sasame{
+    color: #353535;
+    border: 1px dotted #353535;
+    margin: auto;
+    text-align: left;
+    padding: 20px;
+    width: 80%;
 }
