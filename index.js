@@ -20,15 +20,15 @@ mongoose.connect('mongodb://localhost/sasame', { useNewUrlParser: true }, functi
         mongoose.connect('mongodb://localhost/sasame', options);
     }, 5000);
 });
-var postSchema = mongoose.Schema({
+var passageSchema = mongoose.Schema({
     author: String,
     rank: Number, //rank is the average of the array
     content: String
 });
-var Post = mongoose.model('Post', postSchema, 'Posts');
+var Passage = mongoose.model('Post', passageSchema, 'Posts');
 
 app.get('/', function(req, res) {
-    Post.find({}, (err, posts) => {
+    Passage.find({}, (err, posts) => {
         if(!err) {
             res.render('index', { posts });
         }
@@ -47,8 +47,8 @@ app.get('/team', function(req, res) {
 app.get('/applications', function(req, res) {
     res.render('blog', { posts });
 });
-var make_post = function(author, rank, content) {
-    let post = new Post({
+var add_passage = function(author, rank, content) {
+    let post = new Passage({
         author: author,
         rank: rank,
         content: content
@@ -65,7 +65,7 @@ app.get('/submit', (req, res) => {
     // author,
     // rank,
     // content
-    make_post(info.name, 0, info.content);
+    add_passage(info.name, 0, info.content);
     res.render("index");
 });
 
@@ -76,7 +76,7 @@ app.get('/submit', (req, res) => {
 // });
 // post.save();
 
-var rank_post = function(id, rank){
+var rank_passage = function(id, rank){
     Post.find({_id: id}).exec(function(err, res){
         res.rank.push(rank);
         let average = (array) => array.reduce((a, b) => a + b) / array.length;
@@ -127,3 +127,8 @@ var branch = function(){
 app.listen(3000, () => {
     console.log("Sasame Started...");
 });
+
+// REWRITE HERE
+
+
+//
