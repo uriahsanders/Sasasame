@@ -28,11 +28,17 @@ var passageSchema = mongoose.Schema({
 var Passage = mongoose.model('Post', passageSchema, 'Posts');
 
 app.get('/', function(req, res) {
-    Passage.find({}, (err, posts) => {
+    Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
         if(!err) {
-            res.render('index', { posts });
+            res.render('index', { passage: passage });
         }
+        console.log(err);
     });
+    // Passage.find({}, (err, passages) => {
+    //     if(!err) {
+    //         res.render('index', { fruit: passages });
+    //     }
+    // });
 });
 
 app.get('/about', function(req, res) {
@@ -47,10 +53,8 @@ app.get('/team', function(req, res) {
 app.get('/applications', function(req, res) {
     res.render('blog', { posts });
 });
-var add_passage = function(author, rank, content) {
+var add_passage = function(content) {
     let post = new Passage({
-        author: author,
-        rank: rank,
         content: content
     });
     post.save().then((data) => {
@@ -60,13 +64,23 @@ var add_passage = function(author, rank, content) {
     });
 };
 
-app.get('/submit', (req, res) => {
+app.get('/feed_sasame', (req, res) => {
     let info = req.query;
     // author,
     // rank,
     // content
-    add_passage(info.name, 0, info.content);
-    res.render("index");
+    Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
+        if (info.content != passage.content){
+            add_passage(info.content);
+            res.redirect("/");
+        }
+    });
+});
+app.get('/fruit', (req, res) => {
+    let test = null;
+    Passage.find().sort([['_id', 1]]).exec(function(err, response){
+        res.render("fruit", {fruit: response});
+    });
 });
 
 // var post = new Post({

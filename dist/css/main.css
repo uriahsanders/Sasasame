@@ -50,6 +50,11 @@ body {
     color: #fff;
 
 }
+.link{
+    text-decoration: none;
+    color: #353535;
+    opacity: 0.6;
+}
 .inactive{
     opacity: 0.5;
     cursor: not-allowed;
@@ -61,8 +66,9 @@ body {
     width: 65%;
     border: 1px dotted #353535;
     height: 200px;
+    font-size: 1em;
 }
-.sasame_button{
+.sasame_button, .eat_fruit {
     border: 3px solid #353535;
     background: #353535;
     color: #fff;
@@ -72,6 +78,10 @@ body {
     cursor: pointer;
     display: inline-block;
     font-size: .8em;
+}
+#fruit{
+    color: #353535;
+
 }
 #hero{
     margin-bottom: 10px;
@@ -89,11 +99,11 @@ body {
 }
 #main_sasame{
     font-weight: 500;
-    font-size: 1.5em;
+    font-size: 2em;
 }
 #version{
     font-weight: 300;
-    font-size: .3em;
+    font-size: .8em;
 }
 #about-sasame{
     color: #353535;
@@ -102,4 +112,23 @@ body {
     text-align: left;
     padding: 20px;
     width: 80%;
+}
+#blog{
+    color: #000;
+    text-align: center;
+    margin: auto;
+}
+.blog_title{
+    padding: 10px;
+}
+.blog_content{
+    padding: 10px;
+    text-align: left;
+}
+.blog_post{
+    border: 1px dotted #000;
+    width: 80%;
+    padding: 10px;
+    margin: auto;
+    margin-bottom: 20px;
 }
