@@ -45,6 +45,21 @@ body {
     margin-top: 40px;
 
 }
+@media screen and (max-width: 550px){
+    #nav_ul{
+        text-align: center;
+        margin: 0;
+        padding: 0;
+
+    }
+
+    .nav_li{
+        display: block;
+        /* margin-bottom: 5px; */
+        list-style-type: none;
+        margin: 10px;
+    }
+}
 .nav_a{
     text-decoration: none;
     color: #fff;
