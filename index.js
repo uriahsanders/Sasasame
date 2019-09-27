@@ -141,7 +141,7 @@ var branch = function(){
     //Allow user to start their own Sasamatic Seed
 };
 
-app.listen(80, () => {
+app.listen(3000, () => {
     console.log("Sasame Started...");
 });
 
