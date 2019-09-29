@@ -1,0 +1,69 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sasame</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,400i,500,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="shortcut icon" type="image/x-icon" href="images/bitmap.png" />
+        <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div id="control_panel">
+            <div id="control_nav">
+                    <div id="main_header">
+                        Control Panel
+                    </div>
+                    <br/>
+                <!-- Here is where you have -->
+                <!-- the options to: -->
+                <!-- (Add Passage) -->
+                <!-- (Add Highlighted to Category) -->
+                <!-- (Add Category) -->
+                <button class="control_button" id="add_passage">Add Passage</button>
+                <button class="control_button" id="add_category">Add Category</button>
+                <button class="control_button" id="add_passage_to_category">Add Passage to Category</button>
+            </div>
+            <div id="control_blocks">
+                <div class="control_block" id="code">
+                    <!-- You write JS in this block -->
+                    <!-- (Execute JS) (Add JS as passage) -->
+                    <!-- Important functions: -->
+                    <!-- (add_category(), add_passage_to_category()) -->
+                    Here you write JS:
+                    <button class="control_button" id="execute_js">Execute</button>
+                    <button class="control_button" id="add_js_as_passage">Add as Passage</button>
+
+                </div>
+                <div  class="control_block" id="book_of_sasame">
+                    <div class="header">
+                        The Book of Sasame
+                    </div>
+                    <!-- Here you read the book of Sasame from the beginning -->
+                    <!-- Add upon scroll -->
+                    <% book.forEach(function(f) { %>
+                        <p class="passage"><%= f.content %></p>
+                    <% }); %>
+
+                </div>
+                <div class="control_block" id="toc">
+                    <div class="header">
+                        Categories
+                    </div>
+                    <!-- Here you view categorization schemes -->
+                    <!-- * Click a category to view everything in it -->
+                    <div id="categories">
+                        <p class="category">Category</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <script>
+        </script>
+    </body>
+    <script src="js/app.js"></script>
+</html>

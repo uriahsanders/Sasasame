@@ -53,12 +53,18 @@ app.get('/team', function(req, res) {
 app.get('/applications', function(req, res) {
     res.render('blog', { posts });
 });
-var add_passage = function(content) {
+app.get('/control', function(req, res) {
+    Passage.find().sort([['_id', 1]]).exec(function(err, response){
+        res.render("control", {book: response});
+    });
+});
+var add_passage = function(content, callback) {
     let post = new Passage({
         content: content
     });
     post.save().then((data) => {
         console.log("inserted", data.content);
+        callback();
     }).catch((err) => {
         console.log(err);
     });
@@ -71,8 +77,9 @@ app.get('/feed_sasame', (req, res) => {
     // content
     Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
         if (info.content != passage.content){
-            add_passage(info.content);
-            res.redirect("/fruit");
+            add_passage(info.content, function(){
+                res.redirect("/fruit");
+            });
         }
         else{
             res.redirect("/");
