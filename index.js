@@ -169,69 +169,9 @@ var sieve = function(id, rank){
 var path = function(user_path){
     var paths = textForPathing; //same options
     //Grab records from DB in appropriate order depending on rank
-    
 };
-
-var save = function(){
-    //copy everything into /(sa)same
-    //database is copied but unlinked to original
-};
-
-//for the future
-
-var branch = function(){
-    //Allow user to start their own Sasamatic Seed
-};
-
 app.listen(3000, () => {
     console.log("Sasame Started...");
 });
 
-// REWRITE HERE
 
-
-//
-// * Someone tweets “I hate Donald Trump”
-// * For each groups of words in tweet, measure density of its category by num passages/categories within it
-// * Choose the densest group
-// * In this case ‘Donald Trump’
-// * ‘Donald Trump’ category will have every passage ever written about Donald Trump
-// * Iterate over passages
-// * check if passage is also in the ‘I’ category and ‘hate’ category and every other category in the string
-// * choose the passage that fits all first, or fits the most by the end.
-// * This should produce an agreeable statement.
-
-// Infinite Sieve
-// This function should be constantly expanded
-// in order to fractally categorize data.
-// But for now we will anchor on the densest word
-// and then find passages in that category that also match the other words
-var infinite_sieve = function(post){
-    //iterate over every group of words in post
-    //later we will need to clean all but single spaces and 'pure words'
-    words = post.split(' ');
-    num_words = words.length;
-    //we could do more but for now simply use the word
-    //which has the densest category
-    //as an anchor
-    var density = 0;
-    var anchor = null;
-    for(var i = 0; i < num_words; ++i){
-        temp = getDensityOfCategory(words[i]);
-        if(temp > density){
-            density = temp;
-            anchor = words[i];
-        }
-
-    }
-    // Now get all the passages in the category 'anchor'
-
-    //iterate through all passages
-    Passage.find().sort([['_id', 1]]).exec(function(err, passages){
-        for(var i = 0; i < passages.length; ++i){
-            content = passages[i].content;
-        }
-    });
-
-
-};

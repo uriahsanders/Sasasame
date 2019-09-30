@@ -35,7 +35,7 @@ body {
 
 }
 #little_seed {
-    width: 50px;
+    width: 80px;
     display: block;
     margin: auto;
     margin-bottom: 10px;
@@ -196,13 +196,17 @@ body {
     padding-top: 30px;
 }
 .control_button{
-    border: 1px solid white;
     padding: 10px;
     font-size: 1em;
     border: 1px solid #000;
     margin-bottom: 20px;
     width: 100%;
     cursor: pointer;
+    -webkit-appearance: none;
+}
+.control_button:hover{
+    background: #353535;
+    color: #fff;
 }
 .control_input{
     border: 1px solid #000;
@@ -269,12 +273,15 @@ body {
     color: darkgrey;
 
 }
-.up_one_level{
+.up_one_level_link{
     text-decoration: none;
     color: #fff;
-    font-size: .8em;
+}
+.up_one_level{
+    color: #fff;
+    font-size: .7em;
     font-weight: 200;
-    margin-top: 30px;
+    margin-top: 10px;
 
 }
 #mobile_book_menu{

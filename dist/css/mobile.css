@@ -3,12 +3,11 @@
         text-align: center;
         margin: 0;
         padding: 0;
-
+        margin-bottom: 10px;
     }
 
     .nav_li{
-        display: block;
-        /* margin-bottom: 5px; */
+        /* display: block; */
         list-style-type: none;
         margin: 10px;
     }
