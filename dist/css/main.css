@@ -98,6 +98,12 @@ body {
     margin: auto;
     margin-bottom: 20px;
     width: 75%;
+    padding: 10px;
+    cursor: default;
+}
+.fruit:hover{
+    border-bottom: 1px solid #353535;
+
 }
 #hero{
     margin-bottom: 10px;
@@ -170,6 +176,16 @@ body {
 #control_blocks{
     display: flex;
     justify-content: center;
+    padding: 30px;
+    padding-top: 15px;
+}
+.control_block{
+    /* border: 1px solid black; */
+    /* margin: 20px; */
+    margin-top: 0px;
+    width: 30%;
+    padding: 20px;
+    padding-top: 0px;
 }
 #control_nav{
     padding: 20px;
@@ -206,7 +222,6 @@ body {
 }
 #code{
     border-right: 1px solid #fff;
-    padding: 20px;
     text-align: center;
     word-wrap: break-word;
 }
@@ -217,9 +232,8 @@ body {
     font-size: 1.1em;
 }
 #book_of_sasame{
-    border-right: 1px solid #fff;
-    padding: 20px;
     word-wrap: break-word;
+    cursor: default;
 }
 .passage, .category{
     /* border-bottom: 1px dotted grey; */
@@ -230,16 +244,19 @@ body {
     white-space: pre-wrap;
     line-height: 30px;
 }
-.category:hover{
-    background: #353535;
-    color: #fff;
-    cursor: pointer;
+.passage:hover{
+    border-bottom: 1px solid #353535;
 
 }
+.category:hover{
+    cursor: pointer;
+    border-bottom: 1px solid #353535;
+
+}
+
 #toc{
     /* border: 1px solid #fff; */
-    padding: 20px;
-    width: 20%;
+    /* width: 20%; */
     word-wrap: break-word;
 }
 .control_block{
