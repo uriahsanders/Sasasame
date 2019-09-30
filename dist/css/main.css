@@ -52,21 +52,6 @@ body {
     margin-top: 40px;
 
 }
-@media screen and (max-width: 550px){
-    #nav_ul{
-        text-align: center;
-        margin: 0;
-        padding: 0;
-
-    }
-
-    .nav_li{
-        display: block;
-        /* margin-bottom: 5px; */
-        list-style-type: none;
-        margin: 10px;
-    }
-}
 .nav_a{
     text-decoration: none;
     color: #fff;
@@ -100,6 +85,7 @@ body {
     cursor: pointer;
     display: inline-block;
     font-size: .8em;
+    -webkit-appearance: none;
 }
 #fruit{
     color: #353535;
@@ -255,5 +241,13 @@ body {
     font-weight: 200;
     font-style: italic;
     color: darkgrey;
+
+}
+.up_one_level{
+    text-decoration: none;
+    color: #fff;
+    font-size: .8em;
+    font-weight: 200;
+    margin-top: 30px;
 
 }

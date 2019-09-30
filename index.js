@@ -65,7 +65,7 @@ app.get('/applications', function(req, res) {
     res.render('blog', { posts });
 });
 app.get('/roots', function(req, res) {
-    Passage.find().sort([['_id', 1]]).exec(function(err, response){
+    Passage.find().sort([['_id', -1]]).exec(function(err, response){
         res.render("roots", {book: response});
     });
 });

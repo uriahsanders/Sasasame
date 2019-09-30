@@ -9,6 +9,7 @@
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         <div id="control_panel">
@@ -23,6 +24,9 @@
                         </div>
                     </div>
                     <br/>
+                    <div>
+                        <a class="up_one_level" href="../">Up one level</a>
+                    </div>
                 <!-- Here is where you have -->
                 <!-- the options to: -->
                 <!-- (Add Passage) -->
@@ -48,6 +52,9 @@
                 </div>
                 <div  class="control_block" id="book_of_sasame">
                     <!-- Here you read the book of Sasame from the beginning -->
+                    <div class="header">
+                        Sasame
+                    </div>
                     <!-- Add upon scroll -->
                     <% book.forEach(function(f) { %>
                         <p class="passage"><%= f.content %></p>
