@@ -14,7 +14,13 @@
         <div id="control_panel">
             <div id="control_nav">
                     <div id="main_header">
-                        Control Panel
+                        <a href="/">
+                            <img id="little_seed" alt="" src="images/bitmap.png"/>
+                        </a>
+                        The Book of Sasame
+                        <div id="control_sub">
+                            Is kinda like the <span id="hero_sub_seed">roots.</span>
+                        </div>
                     </div>
                     <br/>
                 <!-- Here is where you have -->
@@ -22,9 +28,6 @@
                 <!-- (Add Passage) -->
                 <!-- (Add Highlighted to Category) -->
                 <!-- (Add Category) -->
-                <button class="control_button" id="add_passage">Add Passage</button>
-                <button class="control_button" id="add_category">Add Category</button>
-                <button class="control_button" id="add_passage_to_category">Add Passage to Category</button>
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">
@@ -32,15 +35,18 @@
                     <!-- (Execute JS) (Add JS as passage) -->
                     <!-- Important functions: -->
                     <!-- (add_category(), add_passage_to_category()) -->
-                    Here you write JS:
-                    <button class="control_button" id="execute_js">Execute</button>
-                    <button class="control_button" id="add_js_as_passage">Add as Passage</button>
-
+                    <div class="header">
+                        Add Passage
+                    </div>
+                    <textarea class="control_textarea" cols="30" placeholder="" id="" name="" rows="10"></textarea>
+                    <button class="control_button" id="add_passage_to_category">Add</button>
+                    <div class="header">
+                        Add Chapter
+                    </div>
+                    <input class="control_input"  name="" type="text" value=""/>
+                    <button class="control_button" id="add_passage_to_category">Add</button>
                 </div>
                 <div  class="control_block" id="book_of_sasame">
-                    <div class="header">
-                        The Book of Sasame
-                    </div>
                     <!-- Here you read the book of Sasame from the beginning -->
                     <!-- Add upon scroll -->
                     <% book.forEach(function(f) { %>
@@ -50,12 +56,14 @@
                 </div>
                 <div class="control_block" id="toc">
                     <div class="header">
-                        Categories
+                        Table of Contents
                     </div>
                     <!-- Here you view categorization schemes -->
                     <!-- * Click a category to view everything in it -->
                     <div id="categories">
-                        <p class="category">Category</p>
+                        <% book.forEach(function(f) { %>
+                            <p class="category"><%= f.content %></p>
+                        <% }); %>
                     </div>
 
                 </div>
