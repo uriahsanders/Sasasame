@@ -31,7 +31,7 @@ body {
     width: 110px;
     margin: auto;
     display: block;
-    margin-top: 50px;
+    margin-top: 20px;
 
 }
 #little_seed {
@@ -71,9 +71,10 @@ body {
     margin: 10px;
     padding: 10px;
     width: 65%;
-    border: 1px dotted #353535;
+    border: 1px solid #353535;
     height: 200px;
     font-size: 1em;
+    resize: none;
 }
 .sasame_button, .eat_fruit {
     border: 3px solid #353535;
@@ -90,6 +91,7 @@ body {
 #fruit{
     color: #353535;
     margin: auto;
+    word-wrap: break-word;
 }
 .fruit{
     white-space: pre-wrap;
@@ -121,7 +123,6 @@ body {
 }
 #about-sasame{
     color: #353535;
-    border: 1px dotted #353535;
     margin: auto;
     text-align: left;
     padding: 20px;
@@ -134,22 +135,24 @@ body {
 }
 .blog_title{
     padding: 10px;
+    font-size: 1.1em;
 }
 .blog_content{
     padding: 10px;
     text-align: left;
 }
 .blog_post{
-    border: 1px dotted #000;
-    width: 80%;
-    padding: 10px;
+    border: 1px solid #353535;
+    width: 90%;
+    padding: 20px;
     margin: auto;
     margin-bottom: 20px;
 }
 .blog_image{
-    width: 50%;
+    width: 80%;
     margin: auto;
     display: block;
+    margin-bottom: 20px;
 }
 /* Control Panel */
 #control_panel{
@@ -182,6 +185,8 @@ body {
     font-size: 1em;
     border: 1px solid #000;
     margin-bottom: 20px;
+    width: 100%;
+    cursor: pointer;
 }
 .control_input{
     border: 1px solid #000;
@@ -197,11 +202,13 @@ body {
     text-transform: uppercase;
     width: 100%;
     margin-bottom: 10px;
+    resize: none;
 }
 #code{
     border-right: 1px solid #fff;
     padding: 20px;
     text-align: center;
+    word-wrap: break-word;
 }
 .header{
     padding: 10px;
@@ -212,6 +219,7 @@ body {
 #book_of_sasame{
     border-right: 1px solid #fff;
     padding: 20px;
+    word-wrap: break-word;
 }
 .passage, .category{
     /* border-bottom: 1px dotted grey; */
@@ -222,7 +230,7 @@ body {
     white-space: pre-wrap;
     line-height: 30px;
 }
-.passage:hover, .category:hover{
+.category:hover{
     background: #353535;
     color: #fff;
     cursor: pointer;
@@ -232,6 +240,7 @@ body {
     /* border: 1px solid #fff; */
     padding: 20px;
     width: 20%;
+    word-wrap: break-word;
 }
 .control_block{
 }
@@ -250,4 +259,7 @@ body {
     font-weight: 200;
     margin-top: 30px;
 
+}
+#mobile_book_menu{
+    display: none;
 }

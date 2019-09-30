@@ -4,6 +4,8 @@
         <title>Sasame</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,400i,500,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/mobile.css">
+        <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="images/bitmap.png" />
         <script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -15,6 +17,9 @@
         <div id="control_panel">
             <div id="control_nav">
                     <div id="main_header">
+                        <div id="mobile_book_menu">
+                            <ion-icon name="menu"></ion-icon>
+                        </div>
                         <a href="/">
                             <img id="little_seed" alt="" src="images/bitmap.png"/>
                         </a>
@@ -42,13 +47,17 @@
                     <div class="header">
                         Add Passage
                     </div>
-                    <textarea class="control_textarea" cols="30" placeholder="" id="" name="" rows="10"></textarea>
-                    <button class="control_button" id="add_passage_to_category">Add</button>
+                    <form action="/add_passage" method="GET">
+                        <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
+                        <button class="control_button" id="add_passage">Add</button>
+                    </form>
                     <div class="header">
                         Add Chapter
                     </div>
-                    <input class="control_input"  name="" type="text" value=""/>
-                    <button class="control_button" id="add_passage_to_category">Add</button>
+                    <form action="/add_passage" method="GET">
+                        <input class="control_input"  name="title" type="text" placeholder="Title"/>
+                        <button class="control_button" id="add_chapter">Add</button>
+                    </form>
                 </div>
                 <div  class="control_block" id="book_of_sasame">
                     <!-- Here you read the book of Sasame from the beginning -->
