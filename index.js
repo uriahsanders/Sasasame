@@ -88,8 +88,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
     //home page
     if(url_end == '' || url_end.length < 15){
-        Category.find().sort({_id: 1}).exec(function(err, categories){
-            Passage.find().sort([['_id', 1]]).exec(function(err, passages){
+        Category.find().sort({_id: -1}).exec(function(err, categories){
+            Passage.find().sort([['_id', -1]]).exec(function(err, passages){
                 res.render("sasasame", {category: '', book: passages, categories: categories});
             });
         });
