@@ -90,7 +90,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     if(url_end == '' || url_end.length < 15){
         Category.find().sort({_id: -1}).exec(function(err, categories){
             Passage.find().sort([['_id', -1]]).exec(function(err, passages){
-                res.render("sasasame", {category: '', book: passages, categories: categories});
+                res.render("sasasame", {sasasame: 'sasasame', category: '', book: passages, categories: categories});
             });
         });
     }
@@ -100,7 +100,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         Passage.find({category: url_end}).exec(function(err, passages){
             //find all categories in this category
             Category.find({category: url_end}).exec(function(err, cats){
-                res.render("sasasame", {category: url_end, book: passages, categories: cats});
+                res.render("sasasame", {sasasame: 'xyz', category: url_end, book: passages, categories: cats});
             });
         });
         // Category.findOne({_id:url_end}).exec(function(err, category){

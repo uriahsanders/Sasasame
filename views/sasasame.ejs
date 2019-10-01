@@ -84,10 +84,18 @@
                     <div id="categories">
                         <%let count = 0;%>
                         <%if(categories){%>
-                        <% categories.forEach(function(f) { %>
-                            <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></p>
-                            <%++count;%>
-                        <% });} %>
+                            <%categories.forEach(function(f) { %>
+                                <%if(sasasame == 'sasasame'){%>
+                                    <%if(!f.category){%>
+                                        <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></p>
+                                        <%++count;%>
+                                    <%}%>
+                                <%}%>
+                                <%if(sasasame == 'xyz'){%>
+                                    <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></p>
+                                    <%++count;%>
+                                <%}%>
+                        <%});} %>
                     </div>
 
                 </div>
