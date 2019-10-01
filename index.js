@@ -211,6 +211,9 @@ app.get('/feed_sasame', (req, res) => {
     // rank,
     // content
     Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
+        if(err){
+            console.log(err);
+        }
         if (info.content != passage.content){
             add_passage('', info.content, function(){
                 res.redirect("/");
@@ -220,7 +223,6 @@ app.get('/feed_sasame', (req, res) => {
             add_passage('', 'Light', function(){
                 res.redirect("/");
             });
-            res.redirect("/");
         }
     });
 });
