@@ -220,7 +220,7 @@ app.get('/feed_sasame', (req, res) => {
             });
         }
         else{
-            add_passage('', 'Light', function(){
+            add_passage('', 'Light is the fire behind life.', function(){
                 res.redirect("/");
             });
         }
