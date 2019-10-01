@@ -212,7 +212,7 @@ app.get('/feed_sasame', (req, res) => {
     // content
     Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
         if (info.content != passage.content){
-            add_passage(info.content, function(){
+            add_passage('', info.content, function(){
                 res.redirect("/");
             });
         }
