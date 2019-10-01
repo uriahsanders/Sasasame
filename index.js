@@ -185,8 +185,13 @@ app.get(/\/add_category\/?(:categoryID)?/, (req, res) => {
     var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
     var categoryID = url_end.split('?')[0] || '';
     var backURL=req.header('Referer') || '/';
-    if(info.passage != ''){
+    if(info.title != ''){
         add_category(categoryID, info.title, function(){
+            res.redirect(backURL);
+        });
+    }
+    else{
+        add_category(categoryID, 'Moist SOIL', function(){
             res.redirect(backURL);
         });
     }
@@ -200,6 +205,11 @@ app.get(/\/add_passage\/?(:categoryID)?/, (req, res) => {
     var backURL=req.header('Referer') || '/';
     if(info.passage != ''){
         add_passage(categoryID, info.passage, function(){
+            res.redirect(backURL);
+        });
+    }
+    else{
+        add_passage(categoryID, 'WATER nourishes even fire.', function(){
             res.redirect(backURL);
         });
     }
@@ -220,7 +230,7 @@ app.get('/feed_sasame', (req, res) => {
             });
         }
         else{
-            add_passage('', 'Light is the fire behind life.', function(){
+            add_passage('', 'LIGHT is the fire behind life.', function(){
                 res.redirect("/");
             });
         }
