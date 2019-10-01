@@ -3,8 +3,8 @@
         <meta charset="UTF-8">
         <title>Sasame</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,400i,500,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/mobile.css">
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/mobile.css">
         <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="images/bitmap.png" />
         <script
@@ -21,7 +21,7 @@
                             <ion-icon name="menu"></ion-icon>
                         </div>
                         <a href="/">
-                            <img id="little_seed" alt="" src="images/bitmap.png"/>
+                            <img id="little_seed" alt="" src="/images/bitmap.png"/>
                         </a>
                         THE BOOK OF SASAME
                         <div id="control_sub">
@@ -47,16 +47,16 @@
                     <div class="header">
                         Add Passage
                     </div>
-                    <form action="/add_passage" method="GET">
+                    <form action="/add_passage/<%=category%>" method="GET">
                         <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
-                        <button class="control_button" id="add_passage">Add</button>
+                        <button class="control_button" id="add_passage">Pour Water</button>
                     </form>
                     <div class="header">
                         Add Chapter
                     </div>
-                    <form action="/add_passage" method="GET">
+                    <form action="/add_category/<%=category%>" method="GET">
                         <input class="control_input"  name="title" type="text" placeholder="Title"/>
-                        <button class="control_button" id="add_chapter">Add</button>
+                        <button class="control_button" id="add_chapter">Enrich Soil</button>
                     </form>
                 </div>
                 <div  class="control_block" id="book_of_sasame">
@@ -65,10 +65,11 @@
                         Sasame
                     </div>
                     <!-- Add upon scroll -->
-                    <% book.forEach(function(f) { %>
-                        <p class="passage"><%= f.content %></p>
-                    <% }); %>
-
+                    <%if(book){%>
+                        <% book.forEach(function(f) { %>
+                            <p class="passage"><%= f.content %></p>
+                        <% }); %>
+                    <%}%>
                 </div>
                 <div class="control_block" id="toc">
                     <div class="header">
@@ -77,9 +78,12 @@
                     <!-- Here you view categorization schemes -->
                     <!-- * Click a category to view everything in it -->
                     <div id="categories">
-                        <% book.forEach(function(f) { %>
-                            <p class="category"><%= f.content %></p>
-                        <% }); %>
+                        <%let count = 0;%>
+                        <%if(categories){%>
+                        <% categories.forEach(function(f) { %>
+                            <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></p>
+                            <%++count;%>
+                        <% });} %>
                     </div>
 
                 </div>
