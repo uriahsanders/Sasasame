@@ -40,6 +40,7 @@
         left: 0px;
         margin-left: 0px;
         width: 10%;
+        cursor: pointer;
     }
     #code{
         display: none;
@@ -57,14 +58,15 @@
         display: block;
     }
     #mobile_book_menu_main{
-        display: block;
-        width: 100%;
+        display: none;
+        /* width: 100%; */
         background: #353535;
         position: absolute;
         top: 0px;
         left: 0px;
         color: #fff;
         margin: auto;
+        padding: 15px;
     }
     .basic_link{
         text-decoration: none;
@@ -87,6 +89,14 @@
         cursor: pointer;
     }
     #control_panel{
-        display: none;
+        /* display: none; */
+    }
+    .mobile_control_button{
+        background: #fff;
+        color: #000;
+        width: 100%;
+        padding: 15px;
+        font-size: 0.9em;
+        margin: auto;
     }
 }
