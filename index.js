@@ -195,7 +195,6 @@ app.get(/\/add_category\/?(:categoryID)?/, (req, res) => {
             res.redirect(backURL);
         });
     }
-    res.redirect(backURL);
 });
 app.get(/\/add_passage\/?(:categoryID)?/, (req, res) => {
     let info = req.query;
@@ -213,7 +212,6 @@ app.get(/\/add_passage\/?(:categoryID)?/, (req, res) => {
             res.redirect(backURL);
         });
     }
-    res.redirect(backURL);
 });
 app.get('/feed_sasame', (req, res) => {
     let info = req.query;
