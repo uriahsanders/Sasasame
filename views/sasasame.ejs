@@ -14,11 +14,51 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
+        <div id="mobile_book_menu_main">
+            <div id="mobile_active_close">
+                X
+            </div>
+            <div class="header">
+                Add Passage
+            </div>
+            <form action="/add_passage/<%=category%>" method="GET">
+                <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
+                <button class="mobile_control_button" id="mobile_add_passage">Pour Water</button>
+            </form>
+            <div class="header">
+                Add Chapter
+            </div>
+            <form action="/add_category/<%=category%>" method="GET">
+                <input class="control_input"  name="title" type="text" placeholder="Title"/>
+                <button class="mobile_control_button" id="mobile_add_chapter">Enrich Soil</button>
+            </form>
+            <div class="header">
+                Table of Contents
+            </div>
+            <div id="mobile_category_list">
+                <%if(categories){%>
+                    <%categories.forEach(function(f) { %>
+                        <%if(sasasame == 'sasasame'){%>
+                            <%if(!f.category){%>
+                                <p class="mobile_category"><a class="basic_link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
+                            <%}%>
+                        <%}%>
+                        <%if(sasasame == 'xyz'){%>
+                            <p class="mobile_category"><a class="basic_link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
+                        <%}%>
+                <%});}%>
+                <hr/>
+                <br/>
+                <br/>
+
+            </div>
+        </div>
         <div id="control_panel">
             <div id="control_nav">
                     <div id="main_header">
                         <div id="mobile_book_menu">
-                            <ion-icon name="menu"></ion-icon>
+                            <!-- <ion-icon name="menu"></ion-icon> -->
+                            +
                         </div>
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/bitmap.png"/>
@@ -31,10 +71,6 @@
                     <br/>
                     <div class="up_one_level">
                         <a class="up_one_level_link" href="javascript:history.back()">../</a>
-                    </div>
-                    <div id="mobile_warning">
-                        <br/>
-                        (This App is not yet Mobile Ready.)
                     </div>
                 <!-- Here is where you have -->
                 <!-- the options to: -->
@@ -87,12 +123,12 @@
                             <%categories.forEach(function(f) { %>
                                 <%if(sasasame == 'sasasame'){%>
                                     <%if(!f.category){%>
-                                        <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></p>
+                                        <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
                                         <%++count;%>
                                     <%}%>
                                 <%}%>
                                 <%if(sasasame == 'xyz'){%>
-                                    <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></p>
+                                    <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
                                     <%++count;%>
                                 <%}%>
                         <%});} %>
@@ -100,10 +136,8 @@
 
                 </div>
             </div>
-
         </div>
-        <script>
-        </script>
+        testing
+        <script src="/js/app.js"></script>
     </body>
-    <script src="js/app.js"></script>
 </html>
