@@ -76,10 +76,10 @@ app.get('/', function(req, res) {
 });
 
 app.get('/about', function(req, res) {
-    res.render('about', { posts });
+    res.render('about');
 });
 app.get('/history', function(req, res) {
-    res.render('history', { posts });
+    res.render('history');
 });
 app.get('/team', function(req, res) {
     res.render('blog', { posts });
@@ -144,6 +144,7 @@ var add_passage = function(category, keys, content, callback) {
     else{
         let post = new Passage({
             content: content,
+            keys: keys
         }).save();
     }
     callback();
@@ -246,50 +247,48 @@ app.get('/fruit', (req, res) => {
     });
 });
 
-// var post = new Post({
-//     author: 'Uriah Sanders',
-//     rank: 0,
-//     content: 'Sasame is an intelligent program that automatically saves the world.'
-// });
-// post.save();
-
-var rank_passage = function(id, rank){
-    Post.find({_id: id}).exec(function(err, res){
-        res.rank.push(rank);
-        let average = (array) => array.reduce((a, b) => a + b) / array.length;
-        res.rank = Math.round(average(res.rank));
-        res.save();
-    });
-};
-
-var posts = [];
-
-// -1 is junk, 0 is unranked, 1 is least, 3 is greatest
-var ranks = [-1, 0, 1, 2, 3];
-
-var textForAdding = 'Add a better explanation of Sasame.';
-var textForPathing = ['Best', 'Worst', 'Junk'];
-
-var display = "seed"; // start by showing the seed
-var speech = function(user_speech) {
-    // Update display
-    display = user_speech;
-    // Add new Speech to database as Junk
-    make_post('Anon', -1, user_speech);
-
-};
-
-var sieve = function(id, rank){
-    //rank the speech in database
-    rank_post(id, rank);
-};
-
-var path = function(user_path){
-    var paths = textForPathing; //same options
-    //Grab records from DB in appropriate order depending on rank
-};
 app.listen(3000, () => {
     console.log("Sasame Started...");
 });
 
+// GOLDEN ROAD ALGORITHM
+var golden_road = function(similarity){
+    similarity = similarity || 0;
+    Passage.find({}, (err, passages) => {
+        console.log('RUNNING THE GOLDEN ROAD ALGORITHM');
+        if(err){}
+        //compare every passage to every other passage
+        for(const passage of passages){
+            for(const passage2 of passages){
+                similarity = key_similarity(passage.keys, passage2.keys);
+                if(similarity > 0 && passage.keys.length > 0){
+                    console.log(('' + similarity).split('.').join(''));
+                    passage.golden = 'golden';
+                    passage2.golden = 'golden';
+                }
+            }
+            //only need to do this once
+            passage.save();
+        }
+        // 60 second break
+        setTimeout(golden_road, 60000);
+    });
+};
+golden_road();
 
+function key_similarity(arrayA, arrayB) {
+    var matches = 0;
+    var short_array = arrayA.length;
+    var long_array = arrayB.length;
+    //iterate over the shortest array
+    if(arrayB.length < short_array){
+        short_array = arrayB.length;
+        long_array = arrayA.length;
+    }
+    for (var i=0;i<short_array;++i) {
+        if (arrayB.indexOf(arrayA[i]) != -1)
+            ++matches;
+    }
+    //percentage in decimal form is matches/longest_array_length
+    return matches / long_array;
+}

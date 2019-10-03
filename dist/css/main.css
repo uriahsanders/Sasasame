@@ -324,8 +324,8 @@ body {
     display: none;
 }
 .golden{
-    border-left: 2px solid gold;
-    border-right: 2px solid gold;
+    border-left: 1px solid gold;
+    border-right: 1px solid gold;
 }
 #help_header{
     color: #353535;
