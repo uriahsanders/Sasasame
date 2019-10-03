@@ -34,6 +34,13 @@ body {
     margin-top: 20px;
 
 }
+#seed {
+    width: 110px;
+    margin: auto;
+    display: block;
+    margin-top: 20px;
+
+}
 #little_seed {
     width: 80px;
     display: block;
@@ -107,7 +114,7 @@ body {
 }
 #hero{
     margin-bottom: 10px;
-    margin-top: 15px;
+    margin-top: 5px;
 }
 #hero_sub{
 
@@ -140,25 +147,41 @@ body {
     margin: auto;
 }
 .blog_title{
-    padding: 10px;
+    padding: 20px;
     font-size: 1.1em;
+    /* background: #353535; */
+    /* color: #fff; */
+    /* font-weight: 200; */
+    margin: auto;
+    width: 90%;
+    border-bottom: 1px solid #353535;
 }
 .blog_content{
-    padding: 10px;
+    padding: 20px;
     text-align: left;
+    margin: auto;
+    width: 90%;
+    /* border: 1px solid black; */
+}
+.blog_content p{
 }
 .blog_post{
-    border: 1px solid #353535;
+    /* border: 1px solid #353535; */
     width: 90%;
     padding: 20px;
     margin: auto;
     margin-bottom: 20px;
 }
+.blog_post:last-child{
+    border: 0px;
+}
 .blog_image{
-    width: 80%;
+    width: 100%;
     margin: auto;
+    margin-top: 40px;
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    /* border: 1px solid black; */
 }
 /* Control Panel */
 #control_panel{
@@ -230,6 +253,7 @@ body {
 }
 .header{
     padding: 10px;
+    margin-bottom: 30px;
     font-weight: bold;
     text-align: center;
     font-size: 1.1em;
@@ -237,12 +261,12 @@ body {
 #book_of_sasame{
     word-wrap: break-word;
     cursor: default;
-    width: 40%;
+    width: 50%;
     margin: auto;
 }
 .passage{
-    border-left: 2px solid #000;
-    border-right: 2px solid #000;
+    border-left: 1px solid darkgrey;
+    border-right: 1px solid darkgrey;
     margin: auto;
     text-align: center;
     padding-left: 40px;
@@ -250,21 +274,21 @@ body {
 }
 .passage, .category{
     /* border-bottom: 1px dotted grey; */
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     margin: 0;
     text-align: center;
     white-space: pre-wrap;
     line-height: 30px;
 }
 .passage:hover{
-    border-bottom: 1px solid #353535;
-    border-top: 1px solid #353535;
+    border-bottom: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
 
 }
 .category:hover{
     cursor: pointer;
-    border-bottom: 1px solid #353535;
+    border-bottom: 1px solid darkgrey;
 
 }
 
@@ -314,4 +338,11 @@ body {
 .golden{
     border-left: 2px solid gold;
     border-right: 2px solid gold;
+}
+#help_header{
+    color: #353535;
+    font-size: 1.1em;
+    padding: 10px;
+    margin-top: 10px;
+
 }
