@@ -35,10 +35,10 @@ body {
 
 }
 #seed {
-    width: 110px;
+    width: 100px;
     margin: auto;
     display: block;
-    margin-top: 20px;
+    margin-top: 10px;
 
 }
 #little_seed {
@@ -105,16 +105,15 @@ body {
     margin: auto;
     margin-bottom: 20px;
     width: 75%;
-    padding: 10px;
+    padding-bottom: 10px;
     cursor: default;
 }
 .fruit:hover{
-    border-bottom: 1px solid #353535;
+    border-bottom: 1px solid lightgrey;
 
 }
 #hero{
     margin-bottom: 10px;
-    margin-top: 5px;
 }
 #hero_sub{
 
@@ -180,7 +179,7 @@ body {
     margin: auto;
     margin-top: 40px;
     display: block;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     /* border: 1px solid black; */
 }
 /* Control Panel */
@@ -262,7 +261,7 @@ body {
     word-wrap: break-word;
     cursor: default;
     width: 50%;
-    margin: auto;
+    /* margin: auto; */
 }
 .passage{
     border-left: 1px solid darkgrey;
@@ -324,17 +323,6 @@ body {
 #mobile_warning{
     display: none;
 }
-#key_pad{
-    border: 1px solid black;
-    padding: 10px;
-}
-.key{
-    display: inline-block;
-    margin: 10px;
-    padding: 5px;
-    font-size: 1em;
-    cursor: pointer;
-}
 .golden{
     border-left: 2px solid gold;
     border-right: 2px solid gold;
@@ -344,5 +332,17 @@ body {
     font-size: 1.1em;
     padding: 10px;
     margin-top: 10px;
+}
 
+#mobile_book_menu_main{
+    display: none;
+}
+#fruit_header{
+    color: #353535;
+    padding: 10px;
+    padding-bottom: 30px;
+    font-size: 1em;
+    margin-top: 10px;
+    font-weight: 200;
+    margin-bottom: 30px;
 }

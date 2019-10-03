@@ -202,7 +202,6 @@ app.get(/\/add_category\/?(:categoryID)?/, (req, res) => {
             res.redirect(backURL);
         });
     }
-    res.redirect(backURL);
 });
 app.post(/\/add_passage\/?/, (req, res) => {
     var categoryID = req.body.categoryID;
@@ -214,11 +213,10 @@ app.post(/\/add_passage\/?/, (req, res) => {
         });
     }
     else{
-        add_passage(categoryID, 'WATER nourishes even fire.', function(){
+        add_passage(categoryID, '', 'WATER nourishes even fire.', function(){
             res.redirect(backURL);
         });
     }
-    res.redirect(backURL);
 });
 app.get('/feed_sasame', (req, res) => {
     let info = req.query;
@@ -235,7 +233,7 @@ app.get('/feed_sasame', (req, res) => {
             });
         }
         else{
-            add_passage('', 'LIGHT is the fire behind life.', function(){
+            add_passage('', '', 'LIGHT is the fire behind life.', function(){
                 res.redirect("/");
             });
         }
