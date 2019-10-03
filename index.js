@@ -7,12 +7,14 @@ var app = express();
 app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const options = {
     useNewUrlParser: true
 };
 mongoose.connect('mongodb://localhost/sasame', { useNewUrlParser: true }, function(err){
-
     if (err) {
         return console.error(err);
     }
@@ -43,11 +45,13 @@ var passageSchema = mongoose.Schema({
     author: String,
     rank: Number, //rank is the average of the array
     content: String,
+    keys: [String],
     //category the passage belongs to
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
-    }
+    },
+    golden: String
 });
 var Passage = mongoose.model('Post', passageSchema, 'Posts');
 var Category = mongoose.model('Category', categorySchema, 'Categories');
@@ -86,6 +90,7 @@ app.get('/applications', function(req, res) {
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    var golden = '';
     //home page
     if(url_end == '' || url_end.length < 15){
         Category.find().sort({_id: -1}).exec(function(err, categories){
@@ -115,11 +120,13 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         // });
     }
 });
-var add_passage = function(category, content, callback) {
+var add_passage = function(category, keys, content, callback) {
+    keys = keys || '';
     if(category != ''){
         let post = new Passage({
             content: content,
-            category: category
+            category: category,
+            keys: keys
         }).save().then(data => {
             if(category != ''){
                 Category.findOne({_id:category}).exec(function(err, cat){
@@ -197,14 +204,12 @@ app.get(/\/add_category\/?(:categoryID)?/, (req, res) => {
     }
     res.redirect(backURL);
 });
-app.get(/\/add_passage\/?(:categoryID)?/, (req, res) => {
-    let info = req.query;
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var categoryID = url_end.split('?')[0] || '';
+app.post(/\/add_passage\/?/, (req, res) => {
+    var categoryID = req.body.categoryID;
     var backURL=req.header('Referer') || '/';
-    if(info.passage != ''){
-        add_passage(categoryID, info.passage, function(){
+    var keys = req.body.keys.split('\n');
+    if(req.body.passage != ''){
+        add_passage(categoryID, keys, req.body.passage, function(){
             res.redirect(backURL);
         });
     }
@@ -225,7 +230,7 @@ app.get('/feed_sasame', (req, res) => {
             console.log(err);
         }
         if (info.content != passage.content){
-            add_passage('', info.content, function(){
+            add_passage('', '', info.content, function(){
                 res.redirect("/");
             });
         }

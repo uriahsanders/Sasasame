@@ -237,6 +237,16 @@ body {
 #book_of_sasame{
     word-wrap: break-word;
     cursor: default;
+    width: 40%;
+    margin: auto;
+}
+.passage{
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    margin: auto;
+    text-align: center;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 .passage, .category{
     /* border-bottom: 1px dotted grey; */
@@ -249,6 +259,7 @@ body {
 }
 .passage:hover{
     border-bottom: 1px solid #353535;
+    border-top: 1px solid #353535;
 
 }
 .category:hover{
@@ -288,4 +299,19 @@ body {
 }
 #mobile_warning{
     display: none;
+}
+#key_pad{
+    border: 1px solid black;
+    padding: 10px;
+}
+.key{
+    display: inline-block;
+    margin: 10px;
+    padding: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+.golden{
+    border-left: 2px solid gold;
+    border-right: 2px solid gold;
 }

@@ -48,12 +48,14 @@
                     <!-- (Execute JS) (Add JS as passage) -->
                     <!-- Important functions: -->
                     <!-- (add_category(), add_passage_to_category()) -->
+                    <form action="/add_passage/" method="POST">
                     <div class="header">
                         Add Passage
                     </div>
-                    <form action="/add_passage/<%=category%>" method="GET">
-                        <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
-                        <button class="control_button" id="add_passage">Pour Water</button>
+                    <textarea class="control_textarea" cols="30" placeholder="Keys" id="" name="keys" rows="2"></textarea>
+                    <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
+                    <input name="categoryID" type="hidden" value="<%=category%>"/>
+                    <button class="control_button" id="add_passage">Pour Water</button>
                     </form>
                     <div class="header">
                         Add Chapter
@@ -71,7 +73,7 @@
                     <!-- Add upon scroll -->
                     <%if(book){%>
                         <% book.forEach(function(f) { %>
-                            <p class="passage"><%= f.content %></p>
+                            <p class="passage<%=f.golden%>"><%= f.content %></p>
                         <% }); %>
                     <%}%>
                 </div>
