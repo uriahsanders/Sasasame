@@ -51,10 +51,25 @@ var passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
     },
-    golden: String
+    golden: String,
+    votes: Number
+});
+// Perfect 100 Scheme
+// Uriah is 7
+// GRA members are 66
+// Chromia is 9 (same privileges as 7 plus Leader in the Rules)
+// Akira is 99
+// Default is 100
+// Deszha and Key have no Number (not in the 100) (same privileges as 7)
+// Gabriel is 1 (same privileges as 7)
+// Relax, Wabi, Jeremy, Arty are 10
+var userSchema = mongoose.Schema({
+    perfect: Number,
+    password: String,
 });
 var Passage = mongoose.model('Post', passageSchema, 'Posts');
 var Category = mongoose.model('Category', categorySchema, 'Categories');
+var User = mongoose.model('User', userSchema, 'Users');
 
 app.get('/', function(req, res) {
     Passage.count({}, function( err, count){
@@ -73,6 +88,9 @@ app.get('/', function(req, res) {
     //         res.render('index', { fruit: passages });
     //     }
     // });
+});
+app.get('/login', function(req, res) {
+    res.render('login');
 });
 
 app.get('/about', function(req, res) {
