@@ -42,7 +42,7 @@ body {
 
 }
 #little_seed {
-    width: 80px;
+    width: 70px;
     display: block;
     margin: auto;
     margin-bottom: 10px;
@@ -140,6 +140,14 @@ body {
     padding: 20px;
     width: 80%;
 }
+.help_content{
+    color: #353535;
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+    width: 80%;
+    border: 1px solid #353535;
+}
 #blog{
     color: #000;
     text-align: center;
@@ -200,6 +208,9 @@ body {
     justify-content: center;
     padding: 30px;
     padding-top: 15px;
+    background: url('/images/parchment8.jpg');
+    font-family: 'Nanum Brush Script', cursive;
+    font-size: 1.1em;
 }
 .control_block{
     /* border: 1px solid black; */
@@ -212,7 +223,6 @@ body {
 #control_nav{
     padding: 20px;
     text-align: center;
-    border-bottom: 1px solid white;
     background: #353535;
     color: #fff;
     padding-top: 30px;
@@ -220,33 +230,38 @@ body {
 .control_button{
     padding: 10px;
     font-size: 1em;
-    border: 1px solid #000;
+    border: 1px solid #353535;
     margin-bottom: 20px;
     width: 100%;
     cursor: pointer;
     -webkit-appearance: none;
+    background: transparent;
 }
 .control_button:hover{
-    background: #353535;
-    color: #fff;
+    /* background: #353535; */
+    /* color: #fff; */
+    color: grey;
 }
 .control_input{
-    border: 1px solid #000;
+    border: 1px solid #353535;
     padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
     width: 100%;
+    font-family: 'Nanum Brush Script', cursive;
+    background: transparent;
 }
 .control_textarea{
-    border: 1px solid #000;
+    border: 1px solid #353535;
     padding: 10px;
     font-size: 1em;
     width: 100%;
     margin-bottom: 10px;
     resize: none;
+    font-family: 'Nanum Brush Script', cursive;
+    background: transparent;
 }
 #code{
-    border-right: 1px solid #fff;
     text-align: center;
     word-wrap: break-word;
 }
@@ -255,7 +270,22 @@ body {
     margin-bottom: 30px;
     font-weight: bold;
     text-align: center;
+    font-size: 1.2em;
+}
+.help_header{
+    padding: 10px;
+    margin-bottom: 5px;
+    text-align: center;
     font-size: 1.1em;
+    color: #353535;
+}
+.help_sub_header{
+    padding: 10px;
+    margin-bottom: 5px;
+    font-weight: 200;
+    text-align: center;
+    font-size: 0.9em;
+    color: #353535;
 }
 #book_of_sasame{
     word-wrap: break-word;
@@ -264,8 +294,8 @@ body {
     /* margin: auto; */
 }
 .passage{
-    border-left: 1px solid darkgrey;
-    border-right: 1px solid darkgrey;
+    border-left: 1px solid #353535;
+    border-right: 1px solid #353535;
     margin: auto;
     text-align: center;
     padding-left: 40px;
@@ -279,15 +309,15 @@ body {
     text-align: center;
     white-space: pre-wrap;
     line-height: 30px;
+    font-size: 1.2em;
 }
 .passage:hover{
-    border-bottom: 1px solid lightgrey;
-    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid #353535;
+    border-top: 1px solid #353535;
 
 }
 .category:hover{
-    cursor: pointer;
-    border-bottom: 1px solid darkgrey;
+    border-bottom: 1px solid #353535;
 
 }
 

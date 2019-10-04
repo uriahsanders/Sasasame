@@ -70,7 +70,7 @@
                     </div>
                     <br/>
                     <div class="up_one_level">
-                        <a class="up_one_level_link" href="javascript:history.back()">../</a>
+                        <a class="up_one_level_link" href="/sasasame">Root</a> | <a class="up_one_level_link" href="javascript:history.back()">Back</a> | <a class="up_one_level_link" href="/control">Control</a>
                     </div>
                 <!-- Here is where you have -->
                 <!-- the options to: -->
@@ -88,8 +88,8 @@
                     <div class="header">
                         Add Passage
                     </div>
-                    <textarea class="control_textarea" cols="30" placeholder="Keys" id="" name="keys" rows="2"></textarea>
-                    <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
+                    <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text"/>
+                    <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
                     <input name="categoryID" type="hidden" value="<%=category%>"/>
                     <button class="control_button" id="add_passage">Pour Water</button>
                     </form>
@@ -139,7 +139,6 @@
                 </div>
             </div>
         </div>
-        testing
         <script src="/js/app.js"></script>
     </body>
 </html>

@@ -207,7 +207,8 @@ app.get(/\/add_category\/?(:categoryID)?/, (req, res) => {
 app.post(/\/add_passage\/?/, (req, res) => {
     var categoryID = req.body.categoryID;
     var backURL=req.header('Referer') || '/';
-    var keys = req.body.keys.split('\n');
+    //remove white space and separate by comma
+    var keys = req.body.keys.replace(/\s/g,'').split(',');
     if(req.body.passage != ''){
         add_passage(categoryID, keys, req.body.passage, function(){
             res.redirect(backURL);
