@@ -252,29 +252,46 @@ app.listen(3000, () => {
 });
 
 // GOLDEN ROAD ALGORITHM
-var golden_road = function(similarity){
+// 1: Create Golden Road Chapters by comparing all Passages to all other Passages
+// 2: Create Main Golden Road by comparing all Passages to the next Passage
+// 3: Create Golden Roads on existing Chapters by comparing all passages in each chapter to the next passage in said chapter
+// 1 and 2 run automatically. Number 3 will run manually.
+var golden_road = function(similarity, last_passage, golden_passages){
     similarity = similarity || 0;
+    last_passage = last_passage || {keys: []};
+    golden_passages = [];
     Passage.find({}, (err, passages) => {
         console.log('RUNNING THE GOLDEN ROAD ALGORITHM');
         if(err){}
-        //compare every passage to every other passage
+        //2
         for(const passage of passages){
+            similarity = key_similarity(passage.keys, last_passage.keys);
+            similarity = ('' + similarity).split('.').join('');
+            if(similarity > 0 && passage.keys.length > 0){
+                passage.golden = 'golden' + similarity;
+                last_passage = passage;
+                passage.save();
+            }
+            //1
             for(const passage2 of passages){
                 similarity = key_similarity(passage.keys, passage2.keys);
-                if(similarity > 0 && passage.keys.length > 0){
-                    console.log(('' + similarity).split('.').join(''));
-                    passage.golden = 'golden';
-                    passage2.golden = 'golden';
+                similarity = ('' + similarity).split('.').join('');
+                if(similarity > 0 && passage.keys.length > 0 && passage != passage2){
+                    golden_passages.push(passage);
+                    golden_passages.push(passage2);
                 }
             }
-            //only need to do this once
-            passage.save();
         }
+        let category = new Category({
+            title: 'Golden Road',
+            passages: golden_passages
+        }).save();
         // 60 second break
         setTimeout(golden_road, 60000);
     });
 };
-golden_road();
+// golden_road();
+//now delete old Golden Road Chapters and all associated passages
 
 function key_similarity(arrayA, arrayB) {
     var matches = 0;
