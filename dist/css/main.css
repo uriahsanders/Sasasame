@@ -431,8 +431,103 @@ body {
     font-weight: 200;
     font-size: 0.8em;
     color: #d1a000;
+    margin-bottom: 40px;
+    display: block;
 }
 
 .no_cursive{
     font-family: 'Patua One';
+}
+#control_panel_header{
+    color: #353535;
+    font-size: 1.2em;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+#control_new_chapter_title, #control_key_search{
+    display:block;
+    margin:auto;
+    margin-bottom: 10px;
+    padding: 20px;
+    border: 1px solid #353535;
+    text-align: center;
+    width: 280px;
+    height: 30px;
+}
+#control_new_chapter_title{
+    width: 400px;
+    font-size: 1.2em;
+    padding: 23px;
+}
+#control_search_form{
+    margin: auto;
+    text-align: center;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 20px;
+    padding: 10px;
+
+}
+#control_key_search{
+    display: inline;
+    text-align: left;
+}
+#control_passages{
+    color: #353535;
+    margin: auto;
+    text-align:center;
+    border-bottom: 1px solid black;
+    padding: 10px;
+    width: 50%;
+    margin-top: 20px;
+}
+.control_passage{
+    border-bottom: 1px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.control_passage:last-child{
+    border: 0px;
+    margin-bottom: 0px;
+}
+.control_passage_chapter{
+    margin-bottom: 10px;
+    font-weight: bold;
+
+}
+.control_passage_keys{
+    margin-bottom: 10px;
+    font-weight: 200;
+    font-size:0.9em;
+
+}
+.control_passage_passage{
+    padding: 10px;
+}
+#control_submit, #control_search{
+    display:block;
+    margin:auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 15px;
+    border: 1px solid #353535;
+    text-align:center;
+    cursor: pointer;
+}
+#control_submit{
+    width: 300px;
+    font-size: 0.8em;
+    margin-bottom: 0px;
+}
+#control_search{
+    display: inline;
+}
+.control_select{
+    height: 30px;
+    width: 30px;
+    border: 3px solid #353535;
+    cursor: pointer;
+    position: absolute;
 }
