@@ -14,6 +14,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
+        <div id="login">
+            <br/>
+            <br/>
+            <a class="link white" href="/login">Perfect 100</a>
+        </div>
         <div id="mobile_book_menu_main">
             <div id="mobile_active_close">
                 X
@@ -85,19 +90,19 @@
                     <!-- Important functions: -->
                     <!-- (add_category(), add_passage_to_category()) -->
                     <form action="/add_passage/" method="POST">
-                    <div class="header">
+                    <div class="header no_cursive">
                         Add Passage
                     </div>
-                    <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text"/>
+                    <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                     <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
                     <input name="categoryID" type="hidden" value="<%=category%>"/>
                     <button class="control_button" id="add_passage">Pour Water</button>
                     </form>
-                    <div class="header">
+                    <div class="header no_cursive">
                         Add Chapter
                     </div>
                     <form action="/add_category/<%=category%>" method="GET">
-                        <input class="control_input"  name="title" type="text" placeholder="Title"/>
+                        <input class="control_input"  name="title" type="text" placeholder="Title" autocomplete="off" />
                         <button class="control_button" id="add_chapter">Enrich Soil</button>
                     </form>
                 </div>

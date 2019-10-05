@@ -10,6 +10,7 @@ app.set('views', './views');
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+var session = require('express-session');
 
 const options = {
     useNewUrlParser: true
@@ -22,8 +23,10 @@ mongoose.connect('mongodb://localhost/sasame', { useNewUrlParser: true }, functi
         mongoose.connect('mongodb://localhost/sasame', options);
     }, 5000);
 });
+var bcrypt = require('bcrypt');
+var SALT_WORK_FACTOR = 10;
 var categorySchema = mongoose.Schema({
-    author: String,
+    author: Number,
     title: String, //name of the category
     //passages that belong to this category
     passages: [{
@@ -44,7 +47,7 @@ var categorySchema = mongoose.Schema({
     votes: Number
 });
 var passageSchema = mongoose.Schema({
-    author: String,
+    author: Number,
     rank: Number, //rank is the average of the array
     content: String,
     keys: [String],
@@ -67,11 +70,70 @@ var passageSchema = mongoose.Schema({
 // Relax, Wabi, Jeremy, Mohamed, Arty are 10
 var userSchema = mongoose.Schema({
     perfect: Number,
-    password: String,
+    password: { type: String, required: true, index: {unique:true} },
 });
+userSchema.pre('save', function(next) {
+    var user = this;
+
+    // only hash the password if it has been modified (or is new)
+    if (!user.isModified('password')) return next();
+
+    // generate a salt
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+        if (err) return next(err);
+
+        // hash the password using our new salt
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            if (err) return next(err);
+
+            // override the cleartext password with the hashed one
+            user.password = hash;
+            next();
+        });
+    });
+});
+
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
 var Passage = mongoose.model('Post', passageSchema, 'Posts');
 var Category = mongoose.model('Category', categorySchema, 'Categories');
 var User = mongoose.model('User', userSchema, 'Users');
+///////////////////////////////////////////////////////////
+// Create Perfect Numbers
+// var users_to_add = [];
+// User.create(users_to_add, function(err, user){
+//     if (err) console.log(err);
+// });
+// User.findOne({perfect: 10}, function(err, user){
+//     console.log(user.perfect);
+// });
+// // save user to database
+// testUser.save(function(err) {
+//     if (err) throw err;
+// });
+///////////////////////////////////////////////////////////
+
+// // fetch user and test password verification
+// User.findOne({ username: 'jmar777' }, function(err, user) {
+//     if (err) throw err;
+
+//     // test a matching password
+//     user.comparePassword('Password123', function(err, isMatch) {
+//         if (err) throw err;
+//         console.log('Password123:', isMatch); // -&gt; Password123: true
+//     });
+
+//     // test a failing password
+//     user.comparePassword('123Password', function(err, isMatch) {
+//         if (err) throw err;
+//         console.log('123Password:', isMatch); // -&gt; 123Password: false
+//     });
+// });
+///////////////////////////////////////////////////////////
 
 app.get('/', function(req, res) {
     Passage.count({}, function( err, count){
@@ -116,7 +178,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var golden = '';
     //home page
     if(url_end == '' || url_end.length < 15){
-        Category.find().sort({_id: -1}).exec(function(err, categories){
+        Category.find().sort({_id: 1}).exec(function(err, categories){
             Passage.find().sort([['_id', -1]]).exec(function(err, passages){
                 res.render("sasasame", {sasasame: 'sasasame', category: '', book: passages, categories: categories});
             });

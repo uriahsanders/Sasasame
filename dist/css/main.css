@@ -28,13 +28,6 @@ body {
 }
 
 #seed {
-    width: 110px;
-    margin: auto;
-    display: block;
-    margin-top: 20px;
-
-}
-#seed {
     width: 100px;
     margin: auto;
     display: inline;
@@ -256,7 +249,7 @@ body {
     font-size: 1em;
     margin-bottom: 10px;
     width: 100%;
-    font-family: 'Patua One', cursive;
+    font-family: 'Patua One';
     background: transparent;
 }
 .control_textarea{
@@ -266,7 +259,7 @@ body {
     width: 100%;
     margin-bottom: 10px;
     resize: none;
-    font-family: 'Patua One', cursive;
+    font-family: 'Patua One';
     background: transparent;
 }
 #code{
@@ -309,7 +302,7 @@ body {
     text-align: center;
     padding-left: 40px;
     padding-right: 40px;
-    font-family: 'Patua One', cursive;
+    font-family: 'Patua One';
 }
 .category{
     font-family: 'Nanum Brush Script', cursive;
@@ -438,4 +431,8 @@ body {
     font-weight: 200;
     font-size: 0.8em;
     color: #d1a000;
+}
+
+.no_cursive{
+    font-family: 'Patua One';
 }
