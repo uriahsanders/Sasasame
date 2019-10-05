@@ -39,7 +39,9 @@ var categorySchema = mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
-    }
+    },
+    golden: Boolean,
+    votes: Number
 });
 var passageSchema = mongoose.Schema({
     author: String,
@@ -60,9 +62,9 @@ var passageSchema = mongoose.Schema({
 // Chromia is 9 (same privileges as 7 plus Leader in the Rules)
 // Akira is 99
 // Default is 100
-// Deszha and Key have no Number (not in the 100) (same privileges as 7)
-// Gabriel is 1 (same privileges as 7)
-// Relax, Wabi, Jeremy, Arty are 10
+// Deszha and Key have no Number (0, not in the 100) (same privileges as 7)
+// 1 (same privileges as 7)
+// Relax, Wabi, Jeremy, Mohamed, Arty are 10
 var userSchema = mongoose.Schema({
     perfect: Number,
     password: String,
@@ -92,9 +94,12 @@ app.get('/', function(req, res) {
 app.get('/login', function(req, res) {
     res.render('login');
 });
+app.get('/control', function(req, res) {
+    res.render('control');
+});
 
-app.get('/about', function(req, res) {
-    res.render('about');
+app.get('/help', function(req, res) {
+    res.render('help');
 });
 app.get('/history', function(req, res) {
     res.render('history');

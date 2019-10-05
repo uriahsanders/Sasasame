@@ -419,3 +419,23 @@ body {
     cursor: pointer;
     font-size: 1.1em;
 }
+#control_desc{
+    color: #353535;
+    margin: auto;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1.2em;
+}
+#control{
+    font-size: 2em;
+
+}
+#control_desc_sub{
+    color: #353535;
+    margin: auto;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: 200;
+    font-size: 0.8em;
+    color: #d1a000;
+}
