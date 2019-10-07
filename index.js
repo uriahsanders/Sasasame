@@ -15,6 +15,10 @@ var session = require('express-session');
 const options = {
     useNewUrlParser: true
 };
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 mongoose.connect('mongodb://localhost/sasame', { useNewUrlParser: true }, function(err){
     if (err) {
         return console.error(err);
@@ -44,11 +48,11 @@ var categorySchema = mongoose.Schema({
         ref: 'Category'
     },
     golden: Boolean,
-    votes: Number
+    votes: Number,
+    level: Number,
 });
 var passageSchema = mongoose.Schema({
     author: Number,
-    rank: Number, //rank is the average of the array
     content: String,
     keys: [String],
     //category the passage belongs to
@@ -57,7 +61,7 @@ var passageSchema = mongoose.Schema({
         ref: 'Category'
     },
     golden: String,
-    votes: Number
+    votes: Number,
 });
 // Perfect 100 Scheme
 // Uriah is 7
@@ -102,6 +106,32 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 var Passage = mongoose.model('Post', passageSchema, 'Posts');
 var Category = mongoose.model('Category', categorySchema, 'Categories');
 var User = mongoose.model('User', userSchema, 'Users');
+var topLevels = ['Foreword', 'Infinity Forum', 'RULES', 'Keys', 'Golden Roads', 'Death by Bubbles', 'Development', 'Afterword'];
+var categoriesToCreate = [];
+for(var chapter in topLevels){
+    categoriesToCreate.push(Category({
+        author: 7,
+        title: chapter,
+        level: 1
+    }))
+}
+//Actually create the categories
+// Category.create(categoriesToCreate, function(err, user){
+//     if (err) console.log(err);
+// });
+//Depending on what the category is (level and name)
+//we need to allow or disallow certain actions
+var GRA = function(category){
+    //These rules are for Perfect 100
+    var canMakeChapters = false;
+    var canMakePassages = false;
+
+};
+//Keypad is determined by the community
+//And tells the client side GRA what keys do what
+var keypad = {
+
+};
 ///////////////////////////////////////////////////////////
 // Create Perfect Numbers
 // var users_to_add = [];
@@ -178,7 +208,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var golden = '';
     //home page
     if(url_end == '' || url_end.length < 15){
-        Category.find().sort({_id: 1}).exec(function(err, categories){
+        Category.find({level: 1}).sort({_id: 1}).exec(function(err, categories){
             Passage.find().sort([['_id', -1]]).exec(function(err, passages){
                 res.render("sasasame", {sasasame: 'sasasame', category: '', book: passages, categories: categories});
             });
@@ -324,6 +354,21 @@ app.get('/feed_sasame', (req, res) => {
                 res.redirect("/");
             });
         }
+    });
+});
+app.post('/search_by_key', (req, res) => {
+    var keys = req.body.keys.replace(/\s/g,'').split(',');
+    Passage.find({keys:keys}).populate('category').exec(function(err, passages){
+        res.render('control', {passages: passages});
+    });
+});
+app.post('/make_golden_road', (req, res) => {
+    var keys = req.body.keys.replace(/\s/g,'').split(',');
+    var new_chapter_title = req.body.new_chapter_title;
+
+    add_category();
+    Passage.find({keys:keys}).populate('category').exec(function(err, passages){
+        res.render('control', {passages: passages});
     });
 });
 app.get('/fruit', (req, res) => {

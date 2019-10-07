@@ -16,7 +16,6 @@ document.addEventListener("load", function() {
         });
     });
 });
-
 $('#mobile_active_close').on('click', function(){
     $('#mobile_book_menu_main').fadeOut();
     $('#control_panel').fadeIn();
@@ -24,6 +23,9 @@ $('#mobile_active_close').on('click', function(){
 $('#mobile_book_menu').on('click', function(){
     $('#control_panel').fadeOut();
     $('#mobile_book_menu_main').css('display', 'block');
+});
+$('.control_select').on('click', function(){
+    $(this).toggleClass('control_select_gold');
 });
 //allow tabs in textareas
 var textareas = document.getElementsByTagName('textarea');
@@ -34,7 +36,8 @@ for(var i=0;i<count;i++){
             e.preventDefault();
             var s = this.selectionStart;
             this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
-            this.selectionEnd = s+1; 
+            this.selectionEnd = s+1;
         }
     };
 }
+
