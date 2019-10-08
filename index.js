@@ -1,6 +1,5 @@
 'use strict';
 const express = require('express');
-const mongoose = require('mongoose');
 const ejs = require('ejs');
 
 var app = express();
@@ -12,126 +11,38 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 var session = require('express-session');
 
-const options = {
-    useNewUrlParser: true
-};
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://localhost/sasame', { useNewUrlParser: true }, function(err){
-    if (err) {
-        return console.error(err);
-    }
-    setTimeout( () => {
-        mongoose.connect('mongodb://localhost/sasame', options);
-    }, 5000);
+var models = require('./models');
+// Security
+var securedRoutes = require('express').Router();
+securedRoutes.use((req, res, next) => {
+
+  // -----------------------------------------------------------------------
+  // authentication middleware
+
+  const auth = {login: 'developer', password: 'sasame'} // change this
+
+  // parse login and password from headers
+  const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
+  const [login, password] = new Buffer(b64auth, 'base64').toString().split(':')
+
+  // Verify login and password are set and correct
+  if (login && password && login === auth.login && password === auth.password) {
+    // Access granted...
+    return next()
+  }
+
+  // Access denied...
+  res.set('WWW-Authenticate', 'Basic realm="401"') // change this
+  res.status(401).send('Authentication required.') // custom message
+
+  // -----------------------------------------------------------------------
+
 });
-var bcrypt = require('bcrypt');
-var SALT_WORK_FACTOR = 10;
-var categorySchema = mongoose.Schema({
-    author: Number,
-    title: String, //name of the category
-    //passages that belong to this category
-    passages: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Passage'
-    }], //array of passage IDs
-    //categories that belong to this category
-    categories: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
-    }],
-    //category the category belongs to
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
-    },
-    golden: Boolean,
-    votes: Number,
-    level: Number,
-});
-var passageSchema = mongoose.Schema({
-    author: Number,
-    content: String,
-    keys: [String],
-    //category the passage belongs to
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
-    },
-    golden: String,
-    votes: Number,
-});
-// Perfect 100 Scheme
-// Uriah is 7
-// GRA members are 66
-// Chromia is 9 (same privileges as 7 plus Leader in the Rules)
-// Akira is 99
-// Default is 100
-// Deszha and Key have no Number (0, not in the 100) (same privileges as 7)
-// 1 (same privileges as 7)
-// Relax, Wabi, Jeremy, Mohamed, Arty are 10
-var userSchema = mongoose.Schema({
-    perfect: Number,
-    password: { type: String, required: true, index: {unique:true} },
-});
-userSchema.pre('save', function(next) {
-    var user = this;
-
-    // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) return next();
-
-    // generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
-
-        // hash the password using our new salt
-        bcrypt.hash(user.password, salt, function(err, hash) {
-            if (err) return next(err);
-
-            // override the cleartext password with the hashed one
-            user.password = hash;
-            next();
-        });
-    });
-});
-
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if (err) return cb(err);
-        cb(null, isMatch);
-    });
-};
-var Passage = mongoose.model('Post', passageSchema, 'Posts');
-var Category = mongoose.model('Category', categorySchema, 'Categories');
-var User = mongoose.model('User', userSchema, 'Users');
-var topLevels = ['Foreword', 'Infinity Forum', 'RULES', 'Keys', 'Golden Roads', 'Death by Bubbles', 'Development', 'Afterword'];
-var categoriesToCreate = [];
-for(var chapter in topLevels){
-    categoriesToCreate.push(Category({
-        author: 7,
-        title: chapter,
-        level: 1
-    }))
-}
-//Actually create the categories
-// Category.create(categoriesToCreate, function(err, user){
-//     if (err) console.log(err);
-// });
-//Depending on what the category is (level and name)
-//we need to allow or disallow certain actions
-var GRA = function(category){
-    //These rules are for Perfect 100
-    var canMakeChapters = false;
-    var canMakePassages = false;
-
-};
-//Keypad is determined by the community
-//And tells the client side GRA what keys do what
-var keypad = {
-
-};
+// Uncomment these lines to password protect while evolving Sasame
+// securedRoutes.get('path1', /* ... */);
+// app.use('/', securedRoutes);
+// app.get('public', /* ... */);
+//
 ///////////////////////////////////////////////////////////
 // Create Perfect Numbers
 // var users_to_add = [];
@@ -166,9 +77,8 @@ var keypad = {
 ///////////////////////////////////////////////////////////
 
 app.get('/', function(req, res) {
-    Passage.count({}, function( err, count){
-        console.log(count);
-        Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
+    models.Passage.countDocuments({}, function( err, count){
+        models.Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
             if(!err) {
                 res.render('index', { passage: passage, light: count });
             }
@@ -206,21 +116,62 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
     var golden = '';
+    var addPassageAllowed = true;
+    var addChapterAllowed = true;
     //home page
     if(url_end == '' || url_end.length < 15){
-        Category.find({level: 1}).sort({_id: 1}).exec(function(err, categories){
-            Passage.find().sort([['_id', -1]]).exec(function(err, passages){
-                res.render("sasasame", {sasasame: 'sasasame', category: '', book: passages, categories: categories});
+        models.Category.find({level:1}).sort({_id: 0}).exec(function(err, categories){
+            models.Passage.find().sort([['_id', -1]]).exec(function(err, passages){
+                res.render("sasasame", {sasasame: 'sasasame', category: '', book: passages, categories: categories, addPassageAllowed: true, addChapterAllowed: false});
             });
         });
     }
     //category ID
     else{
         //find all passages in this category
-        Passage.find({category: url_end}).exec(function(err, passages){
-            //find all categories in this category
-            Category.find({category: url_end}).exec(function(err, cats){
-                res.render("sasasame", {sasasame: 'xyz', category: url_end, book: passages, categories: cats});
+        models.Passage.find({category: url_end}).populate('category').exec(function(err, passages){
+            models.Category.find({_id:url_end, level: 1}).exec(function(err, category){
+                switch(category.title){
+                    case 'Foreword':
+                        addPassageAllowed = false;
+                        addChapterAllowed = false;
+                        break;
+                    case 'Infinity Forum':
+                        addPassageAllowed = true;
+                        addChapterAllowed = true;
+                        break;
+                    case 'RULES':
+                        addPassageAllowed = false;
+                        addChapterAllowed = false;
+                        break;
+                    case 'Keys':
+                        addPassageAllowed = true;
+                        addChapterAllowed = false;
+                        break;
+                    case 'Golden Roads':
+                        addPassageAllowed = false;
+                        addChapterAllowed = false;
+                        break;
+                    case 'Death by Bubbles':
+                        addPassageAllowed = true;
+                        addChapterAllowed = true;
+                        break;
+                    case 'Development':
+                        addPassageAllowed = true;
+                        addChapterAllowed = true;
+                        break;
+                    case 'Afterword':
+                        addPassageAllowed = true;
+                        addChapterAllowed = false;
+                        break;
+                    default:
+                        addPassageAllowed = true;
+                        addChapterAllowed = true;
+                }
+                //find all categories in this category
+                models.Category.find({category: url_end}).exec(function(err, cats){
+                    res.render("sasasame", {sasasame: 'xyz', category: url_end, book: passages, categories: cats, addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                });
             });
         });
         // Category.findOne({_id:url_end}).exec(function(err, category){
@@ -238,13 +189,13 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
 var add_passage = function(category, keys, content, callback) {
     keys = keys || '';
     if(category != ''){
-        let post = new Passage({
+        let post = new models.Passage({
             content: content,
             category: category,
             keys: keys
         }).save().then(data => {
             if(category != ''){
-                Category.findOne({_id:category}).exec(function(err, cat){
+                models.Category.findOne({_id:category}).exec(function(err, cat){
                     if(cat.passages){
                         cat.passages.push(data);
                     }
@@ -257,7 +208,7 @@ var add_passage = function(category, keys, content, callback) {
         });
     }
     else{
-        let post = new Passage({
+        let post = new models.Passage({
             content: content,
             keys: keys
         }).save();
@@ -266,12 +217,12 @@ var add_passage = function(category, keys, content, callback) {
 };
 var add_category = function(cat, title, callback) {
     if(cat != ''){
-        let category = new Category({
+        let category = new models.Category({
             title: title,
             category: cat
         }).save().then(data => {
             if(cat != ''){
-                Category.findOne({_id:cat}).exec(function(err, cat){
+                models.Category.findOne({_id:cat}).exec(function(err, cat){
                     if(cat.categories){
                         cat.categories.push(data);
                     }
@@ -284,14 +235,18 @@ var add_category = function(cat, title, callback) {
         });
     }
     else{
-        let category = new Category({
+        let category = new models.Category({
             title: title,
-        }).save();
+        }).save(function(err,cat){
+            if(err){
+                console.log(err);
+            }
+        });
     }
     callback();
 };
 var add_passage_to_category = function(passageID, categoryID, callback) {
-    Category.find({_id:categoryID}).sort([['_id', 1]]).exec(function(err, category){
+    models.Category.find({_id:categoryID}).sort([['_id', 1]]).exec(function(err, category){
         category.passages.append(passageID);
         category.save().then((data) => {
             callback();
@@ -340,11 +295,11 @@ app.get('/feed_sasame', (req, res) => {
     // author,
     // rank,
     // content
-    Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
+    models.Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
         if(err){
             console.log(err);
         }
-        if (info.content != passage.content){
+        if (passage && info.content != passage.content){
             add_passage('', '', info.content, function(){
                 res.redirect("/");
             });
@@ -358,7 +313,7 @@ app.get('/feed_sasame', (req, res) => {
 });
 app.post('/search_by_key', (req, res) => {
     var keys = req.body.keys.replace(/\s/g,'').split(',');
-    Passage.find({keys:keys}).populate('category').exec(function(err, passages){
+    models.Passage.find({keys:keys}).populate('category').exec(function(err, passages){
         res.render('control', {passages: passages});
     });
 });
@@ -367,13 +322,13 @@ app.post('/make_golden_road', (req, res) => {
     var new_chapter_title = req.body.new_chapter_title;
 
     add_category();
-    Passage.find({keys:keys}).populate('category').exec(function(err, passages){
+    models.Passage.find({keys:keys}).populate('category').exec(function(err, passages){
         res.render('control', {passages: passages});
     });
 });
 app.get('/fruit', (req, res) => {
     let test = null;
-    Passage.find().sort([['_id', 1]]).exec(function(err, response){
+    models.Passage.find().sort([['_id', 1]]).exec(function(err, response){
         res.render("fruit", {fruit: response});
     });
 });
@@ -381,62 +336,3 @@ app.get('/fruit', (req, res) => {
 app.listen(3000, () => {
     console.log("Sasame Started...");
 });
-
-// GOLDEN ROAD ALGORITHM
-// 1: Create Golden Road Chapters by comparing all Passages to all other Passages
-// 2: Create Main Golden Road by comparing all Passages to the next Passage
-// 3: Create Golden Roads on existing Chapters by comparing all passages in each chapter to the next passage in said chapter
-// 1 and 2 run automatically. Number 3 will run manually.
-var golden_road = function(similarity, last_passage, golden_passages){
-    similarity = similarity || 0;
-    last_passage = last_passage || {keys: []};
-    golden_passages = [];
-    Passage.find({}, (err, passages) => {
-        console.log('RUNNING THE GOLDEN ROAD ALGORITHM');
-        if(err){}
-        //2
-        for(const passage of passages){
-            similarity = key_similarity(passage.keys, last_passage.keys);
-            similarity = ('' + similarity).split('.').join('');
-            if(similarity > 0 && passage.keys.length > 0){
-                passage.golden = 'golden' + similarity;
-                last_passage = passage;
-                passage.save();
-            }
-            //1
-            for(const passage2 of passages){
-                similarity = key_similarity(passage.keys, passage2.keys);
-                similarity = ('' + similarity).split('.').join('');
-                if(similarity > 0 && passage.keys.length > 0 && passage != passage2){
-                    golden_passages.push(passage);
-                    golden_passages.push(passage2);
-                }
-            }
-        }
-        let category = new Category({
-            title: 'Golden Road',
-            passages: golden_passages
-        }).save();
-        // 60 second break
-        setTimeout(golden_road, 60000);
-    });
-};
-// golden_road();
-//now delete old Golden Road Chapters and all associated passages
-
-function key_similarity(arrayA, arrayB) {
-    var matches = 0;
-    var short_array = arrayA.length;
-    var long_array = arrayB.length;
-    //iterate over the shortest array
-    if(arrayB.length < short_array){
-        short_array = arrayB.length;
-        long_array = arrayA.length;
-    }
-    for (var i=0;i<short_array;++i) {
-        if (arrayB.indexOf(arrayA[i]) != -1)
-            ++matches;
-    }
-    //percentage in decimal form is matches/longest_array_length
-    return matches / long_array;
-}

@@ -3,15 +3,15 @@
             <div id="light_counter"><%=light%> Lights have Shined</div>
             <form action="/feed_sasame" method="GET">
                 <!-- <input type="text" name="name"> -->
-                <textarea id="sasame_text_area" name="content" autofocus><%=passage.content%></textarea>
+		<%if(locals.passage){%>
+			<textarea id="sasame_text_area" name="content"><%=passage.content%></textarea>
+		<%}else{%>
+			<textarea id="sasame_text_area" name="content"></textarea>
+		<%}%>
                 <br/>
                 <input class="sasame_button" type="submit" name="submit" value="Shine Light">
                 <input class="eat_fruit" type="submit" name="submit" value="Enter Seed">
             </form>
-
-            <!-- Loop through all post submits -->
-
-            <!-- <a href="https://github.com/uriahsanders/Sasasame">Github</a> -->
         </div>
         <script>
          $('.eat_fruit').click(function(e){
