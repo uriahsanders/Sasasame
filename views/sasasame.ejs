@@ -4,6 +4,7 @@
         <title>Sasame</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,400i,500,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/book.css">
         <link rel="stylesheet" href="/css/mobile.css">
         <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="images/bitmap.png" />
@@ -93,6 +94,7 @@
                     <div class="header no_cursive">
                         Add Passage
                     </div>
+                    <input type="file"/ class='file_input' multiple>
                     <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                     <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
                     <input name="categoryID" type="hidden" value="<%=chapter%>"/>

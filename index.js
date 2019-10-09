@@ -7,13 +7,17 @@ var app = express();
 app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
+// For POST requests
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// For Logging in
 var session = require('express-session');
-
+//Call in Models
 var models = require('./models');
-// Security
+//Call in Scripts
+var scripts = require('./scripts');
+// Password Protection for When Upgrading
 var securedRoutes = require('express').Router();
 securedRoutes.use((req, res, next) => {
 
@@ -43,41 +47,8 @@ securedRoutes.use((req, res, next) => {
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);
 // app.get('public', /* ... */);
-//
-///////////////////////////////////////////////////////////
-// Create Perfect Numbers
-// var users_to_add = [];
-// User.create(users_to_add, function(err, user){
-//     if (err) console.log(err);
-// });
-// User.findOne({perfect: 10}, function(err, user){
-//     console.log(user.perfect);
-// });
-// // save user to database
-// testUser.save(function(err) {
-//     if (err) throw err;
-// });
-///////////////////////////////////////////////////////////
-
-// // fetch user and test password verification
-// User.findOne({ username: 'jmar777' }, function(err, user) {
-//     if (err) throw err;
-
-//     // test a matching password
-//     user.comparePassword('Password123', function(err, isMatch) {
-//         if (err) throw err;
-//         console.log('Password123:', isMatch); // -&gt; Password123: true
-//     });
-
-//     // test a failing password
-//     user.comparePassword('123Password', function(err, isMatch) {
-//         if (err) throw err;
-//         console.log('123Password:', isMatch); // -&gt; 123Password: false
-//     });
-// });
-///////////////////////////////////////////////////////////
-
 app.get('/', function(req, res) {
+    //scripts.renderIndexPage(req, res);
     models.Passage.countDocuments({}, function( err, count){
         models.Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
             if(!err) {
@@ -88,11 +59,6 @@ app.get('/', function(req, res) {
             }
         });
     });
-    // Passage.find({}, (err, passages) => {
-    //     if(!err) {
-    //         res.render('index', { fruit: passages });
-    //     }
-    // });
 });
 app.get('/login', function(req, res) {
     res.render('login');
@@ -114,6 +80,7 @@ app.get('/applications', function(req, res) {
     res.render('blog', { posts });
 });
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
+    //scripts.renderBookPage(req, res);
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
     var golden = '';
@@ -132,7 +99,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         //find all passages in this category
         models.Passage.find({chapter: urlEnd}).populate('chapter').exec(function(err, passages){
             models.Chapter.find({_id:urlEnd, level: 1}).exec(function(err, chapter){
-                switch(category.title){
+                switch(chapter.title){
                     case 'Foreword':
                         addPassageAllowed = false;
                         addChapterAllowed = false;
@@ -171,7 +138,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                 }
                 //find all categories in this category
                 models.Chapter.find({chapter: urlEnd}).exec(function(err, chaps){
-                    res.render("sasasame", {sasasame: 'xyz', chapter: urlEnd, book: passages, chapter: chaps, addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                    res.render("sasasame", {sasasame: 'xyz', chapter: urlEnd, book: passages, chapters: chaps, addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
                 });
             });
         });
@@ -189,7 +156,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
 });
 var addPassage = function(chapter, keys, content, callback) {
     keys = keys || '';
-    if(chapter != ''){
+    if(chapter != '' && chapter != undefined){
+        // Level 1 passage
         let post = new models.Passage({
             content: content,
             chapter: chapter,
@@ -209,6 +177,7 @@ var addPassage = function(chapter, keys, content, callback) {
         });
     }
     else{
+        //level 1 passage
         let post = new models.Passage({
             content: content,
             keys: keys
@@ -223,14 +192,14 @@ var addChapter = function(chap, title, callback) {
             chapter: chap
         }).save().then(data => {
             if(chap != ''){
-                models.Chapter.findOne({_id:chap}).exec(function(err, chap){
-                    if(chap.chapters){
-                        chap.chapters.push(data);
+                models.Chapter.findOne({_id:chap}).exec(function(err, chapter){
+                    if(chapter.chapters){
+                        chapter.chapters.push(data);
                     }
                     else{
-                        chap.chapters = [data];
+                        chapter.chapters = [data];
                     }
-                    chap.save();
+                    chapter.save();
                 });
             }
         });
@@ -312,16 +281,14 @@ app.get('/feed_sasame', (req, res) => {
 app.post('/search_by_key', (req, res) => {
     var keys = req.body.keys.replace(/\s/g,'').split(',');
     models.Passage.find({keys:keys}).populate('chapter').exec(function(err, passages){
-        res.render('control', {passages: passages});
+        // res.render('control', {passages: passages});
+        res.send(JSON.stringify(passages));
     });
 });
 app.post('/make_golden_road', (req, res) => {
-    var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var newChapterTitle = req.body.newChapterTitle;
-    //passage IDs are in a hidden form, comma separated
-    var passages = req.body.passages.split(',');
-    //as are the keys
-    var keys = req.body.keys.split(',');
+    var title = req.body.title;
+    var passages = JSON.parse(req.body.passages);
+    res.send(JSON.stringify(passages));
     //Find the Category for all Golden Roads first
     models.Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
@@ -331,13 +298,14 @@ app.post('/make_golden_road', (req, res) => {
         }).save(function(err, new_chapter){
             //now get all passages by the ID list sent to use by the client
             //And then create the new passages
-            models.Passage.create(listOfPassages);
+            //Make sure they're linked to the chapter
+            passages.forEach(function(p){
+                p.chapter = new_chapter;
+            });
+            models.Passage.create(passages);
         });
     });
-
-    models.Passage.find({keys:keys}).populate('chapter').exec(function(err, passages){
-        res.render('control', {passages: passages});
-    });
+    res.render('control', {done: true});
 });
 app.get('/fruit', (req, res) => {
     let test = null;
@@ -346,6 +314,6 @@ app.get('/fruit', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
+app.listen(8888, () => {
     console.log("Sasame Started...");
 });
