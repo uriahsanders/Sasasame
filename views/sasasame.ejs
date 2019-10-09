@@ -70,9 +70,6 @@
                             <img id="little_seed" alt="" src="/images/test.png"/>
                         </a>
                         THE BOOK OF SASAME
-                        <div id="control_sub">
-                            is kinda like the <span id="hero_sub_seed">roots.</span>
-                        </div>
                     </div>
                     <br/>
                     <div class="up_one_level">
@@ -97,13 +94,13 @@
                     <input type="file"/ class='file_input' multiple>
                     <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                     <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
-                    <input name="categoryID" type="hidden" value="<%=chapter%>"/>
+                    <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                     <button class="control_button" id="add_passage">Pour Water</button>
                     </form>
                     <div class="header no_cursive">
                         Add Chapter
                     </div>
-                    <form action="/add_category/<%=chapter%>" method="GET">
+                    <form action="/add_chapter/<%=chapter%>" method="GET">
                         <input class="control_input"  name="title" type="text" placeholder="Title" autocomplete="off" />
                         <button class="control_button" id="add_chapter">Enrich Soil</button>
                     </form>

@@ -29,7 +29,7 @@ var chapterSchema = mongoose.Schema({
         ref: 'Chapter'
     }],
     //chapter the category belongs to
-    chapters: {
+    chapter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chapter'
     },

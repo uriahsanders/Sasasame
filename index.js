@@ -155,29 +155,29 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     }
 });
 var addPassage = function(chapter, keys, content, callback) {
+    console.log('test');
     keys = keys || '';
-    if(chapter != '' && chapter != undefined){
-        // Level 1 passage
+    if(chapter != '' && chapter != null){
         let post = new models.Passage({
             content: content,
             chapter: chapter,
             keys: keys
         }).save().then(data => {
-            if(chapter != ''){
-                models.Chapter.findOne({_id:chapter}).exec(function(err, chap){
-                    if(chap.passages){
-                        chap.passages.push(data);
-                    }
-                    else{
-                        chap.passages = [data];
-                    }
-                    chap.save();
-                });
-            }
+            models.Chapter.findOne({_id:chapter}).exec(function(err, chap){
+                console.log(chapter);
+                if(chap.passages){
+                    chap.passages.push(data);
+                }
+                else{
+                    chap.passages = [data];
+                }
+                chap.save();
+            });
         });
     }
     else{
         //level 1 passage
+        console.log('level 1');
         let post = new models.Passage({
             content: content,
             keys: keys
@@ -186,25 +186,16 @@ var addPassage = function(chapter, keys, content, callback) {
     callback();
 };
 var addChapter = function(chap, title, callback) {
-    if(chap != ''){
+    if(chap != '' && chap != null){
         let chapter = new models.Chapter({
             title: title,
             chapter: chap
         }).save().then(data => {
-            if(chap != ''){
-                models.Chapter.findOne({_id:chap}).exec(function(err, chapter){
-                    if(chapter.chapters){
-                        chapter.chapters.push(data);
-                    }
-                    else{
-                        chapter.chapters = [data];
-                    }
-                    chapter.save();
-                });
-            }
+            console.log(data.chapter);
         });
     }
     else{
+        // Level 1
         let chapter = new models.Chapter({
             title: title,
         }).save(function(err,chap){
@@ -288,12 +279,11 @@ app.post('/search_by_key', (req, res) => {
 app.post('/make_golden_road', (req, res) => {
     var title = req.body.title;
     var passages = JSON.parse(req.body.passages);
-    res.send(JSON.stringify(passages));
     //Find the Category for all Golden Roads first
     models.Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
         var cat = new models.Chapter({
-            title: 'Golden Road',
+            title: title,
             chapter: chapter,
         }).save(function(err, new_chapter){
             //now get all passages by the ID list sent to use by the client
@@ -302,10 +292,13 @@ app.post('/make_golden_road', (req, res) => {
             passages.forEach(function(p){
                 p.chapter = new_chapter;
             });
-            models.Passage.create(passages);
+            models.Passage.create(passages, function(err, ps){
+                if(err) console.log(err);
+                console.log(ps);
+            });
         });
     });
-    res.render('control', {done: true});
+    res.send('Done');
 });
 app.get('/fruit', (req, res) => {
     let test = null;
@@ -314,6 +307,10 @@ app.get('/fruit', (req, res) => {
     });
 });
 
-app.listen(8888, () => {
+var server = app.listen(3000, () => {
     console.log("Sasame Started...");
+});
+process.on('uncaughtException', function(){
+    console.log('uncaughtExceptionError');
+    server.close();
 });

@@ -54,19 +54,21 @@ $('#golden_road_form').submit(function(e){
             });
         }
     });
-    alert(JSON.stringify(passages));
-    $.ajax({
-        type: 'post',
-        url: '/make_golden_road',
-        data: {
-            passages: JSON.stringify(passages),
-            title: $('#control_new_chapter_title').text()
-        },
-        success: function(data){
-            alert(data);
-        }
-    });
-
+    console.log(passages);
+    var chapterTitle = $('#control_new_chapter_title').val();
+    if(passages.length > 1 && chapterTitle != ''){
+        $.ajax({
+            type: 'post',
+            url: '/make_golden_road',
+            data: {
+                passages: JSON.stringify(passages),
+                title: chapterTitle
+            },
+            success: function(data){
+                alert(data);
+            }
+        });
+    }
 });
 
 
