@@ -1,5 +1,5 @@
 // This file is for Initializing the Database
-var models = require('./models');
+var models = require('../models');
 // Make Initial Chapters
 var topLevels = ['Foreword', 'Infinity Forum', 'RULES', 'Keys', 'Golden Roads', 'Death by Bubbles', 'Development', 'Afterword'];
 var chaptersToCreate = [];
@@ -56,21 +56,6 @@ for(var chapter in topLevels){
 models.Chapter.create(chaptersToCreate, function(err, chapters){
     if (err) console.log(err);
     console.log(chapters);
+    console.log('All Done!');
     process.exit(1);
 });
-
-
-//Depending on what the category is (level and name)
-//we need to allow or disallow certain actions
-var GRA = function(chapter){
-    //These rules are for Perfect 100
-    var canMakeChapters = false;
-    var canMakePassages = false;
-
-};
-//Keypad is determined by the community
-//And tells the client side GRA what keys do what
-var keypad = {
-
-};
-// Make Initial Users
