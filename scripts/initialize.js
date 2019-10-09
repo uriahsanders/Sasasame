@@ -2,7 +2,7 @@
 var models = require('./models');
 // Make Initial Chapters
 var topLevels = ['Foreword', 'Infinity Forum', 'RULES', 'Keys', 'Golden Roads', 'Death by Bubbles', 'Development', 'Afterword'];
-var categoriesToCreate = [];
+var chaptersToCreate = [];
 var addPassageAllowed;
 var addChapterAllowed;
 for(var chapter in topLevels){
@@ -44,7 +44,7 @@ for(var chapter in topLevels){
             addChapterAllowed = true;
     
     }
-    categoriesToCreate.push(models.Category({
+    chaptersToCreate.push(models.Chapter({
         author: 7,
         title: topLevels[chapter],
         level: 1,
@@ -53,16 +53,16 @@ for(var chapter in topLevels){
     }));
 }
 //Actually create the categories
-models.Category.create(categoriesToCreate, function(err, categories){
+models.Chapter.create(chaptersToCreate, function(err, chapters){
     if (err) console.log(err);
-    console.log(categories);
+    console.log(chapters);
     process.exit(1);
 });
 
 
 //Depending on what the category is (level and name)
 //we need to allow or disallow certain actions
-var GRA = function(category){
+var GRA = function(chapter){
     //These rules are for Perfect 100
     var canMakeChapters = false;
     var canMakePassages = false;

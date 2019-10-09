@@ -1,3 +1,4 @@
+// This file is the 'Controller'
 'use strict';
 const express = require('express');
 const ejs = require('ejs');
@@ -114,23 +115,23 @@ app.get('/applications', function(req, res) {
 });
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
     var golden = '';
     var addPassageAllowed = true;
     var addChapterAllowed = true;
     //home page
-    if(url_end == '' || url_end.length < 15){
-        models.Category.find({level:1}).sort({_id: 0}).exec(function(err, categories){
+    if(urlEnd == '' || urlEnd.length < 15){
+        models.Chapter.find({level:1}).sort({_id: 0}).exec(function(err, chapters){
             models.Passage.find().sort([['_id', -1]]).exec(function(err, passages){
-                res.render("sasasame", {sasasame: 'sasasame', category: '', book: passages, categories: categories, addPassageAllowed: true, addChapterAllowed: false});
+                res.render("sasasame", {sasasame: 'sasasame', chapter: '', book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
             });
         });
     }
     //category ID
     else{
         //find all passages in this category
-        models.Passage.find({category: url_end}).populate('category').exec(function(err, passages){
-            models.Category.find({_id:url_end, level: 1}).exec(function(err, category){
+        models.Passage.find({chapter: urlEnd}).populate('chapter').exec(function(err, passages){
+            models.Chapter.find({_id:urlEnd, level: 1}).exec(function(err, chapter){
                 switch(category.title){
                     case 'Foreword':
                         addPassageAllowed = false;
@@ -169,8 +170,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                         addChapterAllowed = true;
                 }
                 //find all categories in this category
-                models.Category.find({category: url_end}).exec(function(err, cats){
-                    res.render("sasasame", {sasasame: 'xyz', category: url_end, book: passages, categories: cats, addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                models.Chapter.find({chapter: urlEnd}).exec(function(err, chaps){
+                    res.render("sasasame", {sasasame: 'xyz', chapter: urlEnd, book: passages, chapter: chaps, addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
                 });
             });
         });
@@ -186,23 +187,23 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         // });
     }
 });
-var add_passage = function(category, keys, content, callback) {
+var addPassage = function(chapter, keys, content, callback) {
     keys = keys || '';
-    if(category != ''){
+    if(chapter != ''){
         let post = new models.Passage({
             content: content,
-            category: category,
+            chapter: chapter,
             keys: keys
         }).save().then(data => {
-            if(category != ''){
-                models.Category.findOne({_id:category}).exec(function(err, cat){
-                    if(cat.passages){
-                        cat.passages.push(data);
+            if(chapter != ''){
+                models.Chapter.findOne({_id:chapter}).exec(function(err, chap){
+                    if(chap.passages){
+                        chap.passages.push(data);
                     }
                     else{
-                        cat.passages = [data];
+                        chap.passages = [data];
                     }
-                    cat.save();
+                    chap.save();
                 });
             }
         });
@@ -215,29 +216,29 @@ var add_passage = function(category, keys, content, callback) {
     }
     callback();
 };
-var add_category = function(cat, title, callback) {
-    if(cat != ''){
-        let category = new models.Category({
+var addChapter = function(chap, title, callback) {
+    if(chap != ''){
+        let chapter = new models.Chapter({
             title: title,
-            category: cat
+            chapter: chap
         }).save().then(data => {
-            if(cat != ''){
-                models.Category.findOne({_id:cat}).exec(function(err, cat){
-                    if(cat.categories){
-                        cat.categories.push(data);
+            if(chap != ''){
+                models.Chapter.findOne({_id:chap}).exec(function(err, chap){
+                    if(chap.chapters){
+                        chap.chapters.push(data);
                     }
                     else{
-                        cat.categories = [data];
+                        chap.chapters = [data];
                     }
-                    cat.save();
+                    chap.save();
                 });
             }
         });
     }
     else{
-        let category = new models.Category({
+        let chapter = new models.Chapter({
             title: title,
-        }).save(function(err,cat){
+        }).save(function(err,chap){
             if(err){
                 console.log(err);
             }
@@ -245,47 +246,44 @@ var add_category = function(cat, title, callback) {
     }
     callback();
 };
-var add_passage_to_category = function(passageID, categoryID, callback) {
-    models.Category.find({_id:categoryID}).sort([['_id', 1]]).exec(function(err, category){
-        category.passages.append(passageID);
-        category.save().then((data) => {
+var addPassageToCategory = function(passageID, chapterID, callback) {
+    models.Chapter.find({_id:chapterID}).sort([['_id', 1]]).exec(function(err, chapter){
+        chapter.passages.append(passageID);
+        chapter.save().then((data) => {
             callback();
         });
     });
 };
-var get_density_of_category = function(category){
-    return category.passages.length;
-};
 
-app.get(/\/add_category\/?(:categoryID)?/, (req, res) => {
+app.get(/\/add_chapter\/?(:chapterID)?/, (req, res) => {
     let info = req.query;
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var url_end = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var categoryID = url_end.split('?')[0] || '';
+    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    var chapterID = urlEnd.split('?')[0] || '';
     var backURL=req.header('Referer') || '/';
     if(info.title != ''){
-        add_category(categoryID, info.title, function(){
+        addChapter(chapterID, info.title, function(){
             res.redirect(backURL);
         });
     }
     else{
-        add_category(categoryID, 'Moist SOIL', function(){
+        addChapter(chapterID, 'Moist SOIL', function(){
             res.redirect(backURL);
         });
     }
 });
 app.post(/\/add_passage\/?/, (req, res) => {
-    var categoryID = req.body.categoryID;
+    var chapterID = req.body.chapterID;
     var backURL=req.header('Referer') || '/';
     //remove white space and separate by comma
     var keys = req.body.keys.replace(/\s/g,'').split(',');
     if(req.body.passage != ''){
-        add_passage(categoryID, keys, req.body.passage, function(){
+        addPassage(chapterID, keys, req.body.passage, function(){
             res.redirect(backURL);
         });
     }
     else{
-        add_passage(categoryID, '', 'WATER nourishes even fire.', function(){
+        addPassage(chapterID, '', 'WATER nourishes even fire.', function(){
             res.redirect(backURL);
         });
     }
@@ -300,12 +298,12 @@ app.get('/feed_sasame', (req, res) => {
             console.log(err);
         }
         if (passage && info.content != passage.content){
-            add_passage('', '', info.content, function(){
+            addPassage('', '', info.content, function(){
                 res.redirect("/");
             });
         }
         else{
-            add_passage('', '', 'LIGHT is the fire behind life.', function(){
+            addPassage('', '', 'LIGHT is the fire behind life.', function(){
                 res.redirect("/");
             });
         }
@@ -313,31 +311,31 @@ app.get('/feed_sasame', (req, res) => {
 });
 app.post('/search_by_key', (req, res) => {
     var keys = req.body.keys.replace(/\s/g,'').split(',');
-    models.Passage.find({keys:keys}).populate('category').exec(function(err, passages){
+    models.Passage.find({keys:keys}).populate('chapter').exec(function(err, passages){
         res.render('control', {passages: passages});
     });
 });
 app.post('/make_golden_road', (req, res) => {
     var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var new_chapter_title = req.body.new_chapter_title;
+    var newChapterTitle = req.body.newChapterTitle;
     //passage IDs are in a hidden form, comma separated
     var passages = req.body.passages.split(',');
     //as are the keys
     var keys = req.body.keys.split(',');
     //Find the Category for all Golden Roads first
-    models.Category.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, category){
+    models.Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
-        var cat = new models.Category({
+        var cat = new models.Chapter({
             title: 'Golden Road',
-            category: category,
-        }).save(function(err, new_category){
+            chapter: chapter,
+        }).save(function(err, new_chapter){
             //now get all passages by the ID list sent to use by the client
             //And then create the new passages
             models.Passage.create(listOfPassages);
         });
     });
 
-    models.Passage.find({keys:keys}).populate('category').exec(function(err, passages){
+    models.Passage.find({keys:keys}).populate('chapter').exec(function(err, passages){
         res.render('control', {passages: passages});
     });
 });

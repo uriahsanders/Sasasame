@@ -26,14 +26,14 @@
             <div class="header">
                 Add Passage
             </div>
-            <form action="/add_passage/<%=category%>" method="GET">
+            <form action="/add_passage/<%=chapter%>" method="GET">
                 <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
                 <button class="mobile_control_button" id="mobile_add_passage">Pour Water</button>
             </form>
             <div class="header">
                 Add Chapter
             </div>
-            <form action="/add_category/<%=category%>" method="GET">
+            <form action="/add_chapter/<%=chapter%>" method="GET">
                 <input class="control_input"  name="title" type="text" placeholder="Title"/>
                 <button class="mobile_control_button" id="mobile_add_chapter">Enrich Soil</button>
             </form>
@@ -41,10 +41,10 @@
                 Table of Contents
             </div>
             <div id="mobile_category_list">
-                <%if(categories){%>
-                    <%categories.forEach(function(f) { %>
+                <%if(chapters){%>
+                    <%chapters.forEach(function(f) { %>
                         <%if(sasasame == 'sasasame'){%>
-                            <%if(!f.category){%>
+                            <%if(!f.chapter){%>
                                 <p class="mobile_category"><a class="basic_link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
                             <%}%>
                         <%}%>
@@ -95,13 +95,13 @@
                     </div>
                     <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                     <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
-                    <input name="categoryID" type="hidden" value="<%=category%>"/>
+                    <input name="categoryID" type="hidden" value="<%=chapter%>"/>
                     <button class="control_button" id="add_passage">Pour Water</button>
                     </form>
                     <div class="header no_cursive">
                         Add Chapter
                     </div>
-                    <form action="/add_category/<%=category%>" method="GET">
+                    <form action="/add_category/<%=chapter%>" method="GET">
                         <input class="control_input"  name="title" type="text" placeholder="Title" autocomplete="off" />
                         <button class="control_button" id="add_chapter">Enrich Soil</button>
                     </form>
@@ -126,10 +126,10 @@
                     <!-- * Click a category to view everything in it -->
                     <div id="categories">
                         <%let count = 0;%>
-                        <%if(categories){%>
-                            <%categories.forEach(function(f) { %>
+                        <%if(chapters){%>
+                            <%chapters.forEach(function(f) { %>
                                 <%if(sasasame == 'sasasame'){%>
-                                    <%if(!f.category){%>
+                                    <%if(!f.chapter){%>
                                         <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
                                         <%++count;%>
                                     <%}%>

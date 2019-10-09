@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost/sasame', function(err){
 });
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
-var categorySchema = mongoose.Schema({
+var chapterSchema = mongoose.Schema({
     author: Number,
     title: String, //name of the category
     //passages that belong to this category
@@ -23,32 +23,36 @@ var categorySchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     }], //array of passage IDs
-    //categories that belong to this category
-    categories: [{
+    //chapters that belong to this category
+    chapters: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Chapter'
     }],
-    //category the category belongs to
-    category: {
+    //chapter the category belongs to
+    chapters: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Chapter'
     },
     golden: Boolean,
     votes: Number,
     level: Number,
     addPassageAllowed: Boolean,
     addChapterAllowed: Boolean,
+    //Golden Road Chapters have the same key structure as all their passages
+    keys: [String]
 
 });
 var passageSchema = mongoose.Schema({
     author: Number,
     content: String,
     keys: [String],
-    //category the passage belongs to
-    category: {
+    //chapter the passage belongs to
+    chapter: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Chapter'
     },
+    //chapter the passage came from
+    sourceChapter: String,
     golden: String,
     votes: Number,
 });
@@ -92,6 +96,6 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
         cb(null, isMatch);
     });
 };
-module.exports.Passage = mongoose.model('Post', passageSchema, 'Posts');
-module.exports.Category = mongoose.model('Category', categorySchema, 'Categories');
+module.exports.Passage = mongoose.model('Passage', passageSchema, 'Passages');
+module.exports.Chapter = mongoose.model('Chapter', chapterSchema, 'Chapters');
 module.exports.User = mongoose.model('User', userSchema, 'Users');
