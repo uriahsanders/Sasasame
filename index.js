@@ -320,8 +320,23 @@ app.post('/search_by_key', (req, res) => {
 app.post('/make_golden_road', (req, res) => {
     var keys = req.body.keys.replace(/\s/g,'').split(',');
     var new_chapter_title = req.body.new_chapter_title;
+    //passage IDs are in a hidden form, comma separated
+    var passages = req.body.passages.split(',');
+    //as are the keys
+    var keys = req.body.keys.split(',');
+    //Find the Category for all Golden Roads first
+    models.Category.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, category){
+        //We need to make a new category and add all the selected passages to it
+        var cat = new models.Category({
+            title: 'Golden Road',
+            category: category,
+        }).save(function(err, new_category){
+            //now get all passages by the ID list sent to use by the client
+            //And then create the new passages
+            models.Passage.create(listOfPassages);
+        });
+    });
 
-    add_category();
     models.Passage.find({keys:keys}).populate('category').exec(function(err, passages){
         res.render('control', {passages: passages});
     });
