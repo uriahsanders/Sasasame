@@ -30,4 +30,49 @@ for(var i=0;i<count;i++){
         }
     };
 }
+//expand passage
+$(document).on('click', '.passage', function(){
+    $(this).find('.passage_author').fadeToggle();
+    $(this).find('.passage_delete').fadeToggle();
+    $(this).find('.passage_chapter').fadeToggle();
+    $(this).find('.passage_keys').fadeToggle();
+});
+//delete passage
+$(document).on('click', '.passage_delete', function(e){
+    var thiz = $(this);
+    $.ajax({
+        type: 'post',
+        url: '/delete_passage',
+        data: {
+            _id: thiz.siblings('.passage_id').text()
+        },
+        success: function(data){
+            thiz.parent().fadeOut(300, function(){
+                $(this).remove();
+            });
+        }
+    });
+});
+var GRA = function(thiz){
+    //extract keys and content from passage
+    var keys = thiz.find('.passage_keys').text().split(',');
+    var content = thiz.find('.passage_content').text();
+    for(key in keys){
+        switch(key){
+            case '_hide':
+                thiz.hide();
+                break;
+            default:
+                break;
+        }
+    }
+
+};
+//GRA: Golden Road Algorithm
+$(document).on('click', '#runGRA', function(){
+    $('.passage').each(function(){
+        GRA($(this));
+    });
+
+});
 

@@ -121,7 +121,7 @@
 .category{
     font-family: 'Nanum Brush Script', cursive;
 }
-.passage, .category{
+.category{
     /* border-bottom: 1px dotted grey; */
     padding-top: 12px;
     padding-bottom: 12px;
@@ -139,6 +139,43 @@
 .category:hover{
     border-bottom: 1px solid #353535;
 
+}
+.passage{
+    /* border-bottom: 1px dotted grey; */
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin: 0;
+    text-align: center;
+    line-height: 30px;
+    font-size: 1.2em;
+}
+.passage_id{
+    display: none;
+}
+.passage_chapter{
+    display: none;
+    font-weight: bold;
+    padding: 5px;
+}
+.passage_content{
+    white-space: pre-wrap;
+}
+.passage_keys{
+    display: none;
+    font-weight: 200;
+    font-size: 0.8em;
+    padding-bottom: 5px;
+}
+.passage_author{
+    display: none;
+    font-weight: 200;
+    font-size: 0.8em;
+}
+.passage_delete{
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    font-weight: 200;
 }
 
 #toc{

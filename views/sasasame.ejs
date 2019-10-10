@@ -73,7 +73,12 @@
                     </div>
                     <br/>
                     <div class="up_one_level">
-                        <a class="up_one_level_link" href="/sasasame">Book</a> | <a class="up_one_level_link" href="javascript:history.back()">Back</a> | <a class="up_one_level_link" href="/control">Control</a>
+                        <!-- if parent chapter is not level 1 -->
+                        <%if(parentChapter != null && parentChapter.chapter != null){%>
+                        <a class="up_one_level_link" href="/sasasame">Start</a> | <a class="up_one_level_link" href="/sasasame/<%=parentChapter.chapter.title%>/<%=parentChapter.chapter._id%>">Up</a> | <a class="up_one_level_link" href="/control">Control</a>
+                        <%}else{%>
+                        <a class="up_one_level_link" href="/sasasame">Start</a> | <a class="up_one_level_link" href="/sasasame/">Up</a> | <a class="up_one_level_link" href="/control">Control</a>
+                        <%}%>
                     </div>
                 <!-- Here is where you have -->
                 <!-- the options to: -->
@@ -108,12 +113,29 @@
                 <div  class="control_block" id="book_of_sasame">
                     <!-- Here you read the book of Sasame from the beginning -->
                     <div class="header">
-                        Sasame
+                        <%if(parentChapter != null){%>
+                            <%=parentChapter.title%>
+                        <%}else{%>
+                            Sasame
+                        <%}%>
                     </div>
                     <!-- Add upon scroll -->
                     <%if(book){%>
                         <% book.forEach(function(f) { %>
-                            <p class="passage <%=f.golden%>"><%= f.content %></p>
+                            <div class="passage">
+                                <div class="passage_delete">x</div>
+                                <%if(f.chapter){%>
+                                <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div>
+                                <%}else{%>
+                                    <div class="passage_chapter">Sasame</div>
+                                <%}%>
+                                <div class="passage_author">Author<%= f.author %></div>
+                                <%if(f.keys != ''){%>
+                                    <div class="passage_keys">Keys: <%= f.keys %></div>
+                                <%}%>
+                                <div class="passage_content"><%= f.content %></div>
+                                <div class="passage_id"><%= f._id %></div>
+                            </div>
                         <% }); %>
                     <%}%>
                 </div>

@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-
+var mongoosePaginate = require('mongoose-paginate');
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
@@ -42,6 +42,7 @@ var chapterSchema = mongoose.Schema({
     keys: [String]
 
 });
+chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
     author: Number,
     content: String,
@@ -56,6 +57,7 @@ var passageSchema = mongoose.Schema({
     golden: String,
     votes: Number,
 });
+passageSchema.plugin(mongoosePaginate);
 // Perfect 100 Scheme
 // Uriah is 7
 // GRA members are 66

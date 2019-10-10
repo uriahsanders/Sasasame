@@ -83,75 +83,66 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    var chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
     var golden = '';
     var addPassageAllowed = true;
     var addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        models.Chapter.find({level:1}).sort({_id: 0}).exec(function(err, chapters){
-            models.Passage.find().sort([['_id', -1]]).exec(function(err, passages){
-                res.render("sasasame", {sasasame: 'sasasame', chapter: '', book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
+        models.Chapter.find({level:1}).sort({_id: 0}).exec()
+        .then(function(chapters){
+            //Paginate here
+            models.Passage.find().populate('chapter').sort([['_id', -1]]).exec()
+            .then(function(passages){
+                res.render("sasasame", {chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
+                book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
+            })
+            .then(function(err){
+                if(err){
+                    console.log(err);
+                }
             });
+        })
+        .then(function(err){
+            if(err){
+                console.log(err);
+            }
         });
     }
     //category ID
     else{
         //find all passages in this category
-        models.Passage.find({chapter: urlEnd}).populate('chapter').exec(function(err, passages){
-            models.Chapter.find({_id:urlEnd, level: 1}).exec(function(err, chapter){
-                switch(chapter.title){
-                    case 'Foreword':
-                        addPassageAllowed = false;
-                        addChapterAllowed = false;
-                        break;
-                    case 'Infinity Forum':
-                        addPassageAllowed = true;
-                        addChapterAllowed = true;
-                        break;
-                    case 'RULES':
-                        addPassageAllowed = false;
-                        addChapterAllowed = false;
-                        break;
-                    case 'Keys':
-                        addPassageAllowed = true;
-                        addChapterAllowed = false;
-                        break;
-                    case 'Golden Roads':
-                        addPassageAllowed = false;
-                        addChapterAllowed = false;
-                        break;
-                    case 'Death by Bubbles':
-                        addPassageAllowed = true;
-                        addChapterAllowed = true;
-                        break;
-                    case 'Development':
-                        addPassageAllowed = true;
-                        addChapterAllowed = true;
-                        break;
-                    case 'Afterword':
-                        addPassageAllowed = true;
-                        addChapterAllowed = false;
-                        break;
-                    default:
-                        addPassageAllowed = true;
-                        addChapterAllowed = true;
-                }
+        //Paginate here
+        models.Passage.find({chapter: urlEnd}).populate('chapter')
+        .exec()
+        .then(function(passages){
+            models.Chapter.find({_id:urlEnd}).populate('chapter').exec()
+            .then(function(chapter){
                 //find all categories in this category
-                models.Chapter.find({chapter: urlEnd}).exec(function(err, chaps){
-                    res.render("sasasame", {sasasame: 'xyz', chapter: urlEnd, book: passages, chapters: chaps, addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                //Paginate Priority 2
+                models.Chapter.find({chapter: urlEnd}).exec()
+                .then(function(chaps){
+                    res.render("sasasame", {sasasame: 'xyz', parentChapter: chapter[0], 
+                    chapter: urlEnd, book: passages, chapters: chaps, 
+                    addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                })
+                .then(function(err){
+                    if(err){
+                        console.log(err);
+                    }
                 });
+            })
+            .then(function(err){
+                if(err){
+                    console.log(err);
+                }
             });
+        })
+        .then(function(err){
+            if(err){
+                console.log(err);
+            }
         });
-        // Category.findOne({_id:url_end}).exec(function(err, category){
-        //     console.log(category.passages);
-        //     if(!category.passages){
-        //         category.passages = '';
-        //     }
-        //     if(!category.categories){
-        //         category.categories = '';
-        //     }
-        //     res.render("sasasame", {category: url_end, book: category.passages, categories: category.categories});
-        // });
     }
 });
 var addPassage = function(chapter, keys, content, callback) {
@@ -248,6 +239,14 @@ app.post(/\/add_passage\/?/, (req, res) => {
         });
     }
 });
+app.post(/\/delete_passage\/?/, (req, res) => {
+    var passageID = req.body._id;
+    models.Passage.deleteOne({_id: passageID.trim()}, function(err){
+        if(err){
+            console.log(err);
+        }
+    });
+});
 app.get('/feed_sasame', (req, res) => {
     let info = req.query;
     // author,
@@ -271,6 +270,7 @@ app.get('/feed_sasame', (req, res) => {
 });
 app.post('/search_by_key', (req, res) => {
     var keys = req.body.keys.replace(/\s/g,'').split(',');
+    //Paginate here
     models.Passage.find({keys:keys}).populate('chapter').exec(function(err, passages){
         // res.render('control', {passages: passages});
         res.send(JSON.stringify(passages));
@@ -310,7 +310,13 @@ app.get('/fruit', (req, res) => {
 var server = app.listen(3000, () => {
     console.log("Sasame Started...");
 });
-process.on('uncaughtException', function(){
+process.on('uncaughtException', function(err){
     console.log('uncaughtExceptionError');
+    console.log(err);
+    server.close();
+});
+process.on('SIGTERM', function(err){
+    console.log('SIGTERM');
+    console.log(err);
     server.close();
 });
