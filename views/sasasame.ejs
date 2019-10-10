@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/css/book.css">
         <link rel="stylesheet" href="/css/mobile.css">
         <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
-        <link rel="shortcut icon" type="image/x-icon" href="images/bitmap.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="/images/bitmap.png" />
         <script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -106,7 +106,17 @@
                         Add Chapter
                     </div>
                     <form action="/add_chapter/<%=chapter%>" method="GET">
+                        <div id="control_checkboxes">
+                            <div class="control_check">
+                                Public: <div class="tooltip"><div class="control_checkbox"><span class="checkmark"></span></div><div class="tooltiptext">Can others see?</div></div>
+                            </div>
+                            <div class="control_check">
+                                Shared: <div class="tooltip"><div class="control_checkbox"><span class="checkmark"></span></div><div class="tooltiptext">Can others contribute?</div></div>
+                            </div>
+                        </div>
                         <input class="control_input"  name="title" type="text" placeholder="Title" autocomplete="off" />
+                        <input name="public" type="hidden"/>
+                        <input name="shared" type="hidden"/>
                         <button class="control_button" id="add_chapter">Enrich Soil</button>
                     </form>
                 </div>

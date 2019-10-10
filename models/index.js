@@ -33,14 +33,13 @@ var chapterSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chapter'
     },
-    golden: Boolean,
-    votes: Number,
     level: Number,
-    addPassageAllowed: Boolean,
-    addChapterAllowed: Boolean,
-    //Golden Road Chapters have the same key structure as all their passages
-    keys: [String]
-
+    //can others make passages and chapters in here?
+    //author can delete anything but cant edit
+    //users can always edit/delete their own passages
+    shared: Boolean,
+    //can others see this chapter?
+    isPublic: Boolean
 });
 chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
@@ -54,22 +53,16 @@ var passageSchema = mongoose.Schema({
     },
     //chapter the passage came from
     sourceChapter: String,
-    golden: String,
     votes: Number,
 });
 passageSchema.plugin(mongoosePaginate);
-// Perfect 100 Scheme
-// Uriah is 7
-// GRA members are 66
-// Chromia is 9 (same privileges as 7 plus Leader in the Rules)
-// Akira is 99
-// Default is 100
-// Deszha and Key have no Number (0, not in the 100) (same privileges as 7)
-// 1 (same privileges as 7)
-// Relax, Wabi, Jeremy, Mohamed, Arty are 10
 var userSchema = mongoose.Schema({
+    //This is kinda like a rank or VIP or admin
     perfect: Number,
     password: { type: String, required: true, index: {unique:true} },
+    name: {type: String, required: [true, "can't be blank"]},
+    email: {type: String, lowercase: true, 
+        required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
 });
 userSchema.pre('save', function(next) {
     var user = this;

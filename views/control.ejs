@@ -5,6 +5,7 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,400i,500,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/main.css">
         <link rel="stylesheet" href="/css/book.css">
+        <link rel="stylesheet" href="/css/control.css">
         <link rel="stylesheet" href="/css/mobile.css">
         <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="images/bitmap.png" />
@@ -37,14 +38,10 @@
         <div id="control_panel_header">
             Control Panel
         </div>
+        <div id="control_panel_desc">Stitch together and edit passages</div>
         <form id="control_search_form"action="/search_by_key" method="post">
             <input onclick="this.select()"placeholder="Key1, Key2, ..."id="control_key_search" type="text" name="keys" value=""autocomplete="off">
             <button id="control_search"type="submit">Search</button>
-        </form>
-        <form id="golden_road_form"action="/make_golden_road" method="post">
-            <input placeholder="New Chapter Title"id="control_new_chapter_title" type="text" name="new_chapter_title" value=""autocomplete="off">
-            <input type="hidden" name="passage_ids" id="" value="">
-            <button id="control_submit"type="submit">Create Golden Road</button>
         </form>
         <%if(locals.done){%>
             <div id="control_done">

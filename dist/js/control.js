@@ -13,12 +13,15 @@ $('#control_search_form').submit(function(e){
             keys: $('#control_key_search').val()
         },
         success: function(passages){
+            $('#golden_road_form').remove();
             $('.control_select').each(function(){
                 if(!$(this).hasClass('control_select_gold')){
                     $(this).parent().remove();
                 }
             });
             var html = '';
+            var form = '<form id="golden_road_form"action="/make_golden_road" method="post"> <input placeholder="New Chapter Title"id="control_new_chapter_title" type="text" name="new_chapter_title" value=""autocomplete="off"> <input type="hidden" name="passage_ids" id="" value=""> <button id="control_submit"type="submit">Create Golden Road</button> </form>';
+
             JSON.parse(passages).forEach(function(p){
                 html += '<div class="control_passage">\
                     <div class="control_select"></div>\
@@ -36,7 +39,7 @@ $('#control_search_form').submit(function(e){
                 html += '</div></div>';
             
             });
-            html = $('#control_passages').html() + html;
+            html = form + $('#control_passages').html() + html;
             $('#control_passages').html(html);
         }
     });
