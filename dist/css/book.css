@@ -356,3 +356,16 @@
 .control_select_gold{
     background: #FFDF00;
 }
+#chapter_options{
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    background-color: gold;
+    background-color: #353535;
+    position: absolute;
+    display: inline;
+    margin-left: 10px;
+    cursor: pointer;
+    /* margin-top: -12px; */
+    margin-top: 5px;
+}

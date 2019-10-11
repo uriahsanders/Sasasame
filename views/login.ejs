@@ -1,14 +1,21 @@
     <%- include('header') -%>
         <div id="bottom">
             <div id="login_desc">
-                Your Default Username is Perfect 100 <br/>
-                and you represent Humanity.
+                <a class='login_register'>Register</a> |
+                <a class='login_login'>Login</a> |
+                <a class='login_profile'>Profile</a> |
+                <a class='login_logout'>Logout</a>
             </div>
             <form action="">
-                <input id="login_password" name="" placeholder="ENTER PASSWORD" type="password" value=""/>
-                <br/>
-                <input id="login_submit" name="" type="submit" value="CHANGE NUMBER"/>
+                <input class="login_input" placeholder="Name" name="" type="text"/>
+                <input class="login_input" placeholder="Email" name="" type="email"/>
+                <input class="login_input" placeholder="Password" name="" type="password"/>
+                <input class="login_input" placeholder="Confirm Password" name="" type="password"/>
+                <input id="login_submit" placeholder="Password" name="" value="REGISTER" type="submit"/>
             </form>
+            <br />
+            <br />
+            <br />
         </div>
     </body>
     <script src="js/app.js"></script>

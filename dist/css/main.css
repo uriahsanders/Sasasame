@@ -262,7 +262,6 @@ body {
     text-align: center;
 }
 #login_submit{
-    margin-top: 30px;
     border: 1px solid black;
     padding: 15px;
     background: #353535;
@@ -302,18 +301,23 @@ input:focus, textarea:focus{
   margin-left: -60px;
   opacity: 0;
   transition: opacity 0.3s;
+  /* font-size: .8em; */
+}
+.gra_tooltip{
+    font-size: 0.8em;
+    padding-top: 12px;
 }
 
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
+/* .tooltip .tooltiptext::after { */
+/*   content: ""; */
+/*   position: absolute; */
+/*   top: 100%; */
+/*   left: 50%; */
+/*   margin-left: -5px; */
+/*   border-width: 5px; */
+/*   border-style: solid; */
+/*   border-color: #555 transparent transparent transparent; */
+/* } */
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
@@ -373,4 +377,12 @@ input:focus, textarea:focus{
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+.login_input{
+    display: block;
+    margin: auto;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
 }

@@ -43,6 +43,7 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
+var LIMIT = 10; //how many documents per page for pagination
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);
@@ -79,6 +80,32 @@ app.get('/team', function(req, res) {
 app.get('/applications', function(req, res) {
     res.render('blog', { posts });
 });
+//make app.post for pagination
+//call same queries from function
+//but with changing parameters in paginate
+//simply return new object list for client to add into html
+app.post('/paginate', function(req, res){
+    var page = req.body.page;
+    var ret = {};
+    //what category is the user looking at?
+    var chapter = req.body.chapter;
+    var find = {chapter: chapter.trim()};
+    if(chapter.trim() == 'Sasame'){
+        find = {};
+    }
+    //now properly return both Passages and Chapters in this Chapter
+    models.Passage.paginate(find, {page: page, limit: LIMIT}).then(function(passages){
+        models.Chapter.paginate(find, {page: page, limit: LIMIT}).then(function(chapters){
+            ret.passages = passages;
+            ret.chapters = chapters;
+            res.send(JSON.stringify(ret));
+        }).then(function(err){
+            if(err) console.log(err);
+        });
+    }).then(function(err){
+        if(err) console.log(err);
+    });
+});
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -89,10 +116,10 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
+        //get all level 1 chapters (explicit)
         models.Chapter.find({level:1}).sort({_id: 0}).exec()
         .then(function(chapters){
-            //Paginate here
-            models.Passage.find().populate('chapter').sort([['_id', -1]]).exec()
+            models.Passage.find({}).populate('chapter').sort([['_id', -1]]).limit(LIMIT).exec()
             .then(function(passages){
                 res.render("sasasame", {chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
                 book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
@@ -111,16 +138,15 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     }
     //category ID
     else{
-        //find all passages in this category
-        //Paginate here
-        models.Passage.find({chapter: urlEnd}).populate('chapter')
+        //find all passages in this chapter
+        models.Passage.find({chapter: urlEnd}).populate('chapter').limit(LIMIT)
         .exec()
         .then(function(passages){
-            models.Chapter.find({_id:urlEnd}).populate('chapter').exec()
+            //get the parent chapter
+            models.Chapter.findOne({_id:urlEnd}).populate('chapter').limit(LIMIT).exec()
             .then(function(chapter){
-                //find all categories in this category
-                //Paginate Priority 2
-                models.Chapter.find({chapter: urlEnd}).exec()
+                //find all chapters in this chapter
+                models.Chapter.find({chapter: urlEnd}).limit(LIMIT).exec()
                 .then(function(chaps){
                     res.render("sasasame", {sasasame: 'xyz', parentChapter: chapter[0], 
                     chapter: urlEnd, book: passages, chapters: chaps, 

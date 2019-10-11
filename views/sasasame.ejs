@@ -124,9 +124,12 @@
                     <!-- Here you read the book of Sasame from the beginning -->
                     <div class="header">
                         <%if(parentChapter != null){%>
-                            <%=parentChapter.title%>
+                            <%=parentChapter.title%><div id="chapter_options"></div>
+                            <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                         <%}else{%>
-                            Sasame
+                        Sasame <div id="chapter_options"></div>
+                        <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
+                            <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                         <%}%>
                     </div>
                     <!-- Add upon scroll -->
