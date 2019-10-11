@@ -126,10 +126,12 @@
                         <%if(parentChapter != null){%>
                             <%=parentChapter.title%><div id="chapter_options"></div>
                             <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
+                            <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}else{%>
-                        Sasame <div id="chapter_options"></div>
+                            Sasame <div id="chapter_options"></div>
                         <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
                             <input id="parent_chapter_id"type="hidden" value="Sasame"/>
+                            <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}%>
                     </div>
                     <!-- Add upon scroll -->
@@ -159,19 +161,9 @@
                     <!-- Here you view categorization schemes -->
                     <!-- * Click a category to view everything in it -->
                     <div id="categories">
-                        <%let count = 0;%>
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
-                                <%if(sasasame == 'sasasame'){%>
-                                    <%if(!f.chapter){%>
-                                        <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
-                                        <%++count;%>
-                                    <%}%>
-                                <%}%>
-                                <%if(sasasame == 'xyz'){%>
-                                    <p id="category_<%=count%>" class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
-                                    <%++count;%>
-                                <%}%>
+                                <p class="category"><a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
                         <%});} %>
                     </div>
 

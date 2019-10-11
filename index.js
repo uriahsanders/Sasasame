@@ -148,7 +148,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                 //find all chapters in this chapter
                 models.Chapter.find({chapter: urlEnd}).limit(LIMIT).exec()
                 .then(function(chaps){
-                    res.render("sasasame", {sasasame: 'xyz', parentChapter: chapter[0], 
+                    res.render("sasasame", {sasasame: 'xyz', parentChapter: chapter, 
                     chapter: urlEnd, book: passages, chapters: chaps, 
                     addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
                 })
