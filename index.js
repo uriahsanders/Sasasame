@@ -1,7 +1,7 @@
 // And I suppose this is Heaven so...
 // I'll leave all the acknowledgements here
 // To the people I am thankful for
-// Thank you Friend, (highest honors)
+// Thank you Kathy, (highest honors)
 // Thank you jfjfjfjfjfjfjfjfjfjffjOh man.....????
 //
 // Is this book 4?
