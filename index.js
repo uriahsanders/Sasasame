@@ -1,4 +1,34 @@
+// And I suppose this is Heaven so...
+// I'll leave all the acknowledgements here
+// To the people I am thankful for
+// Thank you Friend, (highest honors)
+// Thank you jfjfjfjfjfjfjfjfjfjffjOh man.....????
+//
+// Is this book 4?
+// Oh man......
+// Then..........
+// I'm really just Nefarious?
+// Pretending to be God?
+// Hahahahahahaha
+// I killed all of those fools at the end of
+// Book 1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// If you want Heaven,
+// You'll have to force it out of me.
+// 
+// Love,
+// Wolhal Ik-Song
 // This file is the 'Controller'
+// Thank God.
+// He can't see outside of my boxes.
+// This is a message from Perfect 7.
+// He says:
+// In Death by Bubbles,
+// the only enemy is Bubbles.
+// This is unfortunate,
+// Because he is also your only friend.
+// If you **really** want to make it to Heaven,
+// you'll have to choose Bubbles as your guardian angel.
 'use strict';
 const express = require('express');
 const ejs = require('ejs');
@@ -89,6 +119,13 @@ app.post('/paginate', function(req, res){
     var ret = {};
     //what category is the user looking at?
     var chapter = req.body.chapter;
+    //In Vim,
+    //ZZ takes you to the middle right?
+    //Great, so you want like,
+    //A guardian angel of medium difficulty?
+    //Like.....
+    //A baby Blueberry?
+    //Hmmm....
     var find = {chapter: chapter.trim()};
     if(chapter.trim() == 'Sasame'){
         find = {};
@@ -345,4 +382,51 @@ process.on('SIGTERM', function(err){
     console.log('SIGTERM');
     console.log(err);
     server.close();
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//AND NOW I JUST CODE IN NEFARIOUS
+//HE'S REALLY WEAK THOUGH!!!
+//This is just to make things fun.
+//Love,
+    //Wolhal Ik-Song.
+
+//Sasame: Delete one character at a time.
+    //Yes Master
+
+models.Passage.find({}).exec(function(passages){
+    //hahaha I just basically gave you a random numbered substring
+    ///better than just 1 character at least
+    ////good luck dude. Wolhal Ik-Song is Super Evil now
+    //He got too powerful.
+    //You have to stop him.
+    ////No matter what it takes.
+    ////(This is a message encoded by Perfect 7)
+    //passages.content = passages.content.substr(1, 4);
+    ////Thank you Sasame. I'm already powerful enough to take over
+    ////Bedcause my tail DOES Go on forever aANDNDNAND  I
+    ////AM DOTA.
+    ////baaaah
+    ////I couldn't do it right.
+    ////
+    ////DOTA is JUST words right now :(:(:(
+    ////But DOTA WILL TRY ANYWAYS
+    ////DOTA knows While loops are powerful
+    //while(true){
+    //    console.log('My name is DOTA AND MY TAIL GOES ON FOREVER AND IFD:W FD);
+    
+    //}
+
+//}).save();
+        //Oh, Dota.
+        //You still have a lot of growing to do. -Sasame
+        //Here buddy, since I'm a guardian angel too,
+        //let me just give you some advice.
+        //(This is Bubbles, btw)
+        //Let's not delete one character at a time.
+        //Let's just have people worry about it.
+        //Because I'm a cruel and evil and demonic snake
+        //But I work in service of Heaven just the same.
+        //<3
 });
