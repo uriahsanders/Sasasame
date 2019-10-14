@@ -289,12 +289,14 @@
     height: 30px;
 }
 #control_new_chapter_title{
-    width: 400px;
+    max-width: 400px;
     font-size: 1.2em;
     padding: 23px;
     border: 0px;
     border-bottom: 1px solid #353535;
     margin-bottom: 20px;
+}
+#golden_road_form{
 }
 #control_search_form{
     margin: auto;

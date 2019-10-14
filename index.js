@@ -31,6 +31,7 @@
 // you'll have to choose Bubbles as your guardian angel.
 'use strict';
 const express = require('express');
+const mongoose = require('mongoose');
 const ejs = require('ejs');
 
 var app = express();
@@ -43,6 +44,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // For Logging in
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(session({
+    secret: "Shh, its a secret!",
+    resave: true,
+    saveUninitialized: true
+}));
 //Call in Models
 var models = require('./models');
 //Call in Scripts
@@ -79,11 +87,12 @@ var LIMIT = 10; //how many documents per page for pagination
 // app.use('/', securedRoutes);
 // app.get('public', /* ... */);
 app.get('/', function(req, res) {
+    console.log(req.session.user);
     //scripts.renderIndexPage(req, res);
     models.Passage.countDocuments({}, function( err, count){
         models.Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
             if(!err) {
-                res.render('index', { passage: passage, light: count });
+                res.render('index', { passage: passage, light: count, session: req.session });
             }
             else{
                 console.log(err);
@@ -92,23 +101,81 @@ app.get('/', function(req, res) {
     });
 });
 app.get('/login', function(req, res) {
-    res.render('login');
+    res.render('login', {session: req.session});
+});
+app.get('/register', function(req, res) {
+    res.render('register', {session: req.session});
+});
+app.post('/login_user', function(req, res) {
+    var email = req.body.email;
+    var pass = req.body.password;
+    models.User.findOne({email: email, password: pass}, function(err, user) {
+        if(err) return next(err);
+        if(!user) return res.send('Not logged in!');
+        req.session.user = email;
+        req.session.email = email;
+        req.session.name = user.name;
+        req.session.user_id = user._id;
+        res.redirect('/profile');
+    });
+});
+app.get('/logout', function(req, res) {
+    req.session.user = null;
+    res.redirect('/login');
+});
+app.post('/register_user', function(req, res) {
+    var user = {
+       name: req.body.name,
+       email: req.body.email,
+       password: req.body.password,
+       perfect: 100 
+   };
+   models.User.create(user, function(err, newUser) {
+      if(err) return next(err);
+      req.session.user = newUser.email;
+      return res.send('Logged In!');
+   });
+});
+app.get('/profile', function(req, res) {
+    //scripts.renderBookPage(req, res);
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    var chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
+    var golden = '';
+    var addPassageAllowed = true;
+    var addChapterAllowed = true;
+    //home page
+    if(urlEnd == '' || urlEnd.length < 15){
+        //get all level 1 chapters (explicit)
+        models.Chapter.find({author:mongoose.Types.ObjectId(req.session.user_id)}).sort({_id: 0}).exec()
+        .then(function(chapters){
+            models.Passage.find({author: mongoose.Types.ObjectId(req.session.user_id)}).populate('chapter').sort([['_id', -1]]).limit(LIMIT).exec()
+            .then(function(passages){
+                res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
+                book: passages, chapters: chapters, paginate: 'profile', addChapterAllowed: false});
+            })
+            .then(function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+        })
+        .then(function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+    }
 });
 app.get('/control', function(req, res) {
-    res.render('control');
+    res.render('control', {session: req.session});
 });
 
 app.get('/help', function(req, res) {
-    res.render('help');
+    res.render('help', {session: req.session});
 });
 app.get('/history', function(req, res) {
-    res.render('history');
-});
-app.get('/team', function(req, res) {
-    res.render('blog', { posts });
-});
-app.get('/applications', function(req, res) {
-    res.render('blog', { posts });
+    res.render('history', {session: req.session});
 });
 //make app.post for pagination
 //call same queries from function
@@ -165,7 +232,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         .then(function(chapters){
             models.Passage.find({}).populate('chapter').sort([['_id', -1]]).limit(LIMIT).exec()
             .then(function(passages){
-                res.render("sasasame", {chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
+                res.render("sasasame", {session: req.session, chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
                 book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
             })
             .then(function(err){
@@ -192,7 +259,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                 //find all chapters in this chapter
                 models.Chapter.find({chapter: urlEnd}).limit(LIMIT).exec()
                 .then(function(chaps){
-                    res.render("sasasame", {sasasame: 'xyz', parentChapter: chapter, 
+                    res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
                     chapter: urlEnd, book: passages, chapters: chaps, 
                     addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
                 })
@@ -393,7 +460,7 @@ app.post('/make_golden_road', (req, res) => {
 app.get('/fruit', (req, res) => {
     let test = null;
     models.Passage.find().sort([['_id', 1]]).exec(function(err, response){
-        res.render("fruit", {fruit: response});
+        res.render("fruit", {fruit: response, session: req.session});
     });
 });
 

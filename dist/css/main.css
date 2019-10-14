@@ -395,3 +395,8 @@ input:focus, textarea:focus{
     text-decoration: none;
     color: #353535;
 }
+.login_register, .login_login, .login_logout{
+    color: #353535;
+    text-decoration: none;
+
+}

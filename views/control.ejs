@@ -19,10 +19,10 @@
         <div id="control_panel">
             <div id="control_nav">
                     <div id="main_header">
-                        <div id="mobile_book_menu">
-                            <!-- <ion-icon name="menu"></ion-icon> -->
-                            +
-                        </div>
+                        <!-- <div id="mobile_book_menu"> -->
+                        <!--     <1!-- <ion-icon name="menu"></ion-icon> --1> -->
+                        <!--     + -->
+                        <!-- </div> -->
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
                         </a>
@@ -31,6 +31,9 @@
                     <br/>
                     <div class="up_one_level">
                         <a class="up_one_level_link" href="/sasasame">Start</a> | <a class="up_one_level_link" href="javascript:history.back()">Back</a> | <a class="up_one_level_link" href="/control">Control</a>
+                        <%if(locals.session.user){%>
+                        | <a class="up_one_level_link" href="/profile">Profile</a>
+                        <%}%>
                     </div>
             </div>
             </div>

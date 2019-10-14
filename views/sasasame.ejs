@@ -15,11 +15,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <!-- <div id="login"> -->
-        <!--     <br/> -->
-        <!--     <br/> -->
-        <!--     <a class="link white" href="/login">Perfect 100</a> -->
-        <!-- </div> -->
+        <% if(locals.session && locals.session.user != null){ %>
+            <div id="login">
+                <br/>
+                <br/>
+                <a class="link white" href="/login"><%= session.user  %></a>
+            </div>
+        <%} else{ %>
+            <div id="login">
+                <br/>
+                <br/>
+                <a class="link white" href="/login">Login</a>
+            </div>
+        <%} %>
         <div id="mobile_book_menu_main">
             <div id="mobile_active_close">
                 X
@@ -28,6 +36,7 @@
                 Add Passage
             </div>
             <form action="/add_passage/<%=chapter%>" method="GET">
+                <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                 <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
                 <button class="mobile_control_button" id="mobile_add_passage">Pour Water</button>
             </form>
@@ -79,6 +88,9 @@
                         <%}else{%>
                         <a class="up_one_level_link" href="/sasasame">Start</a> | <a class="up_one_level_link" href="/sasasame/">Up</a> | <a class="up_one_level_link" href="/control">Control</a>
                         <%}%>
+                        <%if(locals.session.user){%>
+                        | <a class="up_one_level_link" href="/profile">Profile</a>
+                        <%}%>
                     </div>
                 <!-- Here is where you have -->
                 <!-- the options to: -->
@@ -123,15 +135,24 @@
                 <div  class="control_block" id="book_of_sasame">
                     <!-- Here you read the book of Sasame from the beginning -->
                     <div class="header">
+                        <!-- PARENT CHAPTER / CHAPTER OPTIONS -->
                         <%if(parentChapter != null){%>
-                        <span id="parent_chapter_title"><%=parentChapter.title%></span><div id="chapter_options"></div>
-                            <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
-                            <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <span id="parent_chapter_title"><%=parentChapter.title%></span><div id="chapter_options"></div>
+                                <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
+                                <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}else{%>
-                        <span id="parent_chapter_title">Sasame</span> <div id="chapter_options"></div>
-                        <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
-                            <input id="parent_chapter_id"type="hidden" value="Sasame"/>
-                            <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <%if(locals.isProfile){%>
+                            <input type="hidden" value="true", id="is_profile"/>
+                            <span id="parent_chapter_title"><%=session.name%></span> <div id="chapter_options"></div>
+                                <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
+                                <input id="parent_chapter_id"type="hidden" value="Sasame"/>
+                                <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <%}else{%>
+                                <span id="parent_chapter_title">Sasame</span> <div id="chapter_options"></div>
+                                <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
+                                <input id="parent_chapter_id"type="hidden" value="Sasame"/>
+                                <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <%}%>
                         <%}%>
                     </div>
                     <!-- Add upon scroll -->

@@ -1,18 +1,32 @@
     <%- include('header') -%>
         <div id="bottom">
             <div id="login_desc">
-                <a class='login_register'>Register</a> |
-                <a class='login_login'>Login</a> |
-                <a class='login_profile'>Profile</a> |
-                <a class='login_logout'>Logout</a>
+                <%if(locals.session.user){ %>
+                    <a href="/login" class='login_register'>Settings</a> |
+                    <a href="/logout" class='login_logout'>Logout</a>
+                <%}else{%>
+                    <a href="/register" class='login_register'>Register</a> |
+                    <a href="/login" class='login_login'>Login</a> |
+                    <a href="/logout" class='login_logout'>Logout</a>
+                <%}%>
             </div>
-            <form action="">
-                <input class="login_input" placeholder="Name" name="" type="text"/>
-                <input class="login_input" placeholder="Email" name="" type="email"/>
-                <input class="login_input" placeholder="Password" name="" type="password"/>
-                <input class="login_input" placeholder="Confirm Password" name="" type="password"/>
-                <input id="login_submit" placeholder="Password" name="" value="REGISTER" type="submit"/>
-            </form>
+                <%if(locals.session.user){ %>
+                    <form action="/update_user" method="POST" autocomplete="off">
+                        <input class="login_input" value="<%=session.name%>"placeholder="Name" name="name" type="text" required/>
+                        <input class="login_input" value="<%=session.email%>"placeholder="Email" name="email" type="email" required/>
+                        <input style="display:none" type="password" name="fakepasswordremembered"/>
+
+                        <input class="login_input" placeholder="New Password" name="password" type="password" autocomplete=""/>
+                        <input class="login_input" placeholder="Confirm Password" name="confirm" type="password" autocomplete="off"/>
+                        <input class="login_input" placeholder="Current Password" name="password" type="password" required/>
+                        <input id="login_submit" name="" value="UPDATE" type="submit"/>
+                <%}else{%>
+                    <form action="/login_user" method="POST">
+                        <input class="login_input" placeholder="Email" name="email" type="email"/>
+                        <input class="login_input" placeholder="Password" name="password" type="password"/>
+                        <input id="login_submit" name="" value="LOGIN" type="submit"/>
+                <%}%>
+                    </form>
             <br />
             <br />
             <br />

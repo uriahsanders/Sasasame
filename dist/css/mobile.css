@@ -30,6 +30,18 @@
         height: 200px;
         font-size: 1em;
     }
+    .control_textarea{
+        background: #fff;
+    }
+    .control_input{
+        background: #fff;
+    }
+    #chapter_options{
+        height: 20px;
+        width: 20px;
+    
+    }
+
     .blog_image{
         width: 100%;
 
