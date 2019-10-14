@@ -124,11 +124,11 @@
                     <!-- Here you read the book of Sasame from the beginning -->
                     <div class="header">
                         <%if(parentChapter != null){%>
-                            <%=parentChapter.title%><div id="chapter_options"></div>
+                        <span id="parent_chapter_title"><%=parentChapter.title%></span><div id="chapter_options"></div>
                             <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                             <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}else{%>
-                            Sasame <div id="chapter_options"></div>
+                        <span id="parent_chapter_title">Sasame</span> <div id="chapter_options"></div>
                         <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
                             <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                             <input id="page" type="hidden" value="2" autocomplete="off"/>

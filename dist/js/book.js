@@ -45,10 +45,14 @@ window.onscroll = function(ev) {
                     $('#book_of_sasame').append(html);
                 });
                 html = '';
-                chapters.docs.forEach(function(chapter){
-                    html = '<p class="category"><a class="link" href="/sasasame/'+chapter.title+'/'+chapter._id+'">'+chapter.title+'</a></p>';
-                    $('#categories').append(html);
-                });
+                //only if ParentChapter is not Sasame
+                var parentChapterTitle = $('#parent_chapter_title').text();
+                if(parentChapterTitle != 'Sasame'){
+                    chapters.docs.forEach(function(chapter){
+                        html = '<p class="category"><a class="link" href="/sasasame/'+chapter.title+'/'+chapter._id+'">'+chapter.title+'</a></p>';
+                        $('#categories').append(html);
+                    });
+                }
                 $('#page').val(++page);
             }
         });
