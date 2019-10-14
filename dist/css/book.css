@@ -110,8 +110,8 @@
     /* margin: auto; */
 }
 .passage{
-    border-left: 1px solid #353535;
-    border-right: 1px solid #353535;
+    /* border-left: 1px solid #353535; */
+    /* border-right: 1px solid #353535; */
     margin: auto;
     text-align: center;
     /* padding-left: 40px; */
@@ -192,9 +192,9 @@
     float: left;
     width: 20px;
     padding: 5px;
-    border-bottom: 1px solid #353535;
-    border-right: 1px solid #353535;
-    border-top: 1px solid #353535;
+    /* border-bottom: 1px solid #353535; */
+    /* border-right: 1px solid #353535; */
+    /* border-top: 1px solid #353535; */
 }
 
 #toc{

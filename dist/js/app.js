@@ -33,6 +33,11 @@ for(var i=0;i<count;i++){
 //expand passage
 $(document).on('click', '.passage_expand', function(){
     var text = $(this).text();
+    var originals = {
+        keys: $(this).siblings('.original_passage_keys').val(),
+        content: $(this).siblings('.original_passage_content').val()
+    };
+    //check against originals to see if Ajax request is needed
     if(text == '+'){
         text = '-';
         $('.passage_content').attr('contenteditable', 'true');
@@ -44,18 +49,21 @@ $(document).on('click', '.passage_expand', function(){
         //because we are now closing it
         var thiz = $(this);
         var keys = thiz.siblings('.passage_keys').children('.passage_edit_keys').text();
-        $.ajax({
-           type: 'post',
-           url: '/update_passage',
-           data: {
-               _id: thiz.siblings('.passage_id').text(),
-               keys: keys,
-               content: thiz.siblings('.passage_content').text(),
-           },
-           success: function(data){
-               //Done
-           }
-        });
+        var content = thiz.siblings('.passage_content').text();
+        if(keys != originals.keys || content != originals.content){
+            $.ajax({
+               type: 'post',
+               url: '/update_passage',
+               data: {
+                   _id: thiz.siblings('.passage_id').text(),
+                   keys: keys,
+                   content: content,
+               },
+               success: function(data){
+                   //Done
+               }
+            });
+        }
     }
     $(this).text(text);
     $(this).siblings('.passage_author').fadeToggle();
