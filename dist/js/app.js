@@ -95,41 +95,47 @@ var GRA = function(thiz){
     //extract keys and content from passage
     var keys = thiz.find('.passage_edit_keys').text().split(',');
     var content = thiz.find('.passage_content').text();
-    var lastChar = content.substr(content.length - 1, 1);
-    if(lastChar == '.' || lastChar == '!' || lastChar == '?'){
-        content = content.substr(0, content.length - 1);
-    }
-    //go through every word in content
-    content = content.split(' ');
-    for(word of content){
-        word = word.toLowerCase();
-        switch(word){
-            case 'dota':
-                thiz.find('.passage_content').css('color', 'crimson');
-                break;
-            case 'blueberry':
-            case 'baby':
-                thiz.find('.passage_content').css('color', 'blue');
-                break;
-
-        }
-    }
     //keys next because they are more important
     //and might undo the above
     //go through every key
+    //You have content keys (_html) that read content to work
+    //and keys that require arguments (_color:someColor), and have free content
     for(key of keys){
         key = key.toLowerCase();
         switch(key){
-            case '_hide':
+            case '_kiss_css':
+                //run css rules for content
+                //line by line, 3 words separated by periods.
+                var lines = content.split('\n');
+                for(line of lines){
+                    var words = line.split('.');
+                    //how pretty
+                    $(words[0]).css(words[1], words[2]);
+                }
                 thiz.hide();
                 break;
-            case 'red':
-                thiz.find('.passage_content').css('color', 'crimson');
+            case '_html':
+                //create html
+                $('body').append(content);
+                thiz.hide();
                 break;
-            case 'blue':
-                thiz.find('.passage_content').css('color', 'blue');
+            case '_js':
+                //eval JS
+                //So great and so Evil!
+                console.log(content);
+                eval(content);
+                thiz.hide();
+                break;
+            case '_hidden':
+                thiz.hide();
                 break;
             default:
+                //for keys that take arguments, ex.
+                //_color:some_color
+                var keyData = key.split(':');
+                if(keyData[0] == '_color'){
+                    thiz.find('.passage_content').css('color', keyData[1]);
+                }
                 break;
         }
     }
@@ -152,5 +158,5 @@ $(document).on('click', '#chapter_options', function(){
         window.location.reload();
     }
 });
-$('#chapter_options').click();
+// $('#chapter_options').click();
 

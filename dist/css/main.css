@@ -386,3 +386,12 @@ input:focus, textarea:focus{
     margin-bottom: 20px;
 
 }
+.help_key_active{
+    text-decoration: none;
+    color: #353535;
+    font-weight: bold;
+}
+.help_key_inactive{
+    text-decoration: none;
+    color: #353535;
+}
