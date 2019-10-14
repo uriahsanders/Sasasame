@@ -136,8 +136,8 @@ app.post('/paginate', function(req, res){
             ret.passages = passages;
             ret.chapters = chapters;
             if(ret.chapters){
-                console.log(ret.chapters);
-                if(typeof ret.chapters.docs[0].level != 'undefined'){
+                console.log(typeof ret.chapters.docs[0].chapter == 'undefined');
+                if(typeof ret.chapters.docs[0].chapter == 'undefined' || typeof ret.chapters.docs[0].level != 'undefined'){
                     if(ret.chapters.docs[0].level == 1){
                         ret.chapters = {};
                     }
