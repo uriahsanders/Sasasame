@@ -1,6 +1,6 @@
 #little_seed {
     width: 70px;
-    display: block;
+    display: inline;
     margin: auto;
     margin-bottom: 10px;
 
@@ -386,4 +386,7 @@
     cursor: pointer;
     /* margin-top: -12px; */
     margin-top: 5px;
+}
+.golden{
+    background-color: gold;
 }

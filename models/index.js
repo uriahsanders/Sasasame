@@ -45,7 +45,7 @@ chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
     author: Number,
     content: String,
-    keys: [String],
+    keys: String,
     //chapter the passage belongs to
     chapter: {
         type: mongoose.Schema.Types.ObjectId,

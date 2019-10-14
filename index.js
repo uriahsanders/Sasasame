@@ -297,7 +297,8 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
     var backURL=req.header('Referer') || '/';
     //remove white space and separate by comma
-    var keys = req.body.keys.replace(/\s/g,'').split(',');
+    // var keys = req.body.keys.replace(/\s/g,'').split(',');
+    var keys = req.body.keys;
     if(req.body.passage != ''){
         addPassage(chapterID, keys, req.body.passage, function(){
             res.redirect(backURL);
@@ -321,7 +322,8 @@ app.post(/\/update_passage\/?/, (req, res) => {
     var passageID = req.body._id;
     var content = req.body.content;
     //remove white space and separate by comma
-    var keys = req.body.keys.replace(/\s/g,'').split(',');
+    // var keys = req.body.keys.replace(/\s/g,'').split(',');
+    var keys = req.body.keys;
     console.log(keys);
     models.Passage.updateOne({_id: passageID.trim()}, {
         keys: keys,
@@ -356,9 +358,10 @@ app.get('/feed_sasame', (req, res) => {
     });
 });
 app.post('/search_by_key', (req, res) => {
-    var keys = req.body.keys.replace(/\s/g,'').split(',');
+    // var keys = req.body.keys.replace(/\s/g,'').split(',');
+    var keys = req.body.keys;
     //Paginate here
-    models.Passage.find({keys:keys}).populate('chapter').exec(function(err, passages){
+    models.Passage.find({keys: new RegExp('^'+keys+'$', "i")}).populate('chapter').exec(function(err, passages){
         // res.render('control', {passages: passages});
         res.send(JSON.stringify(passages));
     });

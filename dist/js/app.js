@@ -91,13 +91,43 @@ $(document).on('click', '.passage_expand', function(){
 //    $(this).find('.passage_keys').fadeToggle();
 //});
 var GRA = function(thiz){
+    //keys are read case insensitive
     //extract keys and content from passage
-    var keys = thiz.find('.passage_keys').text().split(',');
+    var keys = thiz.find('.passage_edit_keys').text().split(',');
     var content = thiz.find('.passage_content').text();
-    for(key in keys){
+    var lastChar = content.substr(content.length - 1, 1);
+    if(lastChar == '.' || lastChar == '!' || lastChar == '?'){
+        content = content.substr(0, content.length - 1);
+    }
+    //go through every word in content
+    content = content.split(' ');
+    for(word of content){
+        word = word.toLowerCase();
+        switch(word){
+            case 'dota':
+                thiz.find('.passage_content').css('color', 'crimson');
+                break;
+            case 'blueberry':
+            case 'baby':
+                thiz.find('.passage_content').css('color', 'blue');
+                break;
+
+        }
+    }
+    //keys next because they are more important
+    //and might undo the above
+    //go through every key
+    for(key of keys){
+        key = key.toLowerCase();
         switch(key){
             case '_hide':
                 thiz.hide();
+                break;
+            case 'red':
+                thiz.find('.passage_content').css('color', 'crimson');
+                break;
+            case 'blue':
+                thiz.find('.passage_content').css('color', 'blue');
                 break;
             default:
                 break;
@@ -106,10 +136,21 @@ var GRA = function(thiz){
 
 };
 //GRA: Golden Road Algorithm
-$(document).on('click', '#runGRA', function(){
-    $('.passage').each(function(){
-        GRA($(this));
-    });
-
+$(document).on('click', '#chapter_options', function(){
+    var background = $(this).css('background-color');
+    //same as #353535
+    if(background == 'rgb(53, 53, 53)'){
+        $(this).css('background-color', 'gold');
+        //run Golden Road Algorithm
+        $('.passage').each(function(){
+            GRA($(this));
+        });
+    }
+    else{
+        $(this).css('background-color', '#353535');
+        //then reload page to reset
+        window.location.reload();
+    }
 });
+$('#chapter_options').click();
 
