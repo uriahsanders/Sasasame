@@ -135,6 +135,14 @@ app.post('/paginate', function(req, res){
         models.Chapter.paginate(find, {page: page, limit: LIMIT}).then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;
+            if(ret.chapters){
+                console.log(ret.chapters);
+                if(typeof ret.chapters.docs[0].level != 'undefined'){
+                    if(ret.chapters.docs[0].level == 1){
+                        ret.chapters = {};
+                    }
+                }
+            }
             res.send(JSON.stringify(ret));
         }).then(function(err){
             if(err) console.log(err);

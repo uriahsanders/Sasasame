@@ -28,13 +28,13 @@ window.onscroll = function(ev) {
                 var html = '';
                 passages.docs.forEach(function(passage){
                     html = '<div class="passage"> <div class="passage_delete">x</div>';
-                    if(passage.chapter){
+                    if(typeof passage.chapter != 'undefined' && typeof passage.chapter.title != 'undefined'){
                         html += ' <div class="passage_chapter"><a class="basic_link"href="/sasasame/'+passage.chapter.title+'/'+passage.chapter._id+'">'+passage.chapter.title+'></a></div>';
                     }
                     else{
                         html += '<div class="passage_chapter">Sasame</div>';
                     }
-                    html += '<div class="passage_author">'+passage.author+'</div>';
+                    // html += '<div class="passage_author">'+passage.author+'</div>';
                     if(passage.keys != ''){
                         html += '<div class="passage_keys">Keys: '+passage.keys+'</div>';
                     }
