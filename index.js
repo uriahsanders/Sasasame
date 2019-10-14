@@ -135,7 +135,7 @@ app.post('/paginate', function(req, res){
         models.Chapter.paginate(find, {page: page, limit: LIMIT}).then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;
-            if(ret.chapters){
+            if(ret.chapters && ret.chapters.docs[0] && ret.chapters.docs[0].chapter){
                 if(typeof ret.chapters.docs[0].chapter == 'undefined' || typeof ret.chapters.docs[0].level != 'undefined'){
                     if(ret.chapters.docs[0].level == 1){
                         ret.chapters = {};
@@ -319,15 +319,18 @@ app.post(/\/delete_passage\/?/, (req, res) => {
 });
 app.post(/\/update_passage\/?/, (req, res) => {
     var passageID = req.body._id;
-    var keys = req.body.keys;
     var content = req.body.content;
-    models.Passage.update({_id: passageID.trim()}, {
+    //remove white space and separate by comma
+    var keys = req.body.keys.replace(/\s/g,'').split(',');
+    console.log(keys);
+    models.Passage.updateOne({_id: passageID.trim()}, {
         keys: keys,
         content: content
     }, function(err, affected, resp){
         if(err){
             console.log(err);
         }
+        console.log(affected);
         res.send(resp);
     });
 });

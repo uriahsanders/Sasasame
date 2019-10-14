@@ -32,7 +32,7 @@ $('#control_search_form').submit(function(e){
                 else{
                     html += 'Sasame';
                 }
-                html += '</div><div class="control_passage_keys" contenteditable="true">';
+                html += '</div><div>Keys:</div><div class="control_passage_keys" contenteditable="true">';
                 html += p.keys;
                 html += '</div><div class="control_passage_passage" contenteditable="true">';
                 html += p.content;

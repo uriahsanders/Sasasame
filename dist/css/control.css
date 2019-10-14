@@ -4,3 +4,9 @@
     margin: auto;
     font-weight: 200;
 }
+.control_passage_keys{
+    border-left: 1px solid #353535;
+    border-right: 1px solid #353535;
+    height: 30px;
+    margin-top: 10px;
+}

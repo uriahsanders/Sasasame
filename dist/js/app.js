@@ -41,16 +41,17 @@ $(document).on('click', '.passage_expand', function(){
         //update passage
         //because we are now closing it
         var thiz = $(this);
+        var keys = thiz.siblings('.passage_keys').children('.passage_edit_keys').text();
         $.ajax({
            type: 'post',
            url: '/update_passage',
            data: {
                _id: thiz.siblings('.passage_id').text(),
-               keys: thiz.siblings('.passage_edit_keys').text(),
+               keys: keys,
                content: thiz.siblings('.passage_content').text(),
            },
            success: function(data){
-               console.log(data);
+               //Done
            }
         });
     }
@@ -58,7 +59,6 @@ $(document).on('click', '.passage_expand', function(){
     $(this).siblings('.passage_author').fadeToggle();
     $(this).siblings('.passage_chapter').fadeToggle();
     $(this).siblings('.passage_keys').fadeToggle();
-    //update passage if closing
 });
 //delete passage
 //$(document).on('click', '.passage_expand', function(e){
