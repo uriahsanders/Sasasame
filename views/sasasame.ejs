@@ -15,11 +15,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <div id="login">
-            <br/>
-            <br/>
-            <a class="link white" href="/login">Perfect 100</a>
-        </div>
+        <!-- <div id="login"> -->
+        <!--     <br/> -->
+        <!--     <br/> -->
+        <!--     <a class="link white" href="/login">Perfect 100</a> -->
+        <!-- </div> -->
         <div id="mobile_book_menu_main">
             <div id="mobile_active_close">
                 X
@@ -140,8 +140,6 @@
                             <div class="passage">
                                 <div class="passage_delete">x</div>
                                 <%if(typeof f.chapter != 'undefined' && typeof f.chapter.title != 'undefined'){%>
-                                <div><%=( f.chapter.title) %></div>
-                                <div>test</div>
                                 <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div>
                                 <%}else{%>
                                     <div class="passage_chapter">Sasame</div>
