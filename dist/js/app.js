@@ -35,9 +35,11 @@ $(document).on('click', '.passage_expand', function(){
     var text = $(this).text();
     if(text == '+'){
         text = '-';
+        $('.passage_content').attr('contenteditable', 'true');
     }
     else{
         text = '+';
+        $('.passage_content').attr('contenteditable', 'false');
         //update passage
         //because we are now closing it
         var thiz = $(this);

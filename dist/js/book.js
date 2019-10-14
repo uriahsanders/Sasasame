@@ -36,7 +36,10 @@ window.onscroll = function(ev) {
                     }
                     // html += '<div class="passage_author">'+passage.author+'</div>';
                     if(passage.keys != ''){
-                        html += '<div class="passage_keys">Keys: '+passage.keys+'</div>';
+                        html += ' <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true">'+passage.keys+'</div></div>';
+                    }
+                    else{
+                        html += ' <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true"></div></div>';
                     }
                     html += '<div class="passage_content">'+passage.content+'</div> <div class="passage_id">'+passage._id+'</div></div>';
                     $('#book_of_sasame').append(html);
