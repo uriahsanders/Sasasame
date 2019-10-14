@@ -31,28 +31,55 @@ for(var i=0;i<count;i++){
     };
 }
 //expand passage
-$(document).on('click', '.passage', function(){
-    $(this).find('.passage_author').fadeToggle();
-    $(this).find('.passage_delete').fadeToggle();
-    $(this).find('.passage_chapter').fadeToggle();
-    $(this).find('.passage_keys').fadeToggle();
+$(document).on('click', '.passage_expand', function(){
+    var text = $(this).text();
+    if(text == '+'){
+        text = '-';
+    }
+    else{
+        text = '+';
+        //update passage
+        //because we are now closing it
+        var thiz = $(this);
+        $.ajax({
+           type: 'post',
+           url: '/update_passage',
+           data: {
+               _id: thiz.siblings('.passage_id').text(),
+               keys: thiz.siblings('.passage_edit_keys').text(),
+               content: thiz.siblings('.passage_content').text(),
+           },
+           success: function(data){
+               console.log(data);
+           }
+        });
+    }
+    $(this).text(text);
+    $(this).siblings('.passage_author').fadeToggle();
+    $(this).siblings('.passage_chapter').fadeToggle();
+    $(this).siblings('.passage_keys').fadeToggle();
+    //update passage if closing
 });
 //delete passage
-$(document).on('click', '.passage_delete', function(e){
-    var thiz = $(this);
-    $.ajax({
-        type: 'post',
-        url: '/delete_passage',
-        data: {
-            _id: thiz.siblings('.passage_id').text()
-        },
-        success: function(data){
-            thiz.parent().fadeOut(300, function(){
-                $(this).remove();
-            });
-        }
-    });
-});
+//$(document).on('click', '.passage_expand', function(e){
+//    var thiz = $(this);
+//    //update passage
+//    // $.ajax({
+//    //     type: 'post',
+//    //     url: '/delete_passage',
+//    //     data: {
+//    //         _id: thiz.siblings('.passage_id').text()
+//    //     },
+//    //     success: function(data){
+//    //         thiz.parent().fadeOut(300, function(){
+//    //             $(this).remove();
+//    //         });
+//    //     }
+//    // });
+//    $(this).find('.passage_author').fadeToggle();
+//    $(this).find('.passage_chapter').fadeToggle();
+//    $(this).find('.passage_keys').fadeToggle();
+//});
 var GRA = function(thiz){
     //extract keys and content from passage
     var keys = thiz.find('.passage_keys').text().split(',');

@@ -138,7 +138,7 @@
                     <%if(book){%>
                         <% book.forEach(function(f) { %>
                             <div class="passage">
-                                <div class="passage_delete">x</div>
+                                <div class="passage_expand">+</div>
                                 <%if(typeof f.chapter != 'undefined' && typeof f.chapter.title != 'undefined'){%>
                                 <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div>
                                 <%}else{%>
@@ -146,9 +146,11 @@
                                 <%}%>
                                 <!-- <div class="passage_author">Author<%= f.author %></div> -->
                                 <%if(f.keys != '' && f.keys != 'undefined'){%>
-                                    <div class="passage_keys">Keys: <% f.keys %></div>
+                                <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true"><%= f.keys %></div></div>
+                                <%}else{%>
+                                <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true"></div></div>
                                 <%}%>
-                                <div class="passage_content"><%= f.content %></div>
+                                <div class="passage_content" contenteditable="true"><%= f.content %></div>
                                 <div class="passage_id"><%= f._id %></div>
                             </div>
                         <% }); %>

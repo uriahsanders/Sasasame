@@ -114,8 +114,8 @@
     border-right: 1px solid #353535;
     margin: auto;
     text-align: center;
-    padding-left: 40px;
-    padding-right: 40px;
+    /* padding-left: 40px; */
+    /* padding-right: 40px; */
     font-family: 'Patua One';
 }
 .category{
@@ -156,26 +156,45 @@
     display: none;
     font-weight: bold;
     padding: 5px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 .passage_content{
     white-space: pre-wrap;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 .passage_keys{
     display: none;
     font-weight: 200;
     font-size: 0.8em;
     padding-bottom: 5px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.passage_edit_keys{
+    border-left: 1px solid #353535;
+    border-right: 1px solid #353535;
+    height: 30px;
+
 }
 .passage_author{
     display: none;
     font-weight: 200;
     font-size: 0.8em;
 }
-.passage_delete{
-    display: none;
-    position: absolute;
+.passage_expand{
+    /* display: none; */
+    /* float: left; */
     cursor: pointer;
     font-weight: 200;
+    /* border: 1px solid #353535; */
+    float: left;
+    width: 20px;
+    padding: 5px;
+    border-bottom: 1px solid #353535;
+    border-right: 1px solid #353535;
+    border-top: 1px solid #353535;
 }
 
 #toc{

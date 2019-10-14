@@ -317,6 +317,20 @@ app.post(/\/delete_passage\/?/, (req, res) => {
         }
     });
 });
+app.post(/\/update_passage\/?/, (req, res) => {
+    var passageID = req.body._id;
+    var keys = req.body.keys;
+    var content = req.body.content;
+    models.Passage.update({_id: passageID.trim()}, {
+        keys: keys,
+        content: content
+    }, function(err, affected, resp){
+        if(err){
+            console.log(err);
+        }
+        res.send(resp);
+    });
+});
 app.get('/feed_sasame', (req, res) => {
     let info = req.query;
     // author,

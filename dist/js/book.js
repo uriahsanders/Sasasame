@@ -27,7 +27,7 @@ window.onscroll = function(ev) {
                 var chapters = dataObj.chapters;
                 var html = '';
                 passages.docs.forEach(function(passage){
-                    html = '<div class="passage"> <div class="passage_delete">x</div>';
+                    html = '<div class="passage"> <div class="passage_expand">+</div>';
                     if(typeof passage.chapter != 'undefined' && typeof passage.chapter.title != 'undefined'){
                         html += ' <div class="passage_chapter"><a class="basic_link"href="/sasasame/'+passage.chapter.title+'/'+passage.chapter._id+'">'+passage.chapter.title+'></a></div>';
                     }
