@@ -163,6 +163,7 @@
     white-space: pre-wrap;
     padding-left: 40px;
     padding-right: 40px;
+    min-height: 30px;
 }
 .passage_keys{
     display: none;
@@ -175,7 +176,7 @@
 .passage_edit_keys{
     border-left: 1px solid #353535;
     border-right: 1px solid #353535;
-    height: 30px;
+    min-height: 30px;
 
 }
 .passage_author{

@@ -93,7 +93,7 @@ $(document).on('click', '.passage_expand', function(){
 var GRA = function(thiz){
     //keys are read case insensitive
     //extract keys and content from passage
-    var keys = thiz.find('.passage_edit_keys').text().split(',');
+    var keys = thiz.find('.passage_edit_keys').text().split(',').map(item => item.trim());
     var content = thiz.find('.passage_content').text();
     //keys next because they are more important
     //and might undo the above
@@ -106,25 +106,22 @@ var GRA = function(thiz){
             case '_kiss_css':
                 //run css rules for content
                 //line by line, 3 words separated by periods.
+                //ex. class.style.value
                 var lines = content.split('\n');
                 for(line of lines){
                     var words = line.split('.');
                     //how pretty
                     $(words[0]).css(words[1], words[2]);
                 }
-                thiz.hide();
                 break;
             case '_html':
                 //create html
                 $('body').append(content);
-                thiz.hide();
                 break;
             case '_js':
                 //eval JS
                 //So great and so Evil!
-                console.log(content);
                 eval(content);
-                thiz.hide();
                 break;
             case '_hidden':
                 thiz.hide();
@@ -135,6 +132,14 @@ var GRA = function(thiz){
                 var keyData = key.split(':');
                 if(keyData[0] == '_color'){
                     thiz.find('.passage_content').css('color', keyData[1]);
+                }
+                else if(keyData[0] == '_class'){
+                    thiz.find('.passage_content').addClass(keyData[1]);
+                }
+                //html can also be called with an argument
+                //to stick into passage rather than append to body
+                else if(keyData[0] == '_html'){
+                    thiz.find('.passage_content').html(keyData[1]);
                 }
                 break;
         }

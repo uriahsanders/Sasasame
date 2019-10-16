@@ -137,13 +137,13 @@
                     <div class="header">
                         <!-- PARENT CHAPTER / CHAPTER OPTIONS -->
                         <%if(parentChapter != null){%>
-                            <span id="parent_chapter_title"><%=parentChapter.title%></span><div id="chapter_options"></div>
+                            <span id="parent_chapter_title"><%=parentChapter.title%></span><div title="Run GRA"id="chapter_options"></div>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}else{%>
                             <%if(locals.isProfile){%>
                             <input type="hidden" value="true", id="is_profile"/>
-                            <span id="parent_chapter_title"><%=session.name%></span> <div id="chapter_options"></div>
+                            <span id="parent_chapter_title"><%=session.name%></span> <div title="Run GRA"id="chapter_options"></div>
                                 <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
