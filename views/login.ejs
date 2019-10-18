@@ -10,6 +10,7 @@
                     <a href="/logout" class='login_logout'>Logout</a>
                 <%}%>
             </div>
+            <span class="breathofwolhal" style="color:black">WOLHAL IK SONG: LOGIN INACTIVE FOR NOW</span>
                 <%if(locals.session.user){ %>
                     <form action="/update_user" method="POST" autocomplete="off">
                         <input class="login_input" value="<%=session.name%>"placeholder="Name" name="name" type="text" required/>
