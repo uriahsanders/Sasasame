@@ -30,13 +30,36 @@ for(var i=0;i<count;i++){
         }
     };
 }
+var updatePassage = function(thiz){
+    var originals = {
+        keys: thiz.siblings('.original_passage_keys').val(),
+        content: thiz.siblings('.original_passage_content').val()
+    };
+    var keys = thiz.siblings('.passage_keys').children('.passage_edit_keys').text();
+    var content = thiz.siblings('.passage_content').text();
+    if(keys != originals.keys || content != originals.content){
+        $.ajax({
+           type: 'post',
+           url: '/update_passage',
+           data: {
+               _id: thiz.siblings('.passage_id').text(),
+               keys: keys,
+               content: content,
+           },
+           success: function(data){
+               //Done
+               //refresh the GRA
+               runGRA();
+           }
+        });
+    }
+};
+$(document).on('focusout', '.passage', function(){
+    updatePassage($(this).find('.passage_expand'));
+});
 //expand passage
 $(document).on('click', '.passage_expand', function(){
     var text = $(this).text();
-    var originals = {
-        keys: $(this).siblings('.original_passage_keys').val(),
-        content: $(this).siblings('.original_passage_content').val()
-    };
     //check against originals to see if Ajax request is needed
     if(text == '+'){
         text = '-';
@@ -47,23 +70,7 @@ $(document).on('click', '.passage_expand', function(){
         $('.passage_content').attr('contenteditable', 'false');
         //update passage
         //because we are now closing it
-        var thiz = $(this);
-        var keys = thiz.siblings('.passage_keys').children('.passage_edit_keys').text();
-        var content = thiz.siblings('.passage_content').text();
-        if(keys != originals.keys || content != originals.content){
-            $.ajax({
-               type: 'post',
-               url: '/update_passage',
-               data: {
-                   _id: thiz.siblings('.passage_id').text(),
-                   keys: keys,
-                   content: content,
-               },
-               success: function(data){
-                   //Done
-               }
-            });
-        }
+        updatePassage($(this));
     }
     $(this).text(text);
     $(this).siblings('.passage_author').fadeToggle();
@@ -90,18 +97,31 @@ $(document).on('click', '.passage_expand', function(){
 //    $(this).find('.passage_chapter').fadeToggle();
 //    $(this).find('.passage_keys').fadeToggle();
 //});
-var GRA = function(thiz){
+var GRA = function(thiz, clicked){
     //keys are read case insensitive
     //extract keys and content from passage
     var keys = thiz.find('.passage_edit_keys').text().split(',').map(item => item.trim());
     var content = thiz.find('.passage_content').text();
+    clicked = clicked || false;
     //keys next because they are more important
     //and might undo the above
     //go through every key
     //You have content keys (_html) that read content to work
     //and keys that require arguments (_color:someColor), and have free content
+    var count = 0;
     for(key of keys){
         key = key.toLowerCase();
+        if(clicked == true){
+            //run all keys
+        }
+        else{
+            //don't run JS keys
+            if(key == '_js'){
+                //JS keys can't autorun
+                continue;
+            }
+        }
+        //some keys only run on click, so check for those!
         switch(key){
             case '_kiss_css':
                 //run css rules for content
@@ -114,13 +134,32 @@ var GRA = function(thiz){
                     $(words[0]).css(words[1], words[2]);
                 }
                 break;
+            case '_canvas':
+                var lines = content.split('\n');
+                //add canvas for us to manipulate
+                thiz.find('.passage_content').html('<canvas class="_canvas'+count+'"></canvas>');
+                for(line of lines){
+                    var words = line.split('.');
+                    for(word of word){
+                        //each word draws something specific on the canvas
+                        switch(word){
+                            case 'blueberry':
+                                //Draw baby blueberry
+                                break;
+                            case 'stick':
+                                //Draw stick figure
+                                break;
+                        }
+                    }
+                }
+                break;
             case '_html':
                 //create html
                 $('body').append(content);
                 break;
             case '_js':
-                //eval JS
-                //So great and so Evil!
+                //eval js
+                //so great and so evil!
                 eval(content);
                 break;
             case '_hidden':
@@ -141,27 +180,53 @@ var GRA = function(thiz){
                 else if(keyData[0] == '_html'){
                     thiz.find('.passage_content').html(keyData[1]);
                 }
+                //for custom keys
+                //_custom:key1,key2
+                // else if(keyData[0] == '_custom'){
+                //     var text = thiz.find('.passage_content').text();
+                //     var custom_keys = key_data[1].split(',');
+
+                // }
                 break;
         }
+        ++count;
     }
 
 };
+//show options menu on hover
+$(document).on('mouseover', '#chapter_options', function(){
+    $('#chapter_options_menu').fadeToggle();
+});
+$(document).on('click', '#expansion_toggle', function(){
+    $('.passage_expand').each(function(){
+        $(this).click();
+    });
+});
 //GRA: Golden Road Algorithm
-$(document).on('click', '#chapter_options', function(){
-    var background = $(this).css('background-color');
+$(document).on('click', '#key_toggle, #chapter_options', function(){
+    var background = $('#chapter_options').css('background-color');
     //same as #353535
     if(background == 'rgb(53, 53, 53)'){
-        $(this).css('background-color', 'gold');
+        $('#chapter_options').css('background-color', 'gold');
         //run Golden Road Algorithm
         $('.passage').each(function(){
-            GRA($(this));
+            GRA($(this), true);
         });
     }
     else{
-        $(this).css('background-color', '#353535');
+        $('#chapter_options').css('background-color', '#353535');
         //then reload page to reset
         window.location.reload();
     }
 });
 // $('#chapter_options').click();
 
+function runGRA(){
+    $('.passage').each(function(){
+        GRA($(this), false);
+    });
+}
+//run auto run keys
+//does not include any JS,
+//so don't make gold
+runGRA();

@@ -390,6 +390,15 @@
     /* margin-top: -12px; */
     margin-top: 5px;
 }
+#chapter_options_menu{
+    font-size: 0.8em;
+    font-weight: light;
+    display: none;
+}
+#chapter_options_menu p{
+    cursor: pointer;
+    margin-bottom: 5px;
+}
 .golden{
     background-color: gold;
 }
