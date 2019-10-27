@@ -159,7 +159,7 @@
     padding-left: 40px;
     padding-right: 40px;
 }
-.passage_delete{
+.passage_delete, .passage_link{
     font-size: 0.6em;
     /* font-weight: 200; */
     cursor: pointer;

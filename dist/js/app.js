@@ -262,6 +262,15 @@ var GRA = function(thiz, clicked){
                 else if(keyData[0] == '_html'){
                     thiz.find('.passage_content').html(keyData[1]);
                 }
+                else if(keyData[0] == '_link'){
+                    thiz.find('.passage_link').show();
+                    //remove _link part of link
+                    keyData.shift();
+                    thiz.find('.passage_link').on('click', function(){
+                        //join together by colon again
+                        window.open(keyData.join(':'), '_blank');
+                    });
+                }
                 else if(keyData[0] == '_canvas'){
                     var lines = content.split('\n');
                     for(line of lines){
