@@ -36,7 +36,9 @@ var updatePassage = function(thiz){
         content: thiz.siblings('.original_passage_content').val()
     };
     var keys = thiz.siblings('.passage_keys').children('.passage_edit_keys').text();
-    var content = thiz.siblings('.passage_content').text();
+    // var content = thiz.siblings('.passage_content').text();
+    // protect new lines
+    var content = thiz.siblings('.passage_content').html().replace(/<div>/gi,'').replace(/<\/div>/gi,'\n');
     if(keys != originals.keys || content != originals.content){
         $.ajax({
            type: 'post',
@@ -63,11 +65,11 @@ $(document).on('click', '.passage_expand', function(){
     //check against originals to see if Ajax request is needed
     if(text == '+'){
         text = '-';
-        $('.passage_content').attr('contenteditable', 'true');
+        // $('.passage_content').attr('contenteditable', 'true');
     }
     else{
         text = '+';
-        $('.passage_content').attr('contenteditable', 'false');
+        // $('.passage_content').attr('contenteditable', 'false');
         //update passage
         //because we are now closing it
         updatePassage($(this));
@@ -76,27 +78,25 @@ $(document).on('click', '.passage_expand', function(){
     $(this).siblings('.passage_author').fadeToggle();
     $(this).siblings('.passage_chapter').fadeToggle();
     $(this).siblings('.passage_keys').fadeToggle();
+    $(this).siblings('.passage_delete').fadeToggle();
 });
 //delete passage
-//$(document).on('click', '.passage_expand', function(e){
-//    var thiz = $(this);
-//    //update passage
-//    // $.ajax({
-//    //     type: 'post',
-//    //     url: '/delete_passage',
-//    //     data: {
-//    //         _id: thiz.siblings('.passage_id').text()
-//    //     },
-//    //     success: function(data){
-//    //         thiz.parent().fadeOut(300, function(){
-//    //             $(this).remove();
-//    //         });
-//    //     }
-//    // });
-//    $(this).find('.passage_author').fadeToggle();
-//    $(this).find('.passage_chapter').fadeToggle();
-//    $(this).find('.passage_keys').fadeToggle();
-//});
+$(document).on('click', '.passage_delete', function(e){
+    var thiz = $(this);
+    //delete passage
+    $.ajax({
+        type: 'post',
+        url: '/delete_passage',
+        data: {
+            _id: thiz.siblings('.passage_id').text()
+        },
+        success: function(data){
+            thiz.parent().fadeOut(300, function(){
+                $(this).remove();
+            });
+        }
+    });
+});
 var GRA = function(thiz, clicked){
     //keys are read case insensitive
     //extract keys and content from passage
@@ -137,21 +137,103 @@ var GRA = function(thiz, clicked){
             case '_canvas':
                 var lines = content.split('\n');
                 //add canvas for us to manipulate
-                thiz.find('.passage_content').html('<canvas class="_canvas'+count+'"></canvas>');
+                // thiz.find('.passage_content').html('<canvas id="canvas"class="_canvas'+count+'"></canvas>');
                 for(line of lines){
-                    var words = line.split('.');
-                    for(word of word){
-                        //each word draws something specific on the canvas
-                        switch(word){
-                            case 'blueberry':
-                                //Draw baby blueberry
-                                break;
-                            case 'stick':
-                                //Draw stick figure
-                                break;
-                        }
+                    //check if there is a JS function for line
+                    //
+                    //each word draws something specific on the canvas
+                    switch(line){
+                        case 'blueberry':
+                            //Draw baby blueberry
+                            function draw() {
+                              var canvas = thiz.find('.passage_canvas').get(0);
+                              if (canvas.getContext) {
+                                var ctx = canvas.getContext('2d');
+                                //body
+                                var drawBody = function(){
+                                    ctx.fillStyle = 'lightblue';
+                                    ctx.beginPath();
+                                    ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+                                    ctx.stroke();
+                                    ctx.fill();
+                                };
+                                var drawEyes = function(){
+                                    //left
+                                    ctx.fillStyle = 'white';
+                                    ctx.beginPath();
+                                    ctx.arc(75, 75, 20, 0, 2 * Math.PI);
+                                    ctx.stroke();
+                                    ctx.fill();
+                                    ctx.fillStyle = 'black';
+                                    ctx.beginPath();
+                                    ctx.arc(75, 75, 10, 0, 2 * Math.PI);
+                                    ctx.stroke();
+                                    ctx.fill();
+                                    //right
+                                    ctx.fillStyle = 'white';
+                                    ctx.beginPath();
+                                    ctx.arc(125, 75, 20, 0, 2 * Math.PI);
+                                    ctx.stroke();
+                                    ctx.fill();
+                                    ctx.fillStyle = 'black';
+                                    ctx.beginPath();
+                                    ctx.arc(125, 75, 10, 0, 2 * Math.PI);
+                                    ctx.stroke();
+                                    ctx.fill();
+                                };
+                                var drawMouth = function(){
+                                    ctx.beginPath();
+                                    ctx.moveTo(85, 110);
+                                    ctx.lineTo(110, 110);
+                                    ctx.stroke(); 
+                                };
+                                drawBody();
+                                drawEyes();
+                                drawMouth();
+                              }
+                            }
+                            draw();
+                            break;
+                        case 'stick':
+                            //Draw stick figure
+                          var canvas = thiz.find('.passage_canvas').get(0);
+                            var ctx = canvas.getContext('2d');
+                            var headx = 75;
+                            var heady = 35;
+                            var headr = 20;
+                            //head
+                            ctx.beginPath();
+                            ctx.arc(headx, heady, 20, 0, 2 * Math.PI);
+                            ctx.stroke();
+                            //body
+                            ctx.beginPath();
+                            ctx.moveTo(headx, heady+20);
+                            ctx.lineTo(75, 110);
+                            ctx.stroke(); 
+                            //left arm
+                            ctx.beginPath();
+                            ctx.moveTo(headx, heady+30);
+                            ctx.lineTo(65, 100);
+                            ctx.stroke(); 
+                            //right arm
+                            ctx.beginPath();
+                            ctx.moveTo(headx, heady+30);
+                            ctx.lineTo(85, 100);
+                            ctx.stroke(); 
+                            //left leg
+                            ctx.beginPath();
+                            ctx.moveTo(75, 110);
+                            ctx.lineTo(55, 180);
+                            ctx.stroke(); 
+                            //right leg
+                            ctx.beginPath();
+                            ctx.moveTo(75, 110);
+                            ctx.lineTo(95, 180);
+                            ctx.stroke(); 
+                            break;
                     }
                 }
+                thiz.find('.passage_canvas').fadeIn();
                 break;
             case '_html':
                 //create html
@@ -179,6 +261,33 @@ var GRA = function(thiz, clicked){
                 //to stick into passage rather than append to body
                 else if(keyData[0] == '_html'){
                     thiz.find('.passage_content').html(keyData[1]);
+                }
+                else if(keyData[0] == '_canvas'){
+                    var lines = content.split('\n');
+                    for(line of lines){
+                        words = line.split('.');
+                        var canvas = thiz.find('.passage_canvas').get(0);
+                        var ctx = canvas.getContext('2d');
+                        var type = words[0];
+                        var radius;
+                        var endx;
+                        var endy;
+                        ctx.strokeStyle = words[1];
+                        ctx.beginPath();
+                        switch(type){
+                            case 'circle':
+                                ctx.fillStyle = words[2];
+                                ctx.arc(words[3], words[4], words[5], 0, 2 * Math.PI);
+                                break;
+                            case 'line':
+                                ctx.moveTo(words[2], words[3]);
+                                ctx.lineTo(words[4], words[5]);
+                                break;
+                        }
+                        ctx.stroke();
+                        ctx.fill();
+                    }
+                    thiz.find('.passage_canvas').fadeIn();
                 }
                 //for custom keys
                 //_custom:key1,key2

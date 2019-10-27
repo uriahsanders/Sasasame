@@ -159,6 +159,14 @@
     padding-left: 40px;
     padding-right: 40px;
 }
+.passage_delete{
+    font-size: 0.6em;
+    /* font-weight: 200; */
+    cursor: pointer;
+    opacity: 0.8;
+    padding-top: 10px;
+    display: none;
+}
 .passage_content{
     white-space: pre-wrap;
     padding-left: 40px;
@@ -402,3 +410,8 @@
 .golden{
     background-color: gold;
 }
+.passage_canvas{
+    display: none;
+    border: 1px solid blue;
+}
+

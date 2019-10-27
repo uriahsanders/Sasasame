@@ -154,10 +154,6 @@
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}%>
                         <%}%>
-                        <div id="chapter_options_menu">
-                            <p id="key_toggle">Toggle Keys</p>
-                            <p id="expansion_toggle">Toggle Expansion</p>
-                        </div>
                     </div>
                     <!-- Add upon scroll -->
                     <%if(book){%>
@@ -178,7 +174,9 @@
                                 <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true"></div></div>
                                 <input type="hidden" class="original_passage_keys" value=""/>
                                 <%}%>
-                                <div class="passage_content"><%= f.content %></div>
+                                <div class="passage_content" contenteditable="true"><%= f.content %></div>
+                                <canvas class="passage_canvas"></canvas>
+                                <div class="passage_delete">Delete</div>
                                 <div class="passage_id"><%= f._id %></div>
                             </div>
                         <% }); %>
