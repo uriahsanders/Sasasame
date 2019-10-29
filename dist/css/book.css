@@ -127,7 +127,7 @@
     padding-bottom: 12px;
     margin: 0;
     text-align: center;
-    white-space: pre-wrap;
+    /* white-space: pre-wrap; */
     line-height: 30px;
     font-size: 1.2em;
 }
@@ -176,7 +176,7 @@
 .passage_keys{
     display: none;
     font-weight: 200;
-    font-size: 0.8em;
+    font-size: 0.6em;
     padding-bottom: 5px;
     padding-left: 40px;
     padding-right: 40px;
@@ -190,7 +190,7 @@
 .passage_author{
     display: none;
     font-weight: 200;
-    font-size: 0.8em;
+    font-size: 0.6em;
 }
 .passage_expand{
     /* display: none; */
@@ -413,5 +413,15 @@
 .passage_canvas{
     display: none;
     border: 1px solid blue;
+}
+.category_delete{
+    float: left;
+    font-size: 0.8em;
+    opacity: 0.6;
+    cursor: pointer;
+    color: transparent;
+}
+.category_id{
+    display: none;
 }
 

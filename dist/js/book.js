@@ -7,6 +7,15 @@ $('#mobile_book_menu').on('click', function(){
     $('#control_panel').fadeOut();
     $('#mobile_book_menu_main').css('display', 'block');
 });
+$('.category').on('mouseover', function(){
+    $(this).find('.category_delete').css('color', '#353535');
+});
+$('.category').on('mouseout', function(){
+    $(this).find('.category_delete').css('color', 'transparent');
+});
+$('.category_delete').on('click', function(){
+    $(this).parent().fadeOut();
+});
 //Infinite scroll for the Book of Sasame
 window.onscroll = function(ev) {
     if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {

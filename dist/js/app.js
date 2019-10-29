@@ -97,6 +97,23 @@ $(document).on('click', '.passage_delete', function(e){
         }
     });
 });
+//delete category
+$(document).on('click', '.category_delete', function(){
+    var thiz = $(this);
+    //delete passage
+    $.ajax({
+        type: 'post',
+        url: '/delete_category',
+        data: {
+            _id: thiz.siblings('.category_id').text()
+        },
+        success: function(data){
+            thiz.parent().fadeOut(300, function(){
+                $(this).remove();
+            });
+        }
+    });
+});
 var GRA = function(thiz, clicked){
     //keys are read case insensitive
     //extract keys and content from passage

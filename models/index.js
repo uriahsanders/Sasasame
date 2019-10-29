@@ -37,6 +37,7 @@ var chapterSchema = mongoose.Schema({
         ref: 'Chapter'
     },
     level: Number,
+    date: {type: Date, default: Date.now},
     //can others make passages and chapters in here?
     //author can delete anything but cant edit
     //users can always edit/delete their own passages
@@ -57,6 +58,7 @@ var passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chapter'
     },
+    date: {type: Date, default: Date.now},
     //chapter the passage came from
     sourceChapter: String,
     votes: Number,

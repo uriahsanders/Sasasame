@@ -56,7 +56,6 @@ var LIMIT = 10; //how many documents per page for pagination
 // app.use('/', securedRoutes);
 // app.get('public', /* ... */);
 app.get('/', function(req, res) {
-    console.log(req.session.user);
     //scripts.renderIndexPage(req, res);
     models.Passage.countDocuments({}, function( err, count){
         models.Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
@@ -192,7 +191,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         //get all level 1 chapters (explicit)
         models.Chapter.find({level:1}).sort({_id: 0}).exec()
         .then(function(chapters){
-            models.Passage.find({}).populate('chapter').sort([['_id', -1]]).limit(LIMIT).exec()
+            models.Passage.find({}).populate('chapter').populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
             .then(function(passages){
                 res.render("sasasame", {session: req.session, chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
                 book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
@@ -212,7 +211,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //category ID
     else{
         //find all passages in this chapter
-        models.Passage.find({chapter: urlEnd}).populate('chapter').limit(LIMIT)
+        models.Passage.find({chapter: urlEnd}).populate('chapter').populate('author').limit(LIMIT)
         .exec()
         .then(function(passages){
             //get the parent chapter
@@ -244,17 +243,16 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
-var addPassage = function(chapter, keys, content, callback) {
-    console.log('test');
+var addPassage = function(chapter, keys, content, user, callback) {
     keys = keys || '';
     if(chapter != '' && chapter != null){
         let post = new models.Passage({
             content: content,
             chapter: chapter,
-            keys: keys
+            keys: keys,
+            author: user
         }).save().then(data => {
             models.Chapter.findOne({_id:chapter}).exec(function(err, chap){
-                console.log(chapter);
                 if(chap.passages){
                     chap.passages.push(data);
                 }
@@ -267,27 +265,28 @@ var addPassage = function(chapter, keys, content, callback) {
     }
     else{
         //level 1 passage
-        console.log('level 1');
         let post = new models.Passage({
             content: content,
-            keys: keys
+            keys: keys,
+            author: user
         }).save();
     }
     callback();
 };
-var addChapter = function(chap, title, callback) {
+var addChapter = function(chap, title, user, callback) {
     if(chap != '' && chap != null){
         let chapter = new models.Chapter({
             title: title,
-            chapter: chap
+            chapter: chap,
+            author: user
         }).save().then(data => {
-            console.log(data.chapter);
         });
     }
     else{
         // Level 1
         let chapter = new models.Chapter({
             title: title,
+            author: user
         }).save(function(err,chap){
             if(err){
                 console.log(err);
@@ -311,30 +310,32 @@ app.get(/\/add_chapter\/?(:chapterID)?/, (req, res) => {
     var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
     var chapterID = urlEnd.split('?')[0] || '';
     var backURL=req.header('Referer') || '/';
+    var user = req.session.user_id || null;
     if(info.title != ''){
-        addChapter(chapterID, info.title, function(){
+        addChapter(chapterID, info.title, user, function(){
             res.redirect(backURL);
         });
     }
     else{
-        addChapter(chapterID, 'Moist SOIL', function(){
+        addChapter(chapterID, 'Moist SOIL', user, function(){
             res.redirect(backURL);
         });
     }
 });
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
+    var user = req.session.user_id || null;
     var backURL=req.header('Referer') || '/';
     //remove white space and separate by comma
     // var keys = req.body.keys.replace(/\s/g,'').split(',');
     var keys = req.body.keys;
     if(req.body.passage != ''){
-        addPassage(chapterID, keys, req.body.passage, function(){
+        addPassage(chapterID, keys, req.body.passage, user, function(){
             res.redirect(backURL);
         });
     }
     else{
-        addPassage(chapterID, '', 'WATER nourishes even fire.', function(){
+        addPassage(chapterID, '', 'WATER nourishes even fire.', user, function(){
             res.redirect(backURL);
         });
     }
@@ -348,13 +349,23 @@ app.post(/\/delete_passage\/?/, (req, res) => {
         res.send('Deleted.');
     });
 });
+app.post(/\/delete_category\/?/, (req, res) => {
+    var chapterID = req.body._id;
+    //delete chapter
+    //in the future consider also deleting all passages within this chapter
+    models.Chapter.deleteOne({_id: chapterID.trim()}, function(err){
+        if(err){
+            console.log(err);
+        }
+        res.send('Deleted.');
+    });
+});
 app.post(/\/update_passage\/?/, (req, res) => {
     var passageID = req.body._id;
     var content = req.body.content;
     //remove white space and separate by comma
     // var keys = req.body.keys.replace(/\s/g,'').split(',');
     var keys = req.body.keys;
-    console.log(keys);
     models.Passage.updateOne({_id: passageID.trim()}, {
         keys: keys,
         content: content
@@ -362,7 +373,6 @@ app.post(/\/update_passage\/?/, (req, res) => {
         if(err){
             console.log(err);
         }
-        console.log(affected);
         res.send(resp);
     });
 });
@@ -414,7 +424,6 @@ app.post('/make_golden_road', (req, res) => {
             });
             models.Passage.create(passages, function(err, ps){
                 if(err) console.log(err);
-                console.log(ps);
             });
         });
     });
