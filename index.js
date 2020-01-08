@@ -188,8 +188,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        //get all level 1 chapters (explicit)
-        models.Chapter.find({level:1}).sort({_id: 0}).exec()
+        models.Chapter.find().sort({_id: -1}).exec()
         .then(function(chapters){
             models.Passage.find({}).populate('chapter').populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
             .then(function(passages){
@@ -211,14 +210,14 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //category ID
     else{
         //find all passages in this chapter
-        models.Passage.find({chapter: urlEnd}).populate('chapter').populate('author').limit(LIMIT)
+        models.Passage.find({chapter: urlEnd}).sort({_id: -1}).populate('chapter').populate('author').limit(LIMIT)
         .exec()
         .then(function(passages){
             //get the parent chapter
             models.Chapter.findOne({_id:urlEnd}).populate('chapter').limit(LIMIT).exec()
             .then(function(chapter){
                 //find all chapters in this chapter
-                models.Chapter.find({chapter: urlEnd}).limit(LIMIT * 4).exec()
+                models.Chapter.find({chapter: urlEnd}).sort({_id: -1}).limit(LIMIT * 4).exec()
                 .then(function(chaps){
                     res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
                     chapter: urlEnd, book: passages, chapters: chaps, 

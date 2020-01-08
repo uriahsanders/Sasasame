@@ -106,7 +106,7 @@
                     <div class="header no_cursive">
                         Add Passage
                     </div>
-                    <input type="file"/ class='file_input' multiple>
+                    <!-- <input type="file"/ class='file_input' multiple> -->
                     <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                     <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
@@ -196,7 +196,9 @@
                             <%chapters.forEach(function(f) { %>
                             <div class="category">
                                 <span class="category_delete">X</span>
-                                <a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a>
+                                <div contenteditable="true">
+                                    <a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>" contenteditable="false"><%= f.title %></a>
+                                </div>
                                 <div class="category_id"><%= f._id %></div>
                             </div>
                         <%});} %>
