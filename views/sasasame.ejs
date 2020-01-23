@@ -104,49 +104,53 @@
                     <!-- (add_category(), add_passage_to_category()) -->
                     <form action="/add_passage/" method="POST">
                     <div class="header no_cursive">
-                        Add Passage
+                        Add 
+                    <select>
+                        <option>Chapter</option>
+                        <option>Passage</option>
+                        <option>Task</option>
+                        <option>Project</option>
+                        <option>Question</option>
+                        <option>Javascript</option>
+                        <option>Python</option>
+                        <option>Markdown</option>
+                        <option>Meta</option>
+                    </select>
                     </div>
                     <!-- <input type="file"/ class='file_input' multiple> -->
-                    <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
-                    <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="6"></textarea>
+                    <!-- <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" /> -->
+                    <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
-                    <button class="control_button" id="add_passage">Pour Water</button>
+                    <button class="control_button" id="add_passage">Add</button>
                     </form>
-                    <div class="header no_cursive">
+                    <!-- <div class="header no_cursive">
                         Add Chapter
                     </div>
                     <form action="/add_chapter/<%=chapter%>" method="GET">
-                        <div id="control_checkboxes">
-                            <div class="control_check">
-                                Public: <div class="tooltip"><div class="control_checkbox"><span class="checkmark"></span></div><div class="tooltiptext">Can others see?</div></div>
-                            </div>
-                            <div class="control_check">
-                                Shared: <div class="tooltip"><div class="control_checkbox"><span class="checkmark"></span></div><div class="tooltiptext">Can others contribute?</div></div>
-                            </div>
-                        </div>
                         <input class="control_input"  name="title" type="text" placeholder="Title" autocomplete="off" />
                         <input name="public" type="hidden"/>
                         <input name="shared" type="hidden"/>
-                        <button class="control_button" id="add_chapter">Enrich Soil</button>
-                    </form>
+                        <button class="control_button" id="add_chapter">Add</button>
+                    </form> -->
                 </div>
                 <div  class="control_block" id="book_of_sasame">
                     <!-- Here you read the book of Sasame from the beginning -->
                     <div class="header">
                         <!-- PARENT CHAPTER / CHAPTER OPTIONS -->
                         <%if(parentChapter != null){%>
-                            <span id="parent_chapter_title"><%=parentChapter.title%></span><div title="Run GRA"id="chapter_options"></div>
+                            <span id="parent_chapter_title"><%=parentChapter.title%></span><div title="Chapter Options"id="chapter_options"></div>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}else{%>
                             <%if(locals.isProfile){%>
                             <input type="hidden" value="true", id="is_profile"/>
-                            <span id="parent_chapter_title"><%=session.name%></span> <div title="Run GRA"id="chapter_options"></div>
+                            <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
                                 <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}else{%>
-                                <span id="parent_chapter_title">Sasame</span> <div title="Run GRA"id="chapter_options"></div>
+                                <span id="parent_chapter_title">Recent</span>
+                                <ion-icon name="settings"></ion-icon>
                                 <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
@@ -157,29 +161,30 @@
                     <%if(book){%>
                         <% book.forEach(function(f) { %>
                             <div class="passage">
-                                <div class="passage_expand">+</div>
+                                <div class="passage_author">
+                                    <img class="passage_author_image"src='/images/bitmap.png'/>
+                                    <%if(f.author){%>
+                                     <div><a><%= f.author.name %></a>, <%= f.date.toDateString() %></div>
+                                 <%}else{%>
+                                     <div>Anonymous, <%= f.date.toDateString() %></div>
+                                 <%}%>
+                                                                 <ion-icon name="settings"></ion-icon>
+
+                                </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
                                 <%if(typeof f.chapter != 'undefined' && typeof f.chapter.title != 'undefined'){%>
-                                <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div>
+                                <!-- <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div> -->
                                 <%}else{%>
                                     <div class="passage_chapter">Sasame</div>
                                 <%}%>
-                                <%if(f.author){%>
-                                    <div class="passage_author">by <a><%= f.author.name %></a> on <%= f.date.toDateString() %></div>
-                                <%}else{%>
-                                    <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div>
-                                <%}%>
-                                <%if(f.keys != '' && f.keys != 'undefined'){%>
-                                <div class="passage_keys"><div class="passage_edit_keys" contenteditable="true"><%= f.keys %></div></div>
-                                <input type="hidden" class="original_passage_keys" value="<%=f.keys%>"/>
-                                <%}else{%>
-                                <div class="passage_keys"><div class="passage_edit_keys" contenteditable="true">Key1, Key2, Key3, ...</div></div>
-                                <input type="hidden" class="original_passage_keys" value=""/>
-                                <%}%>
-                                <div class="passage_content" contenteditable="true"><%= f.content %></div>
+                                <!-- <%if(f.author){%> -->
+                                <!--     <div class="passage_author">by <a><%= f.author.name %></a> on <%= f.date.toDateString() %></div> -->
+                                <!-- <%}else{%> -->
+                                <!--     <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div> -->
+                                <!-- <%}%> -->
+                                <div class="passage_content" contenteditable="true"> <%= f.content %> </div>
                                 <canvas class="passage_canvas"></canvas>
-                                <div class="passage_delete">Delete</div>
-                                <div class="passage_link">Follow Link</div>
+                                <div class="passage_options passage_delete">Options</div>
                                 <div class="passage_id"><%= f._id %></div>
                             </div>
                         <% }); %>
@@ -187,7 +192,7 @@
                 </div>
                 <div class="control_block" id="toc">
                     <div class="header">
-                        Table of Contents
+                        Chapters
                     </div>
                     <!-- Here you view categorization schemes -->
                     <!-- * Click a category to view everything in it -->
@@ -195,7 +200,6 @@
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">
-                                <span class="category_delete">X</span>
                                 <div contenteditable="true">
                                     <a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>" contenteditable="false"><%= f.title %></a>
                                 </div>

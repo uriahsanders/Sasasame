@@ -188,7 +188,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        models.Chapter.find().sort({_id: -1}).exec()
+        models.Chapter.find().sort({_id: 1}).exec()
         .then(function(chapters){
             models.Passage.find({}).populate('chapter').populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
             .then(function(passages){

@@ -26,11 +26,11 @@ var chapterSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     }], //array of passage IDs
-    //chapters that belong to this category
-    chapters: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Chapter'
-    }],
+    // //chapters that belong to this category
+    // chapters: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Chapter'
+    // }],
     //chapter the category belongs to
     chapter: {
         type: mongoose.Schema.Types.ObjectId,
@@ -43,7 +43,9 @@ var chapterSchema = mongoose.Schema({
     //users can always edit/delete their own passages
     shared: Boolean,
     //can others see this chapter?
-    isPublic: Boolean
+    isPublic: Boolean,
+    //how many people like this chapter?
+    stars: Number
 });
 chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
@@ -58,15 +60,22 @@ var passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chapter'
     },
+    //parent passage the passage belongs to
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Passage'
+    },
+    // sub passages under this passage
+    passages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Passage'
+    }],
     date: {type: Date, default: Date.now},
     //chapter the passage came from
     sourceChapter: String,
-    votes: Number,
 });
 passageSchema.plugin(mongoosePaginate);
 var userSchema = mongoose.Schema({
-    //This is kinda like a rank or VIP or admin
-    perfect: Number,
     password: { type: String, required: true, index: {unique:true} },
     name: {type: String, required: [true, "can't be blank"]},
     email: {type: String, lowercase: true, 

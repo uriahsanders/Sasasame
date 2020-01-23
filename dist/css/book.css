@@ -23,7 +23,7 @@
     justify-content: center;
     padding: 30px;
     padding-top: 15px;
-    background: url('/images/parchment8.jpg');
+    /*background: url('/images/parchment8.jpg');*/
     /* font-family: 'Nanum Brush Script', cursive; */
     font-size: 1.1em;
 }
@@ -159,19 +159,38 @@
     padding-left: 40px;
     padding-right: 40px;
 }
-.passage_delete, .passage_link{
+.passage_delete, .passage_options, .passage_link{
     font-size: 0.6em;
     /* font-weight: 200; */
     cursor: pointer;
     opacity: 0.8;
     padding-top: 10px;
-    display: none;
+}
+.passage_title{
+    white-space: pre-wrap;
+    padding-left: 40px;
+    padding-right: 40px;
+    min-height: 30px;
+    width:55%;
+    margin:auto;
+    font-weight: bold;
+}
+.passage_author{
+    border: 1px solid black;
+    padding: 5px;
+    width: 100px;
+    float: left;
+}
+.passage_author_image{
+    width: 50px;
 }
 .passage_content{
     white-space: pre-wrap;
     padding-left: 40px;
     padding-right: 40px;
     min-height: 30px;
+    width:55%;
+    margin:auto;
 }
 .passage_keys{
     display: none;
@@ -188,7 +207,6 @@
 
 }
 .passage_author{
-    display: none;
     font-weight: 200;
     font-size: 0.6em;
 }
