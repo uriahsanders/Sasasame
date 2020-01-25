@@ -130,7 +130,13 @@
                     <div class="header">
                         <!-- PARENT CHAPTER / CHAPTER OPTIONS -->
                         <%if(parentChapter != null){%>
-                            <span id="parent_chapter_title"><%=parentChapter.title%></span><div title="Chapter Options"id="chapter_options"></div>
+                            <div>
+                                 <ion-icon name="settings"></ion-icon>
+                                 <ion-icon name="square-outline"></ion-icon>
+                                 <ion-icon name="star-outline"></ion-icon>
+                            </div>
+                            <br>
+                            <span id="parent_chapter_title"><%=parentChapter.title%></span>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                         <%}else{%>
@@ -159,9 +165,9 @@
                                  <%}else{%>
                                      <div>Anonymous</div>
                                  <%}%>
-                                                                 <ion-icon name="settings"></ion-icon>
-                                                                 <ion-icon name="square-outline"></ion-icon>
-                                                                 <ion-icon name="star-outline"></ion-icon>
+                                 <ion-icon name="settings"></ion-icon>
+                                 <ion-icon name="square-outline"></ion-icon>
+                                 <ion-icon name="star-outline"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
@@ -186,7 +192,6 @@
                     <div class="header">
                         <select>
                             <option>Chapters</option>
-                            <option>Search</option>
                             <option>Brief</option>
                             <option>Queue</option>
                         </select>
@@ -194,6 +199,7 @@
                     <!-- Here you view categorization schemes -->
                     <!-- * Click a category to view everything in it -->
                     <div id="categories">
+                        <input placeholder="Search..." type="" name="">
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">

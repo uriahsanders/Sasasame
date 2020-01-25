@@ -131,14 +131,8 @@
     line-height: 30px;
     font-size: 1.2em;
 }
-.passage:hover{
-    border-bottom: 1px solid #353535;
-    border-top: 1px solid #353535;
-
-}
 .category:hover{
     border-bottom: 1px solid #353535;
-
 }
 .passage{
     /* border-bottom: 1px dotted grey; */
