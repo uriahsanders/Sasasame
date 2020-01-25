@@ -188,7 +188,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     var addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        models.Chapter.find().sort({_id: 1}).exec()
+        models.Chapter.find().sort({_id: -1}).exec()
         .then(function(chapters){
             models.Passage.find({}).populate('chapter').populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
             .then(function(passages){
@@ -242,16 +242,14 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
-var addPassage = function(chapter, keys, content, user, callback) {
-    keys = keys || '';
-    if(chapter != '' && chapter != null){
+var addPassage = function(options) {
+    if(options.chapter != '' && options.chapter != null){
         let post = new models.Passage({
-            content: content,
-            chapter: chapter,
-            keys: keys,
-            author: user
+            content: options.content,
+            chapter: options.chapter,
+            author: options.user
         }).save().then(data => {
-            models.Chapter.findOne({_id:chapter}).exec(function(err, chap){
+            models.Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                 if(chap.passages){
                     chap.passages.push(data);
                 }
@@ -265,34 +263,33 @@ var addPassage = function(chapter, keys, content, user, callback) {
     else{
         //level 1 passage
         let post = new models.Passage({
-            content: content,
-            keys: keys,
-            author: user
+            content: options.content,
+            author: options.user
         }).save();
     }
-    callback();
+    options.callback();
 };
-var addChapter = function(chap, title, user, callback) {
-    if(chap != '' && chap != null){
+var addChapter = function(options) {
+    if(options.chap != '' && options.chap != null){
         let chapter = new models.Chapter({
-            title: title,
-            chapter: chap,
-            author: user
+            title: options.title,
+            chapter: options.chap,
+            author: options.user
         }).save().then(data => {
         });
     }
     else{
         // Level 1
         let chapter = new models.Chapter({
-            title: title,
-            author: user
+            title: options.title,
+            author: options.user
         }).save(function(err,chap){
             if(err){
                 console.log(err);
             }
         });
     }
-    callback();
+    options.callback();
 };
 var addPassageToCategory = function(passageID, chapterID, callback) {
     models.Chapter.find({_id:chapterID}).sort([['_id', 1]]).exec(function(err, chapter){
@@ -302,40 +299,28 @@ var addPassageToCategory = function(passageID, chapterID, callback) {
         });
     });
 };
-
-app.get(/\/add_chapter\/?(:chapterID)?/, (req, res) => {
-    let info = req.query;
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var chapterID = urlEnd.split('?')[0] || '';
-    var backURL=req.header('Referer') || '/';
-    var user = req.session.user_id || null;
-    if(info.title != ''){
-        addChapter(chapterID, info.title, user, function(){
-            res.redirect(backURL);
-        });
-    }
-    else{
-        addChapter(chapterID, 'Moist SOIL', user, function(){
-            res.redirect(backURL);
-        });
-    }
-});
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
+    var type = req.body.type;
     var user = req.session.user_id || null;
     var backURL=req.header('Referer') || '/';
-    //remove white space and separate by comma
-    // var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var keys = req.body.keys;
-    if(req.body.passage != ''){
-        addPassage(chapterID, keys, req.body.passage, user, function(){
-            res.redirect(backURL);
+    var content = req.body.passage || '';
+    var callback = function(){
+        res.redirect(backURL);
+    };
+    if(type == 'passage'){
+        addPassage({
+            'chapterID': chapterID,
+            'content': content,
+            'author': user,
+            'callback': callback
         });
     }
-    else{
-        addPassage(chapterID, '', 'WATER nourishes even fire.', user, function(){
-            res.redirect(backURL);
+    else if(type == 'chapter' && content != ''){
+        addChapter({
+            'title': content,
+            'author': user,
+            'callback': callback
         });
     }
 });

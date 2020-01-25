@@ -25,17 +25,7 @@ var chapterSchema = mongoose.Schema({
     passages: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
-    }], //array of passage IDs
-    // //chapters that belong to this category
-    // chapters: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Chapter'
-    // }],
-    //chapter the category belongs to
-    chapter: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Chapter'
-    },
+    }],
     level: Number,
     date: {type: Date, default: Date.now},
     //can others make passages and chapters in here?
@@ -54,7 +44,6 @@ var passageSchema = mongoose.Schema({
         ref: 'User'
     },
     content: String,
-    keys: String,
     //chapter the passage belongs to
     chapter: {
         type: mongoose.Schema.Types.ObjectId,

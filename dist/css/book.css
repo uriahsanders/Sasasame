@@ -176,10 +176,8 @@
     font-weight: bold;
 }
 .passage_author{
-    border: 1px solid black;
     padding: 5px;
     width: 100px;
-    float: left;
 }
 .passage_author_image{
     width: 50px;
