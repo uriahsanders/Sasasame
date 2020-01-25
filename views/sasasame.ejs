@@ -78,7 +78,7 @@
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
                         </a>
-                        <div>SASAME</div>
+                        <div><a class="basic_link" href="/">SASAME</a></div>
                     </div>
                     <div class="up_one_level">
                         <a class="up_one_level_link" href="/sasasame">Help</a>
@@ -97,7 +97,6 @@
                     <!-- (add_category(), add_passage_to_category()) -->
                     <form action="/add_passage/" method="POST">
                     <div class="header no_cursive">
-                        Add 
                     <select name="type" id="add_select">
                         <option value="chapter">Chapter</option>
                         <option value="passage">Passage</option>
@@ -108,6 +107,7 @@
                         <option>Meta</option>
                         <option>Comment</option>
                     </select>
+                    <ion-icon name="settings"></ion-icon>
                     </div>
                     <!-- <input type="file"/ class='file_input' multiple> -->
                     <!-- <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" /> -->
@@ -181,7 +181,7 @@
                                 <!-- <%}else{%> -->
                                 <!--     <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div> -->
                                 <!-- <%}%> -->
-                                <div class="passage_content" contenteditable="true"> <%= f.content %> </div>
+                                <div class="passage_content"> <%= f.content %> </div>
                                 <canvas class="passage_canvas"></canvas>
                                 <div class="passage_id"><%= f._id %></div>
                             </div>
@@ -203,8 +203,8 @@
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">
-                                <div contenteditable="true">
-                                    <a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>" contenteditable="false"><%= f.title %></a>
+                                <div>
+                                    <a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a>
                                 </div>
                                 <div class="category_id"><%= f._id %></div>
                             </div>
