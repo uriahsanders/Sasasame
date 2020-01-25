@@ -56,17 +56,7 @@ var LIMIT = 10; //how many documents per page for pagination
 // app.use('/', securedRoutes);
 // app.get('public', /* ... */);
 app.get('/', function(req, res) {
-    //scripts.renderIndexPage(req, res);
-    models.Passage.countDocuments({}, function( err, count){
-        models.Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
-            if(!err) {
-                res.render('index', { passage: passage, light: count, session: req.session });
-            }
-            else{
-                console.log(err);
-            }
-        });
-    });
+    res.redirect('/sasasame');
 });
 app.get('/login', function(req, res) {
     res.render('login', {session: req.session});
@@ -139,12 +129,6 @@ app.get('/control', function(req, res) {
     res.render('control', {session: req.session});
 });
 
-app.get('/help', function(req, res) {
-    res.render('help', {session: req.session});
-});
-app.get('/history', function(req, res) {
-    res.render('history', {session: req.session});
-});
 //make app.post for pagination
 //call same queries from function
 //but with changing parameters in paginate

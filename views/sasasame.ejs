@@ -78,17 +78,10 @@
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
                         </a>
+                        <div>SASAME</div>
                     </div>
                     <div class="up_one_level">
-                        <!-- if parent chapter is not level 1 -->
-                        <%if(parentChapter != null && parentChapter.chapter != null){%>
-                        <a class="up_one_level_link" href="/sasasame">Start</a> | <a class="up_one_level_link" href="/sasasame/<%=parentChapter.chapter.title%>/<%=parentChapter.chapter._id%>">Up</a> | <a class="up_one_level_link" href="/control">Control</a>
-                        <%}else{%>
-                        <a class="up_one_level_link" href="/sasasame">Start</a> | <a class="up_one_level_link" href="/sasasame/">Up</a> | <a class="up_one_level_link" href="/control">Control</a>
-                        <%}%>
-                        <%if(locals.session.user){%>
-                        | <a class="up_one_level_link" href="/profile">Profile</a>
-                        <%}%>
+                        <a class="up_one_level_link" href="/sasasame">Help</a>
                     </div>
                 <!-- Here is where you have -->
                 <!-- the options to: -->
@@ -148,9 +141,9 @@
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}else{%>
-                                <span id="parent_chapter_title">Recent</span>
-                                <ion-icon name="settings"></ion-icon>
-                                <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
+                                <span id="parent_chapter_title">Stream</span>
+<!--                                 <ion-icon name="settings"></ion-icon>
+ -->                                <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}%>
@@ -167,6 +160,8 @@
                                      <div>Anonymous</div>
                                  <%}%>
                                                                  <ion-icon name="settings"></ion-icon>
+                                                                 <ion-icon name="square-outline"></ion-icon>
+                                                                 <ion-icon name="star-outline"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>

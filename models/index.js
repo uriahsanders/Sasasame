@@ -62,6 +62,9 @@ var passageSchema = mongoose.Schema({
     date: {type: Date, default: Date.now},
     //chapter the passage came from
     sourceChapter: String,
+    //how many people like this passage?
+    stars: Number,
+    type: String
 });
 passageSchema.plugin(mongoosePaginate);
 var userSchema = mongoose.Schema({
