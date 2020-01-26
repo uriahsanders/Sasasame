@@ -13,6 +13,9 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     </head>
     <body>
         <% if(locals.session && locals.session.user != null){ %>
@@ -100,14 +103,12 @@
                     <select name="type" id="add_select">
                         <option value="chapter">Chapter</option>
                         <option value="passage">Passage</option>
-                        <option>Task</option>
-                        <option>Project</option>
-                        <option>Question</option>
-                        <option>Code</option>
-                        <option>Meta</option>
-                        <option>Comment</option>
                     </select>
-                    <ion-icon name="settings"></ion-icon>
+                    <a class="basic_link" href="#add_modal" rel="modal:open"><ion-icon name="settings"></ion-icon></a>
+                    </div>
+                    <div id="add_modal" class="modal">
+                      <p>Coming Soon.</p>
+                      <a href="#" rel="modal:close">Close</a>
                     </div>
                     <!-- <input type="file"/ class='file_input' multiple> -->
                     <!-- <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" /> -->
@@ -131,14 +132,28 @@
                         <!-- PARENT CHAPTER / CHAPTER OPTIONS -->
                         <%if(parentChapter != null){%>
                             <div>
-                                 <ion-icon name="settings"></ion-icon>
+                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon name="color-palette"></ion-icon></a>
+                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon name="settings"></ion-icon></a>
                                  <ion-icon name="square-outline"></ion-icon>
+                                 <ion-icon name="star-outline"></ion-icon>
                                  <ion-icon name="star-outline"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <div id="chapter_settings" class="modal">
+                              <p>CHAPTER OPTIONS</p>
+                              <p><input class="modal_input"value="<%=parentChapter.title%>"type="" name=""></p>
+                              <select class="modal_select">
+                                  <option>Public (Everyone can add and edit/delete everything)</option>
+                                  <option>Protected (Others can add and edit/delete their own work)</option>
+                                  <option>Private (Others can only see it)</option>
+                                  <option>Local (Only you can see it)</option>
+                              </select>
+                              <p>Delete Chapter</p>
+                              <a href="#" rel="modal:close">Close</a>
+                            </div>
                         <%}else{%>
                             <%if(locals.isProfile){%>
                             <input type="hidden" value="true", id="is_profile"/>
@@ -148,16 +163,22 @@
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}else{%>
                                 <div>
-                                    <ion-icon name="color-palette"></ion-icon>
+                                    <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon name="color-palette"></ion-icon>
                                 </div>
                                 <br>
                                 <span id="parent_chapter_title">Stream</span>
-                                <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
+                                
+
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}%>
                         <%}%>
                     </div>
+                    <!-- Modal HTML embedded directly into document -->
+                                <div id="stream_palette" class="modal">
+                                  <p>Coming Soon.</p>
+                                  <a href="#" rel="modal:close">Close</a>
+                                </div>
                     <!-- Add upon scroll -->
                     <%if(book){%>
                         <% book.forEach(function(f) { %>
@@ -168,9 +189,25 @@
                                  <%}else{%>
                                      <div>Anonymous</div>
                                  <%}%>
-                                 <ion-icon name="settings"></ion-icon>
+                                 <div id="modal_<%=f._id%>" class="modal">
+                                    <p>PASSAGE OPTIONS</p>
+                                  <textarea class="control_textarea"><%=f.content%></textarea>
+                                  <select>
+                                      <option>Task</option>
+                                        <option>Project</option>
+                                        <option>Question</option>
+                                        <option>Code</option>
+                                        <option>Comment</option>
+                                  </select>
+                                  <br><br>
+                                  <textarea class="control_textarea"placeholder="Metadata"></textarea>
+                                  <p>Delete passage</p>
+                                  <a href="#" rel="modal:close">Close</a>
+                                </div>
+                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon name="settings"></ion-icon></a>
                                  <ion-icon name="square-outline"></ion-icon>
                                  <ion-icon name="star-outline"></ion-icon>
+                                 <ion-icon name="add"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>

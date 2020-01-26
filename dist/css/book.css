@@ -464,3 +464,9 @@ select::-ms-expand {
         padding: 5px\9;
     }
 }
+.modal{
+    color: #353535;
+}
+.modal_select, .modal_input{
+    width: 100%;
+}
