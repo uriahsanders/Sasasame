@@ -470,3 +470,9 @@ select::-ms-expand {
 .modal_select, .modal_input{
     width: 100%;
 }
+.gold_color{
+    color: gold;
+}
+.star_icon, .square_icon, .add_icon{
+    cursor:pointer;
+}

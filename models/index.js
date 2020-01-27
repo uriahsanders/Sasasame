@@ -28,14 +28,10 @@ var chapterSchema = mongoose.Schema({
     }],
     level: Number,
     date: {type: Date, default: Date.now},
-    //can others make passages and chapters in here?
-    //author can delete anything but cant edit
-    //users can always edit/delete their own passages
-    shared: Boolean,
-    //can others see this chapter?
-    isPublic: Boolean,
     //how many people like this chapter?
-    stars: Number
+    stars: Number,
+    // JSON for whether chapter is shared, public, design, etc.
+    metadata: String
 });
 chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
@@ -64,11 +60,13 @@ var passageSchema = mongoose.Schema({
     sourceChapter: String,
     //how many people like this passage?
     stars: Number,
-    type: String
+    //JSON for properties
+    metadata: String
 });
 passageSchema.plugin(mongoosePaginate);
 var userSchema = mongoose.Schema({
     password: { type: String, required: true, index: {unique:true} },
+    date: {type: Date, default: Date.now},
     name: {type: String, required: [true, "can't be blank"]},
     email: {type: String, lowercase: true, 
         required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},

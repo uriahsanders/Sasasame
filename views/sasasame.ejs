@@ -13,16 +13,15 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- jQuery Modal -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     </head>
     <body>
         <% if(locals.session && locals.session.user != null){ %>
             <div id="login">
                 <br/>
                 <br/>
-                <a class="link white" href="/login"><%= session.user  %></a>
+                <a class="link white" href="/login"><%=session.user%></a>
             </div>
         <%} else{ %>
             <div id="login">
@@ -75,8 +74,7 @@
             <div id="control_nav">
                     <div id="main_header">
                         <div id="mobile_book_menu">
-                            <!-- <ion-icon name="menu"></ion-icon> -->
-                            +
+                            <ion-icon name="menu"></ion-icon>
                         </div>
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
@@ -86,57 +84,29 @@
                     <div class="up_one_level">
                         <a class="up_one_level_link" href="/sasasame">Help</a>
                     </div>
-                <!-- Here is where you have -->
-                <!-- the options to: -->
-                <!-- (Add Passage) -->
-                <!-- (Add Highlighted to Category) -->
-                <!-- (Add Category) -->
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">
-                    <!-- You write JS in this block -->
-                    <!-- (Execute JS) (Add JS as passage) -->
-                    <!-- Important functions: -->
-                    <!-- (add_category(), add_passage_to_category()) -->
                     <form action="/add_passage/" method="POST">
                     <div class="header no_cursive">
                     <select name="type" id="add_select">
-                        <option value="chapter">Chapter</option>
                         <option value="passage">Passage</option>
+                        <option value="chapter">Chapter</option>
                     </select>
-                    <a class="basic_link" href="#add_modal" rel="modal:open"><ion-icon name="settings"></ion-icon></a>
                     </div>
-                    <div id="add_modal" class="modal">
-                      <p>Coming Soon.</p>
-                      <a href="#" rel="modal:close">Close</a>
-                    </div>
-                    <!-- <input type="file"/ class='file_input' multiple> -->
-                    <!-- <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" /> -->
                     <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                     <button class="control_button" id="add_passage">Add</button>
                     </form>
-                    <!-- <div class="header no_cursive">
-                        Add Chapter
-                    </div>
-                    <form action="/add_chapter/<%=chapter%>" method="GET">
-                        <input class="control_input"  name="title" type="text" placeholder="Title" autocomplete="off" />
-                        <input name="public" type="hidden"/>
-                        <input name="shared" type="hidden"/>
-                        <button class="control_button" id="add_chapter">Add</button>
-                    </form> -->
                 </div>
                 <div  class="control_block" id="book_of_sasame">
-                    <!-- Here you read the book of Sasame from the beginning -->
                     <div class="header">
-                        <!-- PARENT CHAPTER / CHAPTER OPTIONS -->
                         <%if(parentChapter != null){%>
                             <div>
                                   <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon name="color-palette"></ion-icon></a>
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon name="settings"></ion-icon></a>
-                                 <ion-icon name="square-outline"></ion-icon>
-                                 <ion-icon name="star-outline"></ion-icon>
-                                 <ion-icon name="star-outline"></ion-icon>
+                                 <ion-icon class="square_icon"name="square-outline"></ion-icon>
+                                 <ion-icon class="star_icon"name="star-outline"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
@@ -151,6 +121,7 @@
                                   <option>Private (Others can only see it)</option>
                                   <option>Local (Only you can see it)</option>
                               </select>
+                              <p>Update Chapter</p>
                               <p>Delete Chapter</p>
                               <a href="#" rel="modal:close">Close</a>
                             </div>
@@ -158,9 +129,6 @@
                             <%if(locals.isProfile){%>
                             <input type="hidden" value="true", id="is_profile"/>
                             <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
-                                <!-- <div class="tooltip gra_tooltip"><div id="chapter_options"></div><div class="tooltiptext gra_tooltip">Execute</div></div> -->
-                                <input id="parent_chapter_id"type="hidden" value="Sasame"/>
-                                <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}else{%>
                                 <div>
                                     <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon name="color-palette"></ion-icon>
@@ -192,22 +160,14 @@
                                  <div id="modal_<%=f._id%>" class="modal">
                                     <p>PASSAGE OPTIONS</p>
                                   <textarea class="control_textarea"><%=f.content%></textarea>
-                                  <select>
-                                      <option>Task</option>
-                                        <option>Project</option>
-                                        <option>Question</option>
-                                        <option>Code</option>
-                                        <option>Comment</option>
-                                  </select>
-                                  <br><br>
-                                  <textarea class="control_textarea"placeholder="Metadata"></textarea>
+                                  <p>Update passage</p>
                                   <p>Delete passage</p>
                                   <a href="#" rel="modal:close">Close</a>
                                 </div>
-                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon name="settings"></ion-icon></a>
-                                 <ion-icon name="square-outline"></ion-icon>
-                                 <ion-icon name="star-outline"></ion-icon>
-                                 <ion-icon name="add"></ion-icon>
+                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Settings"name="settings"></ion-icon></a>
+                                 <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
+                                 <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+                                 <ion-icon class="add_icon"title="Add Passage"name="add"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>

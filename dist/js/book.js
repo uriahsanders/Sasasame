@@ -16,6 +16,17 @@ $('.category').on('mouseout', function(){
 $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
 });
+$('.star_icon').on('click', function(){
+    $(this).attr('name', function(index, attr){
+        return attr == 'star-outline' ? 'star' : 'star-outline';
+    });
+    $(this).toggleClass('gold_color');
+});
+$('.square_icon').on('click', function(){
+    $(this).attr('name', function(index, attr){
+        return attr == 'square-outline' ? 'checkbox-outline' : 'square-outline';
+    });
+});
 //Infinite scroll for the Book of Sasame
 window.onscroll = function(ev) {
     if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
