@@ -93,7 +93,7 @@
                 <div class="control_block" id="code">
                     <form id="codeform"action="/add_passage/" method="POST">
                     <div class="header no_cursive">
-                    <select name="type" id="add_select">
+                    <select name="type" id="add_select" autocomplete="off">
                         <option value="passage">Passage</option>
                         <option value="chapter">Chapter</option>
                     </select>
@@ -195,15 +195,15 @@
                 </div>
                 <div class="control_block" id="toc">
                     <div class="header">
-                        <select id="right_side_select">
+                        <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
-                            <option value="brief">Brief</option>
                             <option value="queue">Queue</option>
+                            <option value="brief">Brief</option>
                         </select>
                     </div>
                     <!-- Chapters -->
                     <div id="categories">
-                        <input id="right_panel_search"placeholder="Search..." type="" name="">
+                        <input class="control_input"id="right_panel_search"placeholder="Search..." type="" name="">
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">
@@ -217,7 +217,8 @@
                     <!-- Brief from #passages via JS -->
                     <!-- Queue -->
                     <div id="queue">
-                        <input placeholder="Chapter Title" type="" name="">
+                        <input class="control_input"placeholder="Chapter Title" type="" name="">
+                        <button class="control_button">Create!</button>
                         <div id="queue_items"></div>
                     </div>
 

@@ -53,9 +53,9 @@ $('#right_side_select').on('change', function(){
             $('#right_panel_search').hide();
             $('#categories').append('<div id="right_passages">'+$('#passages').html()+'</div>');
             $('#right_passages .passage').css({
-                'font-size': '0.3em',
+                'font-size': '0.5em',
                 'padding': '0px',
-                'line-height': '6px'
+                'line-height': '10px'
             });
             $('#right_passages').sortable();
             break;
