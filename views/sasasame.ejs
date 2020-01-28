@@ -87,7 +87,7 @@
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">
-                    <form action="/add_passage/" method="POST">
+                    <form id="codeform"action="/add_passage/" method="POST">
                     <div class="header no_cursive">
                     <select name="type" id="add_select">
                         <option value="passage">Passage</option>
@@ -149,13 +149,14 @@
                                 </div>
                     <!-- Add upon scroll -->
                     <%if(book){%>
+                        <div id="passages">
                         <% book.forEach(function(f) { %>
-                            <div class="passage">
+                            <div class="passage_<%=f._id%> passage">
                                 <div class="passage_author">
                                     <%if(f.author){%>
                                      <div><a><%= f.author.name %></a></div>
                                  <%}else{%>
-                                     <div>Anonymous</div>
+                                     <div><a class="basic_link" href="#">Anonymous</a></div>
                                  <%}%>
                                  <div id="modal_<%=f._id%>" class="modal">
                                     <p>PASSAGE OPTIONS</p>
@@ -167,7 +168,6 @@
                                  <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Settings"name="settings"></ion-icon></a>
                                  <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
                                  <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
-                                 <ion-icon class="add_icon"title="Add Passage"name="add"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
@@ -181,25 +181,25 @@
                                 <!-- <%}else{%> -->
                                 <!--     <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div> -->
                                 <!-- <%}%> -->
-                                <div class="passage_content"> <%= f.content %> </div>
+                                <a class="basic_link" href="#"><div class="passage_content"><%= f.content %></div></a>
                                 <canvas class="passage_canvas"></canvas>
                                 <div class="passage_id"><%= f._id %></div>
                             </div>
                         <% }); %>
+                    </div>
                     <%}%>
                 </div>
                 <div class="control_block" id="toc">
                     <div class="header">
-                        <select>
-                            <option>Chapters</option>
-                            <option>Brief</option>
-                            <option>Queue</option>
+                        <select id="right_side_select">
+                            <option value="chapters">Chapters</option>
+                            <option value="brief">Brief</option>
+                            <option value="queue">Queue</option>
                         </select>
                     </div>
-                    <!-- Here you view categorization schemes -->
-                    <!-- * Click a category to view everything in it -->
+                    <!-- Chapters -->
                     <div id="categories">
-                        <input placeholder="Search..." type="" name="">
+                        <input id="right_panel_search"placeholder="Search..." type="" name="">
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">
@@ -209,6 +209,11 @@
                                 <div class="category_id"><%= f._id %></div>
                             </div>
                         <%});} %>
+                    </div>
+                    <!-- Brief from #passages via JS -->
+                    <!-- Queue -->
+                    <div id="queue">
+                        
                     </div>
 
                 </div>

@@ -31,7 +31,10 @@ var chapterSchema = mongoose.Schema({
     //how many people like this chapter?
     stars: Number,
     // JSON for whether chapter is shared, public, design, etc.
-    metadata: String
+    metadata: String,
+    // What rules are being used to read the metadata?
+    //also JSON
+    keySchema: String
 });
 chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
@@ -61,7 +64,12 @@ var passageSchema = mongoose.Schema({
     //how many people like this passage?
     stars: Number,
     //JSON for properties
-    metadata: String
+    metadata: String,
+    // What rules are being used to read the metadata?
+    //also JSON
+    keySchema: String,
+    //is this passage a key schema?
+    isSchema: Boolean
 });
 passageSchema.plugin(mongoosePaginate);
 var userSchema = mongoose.Schema({

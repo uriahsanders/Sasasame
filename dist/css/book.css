@@ -118,6 +118,10 @@
     /* padding-right: 40px; */
     font-family: 'Patua One';
 }
+.passage:hover{
+    
+
+}
 .category{
     font-family: 'Nanum Brush Script', cursive;
 }
@@ -475,4 +479,7 @@ select::-ms-expand {
 }
 .star_icon, .square_icon, .add_icon{
     cursor:pointer;
+}
+#queue{
+    display: none;
 }

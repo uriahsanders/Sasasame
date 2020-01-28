@@ -23,9 +23,47 @@ $('.star_icon').on('click', function(){
     $(this).toggleClass('gold_color');
 });
 $('.square_icon').on('click', function(){
+    var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
     $(this).attr('name', function(index, attr){
-        return attr == 'square-outline' ? 'checkbox-outline' : 'square-outline';
+        if(attr == 'square-outline'){
+            //add passage to queue
+            $('#queue').append($('.'+parentClass).clone());
+            return 'checkbox-outline';
+        }
+        else{
+            //remove passage from queue
+            $('#queue .'+parentClass).hide();
+            return 'square-outline';
+        }
     });
+});
+$('#right_side_select').on('change', function(){
+    switch($(this).val()){
+        case 'chapters':
+            $('#queue').hide();
+            $('#categories').show();
+            $('#right_passages').remove();
+            $('#right_panel_search').show();
+            $('.category').show();
+            break;
+        case 'brief':
+            $('#queue').hide();
+            $('#categories').show();
+            $('.category').hide();
+            $('#right_panel_search').hide();
+            $('#categories').append('<div id="right_passages">'+$('#passages').html()+'</div>');
+            $('#right_passages .passage').css({
+                'font-size': '0.3em',
+                'padding': '0px',
+                'line-height': '6px'
+            });
+            break;
+        case 'queue':
+            $('#categories').hide();
+            $('#right_passages').remove();
+            $('#queue').show();
+            break;
+    }
 });
 //Infinite scroll for the Book of Sasame
 window.onscroll = function(ev) {
@@ -83,3 +121,24 @@ window.onscroll = function(ev) {
         }
     }
 };
+
+var fixmeTop = $('#codeform').offset().top;       // get initial position of the element
+
+$(window).scroll(function() {                  // assign scroll event listener
+
+    var currentScroll = $(window).scrollTop() + 20; // get current position
+
+    if (currentScroll >= fixmeTop) {           // apply position: fixed if you
+        $('#codeform').css({                      // scroll to that element or below it
+            position: 'fixed',
+            top: '20px',
+            width: '24%'
+        });
+    } else {                                   // apply position: static
+        $('#codeform').css({                      // if you scroll above it
+            position: 'relative',
+            width: 'auto'
+        });
+    }
+
+});
