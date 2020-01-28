@@ -27,12 +27,12 @@ $('.square_icon').on('click', function(){
     $(this).attr('name', function(index, attr){
         if(attr == 'square-outline'){
             //add passage to queue
-            $('#queue').append($('.'+parentClass).clone());
+            $('#queue_items').append($('.'+parentClass).clone());
             return 'checkbox-outline';
         }
         else{
             //remove passage from queue
-            $('#queue .'+parentClass).hide();
+            $('#queue_items .'+parentClass).hide();
             return 'square-outline';
         }
     });
@@ -57,11 +57,13 @@ $('#right_side_select').on('change', function(){
                 'padding': '0px',
                 'line-height': '6px'
             });
+            $('#right_passages').sortable();
             break;
         case 'queue':
             $('#categories').hide();
             $('#right_passages').remove();
             $('#queue').show();
+            $('#queue_items').sortable();
             break;
     }
 });
