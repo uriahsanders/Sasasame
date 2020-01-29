@@ -31,7 +31,11 @@
             <div id="login">
                 <br/>
                 <br/>
-                <a class="link white" href="/login">Login</a>
+                <a class="link white" href="/login">Help</a> |
+                <a class="link white" href="/login">Login</a> |
+                <a class="link white" href="/login">Register</a> |
+                <a class="link white" href="/login">Donate</a>
+
             </div>
         <%} %>
         <div id="mobile_book_menu_main">
@@ -83,10 +87,6 @@
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
                         </a>
-                        <div><a class="basic_link" href="/">SASAME</a></div>
-                    </div>
-                    <div class="up_one_level">
-                        <a class="up_one_level_link" href="/sasasame">Help</a>
                     </div>
             </div>
             <div id="control_blocks">
@@ -101,16 +101,57 @@
                     <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                     <button class="control_button" id="add_passage">Add</button>
+                    <div id="properties">
+                        <div id="add_property"><ion-icon name="add-circle-outline"></ion-icon> Add Property</div> 
+                    </div>
+                    <div id="property_select">
+                        <div class="property_select">
+                            <ion-icon class="remove_property"name="remove-circle-outline"></ion-icon> 
+                            <!-- For Passages -->
+                            <select>
+                                <option>Color</option>
+                                <option>Background Color</option>
+                                <option>CSS</option>
+                                <option>Code</option>
+                                <option>Javascript</option>
+                                <option>HTML</option>
+                                <option>Markdown</option>
+                                <option>Access</option>
+                                <option>Show Icons</option>
+                                <option>Show Author</option>
+                                <option>Key Schema</option>
+                                <option>Is Key Schema?</option>
+                                <option>Canvas</option>
+                                <option>Tone</option>
+                                <option>Hidden</option>
+                                <option>Autorun</option>
+                                <option>Custom</option>
+                            </select>
+                            <!-- For chapters -->
+                            <!-- <select>
+                                <option>Chapter CSS</option>
+                                <option>Passage CSS</option>
+                                <option>Distraction Free Mode</option>
+                                <option>Show Icons</option>
+                                <option>Show Authors</option>
+                                <option>Impress JS</option>
+                                <option>Key Schema</option>
+                                <option>Custom</option>
+                            </select> -->
+                            <br><br>
+                            <input type="" name="">
+                        </div>
+                    </div>
                     </form>
                 </div>
                 <div  class="control_block" id="book_of_sasame">
                     <div class="header">
                         <%if(parentChapter != null){%>
                             <div>
-                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon name="color-palette"></ion-icon></a>
-                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon name="settings"></ion-icon></a>
-                                 <ion-icon class="square_icon"name="square-outline"></ion-icon>
-                                 <ion-icon class="star_icon"name="star-outline"></ion-icon>
+                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Chapter"name="color-palette"></ion-icon></a>
+                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"name="settings"></ion-icon></a>
+                                 <ion-icon title="Add to Queue"class="square_icon"name="square-outline"></ion-icon>
+                                 <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
@@ -125,6 +166,8 @@
                                   <option>Private (Others can only see it)</option>
                                   <option>Local (Only you can see it)</option>
                               </select>
+                              <p>Distraction Free Mode</p>
+                              <p>Download as PDF</p>
                               <p>Update Chapter</p>
                               <p>Delete Chapter</p>
                               <a href="#" rel="modal:close">Close</a>
@@ -135,7 +178,7 @@
                             <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
                             <%}else{%>
                                 <div>
-                                    <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon name="color-palette"></ion-icon>
+                                    <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Passage"name="color-palette"></ion-icon>
                                 </div>
                                 <br>
                                 <span id="parent_chapter_title">Stream</span>
@@ -169,7 +212,7 @@
                                   <p>Delete passage</p>
                                   <a href="#" rel="modal:close">Close</a>
                                 </div>
-                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Settings"name="settings"></ion-icon></a>
+                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
                                  <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
                                  <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
 
@@ -185,9 +228,46 @@
                                 <!-- <%}else{%> -->
                                 <!--     <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div> -->
                                 <!-- <%}%> -->
-                                <a class="basic_link" href="#"><div class="passage_content"><%= f.content %></div></a>
+                                <div class="passage_content"><%= f.content %></div>
                                 <canvas class="passage_canvas"></canvas>
                                 <div class="passage_id"><%= f._id %></div>
+                                <div class="sub_passages">
+                                    <div class="sub_passage">
+                                        <div class="passage_author">
+                                        <%if(f.author){%>
+                                         <div><a><%= f.author.name %></a></div>
+                                     <%}else{%>
+                                         <div><a class="basic_link" href="#">Anonymous</a></div>
+                                     <%}%>
+                                     <div id="modal_<%=f._id%>" class="modal">
+                                        <p>PASSAGE OPTIONS</p>
+                                      <textarea class="control_textarea"><%=f.content%></textarea>
+                                      <p>Update passage</p>
+                                      <p>Delete passage</p>
+                                      <a href="#" rel="modal:close">Close</a>
+                                    </div>
+                                     <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
+                                     <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+
+                                    </div>
+                                    <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
+                                    <%if(typeof f.chapter != 'undefined' && typeof f.chapter.title != 'undefined'){%>
+                                    <!-- <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div> -->
+                                    <%}else{%>
+                                        <div class="passage_chapter">Sasame</div>
+                                    <%}%>
+                                    <!-- <%if(f.author){%> -->
+                                    <!--     <div class="passage_author">by <a><%= f.author.name %></a> on <%= f.date.toDateString() %></div> -->
+                                    <!-- <%}else{%> -->
+                                    <!--     <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div> -->
+                                    <!-- <%}%> -->
+                                    <div class="passage_content"><%= f.content %></div>
+                                    <canvas class="passage_canvas"></canvas>
+                                    <div class="passage_id"><%= f._id %></div>
+                                    </div>
+                                    <div class="add_sub_passage"><ion-icon title="Add Sub Passage"name="add-circle-outline"></ion-icon></div>
+                                </div>
+
                             </div>
                         <% }); %>
                     </div>
@@ -203,7 +283,7 @@
                     </div>
                     <!-- Chapters -->
                     <div id="categories">
-                        <input class="control_input"id="right_panel_search"placeholder="Search..." type="" name="">
+                        <input class="control_input"id="right_panel_search"placeholder="Search Sasame" type="" name="">
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">

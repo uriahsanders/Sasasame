@@ -1,4 +1,12 @@
-// For the Book of Sasame
+$('#add_property').on('click', function(){
+    $('#properties').prepend($('#property_select').html());
+});
+$(document).on('click', '.remove_property', function(){
+    $(this).parent().remove();
+});
+$(document).on('click', '.passage_content', function(){
+    $(this).parent().children('.sub_passages').slideToggle();
+});
 $('#mobile_active_close').on('click', function(){
     $('#mobile_book_menu_main').fadeOut();
     $('#control_panel').fadeIn();
@@ -20,6 +28,9 @@ $('.star_icon').on('click', function(){
     $(this).attr('name', function(index, attr){
         return attr == 'star-outline' ? 'star' : 'star-outline';
     });
+    $(this).toggleClass('gold_color');
+});
+$('.sun_icon').on('click', function(){
     $(this).toggleClass('gold_color');
 });
 $('.square_icon').on('click', function(){

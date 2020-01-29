@@ -1,9 +1,12 @@
 #little_seed {
-    width: 70px;
+    width: 40px;
     display: inline;
     margin: auto;
     margin-bottom: 10px;
 
+}
+#sasame{
+    font-size: 1em;
 }
 /* Control Panel */
 #control_panel{
@@ -187,6 +190,7 @@
     min-height: 30px;
     width:55%;
     margin:auto;
+    cursor: pointer;
 }
 .passage_keys{
     display: none;
@@ -219,6 +223,11 @@
     /* border-right: 1px solid #353535; */
     /* border-top: 1px solid #353535; */
 }
+.add_sub_passage{
+    margin-top: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
 
 #toc{
     /* border: 1px solid #fff; */
@@ -247,7 +256,10 @@
 
 }
 #mobile_book_menu{
-    display: none;
+    /*display: none;*/
+    position: absolute;
+    left: 20px;
+    top: 20px;
 }
 #mobile_warning{
     display: none;
@@ -477,9 +489,36 @@ select::-ms-expand {
 .gold_color{
     color: gold;
 }
-.star_icon, .square_icon, .add_icon{
+.star_icon, .square_icon, .add_icon, .sun_icon{
     cursor:pointer;
 }
 #queue{
+    display: none;
+}
+#properties{
+    padding: 5px;
+    text-align: left;
+    font-size: 0.9em;
+}
+#add_property, .remove_property{
+    cursor: pointer;
+}
+#property_select{
+    display: none;
+}
+.property_select{
+    margin-bottom: 15px;
+
+}
+.sub_passage{
+    border: 1px solid #CCC;
+    font-size: 0.8em;
+    line-height: 18px;
+    width: 75%;
+    margin: auto;
+    margin-top: 12px;
+    padding: 10px;
+}
+.sub_passages{
     display: none;
 }
