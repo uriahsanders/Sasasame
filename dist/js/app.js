@@ -56,9 +56,9 @@ var updatePassage = function(thiz){
         });
     }
 };
-$(document).on('focusout', '.passage', function(){
-    updatePassage($(this).find('.passage_expand'));
-});
+// $(document).on('focusout', '.passage', function(){
+//     updatePassage($(this).find('.passage_expand'));
+// });
 //expand passage
 $(document).on('click', '.passage_expand', function(){
     var text = $(this).text();
@@ -81,17 +81,19 @@ $(document).on('click', '.passage_expand', function(){
     $(this).siblings('.passage_delete').fadeToggle();
 });
 //delete passage
-$(document).on('click', '.passage_delete', function(e){
+$(document).on('click', '[class^=passage_delete]', function(e){
     var thiz = $(this);
+    var _id = thiz.attr('class').split('_')[2];
     //delete passage
     $.ajax({
         type: 'post',
         url: '/delete_passage',
         data: {
-            _id: thiz.siblings('.passage_id').text()
+            _id: _id
         },
         success: function(data){
-            thiz.parent().fadeOut(300, function(){
+            thiz.parent().parent().fadeOut();
+            $('.passage_'+_id).fadeOut(300, function(){
                 $(this).remove();
             });
         }

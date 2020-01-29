@@ -109,6 +109,7 @@
                             <ion-icon class="remove_property"name="remove-circle-outline"></ion-icon> 
                             <!-- For Passages -->
                             <select>
+                                <option>Hyperlink</option>
                                 <option>Color</option>
                                 <option>Background Color</option>
                                 <option>CSS</option>
@@ -137,6 +138,7 @@
                                 <option>Impress JS</option>
                                 <option>Key Schema</option>
                                 <option>Custom</option>
+                                <option>Autorun</option>
                             </select> -->
                             <br><br>
                             <input type="" name="">
@@ -208,8 +210,9 @@
                                  <div id="modal_<%=f._id%>" class="modal">
                                     <p>PASSAGE OPTIONS</p>
                                   <textarea class="control_textarea"><%=f.content%></textarea>
-                                  <p>Update passage</p>
-                                  <p>Delete passage</p>
+                                  <p class="passage_update">Update passage</p>
+                                  <p class="passage_delete_<%=f._id%>">Delete passage</p>
+                                  <div class="passage_id"><%= f._id %></div>
                                   <a href="#" rel="modal:close">Close</a>
                                 </div>
                                  <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
@@ -230,7 +233,6 @@
                                 <!-- <%}%> -->
                                 <div class="passage_content"><%= f.content %></div>
                                 <canvas class="passage_canvas"></canvas>
-                                <div class="passage_id"><%= f._id %></div>
                                 <div class="sub_passages">
                                     <div class="sub_passage">
                                         <div class="passage_author">
