@@ -160,7 +160,7 @@
     padding-left: 40px;
     padding-right: 40px;
 }
-[class^="passage_delete"], [class^="passage_update"], .passage_link{
+[class^="passage_delete"], [class^="passage_update"], [class^="chapter_delete"], [class^="chapter_update"], .passage_link{
     font-size: 0.8em;
     /* font-weight: 200; */
     cursor: pointer;

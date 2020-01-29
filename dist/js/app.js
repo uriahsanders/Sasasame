@@ -100,19 +100,18 @@ $(document).on('click', '[class^=passage_delete]', function(e){
     });
 });
 //delete category
-$(document).on('click', '.category_delete', function(){
+$(document).on('click', '[class^=chapter_delete]', function(){
     var thiz = $(this);
+    var _id = thiz.attr('class').split('_')[2];
     //delete passage
     $.ajax({
         type: 'post',
         url: '/delete_category',
         data: {
-            _id: thiz.siblings('.category_id').text()
+            _id: _id
         },
         success: function(data){
-            thiz.parent().fadeOut(300, function(){
-                $(this).remove();
-            });
+            window.location = '/';
         }
     });
 });
