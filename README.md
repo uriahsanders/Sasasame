@@ -3,39 +3,24 @@
 ## 1. Sasame, A Social Network for Problem Solving.
 (Under Development)
 
-All content is modular (whether it be text, image, audio, video, code, etc.)
-
-Users on the site stitch modules together to create new modules.
-
-These modules might be projects, books, games, songs, policies, apps, hardware schematics, etc.
-
-Modules keep a record of contributors and can be plugged and played into different modules.
-
-All modules can be starred if found useful.
-
-Monthly donations are split across users by stars earned that month.
-
-Sasame uses the sasamtic algorithm (described below) to generate new modules.
+* All content is modular (whether it be text, image, audio, video, code, etc.)
+* Users on the site stitch modules together to create new modules.
+* These modules might be projects, books, games, songs, policies, apps, hardware schematics, etc.
+* Modules keep a record of contributors and can be plugged and played into different modules.
+* All modules can be starred if found useful.
+* Monthly donations are split across users by stars earned that month.
+* Sasame uses the sasamtic algorithm (described below) to generate new modules.
 
 This method:
-
-Prevents wasted work
-
-Reduces tunnel vision
-
-Enables worldwide collaboration
-
-Bridges work with education and incentivizes both
-
-Helps people accomplish their dreams regardless of background or financial status
-
-Uses Machine Learning to accelerate development
-
-Promotes communication and diplomacy by aiming for novel solutions over simple compromise
-
-Promotes the development of transparent systems
-
-Is Scalable
+* Prevents wasted work
+* Reduces tunnel vision
+* Enables worldwide collaboration
+* Bridges work with education and incentivizes both
+* Helps people accomplish their dreams regardless of background or financial status
+* Uses Machine Learning to accelerate development
+* Promotes communication and diplomacy by aiming for novel solutions over simple compromise
+* Promotes the development of transparent systems
+* Is Scalable
 
 
 ## 2. United Life: A Non Profit for Connecting Humanity in Positive ways.
@@ -47,28 +32,18 @@ Is Scalable
 as well as help lead the development of modules in their areas of interest
 
 Monthly board meetings are held to:
-
-Discuss development of 1-4
-
-Allocate the budget (Server costs, Compensation, 1-4)
-
-Quorum is ¾ of the board.
-
-A simple majority of quorum (50% +1 is required to allocate funds)
-
-Board members may be added or removed by unanimous vote
-
-By-Laws may be amended by unanimous vote
+* Discuss development of 1-4
+* Allocate the budget (Server costs, Compensation, 1-4)
+* Quorum is ¾ of the board.
+* A simple majority of quorum (50% +1 is required to allocate funds)
+* Board members may be added or removed by unanimous vote
+* By-Laws may be amended by unanimous vote
 
 Board members should be chosen for commitment to the cause:
-
-To create a More Connected World
-
-To solve Humanity’s Greatest Challenges
-
-To build Knowledge and Accessibility to it
-
-To have Fun and make the world more Fun
+* To create a More Connected World
+* To solve Humanity’s Greatest Challenges
+* To build Knowledge and Accessibility to it
+* To have Fun and make the world more Fun
 
 
 
