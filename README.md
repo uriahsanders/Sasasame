@@ -25,10 +25,10 @@ Is Scalable
 
 ## 2. United Life: A Non Profit for Connecting Humanity in Positive ways.
 
-1)Supports the development/accessibility of Sasame and diversity of input 
-2)Runs an annual global conference to promote positive work on Sasame
-3)Secures donations/grants for Sasame and United Life
-4)All Board Members are expected to support the above,
+1) Supports the development/accessibility of Sasame and diversity of input 
+2) Runs an annual global conference to promote positive work on Sasame
+3) Secures donations/grants for Sasame and United Life
+4) All Board Members are expected to support the above,
 as well as help lead the development of modules in their areas of interest
 
 Monthly board meetings are held to:
@@ -53,38 +53,38 @@ To have Fun and make the world more Fun
 (Both ‘Passages’ and ‘Chapters’ are considered modules)
 
 Users
-    • May donate to Sasame
-    • Receive funds from the monthly pot of donations according to the number of stars achieved that month added from all their created passages and chapters. Chapters also receive additional stars from the passages they contain. 
-    • Can create accounts or work anonymously. Stars earned by anonymous users go to the user ‘Sasame’
-    • Can create passages, or create chapters that contain passages.
-    • Can search for chapters by title, sorted by number of stars.
-    • Can view passages pulled from chapters throughout the site in the Home Feed (The Stream), or via User Feeds, or by clicking on a specific chapter in the Table of Contents. Content in feeds is sorted by date.
-    • Can view a ‘Help’ page that redirects to a chapter containing a presentation explaining Sasame
-    • Can click a button that recombines passages/chapters marked highly useful (by stars) to create new passages/chapters. These passages/chapters belong to the user ‘Sasame’
-    • Funds received by the user ‘Sasame’ at the end of the month are donations to the United Life Nonprofit.
+    * May donate to Sasame
+    * Receive funds from the monthly pot of donations according to the number of stars achieved that month added from all their created passages and chapters. Chapters also receive additional stars from the passages they contain. 
+    * Can create accounts or work anonymously. Stars earned by anonymous users go to the user ‘Sasame’
+    * Can create passages, or create chapters that contain passages.
+    * Can search for chapters by title, sorted by number of stars.
+    * Can view passages pulled from chapters throughout the site in the Home Feed (The Stream), or via User Feeds, or by clicking on a specific chapter in the Table of Contents. Content in feeds is sorted by date.
+    * Can view a ‘Help’ page that redirects to a chapter containing a presentation explaining Sasame
+    * Can click a button that recombines passages/chapters marked highly useful (by stars) to create new passages/chapters. These passages/chapters belong to the user ‘Sasame’
+    * Funds received by the user ‘Sasame’ at the end of the month are donations to the United Life Nonprofit.
 
 Passages
-    • Can contain text/code/markup
-    • Can have files/images attached
-    • Can be flagged for sensitive content
-    • Can have additional properties selected from a default or custom list
-    • Can have permissions set upon creation for who can edit/delete
-    • Can contain sub-passages, but sub-passages can not contain additional sub-passages
-    • May be starred if found useful
-    • May be bookmarked (checked) for future use, adding to the ‘Queue’
-    • Bookmarked passages in the Queue can be sorted, edited, and stitched together to make new chapters, and contain a reference to the original. Stars added to modified passages belong to both the new passage and the original.
-    • Users can directly record audio and attach it to a passage
-    • Users can directly draw on a canvas and attach it to a passage
-    • Canvas drawings are added to an internal queue sorted by usage. Users can iterate over this queue to create drawings from previously created drawings. Users can also select a portion of a drawing to add it to this queue. Drawings in the queue can be rotated and scaled before adding to the main drawing.
+    * Can contain text/code/markup
+    * Can have files/images attached
+    * Can be flagged for sensitive content
+    * Can have additional properties selected from a default or custom list
+    * Can have permissions set upon creation for who can edit/delete
+    * Can contain sub-passages, but sub-passages can not contain additional sub-passages
+    * May be starred if found useful
+    * May be bookmarked (checked) for future use, adding to the ‘Queue’
+    * Bookmarked passages in the Queue can be sorted, edited, and stitched together to make new chapters, and contain a reference to the original. Stars added to modified passages belong to both the new passage and the original.
+    * Users can directly record audio and attach it to a passage
+    * Users can directly draw on a canvas and attach it to a passage
+    * Canvas drawings are added to an internal queue sorted by usage. Users can iterate over this queue to create drawings from previously created drawings. Users can also select a portion of a drawing to add it to this queue. Drawings in the queue can be rotated and scaled before adding to the main drawing.
 
 Chapters
-    • Have a title
-    • Contain passages
-    • Can have properties selected from a default or custom list
-    • Can have permissions set upon creation for who can edit/delete
-    • Can be flagged for sensitive content
-    • May be starred if found useful
-    • May be bookmarked (checked) for future use, adding all contained passages to the ‘queue’
+    * Have a title
+    * Contain passages
+    * Can have properties selected from a default or custom list
+    * Can have permissions set upon creation for who can edit/delete
+    * Can be flagged for sensitive content
+    * May be starred if found useful
+    * May be bookmarked (checked) for future use, adding all contained passages to the ‘queue’
 
 ## AI
 
