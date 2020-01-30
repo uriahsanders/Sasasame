@@ -74,6 +74,7 @@ var passageSchema = mongoose.Schema({
 passageSchema.plugin(mongoosePaginate);
 var userSchema = mongoose.Schema({
     password: { type: String, required: true, index: {unique:true} },
+    queue: String,
     date: {type: Date, default: Date.now},
     name: {type: String, required: [true, "can't be blank"]},
     email: {type: String, lowercase: true, 

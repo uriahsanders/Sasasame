@@ -294,7 +294,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
     };
     if(type == 'passage'){
         addPassage({
-            'chapterID': chapterID,
+            'chapter': chapterID,
             'content': content,
             'author': user,
             'callback': callback
