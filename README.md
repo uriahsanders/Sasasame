@@ -1,6 +1,6 @@
-#The Plan to Save the World
+# The Plan to Save the World
 
-##1. Sasame, A Social Network for Problem Solving.
+## 1. Sasame, A Social Network for Problem Solving.
 (Under Development)
 
 All content is modular (whether it be text, image, audio, video, code, etc.)
@@ -23,7 +23,7 @@ Promotes the development of transparent systems
 Is Scalable
 
 
-##2. United Life: A Non Profit for Connecting Humanity in Positive ways.
+## 2. United Life: A Non Profit for Connecting Humanity in Positive ways.
 
 1)Supports the development/accessibility of Sasame and diversity of input 
 2)Runs an annual global conference to promote positive work on Sasame
@@ -48,7 +48,7 @@ To have Fun and make the world more Fun
 
 
 
-##Technological Overview of Sasame:
+## Technological Overview of Sasame:
 
 (Both ‘Passages’ and ‘Chapters’ are considered modules)
 
@@ -86,7 +86,7 @@ Chapters
     • May be starred if found useful
     • May be bookmarked (checked) for future use, adding all contained passages to the ‘queue’
 
-##AI
+## AI
 
 Genetic algorithms are algorithms that work by recombinating existing modules to create new ones, and subjecting them to a fitness test that results in a gradual improvement of fitness, or the ability to pass the test. With Sasame, the fitness test is whether a module is starred, and the properties and content of that module is what is recombinated. 
 
@@ -100,7 +100,7 @@ A key difference between Genetic Algorithms and Sasamatic Algorithms is that Sas
 
 
 
-##Social Impact Overview of Sasame
+## Social Impact Overview of Sasame
 
 The completed Social Network should effectively host a community where literally anything can be built collaboratively through the website, with work shared throughout the community. Default properties can be added to modules to accomplish all sorts of features, and users can also write code within modules that defines new properties for others to use in new modules.
 
