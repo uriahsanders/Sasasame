@@ -255,7 +255,7 @@
 
 }
 #mobile_book_menu{
-    /*display: none;*/
+    display: none;
     position: absolute;
     left: 20px;
     top: 20px;
