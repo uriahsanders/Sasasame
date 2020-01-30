@@ -98,6 +98,11 @@
                         <option value="chapter">Chapter</option>
                     </select>
                     </div>
+                    <div style="text-align:left">
+                        <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
+                        <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
+                        <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+                    </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                     <button class="control_button" id="add_passage">Add</button>
@@ -118,8 +123,6 @@
                                 <option>HTML</option>
                                 <option>Markdown</option>
                                 <option>Access</option>
-                                <option>Show Icons</option>
-                                <option>Show Author</option>
                                 <option>Key Schema</option>
                                 <option>Is Key Schema?</option>
                                 <option>Canvas</option>
@@ -133,8 +136,6 @@
                                 <option>Chapter CSS</option>
                                 <option>Passage CSS</option>
                                 <option>Distraction Free Mode</option>
-                                <option>Show Icons</option>
-                                <option>Show Authors</option>
                                 <option>Impress JS</option>
                                 <option>Key Schema</option>
                                 <option>Custom</option>
@@ -154,6 +155,7 @@
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"name="settings"></ion-icon></a>
                                  <ion-icon title="Add to Queue"class="square_icon"name="square-outline"></ion-icon>
                                  <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+                                 <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
@@ -218,6 +220,7 @@
                                  <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
                                  <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
                                  <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+                                 <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
@@ -289,6 +292,11 @@
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">
+                                <!-- For Future
+                                <div class="chapter_flag">
+                                    <ion-icon title="Content Warning" name="flag"></ion-icon>
+                                </div>
+                                 -->
                                 <div>
                                     <a class="link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a>
                                 </div>

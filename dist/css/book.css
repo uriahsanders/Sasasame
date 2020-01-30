@@ -521,3 +521,14 @@ select::-ms-expand {
 .sub_passages{
     display: none;
 }
+.image_upload_icon, .mic_record_icon, .flag_icon{
+    cursor: pointer;
+}
+.chapter_flag{
+    position:absolute;
+    display:none;
+    color:crimson;
+}
+.crimson_color{
+    color: crimson;
+}

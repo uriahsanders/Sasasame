@@ -34,7 +34,8 @@ var chapterSchema = mongoose.Schema({
     metadata: String,
     // What rules are being used to read the metadata?
     //also JSON
-    keySchema: String
+    keySchema: String,
+    flagged: Boolean //content warning
 });
 chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
@@ -69,7 +70,8 @@ var passageSchema = mongoose.Schema({
     //also JSON
     keySchema: String,
     //is this passage a key schema?
-    isSchema: Boolean
+    isSchema: Boolean,
+    flagged: Boolean //content warning
 });
 passageSchema.plugin(mongoosePaginate);
 var userSchema = mongoose.Schema({

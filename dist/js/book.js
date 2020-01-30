@@ -16,10 +16,10 @@ $('#mobile_book_menu').on('click', function(){
     $('#mobile_book_menu_main').css('display', 'block');
 });
 $('.category').on('mouseover', function(){
-    $(this).find('.category_delete').css('color', '#353535');
+    $(this).find('.chapter_flag').show();
 });
 $('.category').on('mouseout', function(){
-    $(this).find('.category_delete').css('color', 'transparent');
+    $(this).find('.chapter_flag').hide();
 });
 $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
@@ -32,6 +32,9 @@ $('.star_icon').on('click', function(){
 });
 $('.sun_icon').on('click', function(){
     $(this).toggleClass('gold_color');
+});
+$('.flag_icon').on('click', function(){
+    $(this).toggleClass('crimson_color');
 });
 $('.square_icon').on('click', function(){
     var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
