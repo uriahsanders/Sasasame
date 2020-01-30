@@ -9,7 +9,7 @@
 * Modules keep a record of contributors and can be plugged and played into different modules.
 * All modules can be starred if found useful.
 * Monthly donations are split across users by stars earned that month.
-* Sasame uses the sasamtic algorithm (described below) to generate new modules.
+* Sasame uses the sasamatic algorithm (described below) to generate new modules.
 
 This method:
 * Prevents wasted work
