@@ -3,16 +3,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const ejs = require('ejs');
 
+require('dotenv').config()
+
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://localhost/sasame', function(err){
+mongoose.connect(process.env.MONGODB_CONNECTION_URL, function(err){
     if (err) {
         return console.error(err);
     }
     setTimeout( () => {
-        mongoose.connect('mongodb://localhost/sasame');
+        mongoose.connect(process.env.MONGODB_CONNECTION_URL);
     }, 5000);
 });
 
