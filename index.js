@@ -41,6 +41,11 @@ const Chapter = require('./models/Chapter');
 const Passage = require('./models/Passage');
 //Call in Scripts
 var scripts = require('./scripts');
+
+// Controllers
+const chapterController = require('./controllers/chapterController');
+const passageController = require('./controllers/passageController');
+
 // Password Protection for When Upgrading
 var securedRoutes = require('express').Router();
 securedRoutes.use((req, res, next) => {
@@ -243,63 +248,6 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
-var addPassage = function(options) {
-    if(options.chapter != '' && options.chapter != null){
-        let post = new Passage({
-            content: options.content,
-            chapter: options.chapter,
-            author: options.user
-        }).save().then(data => {
-            Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
-                if(chap.passages){
-                    chap.passages.push(data);
-                }
-                else{
-                    chap.passages = [data];
-                }
-                chap.save();
-            });
-        });
-    }
-    else{
-        //level 1 passage
-        let post = new Passage({
-            content: options.content,
-            author: options.user
-        }).save();
-    }
-    options.callback();
-};
-var addChapter = function(options) {
-    if(options.chap != '' && options.chap != null){
-        let chapter = new Chapter({
-            title: options.title,
-            chapter: options.chap,
-            author: options.user
-        }).save().then(data => {
-        });
-    }
-    else{
-        // Level 1
-        let chapter = new Chapter({
-            title: options.title,
-            author: options.user
-        }).save(function(err,chap){
-            if(err){
-                console.log(err);
-            }
-        });
-    }
-    options.callback();
-};
-var addPassageToCategory = function(passageID, chapterID, callback) {
-    Chapter.find({_id:chapterID}).sort([['_id', 1]]).exec(function(err, chapter){
-        chapter.passages.append(passageID);
-        chapter.save().then((data) => {
-            callback();
-        });
-    });
-};
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
     var type = req.body.type;
@@ -310,7 +258,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
         res.redirect(backURL);
     };
     if(type == 'passage'){
-        addPassage({
+        passageController.addPassage({
             'chapter': chapterID,
             'content': content,
             'author': user,
@@ -318,7 +266,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
         });
     }
     else if(type == 'chapter' && content != ''){
-        addChapter({
+        chapterController.addChapter({
             'title': content,
             'author': user,
             'callback': callback
@@ -371,12 +319,12 @@ app.get('/feed_sasame', (req, res) => {
             console.log(err);
         }
         if (passage && info.content != passage.content){
-            addPassage('', '', info.content, function(){
+            passageController.addPassage('', '', info.content, function(){
                 res.redirect("/");
             });
         }
         else{
-            addPassage('', '', 'LIGHT is the fire behind life.', function(){
+            passageController.addPassage('', '', 'LIGHT is the fire behind life.', function(){
                 res.redirect("/");
             });
         }
