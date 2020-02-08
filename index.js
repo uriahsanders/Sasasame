@@ -422,7 +422,7 @@ app.get('/fruit', (req, res) => {
 });
 
 var server = app.listen(3000, () => {
-    console.log("Sasame Started...");
+    console.log(`Sasame started on Port ${server.address().port}`);
 });
 process.on('uncaughtException', function(err){
     console.log('uncaughtExceptionError');
