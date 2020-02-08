@@ -1,27 +1,23 @@
 'use strict';
 const express = require('express');
 const mongoose = require('mongoose');
-const ejs = require('ejs');
 
 require('dotenv').config()
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.MONGODB_CONNECTION_URL, function(err){
-    if (err) {
-        return console.error(err);
-    }
-    setTimeout( () => {
-        mongoose.connect(process.env.MONGODB_CONNECTION_URL);
-    }, 5000);
+mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
 });
 
 var app = express();
+
+const ejs = require('ejs');
 app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
 // For POST requests
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -35,10 +31,12 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
 //Call in Models
 const User = require('./models/User');
 const Chapter = require('./models/Chapter');
 const Passage = require('./models/Passage');
+
 //Call in Scripts
 var scripts = require('./scripts');
 
