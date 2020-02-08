@@ -1,11 +1,11 @@
 'use strict';
 const mongoose = require('mongoose');
-var mongoosePaginate = require('mongoose-paginate');
+const mongoosePaginate = require('mongoose-paginate');
 
-var bcrypt = require('bcrypt');
-var SALT_WORK_FACTOR = 10;
+const bcrypt = require('bcrypt');
+const SALT_WORK_FACTOR = 10;
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     password: { type: String, required: true, index: {unique:true} },
     queue: String,
     date: {type: Date, default: Date.now},

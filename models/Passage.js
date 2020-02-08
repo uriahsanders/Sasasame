@@ -1,8 +1,8 @@
 'use strict';
 const mongoose = require('mongoose');
-var mongoosePaginate = require('mongoose-paginate');
+const mongoosePaginate = require('mongoose-paginate');
 
-var passageSchema = mongoose.Schema({
+const passageSchema = mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
