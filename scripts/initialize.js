@@ -1,5 +1,7 @@
 // This file is for Initializing the Database
-var models = require('../models');
+const Chapter = require('../models/Chapter');
+const Passage = require('../models/Passage');
+
 // Make Initial Chapters
 var topLevels = ['Foreword', 'Infinity Forum', 'RULES', 'Keys', 'Golden Roads', 'Death by Bubbles', 'Development', 'Afterword'];
 var chaptersToCreate = [];
@@ -53,7 +55,7 @@ for(var chapter in topLevels){
     }));
 }
 //Actually create the categories
-models.Chapter.create(chaptersToCreate, function(err, chapters){
+Chapter.create(chaptersToCreate, function(err, chapters){
     if (err) console.log(err);
     console.log(chapters);
     console.log('All Done!');
