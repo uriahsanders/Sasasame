@@ -221,7 +221,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
             Chapter.findOne({_id:urlEnd}).populate('chapter').limit(LIMIT).exec()
             .then(function(chapter){
                 //find all chapters in this chapter
-                models.Chapter.find().sort({_id: -1}).limit(LIMIT * 4).exec()
+                Chapter.find().sort({_id: -1}).limit(LIMIT * 4).exec()
                 .then(function(chaps){
                     res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
                     chapter: urlEnd, book: passages, chapters: chaps, 
