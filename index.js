@@ -257,20 +257,26 @@ app.post(/\/add_passage\/?/, (req, res) => {
     let callback = function(){
         res.redirect(backURL);
     };
-    if(type == 'passage'){
-        passageController.addPassage({
-            'chapter': chapterID,
-            'content': content,
-            'author': user,
-            'callback': callback
-        });
-    }
-    else if(type == 'chapter' && content != ''){
-        chapterController.addChapter({
-            'title': content,
-            'author': user,
-            'callback': callback
-        });
+    switch(type) {
+        case 'passage':
+            passageController.addPassage({
+                'chapter': chapterID,
+                'content': content,
+                'author': user,
+                'callback': callback
+            });
+            break;
+        case 'chapter':
+            chapterController.addChapter({
+                'title': content,
+                'author': user,
+                'callback': callback
+            });
+            break;
+        case '':
+        default:
+            //TODO: Handle Empty Content Case, etc.
+            break;
     }
 });
 app.post(/\/update_passage\/?/, passageController.updatePassage);
