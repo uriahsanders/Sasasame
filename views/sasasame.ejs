@@ -13,9 +13,9 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
         <script
-              src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-              integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-              crossorigin="anonymous"></script>
+          src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+          integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+          crossorigin="anonymous"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
@@ -101,6 +101,7 @@
                     </div>
                     <div style="text-align:left">
                         <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
+                        <ion-icon title="Attach File"name="attach"></ion-icon>
                         <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
                         <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon>
                         <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
@@ -291,7 +292,9 @@
                     </div>
                     <!-- Chapters -->
                     <div id="categories">
-                        <input class="control_input"id="right_panel_search"placeholder="Search Sasame" type="" name="">
+                        <div>
+                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="">
+                        </div>
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
                             <div class="category">

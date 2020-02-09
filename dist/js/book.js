@@ -1,3 +1,19 @@
+//search
+$('#chapter_search').on('keypress', function(e){
+    if(e.which == 13){
+        $.ajax({
+            type: 'post',
+            url: '/search/',
+            data: {
+                title: $(this).val()
+            },
+            success: function(data){
+                alert(JSON.stringify(data));
+            }
+        });
+
+    }
+});
 $('#add_property').on('click', function(){
     $('#properties').prepend($('#property_select').html());
 });

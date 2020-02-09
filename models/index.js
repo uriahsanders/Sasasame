@@ -37,6 +37,7 @@ var chapterSchema = mongoose.Schema({
     keySchema: String,
     flagged: Boolean //content warning
 });
+chapterSchema.index({name: 'text'});
 chapterSchema.plugin(mongoosePaginate);
 var passageSchema = mongoose.Schema({
     author: {
@@ -60,8 +61,11 @@ var passageSchema = mongoose.Schema({
         ref: 'Passage'
     }],
     date: {type: Date, default: Date.now},
-    //chapter the passage came from
-    sourceChapter: String,
+    //record of chapters the passage came from
+    sourceChapters: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chapter'
+    }],
     //how many people like this passage?
     stars: Number,
     //JSON for properties

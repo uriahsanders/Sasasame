@@ -230,7 +230,7 @@
 
 #toc{
     /* border: 1px solid #fff; */
-    /* width: 20%; */
+    max-width: 25%; 
     word-wrap: break-word;
 }
 .control_block{

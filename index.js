@@ -201,7 +201,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
             models.Chapter.findOne({_id:urlEnd}).populate('chapter').limit(LIMIT).exec()
             .then(function(chapter){
                 //find all chapters in this chapter
-                models.Chapter.find({chapter: urlEnd}).sort({_id: -1}).limit(LIMIT * 4).exec()
+                models.Chapter.find().sort({_id: -1}).limit(LIMIT * 4).exec()
                 .then(function(chaps){
                     res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
                     chapter: urlEnd, book: passages, chapters: chaps, 
@@ -327,6 +327,13 @@ app.post(/\/delete_category\/?/, (req, res) => {
         }
         res.send('Deleted.');
     });
+});
+app.post(/search/, (req, res) => {
+    var title = req.body.title;
+    models.Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
+        res.send(JSON.stringify(chapters));
+    });
+
 });
 app.post(/\/update_passage\/?/, (req, res) => {
     var passageID = req.body._id;
