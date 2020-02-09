@@ -45,7 +45,7 @@
             <div class="header">
                 Add Passage
             </div>
-            <form action="/add_passage/<%=chapter%>" method="GET">
+            <form action="/passage/add_passage/<%=chapter%>" method="POST">
                 <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
                 <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
                 <button class="mobile_control_button" id="mobile_add_passage">Pour Water</button>
@@ -92,7 +92,7 @@
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">
-                    <form id="codeform"action="/add_passage/" method="POST">
+                    <form id="codeform"action="/passage/add_passage/" method="POST">
                     <div class="header no_cursive">
                     <select name="type" id="add_select" autocomplete="off">
                         <option value="passage">Passage</option>

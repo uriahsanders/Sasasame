@@ -41,8 +41,8 @@ var updatePassage = function(thiz){
     var content = thiz.siblings('.passage_content').html().replace(/<div>/gi,'').replace(/<\/div>/gi,'\n');
     if(keys != originals.keys || content != originals.content){
         $.ajax({
-           type: 'post',
-           url: '/update_passage',
+           type: 'put',
+           url: '/passage/update_passage',
            data: {
                _id: thiz.siblings('.passage_id').text(),
                keys: keys,
@@ -86,8 +86,8 @@ $(document).on('click', '[class^=passage_delete]', function(e){
     var _id = thiz.attr('class').split('_')[2];
     //delete passage
     $.ajax({
-        type: 'post',
-        url: '/delete_passage',
+        type: 'delete',
+        url: '/passage/delete_passage',
         data: {
             _id: _id
         },
@@ -105,8 +105,8 @@ $(document).on('click', '[class^=chapter_delete]', function(){
     var _id = thiz.attr('class').split('_')[2];
     //delete passage
     $.ajax({
-        type: 'post',
-        url: '/delete_category',
+        type: 'delete',
+        url: '/passage/delete_category',
         data: {
             _id: _id
         },

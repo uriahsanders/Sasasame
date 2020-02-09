@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const helmet = require('helmet');
 const PORT = process.env.PORT || 3000;
+require('dotenv').config()
 // Models
 const User = require('./models/User');
 const Chapter = require('./models/Chapter');
@@ -11,8 +12,10 @@ const Passage = require('./models/Passage');
 // Controllers
 const chapterController = require('./controllers/chapterController');
 const passageController = require('./controllers/passageController');
+// Routes
+const passageRoutes = require('./routes/passage');
 
-require('dotenv').config()
+const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
 
 // Database Connection Setup
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
@@ -73,7 +76,6 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
-const LIMIT = 10; //how many documents per page for pagination
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);
@@ -128,12 +130,14 @@ app.get('/profile', function(req, res) {
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
         //get all level 1 chapters (explicit)
-        Chapter.find({author:mongoose.Types.ObjectId(req.session.user_id)}).sort({_id: 0}).exec()
+        Chapter.find({author:mongoose.Types.ObjectId(req.session.user_id)})
+        .sort({_id: 0})
+        .exec()
         .then(function(chapters){
             Passage.find({author: mongoose.Types.ObjectId(req.session.user_id)})
             .populate('chapter')
             .sort([['_id', -1]])
-            .limit(LIMIT)
+            .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(passages){
                 res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
@@ -170,8 +174,8 @@ app.post('/paginate', function(req, res){
         find = {};
     }
     //now properly return both Passages and Chapters in this Chapter
-    Passage.paginate(find, {page: page, limit: LIMIT}).then(function(passages){
-        Chapter.paginate(find, {page: page, limit: LIMIT}).then(function(chapters){
+    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE}).then(function(passages){
+        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE}).then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;
             if(ret.chapters && ret.chapters.docs[0] && ret.chapters.docs[0].chapter){
@@ -204,7 +208,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
             Passage.find({})
             .populate('chapter author')
             .sort([['_id', -1]])
-            .limit(LIMIT)
+            .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(passages){
                 res.render("sasasame", {session: req.session, chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
@@ -228,17 +232,20 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         Passage.find({chapter: urlEnd})
         .sort({_id: -1})
         .populate('chapter author')
-        .limit(LIMIT)
+        .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(passages){
             //get the parent chapter
             Chapter.findOne({_id:urlEnd})
             .populate('chapter')
-            .limit(LIMIT)
+            .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(chapter){
                 //find all chapters in this chapter
-                Chapter.find().sort({_id: -1}).limit(LIMIT * 4).exec()
+                Chapter.find()
+                .sort({_id: -1})
+                .limit(DOCS_PER_PAGE * 4)
+                .exec()
                 .then(function(chaps){
                     res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
                     chapter: urlEnd, book: passages, chapters: chaps, 
@@ -263,43 +270,13 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
-app.post(/\/add_passage\/?/, (req, res) => {
-    let chapterID = req.body.chapterID;
-    let type = req.body.type;
-    let user = req.session.user_id || null;
-    let backURL=req.header('Referer') || '/';
-    let content = req.body.passage || '';
-    let callback = function(){
-        res.redirect(backURL);
-    };
-    switch(type) {
-        case 'passage':
-            passageController.addPassage({
-                'chapter': chapterID,
-                'content': content,
-                'author': user,
-                'callback': callback
-            });
-            break;
-        case 'chapter':
-            chapterController.addChapter({
-                'title': content,
-                'author': user,
-                'callback': callback
-            });
-            break;
-        case '':
-        default:
-            //TODO: Handle Empty Content Case, etc.
-            break;
-    }
-});
-app.post(/\/update_passage\/?/, passageController.updatePassage);
-app.post(/\/delete_passage\/?/, passageController.deletePassage);
-app.post(/\/delete_category\/?/, chapterController.deleteChapter);
+app.use('/passage', passageRoutes);
 app.post(/search/, (req, res) => {
     let title = req.body.title;
-    Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
+    Chapter.find({title: new RegExp(''+title+'', "i")})
+    .select('title')
+    .sort('stars')
+    .exec(function(err, chapters){
         res.send(JSON.stringify(chapters));
     });
 
