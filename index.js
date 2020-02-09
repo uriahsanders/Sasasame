@@ -174,8 +174,10 @@ app.post('/paginate', function(req, res){
         find = {};
     }
     //now properly return both Passages and Chapters in this Chapter
-    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE}).then(function(passages){
-        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE}).then(function(chapters){
+    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE})
+    .then(function(passages){
+        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE})
+        .then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;
             if(ret.chapters && ret.chapters.docs[0] && ret.chapters.docs[0].chapter){
@@ -203,7 +205,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     let addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        Chapter.find().sort({_id: -1}).exec()
+        Chapter.find().sort({_id: -1})
+        .exec()
         .then(function(chapters){
             Passage.find({})
             .populate('chapter author')
@@ -286,7 +289,9 @@ app.get('/feed_sasame', (req, res) => {
     // author,
     // rank,
     // content
-    Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
+    Passage.findOne()
+    .sort({_id: -1})
+    .exec(function(err, passage) {
         if(err){
             console.log(err);
         }
@@ -306,7 +311,9 @@ app.post('/search_by_key', (req, res) => {
     // let keys = req.body.keys.replace(/\s/g,'').split(',');
     let keys = req.body.keys;
     //Paginate here
-    Passage.find({keys: new RegExp('^'+keys+'$', "i")}).populate('chapter').exec(function(err, passages){
+    Passage.find({keys: new RegExp('^'+keys+'$', "i")})
+    .populate('chapter')
+    .exec(function(err, passages){
         // res.render('control', {passages: passages});
         res.send(JSON.stringify(passages));
     });
@@ -315,7 +322,8 @@ app.post('/make_golden_road', (req, res) => {
     let title = req.body.title;
     let passages = JSON.parse(req.body.passages);
     //Find the Category for all Golden Roads first
-    Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
+    Chapter.findOne({level: 1, title: 'Golden Roads'})
+    .exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
         let cat = new Chapter({
             title: title,
@@ -336,7 +344,9 @@ app.post('/make_golden_road', (req, res) => {
 });
 app.get('/fruit', (req, res) => {
     let test = null;
-    Passage.find().sort([['_id', 1]]).exec(function(err, response){
+    Passage.find()
+    .sort([['_id', 1]])
+    .exec(function(err, response){
         res.render("fruit", {fruit: response, session: req.session});
     });
 });
