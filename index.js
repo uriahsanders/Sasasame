@@ -1,9 +1,19 @@
 'use strict';
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require("body-parser");
+const helmet = require('helmet');
+// Models
+const User = require('./models/User');
+const Chapter = require('./models/Chapter');
+const Passage = require('./models/Passage');
+// Controllers
+const chapterController = require('./controllers/chapterController');
+const passageController = require('./controllers/passageController');
 
 require('dotenv').config()
 
+// Database Connection Setup
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -12,14 +22,15 @@ mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
 });
 
 var app = express();
+app.use(helmet());
 
+// Setup Frontend Templating Engine - ejs
 const ejs = require('ejs');
 app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
 // For POST requests
-var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // For Logging in
@@ -32,17 +43,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
-//Call in Models
-const User = require('./models/User');
-const Chapter = require('./models/Chapter');
-const Passage = require('./models/Passage');
-
 //Call in Scripts
 var scripts = require('./scripts');
-
-// Controllers
-const chapterController = require('./controllers/chapterController');
-const passageController = require('./controllers/passageController');
 
 // Password Protection for When Upgrading
 var securedRoutes = require('express').Router();
