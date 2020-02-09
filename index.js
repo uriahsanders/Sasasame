@@ -57,7 +57,10 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
   // authentication middleware
 
-  const auth = {login: 'developer', password: 'sasame'} // change this
+  const auth = {
+        login: 'developer',
+        password: 'sasame'
+    } // change this
 
   // parse login and password from headers
   const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
@@ -140,8 +143,18 @@ app.get('/profile', function(req, res) {
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(passages){
-                res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
-                book: passages, chapters: chapters, paginate: 'profile', addChapterAllowed: false});
+                res.render("sasasame", {
+                    session: req.session,
+                    isProfile: 'true',
+                    chapter: '',
+                    sasasame: 'sasasame',
+                    chapterTitle: 'Sasame',
+                    parentChapter: null,
+                    book: passages,
+                    chapters: chapters,
+                    paginate: 'profile',
+                    addChapterAllowed: false
+                });
             })
             .then(function(err){
                 if(err){
@@ -214,8 +227,17 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(passages){
-                res.render("sasasame", {session: req.session, chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
-                book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
+                res.render("sasasame", {
+                    session: req.session,
+                    chapter: '',
+                    sasasame: 'sasasame',
+                    chapterTitle: 'Sasame',
+                    parentChapter: null,
+                    book: passages,
+                    chapters: chapters,
+                    addPassageAllowed: true,
+                    addChapterAllowed: false
+                });
             })
             .then(function(err){
                 if(err){
@@ -250,9 +272,16 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                 .limit(DOCS_PER_PAGE * 4)
                 .exec()
                 .then(function(chaps){
-                    res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
-                    chapter: urlEnd, book: passages, chapters: chaps, 
-                    addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                    res.render("sasasame", {
+                        session: req.session,
+                        sasasame: 'xyz',
+                        parentChapter: chapter,
+                        chapter: urlEnd,
+                        book: passages,
+                        chapters: chaps,
+                        addPassageAllowed: addPassageAllowed,
+                        addChapterAllowed: addChapterAllowed
+                    });
                 })
                 .then(function(err){
                     if(err){
@@ -347,7 +376,10 @@ app.get('/fruit', (req, res) => {
     Passage.find()
     .sort([['_id', 1]])
     .exec(function(err, response){
-        res.render("fruit", {fruit: response, session: req.session});
+        res.render("fruit", {
+            fruit: response,
+            session: req.session
+        });
     });
 });
 
