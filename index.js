@@ -130,7 +130,11 @@ app.get('/profile', function(req, res) {
         //get all level 1 chapters (explicit)
         Chapter.find({author:mongoose.Types.ObjectId(req.session.user_id)}).sort({_id: 0}).exec()
         .then(function(chapters){
-            Passage.find({author: mongoose.Types.ObjectId(req.session.user_id)}).populate('chapter').sort([['_id', -1]]).limit(LIMIT).exec()
+            Passage.find({author: mongoose.Types.ObjectId(req.session.user_id)})
+            .populate('chapter')
+            .sort([['_id', -1]])
+            .limit(LIMIT)
+            .exec()
             .then(function(passages){
                 res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
                 book: passages, chapters: chapters, paginate: 'profile', addChapterAllowed: false});
@@ -197,7 +201,11 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     if(urlEnd == '' || urlEnd.length < 15){
         Chapter.find().sort({_id: -1}).exec()
         .then(function(chapters){
-            Passage.find({}).populate('chapter').populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
+            Passage.find({})
+            .populate('chapter author')
+            .sort([['_id', -1]])
+            .limit(LIMIT)
+            .exec()
             .then(function(passages){
                 res.render("sasasame", {session: req.session, chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
                 book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
@@ -217,11 +225,17 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //category ID
     else{
         //find all passages in this chapter
-        Passage.find({chapter: urlEnd}).sort({_id: -1}).populate('chapter').populate('author').limit(LIMIT)
+        Passage.find({chapter: urlEnd})
+        .sort({_id: -1})
+        .populate('chapter author')
+        .limit(LIMIT)
         .exec()
         .then(function(passages){
             //get the parent chapter
-            Chapter.findOne({_id:urlEnd}).populate('chapter').limit(LIMIT).exec()
+            Chapter.findOne({_id:urlEnd})
+            .populate('chapter')
+            .limit(LIMIT)
+            .exec()
             .then(function(chapter){
                 //find all chapters in this chapter
                 Chapter.find().sort({_id: -1}).limit(LIMIT * 4).exec()
@@ -326,7 +340,7 @@ app.post('/make_golden_road', (req, res) => {
     //Find the Category for all Golden Roads first
     Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
-        var cat = new Chapter({
+        let cat = new Chapter({
             title: title,
             chapter: chapter,
         }).save(function(err, new_chapter){
