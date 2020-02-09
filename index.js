@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const helmet = require('helmet');
+const PORT = process.env.PORT || 3000;
 // Models
 const User = require('./models/User');
 const Chapter = require('./models/Chapter');
@@ -349,8 +350,8 @@ app.get('/fruit', (req, res) => {
     });
 });
 
-var server = app.listen(3000, () => {
-    console.log(`Sasame started on Port ${server.address().port}`);
+var server = app.listen(PORT, () => {
+    console.log(`Sasame started on Port ${PORT}`);
 });
 process.on('uncaughtException', function(err){
     console.log('uncaughtExceptionError');
