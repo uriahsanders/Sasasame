@@ -34,8 +34,8 @@ app.set('views', './views');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // For Logging in
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(session({
     secret: "Shh, its a secret!",
@@ -44,7 +44,7 @@ app.use(session({
 }));
 
 //Call in Scripts
-var scripts = require('./scripts');
+const scripts = require('./scripts');
 
 // Password Protection for When Upgrading
 var securedRoutes = require('express').Router();
@@ -72,7 +72,7 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
-var LIMIT = 10; //how many documents per page for pagination
+const LIMIT = 10; //how many documents per page for pagination
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);
@@ -87,8 +87,8 @@ app.get('/register', function(req, res) {
     res.render('register', {session: req.session});
 });
 app.post('/login_user', function(req, res) {
-    var email = req.body.email;
-    var pass = req.body.password;
+    let email = req.body.email;
+    let pass = req.body.password;
     User.findOne({email: email, password: pass}, function(err, user) {
         if(err) return next(err);
         if(!user) return res.send('Not logged in!');
@@ -104,7 +104,7 @@ app.get('/logout', function(req, res) {
     res.redirect('/login');
 });
 app.post('/register_user', function(req, res) {
-    var user = {
+    let user = {
        name: req.body.name,
        email: req.body.email,
        password: req.body.password,
@@ -118,12 +118,12 @@ app.post('/register_user', function(req, res) {
 });
 app.get('/profile', function(req, res) {
     //scripts.renderBookPage(req, res);
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
-    var golden = '';
-    var addPassageAllowed = true;
-    var addChapterAllowed = true;
+    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
+    let golden = '';
+    let addPassageAllowed = true;
+    let addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
         //get all level 1 chapters (explicit)
@@ -156,11 +156,11 @@ app.get('/control', function(req, res) {
 //but with changing parameters in paginate
 //simply return new object list for client to add into html
 app.post('/paginate', function(req, res){
-    var page = req.body.page;
-    var ret = {};
+    let page = req.body.page;
+    let ret = {};
     //what category is the user looking at?
-    var chapter = req.body.chapter;
-    var find = {chapter: chapter.trim()};
+    let chapter = req.body.chapter;
+    let find = {chapter: chapter.trim()};
     if(chapter.trim() == 'Sasame'){
         find = {};
     }
@@ -186,12 +186,12 @@ app.post('/paginate', function(req, res){
 });
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
-    var golden = '';
-    var addPassageAllowed = true;
-    var addChapterAllowed = true;
+    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
+    let golden = '';
+    let addPassageAllowed = true;
+    let addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
         Chapter.find().sort({_id: -1}).exec()
@@ -249,12 +249,12 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     }
 });
 app.post(/\/add_passage\/?/, (req, res) => {
-    var chapterID = req.body.chapterID;
-    var type = req.body.type;
-    var user = req.session.user_id || null;
-    var backURL=req.header('Referer') || '/';
-    var content = req.body.passage || '';
-    var callback = function(){
+    let chapterID = req.body.chapterID;
+    let type = req.body.type;
+    let user = req.session.user_id || null;
+    let backURL=req.header('Referer') || '/';
+    let content = req.body.passage || '';
+    let callback = function(){
         res.redirect(backURL);
     };
     if(type == 'passage'){
@@ -274,7 +274,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
     }
 });
 app.post(/\/delete_passage\/?/, (req, res) => {
-    var passageID = req.body._id;
+    let passageID = req.body._id;
     Passage.deleteOne({_id: passageID.trim()}, function(err){
         if(err){
             console.log(err);
@@ -283,7 +283,7 @@ app.post(/\/delete_passage\/?/, (req, res) => {
     });
 });
 app.post(/\/delete_category\/?/, (req, res) => {
-    var chapterID = req.body._id;
+    let chapterID = req.body._id;
     //delete chapter
     //in the future consider also deleting all passages within this chapter
     Chapter.deleteOne({_id: chapterID.trim()}, function(err){
@@ -294,18 +294,18 @@ app.post(/\/delete_category\/?/, (req, res) => {
     });
 });
 app.post(/search/, (req, res) => {
-    var title = req.body.title;
+    let title = req.body.title;
     models.Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
         res.send(JSON.stringify(chapters));
     });
 
 });
 app.post(/\/update_passage\/?/, (req, res) => {
-    var passageID = req.body._id;
-    var content = req.body.content;
+    let passageID = req.body._id;
+    let content = req.body.content;
     //remove white space and separate by comma
-    // var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var keys = req.body.keys;
+    // let keys = req.body.keys.replace(/\s/g,'').split(',');
+    let keys = req.body.keys;
     Passage.updateOne({_id: passageID.trim()}, {
         keys: keys,
         content: content
@@ -338,8 +338,8 @@ app.get('/feed_sasame', (req, res) => {
     });
 });
 app.post('/search_by_key', (req, res) => {
-    // var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var keys = req.body.keys;
+    // let keys = req.body.keys.replace(/\s/g,'').split(',');
+    let keys = req.body.keys;
     //Paginate here
     Passage.find({keys: new RegExp('^'+keys+'$', "i")}).populate('chapter').exec(function(err, passages){
         // res.render('control', {passages: passages});
@@ -347,8 +347,8 @@ app.post('/search_by_key', (req, res) => {
     });
 });
 app.post('/make_golden_road', (req, res) => {
-    var title = req.body.title;
-    var passages = JSON.parse(req.body.passages);
+    let title = req.body.title;
+    let passages = JSON.parse(req.body.passages);
     //Find the Category for all Golden Roads first
     Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
