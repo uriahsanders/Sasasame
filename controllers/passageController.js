@@ -29,13 +29,37 @@ module.exports = {
         }
         options.callback();
     },
-
     addPassageToCategory: function(passageID, chapterID, callback) {
         Chapter.find({_id:chapterID}).sort([['_id', 1]]).exec(function(err, chapter){
             chapter.passages.append(passageID);
             chapter.save().then((data) => {
                 callback();
             });
+        });
+    },
+    updatePassage: function(req, res) {
+        let passageID = req.body._id;
+        let content = req.body.content;
+        //remove white space and separate by comma
+        // let keys = req.body.keys.replace(/\s/g,'').split(',');
+        let keys = req.body.keys;
+        Passage.updateOne({_id: passageID.trim()}, {
+            keys: keys,
+            content: content
+        }, function(err, affected, resp){
+            if(err){
+                console.log(err);
+            }
+            res.send(resp);
+        });
+    },
+    deletePassage: function(req, res) {
+        let passageID = req.body._id;
+        Passage.deleteOne({ _id: passageID.trim() }, function(err) {
+            if(err){
+                console.log(err);
+            }
+            res.send('The passage has been deleted.');
         });
     }
 }

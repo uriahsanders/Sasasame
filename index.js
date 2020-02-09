@@ -30,10 +30,10 @@ app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-// For POST requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// For Logging in
+
+// User Session Setup Logic
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -273,48 +273,15 @@ app.post(/\/add_passage\/?/, (req, res) => {
         });
     }
 });
-app.post(/\/delete_passage\/?/, (req, res) => {
-    let passageID = req.body._id;
-    Passage.deleteOne({_id: passageID.trim()}, function(err){
-        if(err){
-            console.log(err);
-        }
-        res.send('Deleted.');
-    });
-});
-app.post(/\/delete_category\/?/, (req, res) => {
-    let chapterID = req.body._id;
-    //delete chapter
-    //in the future consider also deleting all passages within this chapter
-    Chapter.deleteOne({_id: chapterID.trim()}, function(err){
-        if(err){
-            console.log(err);
-        }
-        res.send('Deleted.');
-    });
-});
+app.post(/\/update_passage\/?/, passageController.updatePassage);
+app.post(/\/delete_passage\/?/, passageController.deletePassage);
+app.post(/\/delete_category\/?/, chapterController.deleteChapter);
 app.post(/search/, (req, res) => {
     let title = req.body.title;
     models.Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
         res.send(JSON.stringify(chapters));
     });
 
-});
-app.post(/\/update_passage\/?/, (req, res) => {
-    let passageID = req.body._id;
-    let content = req.body.content;
-    //remove white space and separate by comma
-    // let keys = req.body.keys.replace(/\s/g,'').split(',');
-    let keys = req.body.keys;
-    Passage.updateOne({_id: passageID.trim()}, {
-        keys: keys,
-        content: content
-    }, function(err, affected, resp){
-        if(err){
-            console.log(err);
-        }
-        res.send(resp);
-    });
 });
 app.get('/feed_sasame', (req, res) => {
     let info = req.query;
