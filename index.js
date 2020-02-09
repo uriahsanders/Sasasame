@@ -299,7 +299,7 @@ app.post(/\/delete_passage\/?/, passageController.deletePassage);
 app.post(/\/delete_category\/?/, chapterController.deleteChapter);
 app.post(/search/, (req, res) => {
     let title = req.body.title;
-    models.Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
+    Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
         res.send(JSON.stringify(chapters));
     });
 

@@ -46,7 +46,7 @@ for(var chapter in topLevels){
             addChapterAllowed = true;
     
     }
-    chaptersToCreate.push(models.Chapter({
+    chaptersToCreate.push(Chapter({
         author: 7,
         title: topLevels[chapter],
         level: 1,
