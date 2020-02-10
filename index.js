@@ -1,9 +1,23 @@
 'use strict';
 const express = require('express');
 const mongoose = require('mongoose');
-
+const bodyParser = require("body-parser");
+const helmet = require('helmet');
+const PORT = process.env.PORT || 3000;
 require('dotenv').config()
+// Models
+const User = require('./models/User');
+const Chapter = require('./models/Chapter');
+const Passage = require('./models/Passage');
+// Controllers
+const chapterController = require('./controllers/chapterController');
+const passageController = require('./controllers/passageController');
+// Routes
+const passageRoutes = require('./routes/passage');
 
+const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
+
+// Database Connection Setup
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -12,19 +26,20 @@ mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
 });
 
 var app = express();
+app.use(helmet());
 
+// Setup Frontend Templating Engine - ejs
 const ejs = require('ejs');
 app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-// For POST requests
-var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// For Logging in
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
+
+// User Session Setup Logic
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(session({
     secret: "Shh, its a secret!",
@@ -32,17 +47,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
-//Call in Models
-const User = require('./models/User');
-const Chapter = require('./models/Chapter');
-const Passage = require('./models/Passage');
-
 //Call in Scripts
-var scripts = require('./scripts');
-
-// Controllers
-const chapterController = require('./controllers/chapterController');
-const passageController = require('./controllers/passageController');
+const scripts = require('./scripts');
 
 // Password Protection for When Upgrading
 var securedRoutes = require('express').Router();
@@ -51,7 +57,10 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
   // authentication middleware
 
-  const auth = {login: 'developer', password: 'sasame'} // change this
+  const auth = {
+        login: 'developer',
+        password: 'sasame'
+    } // change this
 
   // parse login and password from headers
   const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
@@ -70,7 +79,6 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
-var LIMIT = 10; //how many documents per page for pagination
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);
@@ -85,8 +93,8 @@ app.get('/register', function(req, res) {
     res.render('register', {session: req.session});
 });
 app.post('/login_user', function(req, res) {
-    var email = req.body.email;
-    var pass = req.body.password;
+    let email = req.body.email;
+    let pass = req.body.password;
     User.findOne({email: email, password: pass}, function(err, user) {
         if(err) return next(err);
         if(!user) return res.send('Not logged in!');
@@ -102,7 +110,7 @@ app.get('/logout', function(req, res) {
     res.redirect('/login');
 });
 app.post('/register_user', function(req, res) {
-    var user = {
+    let user = {
        name: req.body.name,
        email: req.body.email,
        password: req.body.password,
@@ -116,24 +124,38 @@ app.post('/register_user', function(req, res) {
 });
 app.get(/\/user\/?(:user_id)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var user_id = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var golden = '';
-    var addPassageAllowed = true;
-    var addChapterAllowed = true;
-    User.findOne({_id: user_id.trim()}).exec().then(function(profile_user){
-        Chapter.find({author:mongoose.Types.ObjectId(user_id)}).exec()
-            .then(function(chapters){
-                Passage.find({author: mongoose.Types.ObjectId(user_id)}).populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
-                .then(function(passages){
-                    res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
-                    book: passages, chapters: chapters, paginate: 'profile', addChapterAllowed: false, parentChapter: {title: profile_user.name}});
-                })
-                .then(function(err){
-                    if(err){
-                        console.log(err);
-                    }
+    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let user_id = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let golden = '';
+    let addPassageAllowed = true;
+    let addChapterAllowed = true;
+    //home page
+    //get all level 1 chapters (explicit)
+    User.findOne({_id: user_id.trim()})
+    .exec()
+    .then(function(profile_user){
+        Chapter.find({author:mongoose.Types.ObjectId(user_id)})
+        .exec()
+        .then(function(chapters){
+            Passage.find({author: mongoose.Types.ObjectId(user_id)})
+            .populate('author')
+            .sort([['_id', -1]])
+            .limit(DOCS_PER_PAGE)
+            .exec()
+            .then(function(passages){
+                res.render("sasasame", {
+                    session: req.session,
+                    isProfile: 'true',
+                    chapter: '',
+                    sasasame: 'sasasame',
+                    chapterTitle: 'Sasame',
+                    parentChapter: null,
+                    book: passages,
+                    chapters: chapters,
+                    paginate: 'profile',
+                    addChapterAllowed: false,
+                    parentChapter: {title: profile_user.name}
                 });
             })
             .then(function(err){
@@ -141,6 +163,7 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
                     console.log(err);
                 }
             });
+        });
     });
 });
 app.get('/control', function(req, res) {
@@ -152,17 +175,19 @@ app.get('/control', function(req, res) {
 //but with changing parameters in paginate
 //simply return new object list for client to add into html
 app.post('/paginate', function(req, res){
-    var page = req.body.page;
-    var ret = {};
+    let page = req.body.page;
+    let ret = {};
     //what category is the user looking at?
-    var chapter = req.body.chapter;
-    var find = {chapter: chapter.trim()};
+    let chapter = req.body.chapter;
+    let find = {chapter: chapter.trim()};
     if(chapter.trim() == 'Sasame'){
         find = {};
     }
     //now properly return both Passages and Chapters in this Chapter
-    Passage.paginate(find, {page: page, limit: LIMIT}).then(function(passages){
-        Chapter.paginate(find, {page: page, limit: LIMIT}).then(function(chapters){
+    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE})
+    .then(function(passages){
+        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE})
+        .then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;
             if(ret.chapters && ret.chapters.docs[0] && ret.chapters.docs[0].chapter){
@@ -182,20 +207,34 @@ app.post('/paginate', function(req, res){
 });
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
-    var golden = '';
-    var addPassageAllowed = true;
-    var addChapterAllowed = true;
+    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
+    let golden = '';
+    let addPassageAllowed = true;
+    let addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        Chapter.find().sort({_id: -1}).exec()
+        Chapter.find().sort({_id: -1})
+        .exec()
         .then(function(chapters){
-            Passage.find({}).populate('chapter').populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
+            Passage.find({})
+            .populate('chapter author')
+            .sort([['_id', -1]])
+            .limit(DOCS_PER_PAGE)
+            .exec()
             .then(function(passages){
-                res.render("sasasame", {session: req.session, chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
-                book: passages, chapters: chapters, addPassageAllowed: true, addChapterAllowed: false});
+                res.render("sasasame", {
+                    session: req.session,
+                    chapter: '',
+                    sasasame: 'sasasame',
+                    chapterTitle: 'Sasame',
+                    parentChapter: null,
+                    book: passages,
+                    chapters: chapters,
+                    addPassageAllowed: true,
+                    addChapterAllowed: false
+                });
             })
             .then(function(err){
                 if(err){
@@ -212,18 +251,34 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //category ID
     else{
         //find all passages in this chapter
-        Passage.find({chapter: urlEnd}).sort({_id: -1}).populate('chapter').populate('author').limit(LIMIT)
+        Passage.find({chapter: urlEnd})
+        .sort({_id: -1})
+        .populate('chapter author')
+        .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(passages){
             //get the parent chapter
-            Chapter.findOne({_id:urlEnd}).populate('chapter').limit(LIMIT).exec()
+            Chapter.findOne({_id:urlEnd})
+            .populate('chapter')
+            .limit(DOCS_PER_PAGE)
+            .exec()
             .then(function(chapter){
                 //find all chapters in this chapter
-                Chapter.find().sort({_id: -1}).limit(LIMIT * 4).exec()
+                Chapter.find()
+                .sort({_id: -1})
+                .limit(DOCS_PER_PAGE * 4)
+                .exec()
                 .then(function(chaps){
-                    res.render("sasasame", {session: req.session, sasasame: 'xyz', parentChapter: chapter, 
-                    chapter: urlEnd, book: passages, chapters: chaps, 
-                    addPassageAllowed: addPassageAllowed, addChapterAllowed: addChapterAllowed});
+                    res.render("sasasame", {
+                        session: req.session,
+                        sasasame: 'xyz',
+                        parentChapter: chapter,
+                        chapter: urlEnd,
+                        book: passages,
+                        chapters: chaps,
+                        addPassageAllowed: addPassageAllowed,
+                        addChapterAllowed: addChapterAllowed
+                    });
                 })
                 .then(function(err){
                     if(err){
@@ -290,9 +345,14 @@ app.post(/\/delete_category\/?/, (req, res) => {
         res.send('Deleted.');
     });
 });
+
+app.use('/passage', passageRoutes);
 app.post(/search/, (req, res) => {
-    var title = req.body.title;
-    Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
+    let title = req.body.title;
+    Chapter.find({title: new RegExp(''+title+'', "i")})
+    .select('title')
+    .sort('stars')
+    .exec(function(err, chapters){
         res.send(JSON.stringify(chapters));
     });
 });
@@ -325,12 +385,13 @@ app.post(/\/update_passage\/?/, (req, res) => {
 });
 
 app.post('/make_golden_road', (req, res) => {
-    var title = req.body.title;
-    var passages = JSON.parse(req.body.passages);
+    let title = req.body.title;
+    let passages = JSON.parse(req.body.passages);
     //Find the Category for all Golden Roads first
-    Chapter.findOne({level: 1, title: 'Golden Roads'}).exec(function(err, chapter){
+    Chapter.findOne({level: 1, title: 'Golden Roads'})
+    .exec(function(err, chapter){
         //We need to make a new category and add all the selected passages to it
-        var cat = new Chapter({
+        let cat = new Chapter({
             title: title,
             chapter: chapter,
         }).save(function(err, new_chapter){
@@ -348,8 +409,8 @@ app.post('/make_golden_road', (req, res) => {
     res.send('Done');
 });
 
-var server = app.listen(3000, () => {
-    console.log(`Sasame started on Port ${server.address().port}`);
+var server = app.listen(PORT, () => {
+    console.log(`Sasame started on Port ${PORT}`);
 });
 process.on('uncaughtException', function(err){
     console.log('uncaughtExceptionError');
