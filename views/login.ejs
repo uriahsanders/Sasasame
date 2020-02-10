@@ -2,8 +2,6 @@
         <div id="bottom">
             <div id="login_desc">
                 <%if(locals.session.user){ %>
-                    <a href="/login" class='login_register'>Settings</a> |
-                    <a href="/logout" class='login_logout'>Logout</a>
                 <%}else{%>
                     <a href="/register" class='login_register'>Register</a> |
                     <a href="/login" class='login_login'>Login</a> |
