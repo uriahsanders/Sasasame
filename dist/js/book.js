@@ -14,6 +14,19 @@ $('#chapter_search').on('keypress', function(e){
 
     }
 });
+$('[id^=star_]').on('click', function(){
+    var _id = $(this).attr('id').split('_')[1];
+    $.ajax({
+            type: 'post',
+            url: '/star/',
+            data: {
+                _id: _id
+            },
+            success: function(data){
+                alert(JSON.stringify(data));
+            }
+        });
+});
 $('#add_property').on('click', function(){
     $('#properties').prepend($('#property_select').html());
 });

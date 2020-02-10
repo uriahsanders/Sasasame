@@ -25,16 +25,18 @@
             <div id="login">
                 <br/>
                 <br/>
-                <a class="link white" href="/login"><%=session.user%></a>
+                <a class="link white" href="/profile">Profile</a> |
+                <a class="link white" href="/login">Settings</a> |
+                <a class="link white" href="/logout">Logout</a>
             </div>
         <%} else{ %>
             <div id="login">
                 <br/>
                 <br/>
-                <a class="link white" target="_blank"href="https://github.com/uriahsanders/Sasasame">Help</a> |
-                <a class="link white" href="#">Login</a> |
-                <a class="link white" href="#">Register</a> |
-                <a class="link white" href="#">Donate</a>
+                <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
+                <a class="link white" href="/login">Login</a> |
+                <a class="link white" href="/register">Register</a> <!-- |
+                <a class="link white" href="#">Donate</a> -->
 
             </div>
         <%} %>
@@ -209,7 +211,7 @@
                             <div class="passage_<%=f._id%> passage">
                                 <div class="passage_author">
                                     <%if(f.author){%>
-                                     <div><a><%= f.author.name %></a></div>
+                                     <div><a class="basic_link" href="/user/<%=f.author._id%>"><%= f.author.name %></a></div>
                                  <%}else{%>
                                      <div><a class="basic_link" href="#">Anonymous</a></div>
                                  <%}%>
@@ -223,16 +225,12 @@
                                 </div>
                                  <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
                                  <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
-                                 <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+                                 <ion-icon id="star_<%=f._id%>"title="Star"class="star_icon"name="star-outline"></ion-icon>
                                  <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
-                                <%if(typeof f.chapter != 'undefined' && typeof f.chapter.title != 'undefined'){%>
-                                <!-- <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div> -->
-                                <%}else{%>
                                     <div class="passage_chapter">Sasame</div>
-                                <%}%>
                                 <!-- <%if(f.author){%> -->
                                 <!--     <div class="passage_author">by <a><%= f.author.name %></a> on <%= f.date.toDateString() %></div> -->
                                 <!-- <%}else{%> -->
@@ -260,11 +258,7 @@
 
                                     </div>
                                     <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
-                                    <%if(typeof f.chapter != 'undefined' && typeof f.chapter.title != 'undefined'){%>
-                                    <!-- <div class="passage_chapter"><a class="basic_link"href="/sasasame/<%= f.chapter.title %>/<%= f.chapter._id %>"><%= f.chapter.title %></a></div> -->
-                                    <%}else{%>
                                         <div class="passage_chapter">Sasame</div>
-                                    <%}%>
                                     <!-- <%if(f.author){%> -->
                                     <!--     <div class="passage_author">by <a><%= f.author.name %></a> on <%= f.date.toDateString() %></div> -->
                                     <!-- <%}else{%> -->

@@ -6,7 +6,7 @@ module.exports = {
             let chapter = new Chapter({
                 title: options.title,
                 chapter: options.chap,
-                author: options.user
+                author: options.author
             }).save().then(data => {
             });
         }
@@ -14,7 +14,7 @@ module.exports = {
             // Level 1
             let chapter = new Chapter({
                 title: options.title,
-                author: options.user
+                author: options.author
             }).save(function(err,chap){
                 if(err){
                     console.log(err);

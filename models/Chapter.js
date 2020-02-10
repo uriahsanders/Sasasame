@@ -15,8 +15,11 @@ const chapterSchema = mongoose.Schema({
     }],
     level: Number,
     date: {type: Date, default: Date.now},
-    //how many people like this chapter?
-    stars: Number,
+    //which users find this chapter useful?
+    stars: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     // JSON for whether chapter is shared, public, design, etc.
     metadata: String,
     // What rules are being used to read the metadata?

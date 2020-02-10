@@ -94,7 +94,7 @@ app.post('/login_user', function(req, res) {
         req.session.email = email;
         req.session.name = user.name;
         req.session.user_id = user._id;
-        res.redirect('/profile');
+        res.redirect('/user/' + user._id);
     });
 });
 app.get('/logout', function(req, res) {
@@ -114,36 +114,34 @@ app.post('/register_user', function(req, res) {
       return res.send('Logged In!');
    });
 });
-app.get('/profile', function(req, res) {
+app.get(/\/user\/?(:user_id)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     var urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    var chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
+    var user_id = fullUrl.split('/')[fullUrl.split('/').length - 1];
     var golden = '';
     var addPassageAllowed = true;
     var addChapterAllowed = true;
-    //home page
-    if(urlEnd == '' || urlEnd.length < 15){
-        //get all level 1 chapters (explicit)
-        Chapter.find({author:mongoose.Types.ObjectId(req.session.user_id)}).sort({_id: 0}).exec()
-        .then(function(chapters){
-            Passage.find({author: mongoose.Types.ObjectId(req.session.user_id)}).populate('chapter').sort([['_id', -1]]).limit(LIMIT).exec()
-            .then(function(passages){
-                res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
-                book: passages, chapters: chapters, paginate: 'profile', addChapterAllowed: false});
+    User.findOne({_id: user_id.trim()}).exec().then(function(profile_user){
+        Chapter.find({author:mongoose.Types.ObjectId(user_id)}).exec()
+            .then(function(chapters){
+                Passage.find({author: mongoose.Types.ObjectId(user_id)}).populate('author').sort([['_id', -1]]).limit(LIMIT).exec()
+                .then(function(passages){
+                    res.render("sasasame", {session: req.session, isProfile: 'true', chapter: '', sasasame: 'sasasame', chapterTitle: 'Sasame', parentChapter: null, 
+                    book: passages, chapters: chapters, paginate: 'profile', addChapterAllowed: false, parentChapter: {title: profile_user.name}});
+                })
+                .then(function(err){
+                    if(err){
+                        console.log(err);
+                    }
+                });
             })
             .then(function(err){
                 if(err){
                     console.log(err);
                 }
             });
-        })
-        .then(function(err){
-            if(err){
-                console.log(err);
-            }
-        });
-    }
+    });
 });
 app.get('/control', function(req, res) {
     res.render('control', {session: req.session});
@@ -253,6 +251,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var backURL=req.header('Referer') || '/';
     var content = req.body.passage || '';
     var callback = function(){
+        console.log(user);
         res.redirect(backURL);
     };
     if(type == 'passage'){
@@ -293,9 +292,19 @@ app.post(/\/delete_category\/?/, (req, res) => {
 });
 app.post(/search/, (req, res) => {
     var title = req.body.title;
-    models.Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
+    Chapter.find({title: new RegExp(''+title+'', "i")}).select('title').sort('stars').exec(function(err, chapters){
         res.send(JSON.stringify(chapters));
     });
+});
+app.post(/star/, (req, res) => {
+    var _id = req.body._id.trim();
+    Passage.findOneAndUpdate({_id: _id}, {
+        $inc: {
+            stars: 1
+        }
+    }, function(err, documents){
+        res.send(documents);
+    })
 
 });
 app.post(/\/update_passage\/?/, (req, res) => {
@@ -314,36 +323,7 @@ app.post(/\/update_passage\/?/, (req, res) => {
         res.send(resp);
     });
 });
-app.get('/feed_sasame', (req, res) => {
-    let info = req.query;
-    // author,
-    // rank,
-    // content
-    Passage.findOne().sort({_id: -1}).exec(function(err, passage) {
-        if(err){
-            console.log(err);
-        }
-        if (passage && info.content != passage.content){
-            passageController.addPassage('', '', info.content, function(){
-                res.redirect("/");
-            });
-        }
-        else{
-            passageController.addPassage('', '', 'LIGHT is the fire behind life.', function(){
-                res.redirect("/");
-            });
-        }
-    });
-});
-app.post('/search_by_key', (req, res) => {
-    // var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var keys = req.body.keys;
-    //Paginate here
-    Passage.find({keys: new RegExp('^'+keys+'$', "i")}).populate('chapter').exec(function(err, passages){
-        // res.render('control', {passages: passages});
-        res.send(JSON.stringify(passages));
-    });
-});
+
 app.post('/make_golden_road', (req, res) => {
     var title = req.body.title;
     var passages = JSON.parse(req.body.passages);
@@ -366,12 +346,6 @@ app.post('/make_golden_road', (req, res) => {
         });
     });
     res.send('Done');
-});
-app.get('/fruit', (req, res) => {
-    let test = null;
-    Passage.find().sort([['_id', 1]]).exec(function(err, response){
-        res.render("fruit", {fruit: response, session: req.session});
-    });
 });
 
 var server = app.listen(3000, () => {

@@ -26,8 +26,11 @@ const passageSchema = mongoose.Schema({
     date: {type: Date, default: Date.now},
     //chapter the passage came from
     sourceChapter: String,
-    //how many people like this passage?
-    stars: Number,
+    //which users find this passage useful?
+    stars: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     //JSON for properties
     metadata: String,
     // What rules are being used to read the metadata?
