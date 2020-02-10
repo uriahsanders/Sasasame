@@ -536,3 +536,12 @@ select::-ms-expand {
     margin-top: 25px;
     opacity: 0.6;
 }
+.passage_details{
+    margin-bottom: 10px;
+    padding: 5px;
+}
+.passage_details p{
+    font-size: 0.8em;
+    line-height: 11px;
+    margin-top: 5px;
+}

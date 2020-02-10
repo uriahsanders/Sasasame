@@ -225,6 +225,15 @@
                                  <%}%>
                                  <div id="modal_<%=f._id%>" class="modal">
                                     <p>PASSAGE OPTIONS</p>
+                                    <div class="passage_details">
+                                        <p>Posted: <%= f.date.toDateString() %></p>
+                                        <%if(f.author){%>
+                                            <p>By: <%= f.author.name %> </p>
+                                        <%}else{%>
+                                            <p>By: Anonymous</p>
+                                        <%}%>
+                                        <p><%= f.stars.length %> Stars </p>
+                                    </div>
                                   <textarea class="control_textarea"><%=f.content%></textarea>
                                   <p class="passage_update">Update passage</p>
                                   <p class="passage_delete_<%=f._id%>">Delete passage</p>
