@@ -247,35 +247,32 @@
                                 <div class="passage_content"><%= f.content %></div>
                                 <canvas class="passage_canvas"></canvas>
                                 <div class="sub_passages">
-                                    <div class="sub_passage">
+                                    <% f.passages.forEach(function(sub){%>
+                                        <div class="sub_passage">
                                         <div class="passage_author">
-                                        <%if(f.author){%>
-                                         <div><a><%= f.author.name %></a></div>
-                                     <%}else{%>
-                                         <div><a class="basic_link" href="#">Anonymous</a></div>
-                                     <%}%>
-                                     <div id="modal_<%=f._id%>" class="modal">
-                                        <p>PASSAGE OPTIONS</p>
-                                      <textarea class="control_textarea"><%=f.content%></textarea>
-                                      <p>Update passage</p>
-                                      <p>Delete passage</p>
-                                      <a href="#" rel="modal:close">Close</a>
-                                    </div>
-                                     <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
-                                     <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+                                        <%if(sub.author){%>
+                                             <div><a><%= sub.author.name %></a></div>
+                                         <%}else{%>
+                                             <div><a class="basic_link" href="#">Anonymous</a></div>
+                                         <%}%>
+                                         <div id="modal_<%=sub._id%>" class="modal">
+                                            <p>PASSAGE OPTIONS</p>
+                                          <textarea class="control_textarea"><%=sub.content%></textarea>
+                                          <p>Update passage</p>
+                                          <p>Delete passage</p>
+                                          <a href="#" rel="modal:close">Close</a>
+                                        </div>
+                                         <a class="basic_link" href="#modal_<%=sub._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
+                                         <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
 
-                                    </div>
-                                    <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
-                                        <div class="passage_chapter">Sasame</div>
-                                    <!-- <%if(f.author){%> -->
-                                    <!--     <div class="passage_author">by <a><%= f.author.name %></a> on <%= f.date.toDateString() %></div> -->
-                                    <!-- <%}else{%> -->
-                                    <!--     <div class="passage_author">by Anonymous on <%= f.date.toDateString() %></div> -->
-                                    <!-- <%}%> -->
-                                    <div class="passage_content"><%= f.content %></div>
-                                    <canvas class="passage_canvas"></canvas>
-                                    <div class="passage_id"><%= f._id %></div>
-                                    </div>
+                                        </div>
+                                        <input type="hidden" class="original_passage_content" value="<%=sub.content%>"/>
+                                            <div class="passage_chapter">Sasame</div>
+                                        <div class="passage_content"><%= f.content %></div>
+                                        <canvas class="passage_canvas"></canvas>
+                                        <div class="passage_id"><%= f._id %></div>
+                                        </div>
+                                    <%});%>
                                     <div class="add_sub_passage"><ion-icon title="Add Sub Passage"name="add-circle-outline"></ion-icon></div>
                                 </div>
 

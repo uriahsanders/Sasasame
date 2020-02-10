@@ -532,3 +532,7 @@ select::-ms-expand {
 .crimson_color{
     color: crimson;
 }
+.add_sub_passage{
+    margin-top: 25px;
+    opacity: 0.6;
+}
