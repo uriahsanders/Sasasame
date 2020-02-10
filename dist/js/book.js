@@ -8,7 +8,8 @@ $('#chapter_search').on('keypress', function(e){
                 title: $(this).val()
             },
             success: function(data){
-                alert(JSON.stringify(data));
+                $('.category').remove();
+                $('#categories').append(data);
             }
         });
 

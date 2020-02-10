@@ -103,9 +103,9 @@
                     </div>
                     <div style="text-align:left">
                         <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
-                        <ion-icon title="Attach File"name="attach"></ion-icon>
+                        <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
                         <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
-                        <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon>
+                        <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
                         <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
@@ -121,20 +121,28 @@
                             <select>
                                 <option>Hyperlink</option>
                                 <option>Color</option>
-                                <option>Background Color</option>
                                 <option>CSS</option>
-                                <option>Code</option>
-                                <option>Javascript</option>
-                                <option>HTML</option>
-                                <option>Markdown</option>
+                                <option>Code/Markup</option>
+                                <!-- 
+                                    Ex.
+                                    Javascript
+                                    HTML
+                                    Markdown
+                                    Key Schema
+                                    (Syntax highlight inoperable languages
+                                    Add run button for JS
+                                    Autorun Markdown)
+                                 -->
                                 <option>Access</option>
                                 <option>Key Schema</option>
-                                <option>Is Key Schema?</option>
+                                <!-- User inputs JSON with methods -->
                                 <option>Canvas</option>
+                                <!-- Render passage as canvas -->
                                 <option>Tone</option>
+                                <!-- Render passage via tone.js -->
                                 <option>Hidden</option>
+                                <!-- Hide passage -->
                                 <option>Autorun</option>
-                                <option>Custom</option>
                             </select>
                             <!-- For chapters -->
                             <!-- <select>

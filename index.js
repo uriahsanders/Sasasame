@@ -215,7 +215,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     let addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        Chapter.find().sort({_id: -1})
+        Chapter.find()
+        .sort('stars')
         .exec()
         .then(function(chapters){
             Passage.find({})
@@ -257,15 +258,16 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(passages){
-            //get the parent chapter
+            //get the parent chapter 
+            //(NEEDS TO BE REWORKED, CHAPTERS NO LONGER HAVE SUBCHAPTERS)
             Chapter.findOne({_id:urlEnd})
-            .populate('chapter')
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(chapter){
-                //find all chapters in this chapter
+                //find all chapters
                 Chapter.find()
-                .sort({_id: -1})
+                .select('title')
+                .sort('stars')
                 .limit(DOCS_PER_PAGE * 4)
                 .exec()
                 .then(function(chaps){
@@ -353,7 +355,25 @@ app.post(/search/, (req, res) => {
     .select('title')
     .sort('stars')
     .exec(function(err, chapters){
-        res.send(JSON.stringify(chapters));
+        let html = '';
+        if(chapters){
+            chapters.forEach(function(f){
+                html += `
+                <div class="category">
+                    <!-- For Future
+                    <div class="chapter_flag">
+                        <ion-icon title="Content Warning" name="flag"></ion-icon>
+                    </div>
+                     -->
+                    <div>
+                        <a class="link" href="/sasasame/`+f.title+`/`+f._id+`">`
+                        +f.title+`</a>
+                    </div>
+                    <div class="category_id">`+f._id+`</div>
+                </div>`;
+            });
+        }
+        res.send(html);
     });
 });
 app.post(/star/, (req, res) => {
