@@ -238,7 +238,6 @@
                                   <p class="passage_update">Update passage</p>
                                   <p class="passage_delete_<%=f._id%>">Delete passage</p>
                                   <div class="passage_id"><%= f._id %></div>
-                                  <a href="#" rel="modal:close">Close</a>
                                 </div>
                                  <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
                                  <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
@@ -301,7 +300,7 @@
                     <!-- Chapters -->
                     <div id="categories">
                         <div>
-                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="">
+                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
                         </div>
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>

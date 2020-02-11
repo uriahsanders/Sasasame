@@ -15,7 +15,7 @@ const passageController = require('./controllers/passageController');
 // Routes
 const passageRoutes = require('./routes/passage');
 
-const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
+const DOCS_PER_PAGE = 20; // Documents per Page Limit (Pagination)
 
 // Database Connection Setup
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
@@ -217,6 +217,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     if(urlEnd == '' || urlEnd.length < 15){
         Chapter.find()
         .sort('stars')
+        .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(chapters){
             Passage.find({})
@@ -354,6 +355,7 @@ app.post(/search/, (req, res) => {
     Chapter.find({title: new RegExp(''+title+'', "i")})
     .select('title')
     .sort('stars')
+    .limit(DOCS_PER_PAGE)
     .exec(function(err, chapters){
         let html = '';
         if(chapters){
