@@ -94,14 +94,14 @@ $('#right_side_select').on('change', function(){
             $('#queue').hide();
             $('#categories').show();
             $('#right_passages').remove();
-            $('#right_panel_search').show();
+            $('#chapter_search').show();
             $('.category').show();
             break;
         case 'brief':
             $('#queue').hide();
             $('#categories').show();
             $('.category').hide();
-            $('#right_panel_search').hide();
+            $('#chapter_search').hide();
             $('#categories').append('<div id="right_passages">'+$('#passages').html()+'</div>');
             $('#right_passages .passage').css({
                 'font-size': '0.5em',
@@ -162,7 +162,7 @@ window.onscroll = function(ev) {
                     html = '';
                     //only if ParentChapter is not Sasame
                     var parentChapterTitle = $('#parent_chapter_title').text();
-                    if(parentChapterTitle != 'Sasame'){
+                    if(parentChapterTitle != 'Sasame' && $('#right_side_select').val() === 'chapters'){
                         chapters.docs.forEach(function(chapter){
                             html = '<p class="category"><a class="link" href="/sasasame/'+chapter.title+'/'+chapter._id+'">'+chapter.title+'</a></p>';
                             $('#categories').append(html);
