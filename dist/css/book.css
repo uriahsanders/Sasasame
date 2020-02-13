@@ -494,15 +494,15 @@ select::-ms-expand {
 #queue{
     display: none;
 }
-#properties{
+#properties, #sub_properties{
     padding: 5px;
     text-align: left;
     font-size: 0.9em;
 }
-#add_property, .remove_property{
+#add_property, #add_sub_property, .remove_property{
     cursor: pointer;
 }
-#property_select{
+#property_select, #sub_property_select{
     display: none;
 }
 .property_select{

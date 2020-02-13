@@ -34,6 +34,12 @@ $('#add_property').on('click', function(){
 $(document).on('click', '.remove_property', function(){
     $(this).parent().remove();
 });
+$('#add_sub_property').on('click', function(){
+    $('#sub_properties').prepend($('#sub_property_select').html());
+});
+$(document).on('click', '.remove_property', function(){
+    $(this).parent().remove();
+});
 $(document).on('click', '.passage_content', function(){
     $(this).parent().children('.sub_passages').slideToggle();
 });
@@ -81,6 +87,7 @@ $('.square_icon').on('click', function(){
         }
     });
 });
+
 $('#right_side_select').on('change', function(){
     switch($(this).val()){
         case 'chapters':

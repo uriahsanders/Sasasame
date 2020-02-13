@@ -208,10 +208,74 @@
                         <%}%>
                     </div>
                     <!-- Modal HTML embedded directly into document -->
-                                <div id="stream_palette" class="modal">
-                                  <p>Coming Soon.</p>
-                                  <a href="#" rel="modal:close">Close</a>
+                    <div id="stream_palette" class="modal">
+                      <p>Coming Soon.</p>
+                      <a href="#" rel="modal:close">Close</a>
+                    </div>
+                    <div id="modal_add_sub_passage" class="modal">
+                        <form id="add_sub_passage_form"action="/passage/add_sub_passage/" method="POST">
+                            <div class="header no_cursive">
+                                Add Sub Passage
+                            </div>
+                            <div style="text-align:left">
+                                <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
+                                <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
+                                <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
+                                <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
+                                <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+                            </div>
+                            <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6"></textarea>
+                            <input name="chapterID" type="hidden" value="<%=chapter%>"/>
+                            <button class="control_button" id="add_sub_passage">Add</button>
+                            <div id="sub_properties">
+                                <div id="add_sub_property"><ion-icon name="add-circle-outline"></ion-icon> Add Property</div> 
+                            </div>
+                            <div id="sub_property_select">
+                                <div class="property_select">
+                                    <ion-icon class="remove_property"name="remove-circle-outline"></ion-icon> 
+                                    <!-- For Passages -->
+                                    <select>
+                                        <option>Hyperlink</option>
+                                        <option>Color</option>
+                                        <option>CSS</option>
+                                        <option>Code/Markup</option>
+                                        <!-- 
+                                            Ex.
+                                            Javascript
+                                            HTML
+                                            Markdown
+                                            Key Schema
+                                            (Syntax highlight inoperable languages
+                                            Add run button for JS
+                                            Autorun Markdown)
+                                         -->
+                                        <option>Access</option>
+                                        <option>Key Schema</option>
+                                        <!-- User inputs JSON with methods -->
+                                        <option>Canvas</option>
+                                        <!-- Render passage as canvas -->
+                                        <option>Tone</option>
+                                        <!-- Render passage via tone.js -->
+                                        <option>Hidden</option>
+                                        <!-- Hide passage -->
+                                        <option>Autorun</option>
+                                    </select>
+                                    <!-- For chapters -->
+                                    <!-- <select>
+                                        <option>Chapter CSS</option>
+                                        <option>Passage CSS</option>
+                                        <option>Distraction Free Mode</option>
+                                        <option>Impress JS</option>
+                                        <option>Key Schema</option>
+                                        <option>Custom</option>
+                                        <option>Autorun</option>
+                                    </select> -->
+                                    <br><br>
+                                    <input type="" name="">
                                 </div>
+                            </div>
+                        </form>
+                    </div>
                     <!-- Add upon scroll -->
                     <%if(book){%>
                         <div id="passages">
@@ -281,7 +345,7 @@
                                         <div class="passage_id"><%= f._id %></div>
                                         </div>
                                     <%});%>
-                                    <div class="add_sub_passage"><ion-icon title="Add Sub Passage"name="add-circle-outline"></ion-icon></div>
+                                    <div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage" rel="modal:open"><ion-icon title="Add Sub Passage"name="add-circle-outline"></ion-icon></a></div>
                                 </div>
 
                             </div>

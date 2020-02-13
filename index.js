@@ -15,7 +15,7 @@ const passageController = require('./controllers/passageController');
 // Routes
 const passageRoutes = require('./routes/passage');
 
-const DOCS_PER_PAGE = 20; // Documents per Page Limit (Pagination)
+const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
 
 // Database Connection Setup
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
