@@ -25,16 +25,16 @@ $('#add_select').on('change', function(){
 });
 $('[id^=star_]').on('click', function(){
     var _id = $(this).attr('id').split('_')[1];
-    $.ajax({
-            type: 'post',
-            url: '/star/',
-            data: {
-                _id: _id
-            },
-            success: function(data){
-                alert(JSON.stringify(data));
-            }
-        });
+    // $.ajax({
+    //         type: 'post',
+    //         url: '/star/',
+    //         data: {
+    //             _id: _id
+    //         },
+    //         success: function(data){
+    //             // alert(JSON.stringify(data));
+    //         }
+    //     });
 });
 $('#add_property').on('click', function(){
     $('#properties').prepend($('#property_select').html());
@@ -69,8 +69,8 @@ $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
 });
 $('.star_icon').on('click', function(){
-    $(this).attr('name', function(index, attr){
-        return attr == 'star-outline' ? 'star' : 'star-outline';
+    $(this).attr('src', function(index, attr){
+        return attr == '/images/ionicons/star-outline.svg' ? '/images/ionicons/star.svg' : '/images/ionicons/star-outline.svg';
     });
     $(this).toggleClass('gold_color');
 });
@@ -82,16 +82,16 @@ $('.flag_icon').on('click', function(){
 });
 $('.square_icon').on('click', function(){
     var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
-    $(this).attr('name', function(index, attr){
-        if(attr == 'square-outline'){
+    $(this).attr('src', function(index, attr){
+        if(attr == '/images/ionicons/square-outline.svg'){
             //add passage to queue
             $('#queue_items').append($('.'+parentClass).clone());
-            return 'checkbox-outline';
+            return '/images/ionicons/checkbox-outline.svg';
         }
         else{
             //remove passage from queue
             $('#queue_items .'+parentClass).hide();
-            return 'square-outline';
+            return '/images/ionicons/square-outline.svg';
         }
     });
 });

@@ -216,6 +216,7 @@
                                 <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
                                 <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
                                 <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+
                             </div>
                             <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6"></textarea>
                             <input name="chapterID" type="hidden" value="<%=chapter%>"/>
@@ -296,10 +297,12 @@
                                   <p class="passage_delete_<%=f._id%>">Delete passage</p>
                                   <div class="passage_id"><%= f._id %></div>
                                 </div>
-                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
-                                 <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
-                                 <ion-icon id="star_<%=f._id%>"title="Star"class="star_icon"name="star-outline"></ion-icon>
-                                 <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+                                 <a class="basic_link" href="#modal_<%=f._id%>" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+                                 <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
+                                 <ion-icon id="star_<%=f._id%>"title="Star"class="star_icon" src="/images/ionicons/star-outline.svg"></ion-icon>
+                                 <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+                                 <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
+
 
                                 </div>
                                 <input type="hidden" class="original_passage_content" value="<%=f.content%>"/>
