@@ -169,6 +169,9 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
 app.get('/control', function(req, res) {
     res.render('control', {session: req.session});
 });
+app.get('/ppe', function(req, res) {
+    res.render('ppe', {session: req.session});
+});
 
 //make app.post for pagination
 //call same queries from function
@@ -184,9 +187,9 @@ app.post('/paginate', function(req, res){
         find = {};
     }
     //now properly return both Passages and Chapters in this Chapter
-    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE})
+    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
     .then(function(passages){
-        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE})
+        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: 'stars'})
         .then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;

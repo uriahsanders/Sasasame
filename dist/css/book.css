@@ -1,8 +1,6 @@
 #little_seed {
-    width: 40px;
-    display: inline;
-    margin: auto;
-    margin-bottom: 10px;
+    width: 35px;
+    margin-left: 30px;
 
 }
 #sasame{
@@ -39,8 +37,7 @@
     padding-top: 0px;
 }
 #control_nav{
-    padding: 20px;
-    text-align: center;
+    padding: 10px;
     background: #353535;
     color: #fff;
     padding-top: 30px;
@@ -183,13 +180,15 @@
     width: 50px;
 }
 .passage_content{
-    white-space: pre-wrap;
-    padding-left: 40px;
-    padding-right: 40px;
+    white-space: pre;
+    overflow-x: auto;
+    padding-left: 20px;
+    padding-bottom: 10px;
     min-height: 30px;
-    width:55%;
+    /*width:55%;*/
     margin:auto;
     cursor: pointer;
+    text-align: left;
 }
 .passage_keys{
     display: none;

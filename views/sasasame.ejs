@@ -88,8 +88,8 @@
                         </div>
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
-                        </a>
-                        <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">(Under Development)</a></div>
+                        </a><!-- 
+                        <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">Sasame</a></div> -->
                     </div>
             </div>
             <div id="control_blocks">
@@ -101,12 +101,13 @@
                         <option value="chapter">Chapter</option>
                     </select>
                     </div>
-                    <div style="text-align:left">
+                    <div id="add_passage_icons"style="text-align:left">
                         <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
                         <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
                         <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+                        <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Passage"name="color-palette"></ion-icon></a>
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
@@ -195,11 +196,7 @@
                             <input type="hidden" value="true", id="is_profile"/>
                             <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
                             <%}else{%>
-                                <div>
-                                    <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Passage"name="color-palette"></ion-icon>
-                                </div>
-                                <br>
-                                <span id="parent_chapter_title">Stream</span>
+                                <span id="parent_chapter_title">Home</span>
                                 
 
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
@@ -208,10 +205,6 @@
                         <%}%>
                     </div>
                     <!-- Modal HTML embedded directly into document -->
-                    <div id="stream_palette" class="modal">
-                      <p>Coming Soon.</p>
-                      <a href="#" rel="modal:close">Close</a>
-                    </div>
                     <div id="modal_add_sub_passage" class="modal">
                         <form id="add_sub_passage_form"action="/passage/add_sub_passage/" method="POST">
                             <div class="header no_cursive">
