@@ -2,23 +2,16 @@
     <head>
         <meta charset="UTF-8">
         <title>Sasame</title>
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,400i,500,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/main.css">
         <link rel="stylesheet" href="/css/book.css">
         <link rel="stylesheet" href="/css/mobile.css">
         <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="/images/bitmap.png" />
-        <script
-        src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous"></script>
-        <script
-          src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-          integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-          crossorigin="anonymous"></script>
+        <script src="/jquery.min.js"></script>
+        <script src="/jquery-ui.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+        <script src="/jquery.modal.min.js"></script>
+        <link rel="stylesheet" href="/jquery.modal.min.css" />
     </head>
     <body>
         <% if(locals.session && locals.session.user != null){ %>
@@ -84,7 +77,7 @@
             <div id="control_nav">
                     <div id="main_header">
                         <div id="mobile_book_menu">
-                            <ion-icon name="menu"></ion-icon>
+                            <ion-icon src="/images/ionicons/menu.svg"></ion-icon>
                         </div>
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
@@ -102,22 +95,22 @@
                     </select>
                     </div>
                     <div id="add_passage_icons"style="text-align:left">
-                        <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
+                        <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                        <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
+                        <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                        <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
-                        <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Passage"name="color-palette"></ion-icon></a>
+                        <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+                        <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Passage"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" id="" name="passage" rows="6"></textarea>
                     <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                     <button class="control_button" id="add_passage">Add</button>
                     <div id="properties">
-                        <div id="add_property"><ion-icon name="add-circle-outline"></ion-icon> Add Property</div> 
+                        <div id="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
                     </div>
                     <div id="property_select">
                         <div class="property_select">
-                            <ion-icon class="remove_property"name="remove-circle-outline"></ion-icon> 
+                            <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
                             <!-- For Passages -->
                             <select>
                                 <option>Hyperlink</option>
@@ -165,11 +158,11 @@
                     <div class="header">
                         <%if(parentChapter != null){%>
                             <div>
-                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Chapter"name="color-palette"></ion-icon></a>
-                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"name="settings"></ion-icon></a>
-                                 <ion-icon title="Add to Queue"class="square_icon"name="square-outline"></ion-icon>
-                                 <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
-                                 <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Chapter"src="/images/ionicons/color-palette.svg"></ion-icon></a>
+                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
+                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-outline.svg"></ion-icon>
+                                 <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-outline.svg"></ion-icon>
+                                 <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
@@ -211,22 +204,22 @@
                                 Add Sub Passage
                             </div>
                             <div style="text-align:left">
-                                <ion-icon title="Add Image"class="image_upload_icon"name="images"></ion-icon>
+                                <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                                 <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                                <ion-icon title="Add Audio Recording"class="mic_record_icon"name="mic"></ion-icon>
+                                <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
                                 <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                                <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+                                <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
 
                             </div>
                             <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6"></textarea>
                             <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                             <button class="control_button" id="add_sub_passage">Add</button>
                             <div id="sub_properties">
-                                <div id="add_sub_property"><ion-icon name="add-circle-outline"></ion-icon> Add Property</div> 
+                                <div id="add_sub_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
                             </div>
                             <div id="sub_property_select">
                                 <div class="property_select">
-                                    <ion-icon class="remove_property"name="remove-circle-outline"></ion-icon> 
+                                    <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
                                     <!-- For Passages -->
                                     <select>
                                         <option>Hyperlink</option>
@@ -330,8 +323,8 @@
                                           <p>Delete passage</p>
                                           <a href="#" rel="modal:close">Close</a>
                                         </div>
-                                         <a class="basic_link" href="#modal_<%=sub._id%>" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
-                                         <ion-icon title="Star"class="star_icon"name="star-outline"></ion-icon>
+                                         <a class="basic_link" href="#modal_<%=sub._id%>" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+                                         <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-outline.svg"></ion-icon>
 
                                         </div>
                                         <input type="hidden" class="original_passage_content" value="<%=sub.content%>"/>
@@ -341,7 +334,7 @@
                                         <div class="passage_id"><%= f._id %></div>
                                         </div>
                                     <%});%>
-                                    <div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage" rel="modal:open"><ion-icon title="Add Sub Passage"name="add-circle-outline"></ion-icon></a></div>
+                                    <div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-outline.svg"></ion-icon></a></div>
                                 </div>
 
                             </div>

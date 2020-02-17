@@ -79,6 +79,18 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
+app.get('/jquery.min.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/jquery/dist/jquery.min.js');
+});
+app.get('/jquery-ui.min.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/jquery-ui-dist/jquery-ui.min.js');
+});
+app.get('/jquery.modal.min.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/jquery-modal/jquery.modal.min.js');
+});
+app.get('/jquery.modal.min.css', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/jquery-modal/jquery.modal.min.css');
+});
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);
