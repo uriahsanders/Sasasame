@@ -1,6 +1,54 @@
 //shared code for server/client
 (function(exports){
 
+  exports.printPropertySelect = function(key, value){
+    return `
+<div class="property_select">
+                            <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
+                            <!-- For Passages -->
+                            <select name="property_key"class="property_key">
+                                <option>`+key+`</option>
+                                <option>Hyperlink</option>
+                                <option>Color</option>
+                                <option>CSS</option>
+                                <option>Code/Markup</option>
+                                <!-- 
+                                    Ex.
+                                    Javascript
+                                    HTML
+                                    Markdown
+                                    Key Schema
+                                    (Syntax highlight inoperable languages
+                                    Add run button for JS
+                                    Autorun Markdown)
+                                 -->
+                                <option>Access</option>
+                                <option>Key Schema</option>
+                                <!-- User inputs JSON with methods -->
+                                <option>Canvas</option>
+                                <!-- Render passage as canvas -->
+                                <option>Tone</option>
+                                <!-- Render passage via tone.js -->
+                                <option>Hidden</option>
+                                <!-- Hide passage -->
+                                <option>Autorun</option>
+                            </select>
+                            <!-- For chapters -->
+                            <!-- <select>
+                                <option>Access</option>
+                                <option>Chapter CSS</option>
+                                <option>Passage CSS</option>
+                                <option>Distraction Free Mode</option>
+                                <option>Impress JS</option>
+                                <option>Key Schema</option>
+                                <option>Custom</option>
+                                <option>Autorun</option>
+                            </select> -->
+                            <br><br>
+                            <input value="`+value+`"name="property_value"class="property_value"type="" name="">
+                        </div>
+    `;
+  };
   exports.printPassage = function(passage){
        var ret = '';
         ret += `
@@ -24,7 +72,15 @@
                     ret += `<p>`+passage.stars.length+` Stars </p>
                 </div>`;
               ret += `<textarea class="control_textarea">`+passage.content+`</textarea>
-              <p class="passage_update">Update passage</p>
+              Properties:
+              <br><br>
+              `;
+              var i = 0;
+              var metadata = JSON.parse(passage.metadata);
+              for (let [key, value] of Object.entries(metadata)) {
+                    ret += exports.printPropertySelect(key, value);
+                }
+              ret += `<p class="passage_update">Update passage</p>
               <p class="passage_delete_`+passage._id+`">Delete passage</p>
               <div class="passage_id">`+passage._id+`</div>
             </div>

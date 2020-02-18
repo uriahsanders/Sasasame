@@ -108,7 +108,9 @@
                     <div id="properties">
                         <div id="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
                     </div>
-                    <div id="property_select">
+                    </form>
+                </div>
+                <div id="property_select">
                         <div class="property_select">
                             <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
                             <!-- For Passages -->
@@ -153,8 +155,6 @@
                             <input name="property_value"class="property_value"type="" name="">
                         </div>
                     </div>
-                    </form>
-                </div>
                 <div  class="control_block" id="book_of_sasame">
                     <div class="header">
                         <%if(parentChapter != null){%>
@@ -168,7 +168,8 @@
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
-                                <input id="page" type="hidden" value="2" autocomplete="off"/>
+                                <input id="passage_page" type="hidden" value="2" autocomplete="off"/>
+                                <input id="chapter_page" type="hidden" value="2" autocomplete="off"/>
                             <div id="chapter_settings" class="modal">
                               <p>CHAPTER OPTIONS</p>
                               <p><input class="modal_input"value="<%=parentChapter.title%>"type="" name=""></p>

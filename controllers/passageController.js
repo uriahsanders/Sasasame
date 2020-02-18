@@ -7,7 +7,8 @@ module.exports = {
             let post = new Passage({
                 content: options.content,
                 chapter: options.chapter,
-                author: options.author
+                author: options.author,
+                metadata: options.metadata
             }).save().then(data => {
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                     if(chap.passages){
@@ -24,7 +25,8 @@ module.exports = {
             //level 1 passage
             let post = new Passage({
                 content: options.content,
-                author: options.author
+                author: options.author,
+                metadata: options.metadata
             }).save();
         }
         options.callback();

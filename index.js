@@ -192,7 +192,8 @@ app.get('/ppe', function(req, res) {
 //but with changing parameters in paginate
 //simply return new object list for client to add into html
 app.post('/paginate', function(req, res){
-    let page = req.body.page;
+    let passagePage = req.body.passagePage;
+    let chapterPage = req.body.chapterPage;
     let ret = {};
     //what category is the user looking at?
     let chapter = req.body.chapter;
@@ -201,9 +202,9 @@ app.post('/paginate', function(req, res){
         find = {};
     }
     //now properly return both Passages and Chapters in this Chapter
-    Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
+    Passage.paginate(find, {page: passagePage, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
     .then(function(passages){
-        Chapter.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: 'stars'})
+        Chapter.paginate(find, {page: chapterPage, limit: DOCS_PER_PAGE, sort: 'stars'})
         .then(function(chapters){
             ret.passages = passages;
             ret.chapters = chapters;
@@ -328,8 +329,20 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var user = req.session.user_id || null;
     var backURL=req.header('Referer') || '/';
     var content = req.body.passage || '';
+    var property_key = req.body['property_key[]'] || req.body.property_key;
+    var property_value = req.body['property_value[]'] || req.body.property_value;
+    //build metadata from separate arrays
+    var metadata = {};
+    var i = 0;
+    if(Array.isArray(property_key)){
+        property_key.forEach(function(key){
+            metadata[key] = property_value[i++];
+        });
+    }
+    else{
+        metadata[property_key] = property_value;
+    }
     var callback = function(){
-        console.log(user);
         res.redirect(backURL);
     };
     if(type == 'passage'){
@@ -337,7 +350,8 @@ app.post(/\/add_passage\/?/, (req, res) => {
             'chapter': chapterID,
             'content': content,
             'author': user,
-            'callback': callback
+            'metadata': JSON.stringify(metadata),
+            'callback': callback,
         });
     }
     else if(type == 'chapter' && content != ''){
