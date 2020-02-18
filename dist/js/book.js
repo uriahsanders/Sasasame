@@ -1,19 +1,19 @@
 //Add passages
-$.fn.serializeObject = function() {
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name]) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
+// $.fn.serializeObject = function() {
+//     var o = {};
+//     var a = this.serializeArray();
+//     $.each(a, function() {
+//         if (o[this.name]) {
+//             if (!o[this.name].push) {
+//                 o[this.name] = [o[this.name]];
+//             }
+//             o[this.name].push(this.value || '');
+//         } else {
+//             o[this.name] = this.value || '';
+//         }
+//     });
+//     return o;
+// };
 // $('#codeform').on('submit', function(e){
 //     e.preventDefault();
 //     var info = $(this).serializeObject();
@@ -65,8 +65,9 @@ $('[id^=star_]').on('click', function(){
     //         }
     //     });
 });
-$('#add_property').on('click', function(){
-    $('#properties').prepend($('#property_select').html());
+
+$('.add_property').on('click', function(){
+    $(this).parent().prepend($('#property_select').html());
 });
 $(document).on('click', '.remove_property', function(){
     $(this).parent().remove();

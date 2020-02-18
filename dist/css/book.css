@@ -498,7 +498,7 @@ select::-ms-expand {
     text-align: left;
     font-size: 0.9em;
 }
-#add_property, #add_sub_property, .remove_property{
+.add_property, #add_sub_property, .remove_property{
     cursor: pointer;
 }
 #property_select, #sub_property_select{

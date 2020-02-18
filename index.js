@@ -300,7 +300,9 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                         book: passages,
                         chapters: chaps,
                         addPassageAllowed: addPassageAllowed,
-                        addChapterAllowed: addChapterAllowed
+                        addChapterAllowed: addChapterAllowed,
+                        printPassage: scripts.printPassage,
+                        printChapter: scripts.printChapter
                     });
                 })
                 .then(function(err){

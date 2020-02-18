@@ -72,7 +72,6 @@
                     ret += `<p>`+passage.stars.length+` Stars </p>
                 </div>`;
               ret += `<textarea class="control_textarea">`+passage.content+`</textarea>
-              Properties:
               <br><br>
               `;
               var i = 0;
@@ -80,7 +79,12 @@
               for (let [key, value] of Object.entries(metadata)) {
                     ret += exports.printPropertySelect(key, value);
                 }
-              ret += `<p class="passage_update">Update passage</p>
+              ret += `
+              <div class="properties">
+                    <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
+                </div>
+              <br>
+              <p class="passage_update">Update passage</p>
               <p class="passage_delete_`+passage._id+`">Delete passage</p>
               <div class="passage_id">`+passage._id+`</div>
             </div>
