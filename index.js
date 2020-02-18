@@ -48,8 +48,7 @@ app.use(session({
 }));
 
 //Call in Scripts
-const scripts = require('./scripts');
-
+const scripts = require('./shared');
 // Password Protection for When Upgrading
 var securedRoutes = require('express').Router();
 securedRoutes.use((req, res, next) => {
@@ -90,6 +89,9 @@ app.get('/jquery.modal.min.js', function(req, res) {
 });
 app.get('/jquery.modal.min.css', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery-modal/jquery.modal.min.css');
+});
+app.get('/shared.js', function(req, res) {
+    res.sendFile(__dirname + '/shared.js');
 });
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
@@ -250,7 +252,9 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                     book: passages,
                     chapters: chapters,
                     addPassageAllowed: true,
-                    addChapterAllowed: false
+                    addChapterAllowed: false,
+                    printPassage: scripts.printPassage,
+                    printChapter: scripts.printChapter
                 });
             })
             .then(function(err){
@@ -317,6 +321,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
+
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
     var type = req.body.type;

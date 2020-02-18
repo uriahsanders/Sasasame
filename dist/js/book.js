@@ -1,3 +1,32 @@
+//Add passages
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+$('#codeform').on('submit', function(e){
+    e.preventDefault();
+    var info = $(this).serializeObject();
+    alert(JSON.stringify(info));
+    // $.ajax({
+    //     type: 'post',
+    //     url: '/passage/add_passage/',
+    //     data: info,
+    //     success: function(data){
+    //         alert(data);
+    //     }
+    // });
+});
 //search
 $('#chapter_search').on('keypress', function(e){
     if(e.which == 13){
@@ -127,12 +156,7 @@ $('#right_side_select').on('change', function(){
     }
 });
 window.onscroll = function(ev) {
-    console.log('Inner height: '+ window.innerHeight);
-    console.log('Y Offset: '+ window.pageYOffset);
-    console.log('Added: '+ (window.innerHeight + window.pageYOffset));
-    console.log('Doc Offset: '+ document.body.offsetHeight);
     if ((window.innerHeight * 1.5 + window.pageYOffset) >= document.body.offsetHeight) {
-        console.log('test');
         var chapter = $('#parent_chapter_id').val();
         var page = parseInt($('#page').val());
         var isProfile = $('#is_profile').val();
@@ -151,34 +175,17 @@ window.onscroll = function(ev) {
                     var chapters = dataObj.chapters;
                     var html = '';
                     passages.docs.forEach(function(passage){
-                        html = '<div class="passage"> <div class="passage_expand">+</div>';
-                        if(typeof passage.chapter != 'undefined' && typeof passage.chapter.title != 'undefined'){
-                            html += ' <div class="passage_chapter"><a class="basic_link"href="/sasasame/'+passage.chapter.title+'/'+passage.chapter._id+'">'+passage.chapter.title+'></a></div>';
-                        }
-                        else{
-                            html += '<div class="passage_chapter">Sasame</div>';
-                        }
-                        // html += '<div class="passage_author">'+passage.author+'</div>';
-                        if(passage.keys != ''){
-                            html += ' <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true">'+passage.keys+'</div></div>';
-                            html += '<input type="hidden" class="original_passage_keys" value="'+passage.keys+'"/>';
-                        }
-                        else{
-                            html += ' <div class="passage_keys">Keys: <div class="passage_edit_keys" contenteditable="true"></div></div>';
-                            html += '<input type="hidden" class="original_passage_keys" value=""/>';
-                        }
-                        html += '<div class="passage_content">'+passage.content+'</div> <div class="passage_id">'+passage._id+'</div></div>';
-                        html += '<input type="hidden" class="original_passage_content" value="'+passage.content+'"/>';
-                        $('#book_of_sasame').append(html);
+                        html += share.printPassage(passage);
                     });
+                    $('#book_of_sasame').append(html);
                     html = '';
                     //only if ParentChapter is not Sasame
                     var parentChapterTitle = $('#parent_chapter_title').text();
                     if(parentChapterTitle != 'Sasame' && $('#right_side_select').val() === 'chapters'){
                         chapters.docs.forEach(function(chapter){
-                            html = '<p class="category"><a class="link" href="/sasasame/'+chapter.title+'/'+chapter._id+'">'+chapter.title+'</a></p>';
-                            $('#categories').append(html);
+                            html += share.printChapter(chapter);
                         });
+                        $('#categories').append(html);
                     }
                     $('#page').val(++page);
                 }
