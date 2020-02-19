@@ -88,15 +88,17 @@
               <p class="passage_delete_`+passage._id+`">Delete passage</p>
               <div class="passage_id">`+passage._id+`</div>
             </div>
+            </div>
+             <div class="proteins">
              <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
              <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-outline.svg"></ion-icon>
              <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
+             <ion-icon title="Split"src="/images/ionicons/cut-outline.svg"></ion-icon>
+             <ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
              <ion-icon title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
-
-
-            </div>
+             </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
             <div class="passage_content">`+ passage.content+`</div>

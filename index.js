@@ -15,6 +15,8 @@ const passageController = require('./controllers/passageController');
 // Routes
 const passageRoutes = require('./routes/passage');
 
+var fs = require('fs'); 
+
 const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
 
 // Database Connection Setup
