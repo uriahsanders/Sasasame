@@ -16,6 +16,7 @@ const passageController = require('./controllers/passageController');
 const passageRoutes = require('./routes/passage');
 
 var fs = require('fs'); 
+var path = require('path');
 
 const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
 
@@ -182,8 +183,41 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
         });
     });
 });
-app.get('/control', function(req, res) {
-    res.render('control', {session: req.session});
+app.post('/fileStream', function(req, res) {
+    var result = '';
+    var dir = '/home/perfect7/Projects/Sasasame/';
+    fs.readdir(dir, (err, files) => {
+      res.send({
+        _id: files,
+        title: files,
+        path: dir
+      });
+    });
+});
+app.post('/file', function(req, res) {
+    var file = req.body.fileName;
+    var dir = req.body.dir + file;
+    var stat = fs.lstatSync(dir);
+    if(stat.isFile()){
+        fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
+                if (!err) {
+                    res.send({
+                        data: scripts.printFile(data),
+                        type: 'file'
+                    });
+                } else {
+                    console.log(err);
+                }
+        });
+    }
+    else if (stat.isDirectory()){
+        fs.readdir(dir, (err, files) => {
+          res.send({
+            data: data,
+            type: 'dir'
+          });
+        });
+    }
 });
 app.get('/ppe', function(req, res) {
     res.render('ppe', {session: req.session});

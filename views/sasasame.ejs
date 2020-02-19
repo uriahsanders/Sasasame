@@ -5,13 +5,13 @@
         <link rel="stylesheet" href="/css/main.css">
         <link rel="stylesheet" href="/css/book.css">
         <link rel="stylesheet" href="/css/mobile.css">
-        <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="/images/bitmap.png" />
         <script src="/jquery.min.js"></script>
         <script src="/jquery-ui.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="/jquery.modal.min.js"></script>
         <link rel="stylesheet" href="/jquery.modal.min.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     </head>
     <body>
         <% if(locals.session && locals.session.user != null){ %>
@@ -191,7 +191,8 @@
                             <input type="hidden" value="true", id="is_profile"/>
                             <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
                             <%}else{%>
-                                <span id="parent_chapter_title">Home</span>
+                                <span title="test"id="parent_chapter_title">Thought Stream</span>
+                                <input id="fileStreamPath" type="hidden"></input>
                                 
 
                                 <input id="parent_chapter_id"type="hidden" value="Sasame"/>
@@ -305,6 +306,8 @@
                 </div>
             </div>
         </div>
+        <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
         <script src="/shared.js"></script>
         <script src="/js/app.js"></script>
         <script src="/js/book.js"></script>

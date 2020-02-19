@@ -1,6 +1,5 @@
 //shared code for server/client
 (function(exports){
-
   exports.printPropertySelect = function(key, value){
     return `
 <div class="property_select">
@@ -149,6 +148,32 @@
             <a class="link" href="/sasasame/`+chapter.title+`/`+chapter._id+`">`+chapter.title+`</a>
         </div>
         <div class="category_id">`+chapter._id+`</div>
+    </div>`;
+    return ret;
+  };
+  exports.printFile = function(content){
+    var ret = '';
+        ret += `
+        <div class="passage">
+             <div class="proteins">
+             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
+             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
+             <ion-icon title="Split"src="/images/ionicons/cut-outline.svg"></ion-icon>
+             <ion-icon title="Move line from above"src="/images/ionicons/add-outline.svg"></ion-icon>
+             <ion-icon title="Move line to above"name="/images/ionicons/remove-outline.svg"></ion-icon>
+
+             </div>
+            <div class="passage_content" contenteditable="true">`+ content+`</div>
+        </div>`;
+        return ret;
+  };
+  exports.printDir = function(dirname){
+    var ret = '';
+    ret += `
+    <div class="category">
+        <div>
+            <a class="link fileStreamChapter">`+dirname+`</a>
+        </div>
     </div>`;
     return ret;
   };

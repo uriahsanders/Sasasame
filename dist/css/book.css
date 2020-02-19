@@ -549,3 +549,9 @@ select::-ms-expand {
     padding-left: 16px;
     width: 130px;
 }
+#parent_chapter_title{
+    cursor: pointer;
+}
+.fileStreamChapter{
+    cursor: pointer;
+}

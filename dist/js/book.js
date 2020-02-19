@@ -27,6 +27,10 @@
 //         }
 //     });
 // });
+  $( function() {
+    $( document ).tooltip();
+    $(document).find('title').remove();
+  } );
 //search
 $('#chapter_search').on('keypress', function(e){
     if(e.which == 13){
@@ -80,6 +84,61 @@ $(document).on('click', '.remove_property', function(){
 });
 $(document).on('click', '.passage_content', function(){
     $(this).parent().children('.sub_passages').slideToggle();
+});
+var doSomethingThoughtStream = function(){
+
+};
+var doSomethingFileStream = function(){
+    $('#categories').html('');
+    $.ajax({
+        type: 'post',
+        url: '/fileStream',
+        data: 1,
+        success: function(data){
+            var ret = '';
+            data.title.forEach(function(item){
+                ret += share.printDir(item);
+            });
+            $('#fileStreamPath').val(data.path);
+            $('#categories').html(ret);
+            $('#passages').html('');
+        }
+    });
+};
+$(document).on('click', '.fileStreamChapter', function(){
+    $.ajax({
+        type: 'post',
+        url: '/file',
+        data: {
+            dir: $('#fileStreamPath').val() || '',
+            fileName: $(this).text()
+        },
+        success: function(data){
+            if(data.type == 'file'){
+                $('#passages').html(data.data);
+            }
+            else if(data.type == 'dir'){
+                $('#categories').html(data.data);
+            }
+            fixIconTitles();
+        }
+    });
+});
+$('#parent_chapter_title').on('click', function(){
+    var something = $(this).text();
+    //The File Stream is stored in the File Stream
+    //and is very dangerous
+    if(something == 'File Stream'){
+        //The Thought Stream is stored in the database
+        something = "Thought Stream"
+        doSomethingThoughtStream();
+    }
+    else if(something == 'Thought Stream'){
+        something = 'File Stream';
+        doSomethingFileStream();
+    }
+    $(this).text(something);
+
 });
 $('#mobile_active_close').on('click', function(){
     $('#mobile_book_menu_main').fadeOut();
@@ -228,11 +287,20 @@ window.onscroll = function(ev) {
                         $('#categories').append(html);
                     }
                     $('#page').val(++page);
+                    fixIconTitles();
                 }
             });
         }
     }
 };
+fixIconTitles();
+function fixIconTitles(){
+    $('title').each(function(){
+        if($(this).text().split('-')[0] == 'ionicons'){
+            $(this).remove();
+        }
+    });
+}
 
 // var fixmeTop = $('#codeform').offset().top;       // get initial position of the element
 
