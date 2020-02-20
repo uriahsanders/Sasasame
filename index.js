@@ -103,12 +103,6 @@ app.get('/shared.js', function(req, res) {
 app.get('/', function(req, res) {
     res.redirect('/sasasame');
 });
-app.get('/login', function(req, res) {
-    res.render('login', {session: req.session});
-});
-app.get('/register', function(req, res) {
-    res.render('register', {session: req.session});
-});
 app.post('/login/', function(req, res) {
     let name = req.body.name;
     User.findOne({name: name}, function(err, user) {
@@ -117,7 +111,7 @@ app.post('/login/', function(req, res) {
            var obj = new User();
            obj.name = name;
            obj.save(function(err2, newUser) {
-              req.session.user = newUser.name;
+              req.session.user = newUser;
               req.session.name = newUser.name;
               req.session.user_id = newUser._id;
               res.send('/user/' + newUser._id);
@@ -125,7 +119,7 @@ app.post('/login/', function(req, res) {
         }
         //Login
         else{
-            req.session.user = user.name;
+            req.session.user = user;
             req.session.name = user.name;
             req.session.user_id = user._id;
             res.send('/user/' + user._id);
@@ -135,18 +129,6 @@ app.post('/login/', function(req, res) {
 app.get('/logout', function(req, res) {
     req.session.user = null;
     res.redirect('/');
-});
-app.post('/register_user', function(req, res) {
-   let user = {
-       name: req.body.name
-   };
-   User.create(user, function(err, newUser) {
-      if(err) return next(err);
-      req.session.user = newUser.name;
-      req.session.name = newUser.name;
-      req.session.user_id = newUser._id;
-      return res.send('Logged In!');
-   });
 });
 app.get(/\/user\/?(:user_id)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
@@ -181,7 +163,9 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
                     chapters: chapters,
                     paginate: 'profile',
                     addChapterAllowed: false,
-                    parentChapter: {title: profile_user.name}
+                    parentChapter: {title: profile_user.name},
+                    printPassage: scripts.printPassage,
+                    printChapter: scripts.printChapter
                 });
             })
             .then(function(err){
@@ -486,8 +470,8 @@ app.post(/search/, (req, res) => {
 app.post(/star/, (req, res) => {
     var _id = req.body._id.trim();
     Passage.findOneAndUpdate({_id: _id}, {
-        $inc: {
-            stars: 1
+        $push: {
+            stars: req.session.user
         }
     }, function(err, documents){
         res.send(documents);

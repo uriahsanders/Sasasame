@@ -145,6 +145,8 @@
                                 <option>Hidden</option>
                                 <!-- Hide passage -->
                                 <option>Autorun</option>
+                                <!-- Render unable to modify/delete -->
+                                <option>Permanent</option>
                             </select>
                             <!-- For chapters -->
                             <!-- <select>
@@ -165,12 +167,14 @@
                     <div class="header">
                         <%if(parentChapter != null){%>
                             <div>
-                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Generate Chapter"src="/images/ionicons/color-palette.svg"></ion-icon></a>
+                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
                                  <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-outline.svg"></ion-icon>
                                  <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-outline.svg"></ion-icon>
                                  <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
                                  <ion-icon title="Play All" name="play-circle"></ion-icon>
+                                 <ion-icon title="Load All"src="/images/ionicons/reload-circle-outline.svg"></ion-icon>
+                                 <ion-icon title="Download as PDF"src="/images/ionicons/download-outline.svg"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
@@ -281,7 +285,10 @@
                         <% book.forEach(function(f) { %>
                             <%- printPassage(f) %>
                         <% }); %>
-                    </div>
+                        </div>
+                        <div id="load_more_passages"class="passage">
+                            Load More
+                        </div>
                     <%}%>
                 </div>
                 <div class="control_block" id="toc">
@@ -302,6 +309,7 @@
                                 <%- printChapter(f) %>
                         <%});} %>
                     </div>
+                    <div id="load_more_cats"class="category">Load More</div>
                     <!-- Brief from #passages via JS -->
                     <!-- Queue -->
                     <div id="queue">

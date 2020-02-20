@@ -173,8 +173,9 @@
     font-weight: bold;
 }
 .passage_author{
-    padding: 5px;
+    padding-left: 18px;
     width: 100px;
+    text-align: left;
 }
 .passage_author_image{
     width: 50px;
@@ -553,5 +554,8 @@ select::-ms-expand {
     cursor: pointer;
 }
 .fileStreamChapter{
+    cursor: pointer;
+}
+#load_more_passages, #load_more_cats{
     cursor: pointer;
 }
