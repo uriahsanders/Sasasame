@@ -127,6 +127,7 @@ $(document).on('click', '.fileStreamChapter', function(){
         success: function(data){
             if(data.type == 'file'){
                 $('#passages').html(data.data);
+                $('#parent_chapter_title').text(fileStreamPath + title);
             }
             else if(data.type == 'dir'){
                 var categories = `
@@ -187,6 +188,19 @@ $('.sun_icon').on('click', function(){
 });
 $('.flag_icon').on('click', function(){
     $(this).toggleClass('crimson_color');
+});
+$(document).on('click', '.icon_top_add', function(){
+    var thiz = $(this);
+    $(this).attr('src', function(index, attr){
+        if(attr == '/images/ionicons/caret-up-outline.svg'){
+            thiz.prop('title', 'Add to Bottom');
+            return '/images/ionicons/caret-down-outline.svg';
+        }
+        else{
+            thiz.prop('title', 'Add to Top');
+            return '/images/ionicons/caret-up-outline.svg';
+        }
+    });
 });
 $('.square_icon').on('click', function(){
     var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
