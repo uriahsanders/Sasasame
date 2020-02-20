@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const helmet = require('helmet');
 const PORT = process.env.PORT || 3000;
-require('dotenv').config()
+require('dotenv').config();
 // Models
 const User = require('./models/User');
 const Chapter = require('./models/Chapter');
@@ -109,33 +109,42 @@ app.get('/login', function(req, res) {
 app.get('/register', function(req, res) {
     res.render('register', {session: req.session});
 });
-app.post('/login_user', function(req, res) {
-    let email = req.body.email;
-    let pass = req.body.password;
-    User.findOne({email: email, password: pass}, function(err, user) {
-        if(err) return next(err);
-        if(!user) return res.send('Not logged in!');
-        req.session.user = email;
-        req.session.email = email;
-        req.session.name = user.name;
-        req.session.user_id = user._id;
-        res.redirect('/user/' + user._id);
+app.post('/login/', function(req, res) {
+    let name = req.body.name;
+    User.findOne({name: name}, function(err, user) {
+        //Register
+        if(!user){
+           var obj = new User();
+           obj.name = name;
+           obj.save(function(err2, newUser) {
+              req.session.user = newUser.name;
+              req.session.name = newUser.name;
+              req.session.user_id = newUser._id;
+              res.send('/user/' + newUser._id);
+           });
+        }
+        //Login
+        else{
+            req.session.user = user.name;
+            req.session.name = user.name;
+            req.session.user_id = user._id;
+            res.send('/user/' + user._id);
+        }
     });
 });
 app.get('/logout', function(req, res) {
     req.session.user = null;
-    res.redirect('/login');
+    res.redirect('/');
 });
 app.post('/register_user', function(req, res) {
-    let user = {
-       name: req.body.name,
-       email: req.body.email,
-       password: req.body.password,
-       perfect: 100 
+   let user = {
+       name: req.body.name
    };
    User.create(user, function(err, newUser) {
       if(err) return next(err);
-      req.session.user = newUser.email;
+      req.session.user = newUser.name;
+      req.session.name = newUser.name;
+      req.session.user_id = newUser._id;
       return res.send('Logged In!');
    });
 });

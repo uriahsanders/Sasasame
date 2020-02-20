@@ -2,3 +2,13 @@
 	margin: 0;
 	padding: 0;
 }
+#canvas{
+	cursor: none;
+}
+#queue{
+	border: 1px solid black;
+}
+.queue_canvas{
+	border: 1px solid black;
+	margin: 0px;
+}

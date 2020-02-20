@@ -47,6 +47,19 @@ $('#chapter_search').on('keypress', function(e){
 
     }
 });
+$('#login_form').on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        type: 'post',
+        url: '/login/',
+        data: {
+            name: $('#login_name').val()
+        },
+        success: function(data){
+            window.location.replace(data);
+        }
+    });
+});
 $('#add_select').on('change', function(){
     if($(this).val() == 'chapter'){
         $('#add_passage_icons').hide();

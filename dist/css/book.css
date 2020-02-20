@@ -520,7 +520,7 @@ select::-ms-expand {
 .sub_passages{
     display: none;
 }
-.image_upload_icon, .mic_record_icon, .flag_icon{
+.image_upload_icon, .mic_record_icon, .flag_icon, .icon_top_add{
     cursor: pointer;
 }
 .chapter_flag{

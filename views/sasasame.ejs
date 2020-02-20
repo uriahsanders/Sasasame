@@ -14,12 +14,18 @@
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     </head>
     <body>
+        <div id="login_modal" class="modal">
+          <p>Login/Register</p>
+          <form id="login_form" action="/login" method="POST">
+            <p><input id="login_name"class="modal_input"value=""type="" name="name"></p>
+            <p><button>Go</button></p>
+          </form>
+        </div>
         <% if(locals.session && locals.session.user != null){ %>
             <div id="login">
                 <br/>
                 <br/>
                 <a class="link white" href="/user/<%=locals.session.user_id%>">Profile</a> |
-                <a class="link white" href="/login">Settings</a> |
                 <a class="link white" href="/logout">Logout</a>
             </div>
         <%} else{ %>
@@ -27,8 +33,7 @@
                 <br/>
                 <br/>
                 <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
-                <a class="link white" href="/login">Login</a> |
-                <a class="link white" href="/register">Register</a> <!-- |
+                <a class="link white" rel="modal:open"href="#login_modal">Login</a> <!-- |
                 <a class="link white" href="#">Donate</a> -->
 
             </div>

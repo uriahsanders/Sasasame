@@ -38,7 +38,9 @@ const passageSchema = mongoose.Schema({
     keySchema: String,
     //is this passage a key schema?
     isSchema: Boolean,
-    flagged: Boolean //content warning
+    flagged: Boolean, //content warning
+    //display order within chapter from top to bottom
+    order: Number
 });
 passageSchema.plugin(mongoosePaginate);
 
