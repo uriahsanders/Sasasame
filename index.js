@@ -185,18 +185,32 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
 });
 app.post('/fileStream', function(req, res) {
     var result = '';
-    var dir = '/home/perfect7/Projects/Sasasame/';
+    var dir = __dirname + '/';
     fs.readdir(dir, (err, files) => {
+      var ret = '';
+      var stat2;
+      files.forEach(function(file){
+        stat2 = fs.lstatSync(dir + '/' +file);
+        if(stat2.isDirectory()){
+            file += '/';
+        }
+        ret += scripts.printDir(file);
+      });
       res.send({
-        _id: files,
-        title: files,
+        dirs: ret,
+        type: 'dir',
         path: dir
       });
     });
 });
 app.post('/file', function(req, res) {
     var file = req.body.fileName;
-    var dir = req.body.dir + file;
+    if(req.body.dir[req.body.dir.length - 1] == '/'){
+        var dir = req.body.dir + file;
+    }
+    else{
+        var dir = req.body.dir + '/' + file;
+    }
     var stat = fs.lstatSync(dir);
     if(stat.isFile()){
         fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
@@ -212,9 +226,19 @@ app.post('/file', function(req, res) {
     }
     else if (stat.isDirectory()){
         fs.readdir(dir, (err, files) => {
+          var ret = '';
+          var stat2;
+          files.forEach(function(file){
+            stat2 = fs.lstatSync(dir + '/' +file);
+            if(stat2.isDirectory()){
+                file += '/';
+            }
+            ret += scripts.printDir(file);
+          });
           res.send({
-            data: data,
-            type: 'dir'
+            data: ret,
+            type: 'dir',
+            dir: dir
           });
         });
     }

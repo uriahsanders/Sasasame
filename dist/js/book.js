@@ -29,7 +29,6 @@
 // });
   $( function() {
     $( document ).tooltip();
-    $(document).find('title').remove();
   } );
 //search
 $('#chapter_search').on('keypress', function(e){
@@ -86,7 +85,7 @@ $(document).on('click', '.passage_content', function(){
     $(this).parent().children('.sub_passages').slideToggle();
 });
 var doSomethingThoughtStream = function(){
-
+    window.location.reload();
 };
 var doSomethingFileStream = function(){
     $('#categories').html('');
@@ -95,32 +94,53 @@ var doSomethingFileStream = function(){
         url: '/fileStream',
         data: 1,
         success: function(data){
-            var ret = '';
-            data.title.forEach(function(item){
-                ret += share.printDir(item);
-            });
+            var categories = `
+                <div class="category">
+                    <div>
+                        <a class="link fileStreamChapter">../</a>
+                    </div>
+                </div>` + data.dirs;
             $('#fileStreamPath').val(data.path);
-            $('#categories').html(ret);
+            $('#categories').html(categories);
             $('#passages').html('');
+            $('#parent_chapter_title').text(data.path);
         }
     });
 };
 $(document).on('click', '.fileStreamChapter', function(){
+    var title = $(this).text();
+    var fileStreamPath = $('#fileStreamPath').val();
+    if(title == '../'){
+        fileStreamPath = fileStreamPath.split('/');
+         fileStreamPath.pop();
+         fileStreamPath.pop();
+        fileStreamPath = fileStreamPath.join('/');
+        title = '';
+    }
     $.ajax({
         type: 'post',
         url: '/file',
         data: {
-            dir: $('#fileStreamPath').val() || '',
-            fileName: $(this).text()
+            dir: fileStreamPath || '',
+            fileName: title
         },
         success: function(data){
             if(data.type == 'file'){
                 $('#passages').html(data.data);
             }
             else if(data.type == 'dir'){
-                $('#categories').html(data.data);
+                var categories = `
+                <div class="category">
+                    <div>
+                        <a class="link fileStreamChapter">../</a>
+                    </div>
+                </div>` + data.data;
+                $('#categories').html(categories);
+                $('#fileStreamPath').val(data.dir);
+                $('#passages').html('');
             }
-            fixIconTitles();
+            $('#parent_chapter_title').text(data.dir);
+            
         }
     });
 });
@@ -128,16 +148,15 @@ $('#parent_chapter_title').on('click', function(){
     var something = $(this).text();
     //The File Stream is stored in the File Stream
     //and is very dangerous
-    if(something == 'File Stream'){
+    if(something == 'Thought Stream'){
+        doSomethingFileStream();
+    }
+    else{
         //The Thought Stream is stored in the database
         something = "Thought Stream"
         doSomethingThoughtStream();
+        $(this).text(something);
     }
-    else if(something == 'Thought Stream'){
-        something = 'File Stream';
-        doSomethingFileStream();
-    }
-    $(this).text(something);
 
 });
 $('#mobile_active_close').on('click', function(){
@@ -158,8 +177,8 @@ $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
 });
 $('.star_icon').on('click', function(){
-    $(this).attr('src', function(index, attr){
-        return attr == '/images/ionicons/star-outline.svg' ? '/images/ionicons/star.svg' : '/images/ionicons/star-outline.svg';
+    $(this).attr('name', function(index, attr){
+        return attr == 'star-outline' ? 'star' : 'star-outline';
     });
     $(this).toggleClass('gold_color');
 });
@@ -171,16 +190,16 @@ $('.flag_icon').on('click', function(){
 });
 $('.square_icon').on('click', function(){
     var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
-    $(this).attr('src', function(index, attr){
-        if(attr == '/images/ionicons/square-outline.svg'){
+    $(this).attr('name', function(index, attr){
+        if(attr == 'square-outline'){
             //add passage to queue
             $('#queue_items').append($('.'+parentClass).clone());
-            return '/images/ionicons/checkbox-outline.svg';
+            return 'checkbox-outline';
         }
         else{
             //remove passage from queue
             $('#queue_items .'+parentClass).hide();
-            return '/images/ionicons/square-outline.svg';
+            return 'square-outline';
         }
     });
 });
@@ -254,53 +273,45 @@ $('#more_chapters').on('click', function(){
         });
     }
 });
-window.onscroll = function(ev) {
-    if ((window.innerHeight * 1.5 + window.pageYOffset) >= document.body.offsetHeight) {
-        var chapter = $('#parent_chapter_id').val();
-        var page = parseInt($('#page').val());
-        var isProfile = $('#is_profile').val();
-        if(isProfile != 'true'){
-            $.ajax({
-                type: 'post',
-                url: '/paginate',
-                data: {
-                    page: page,
-                    chapter: chapter
-                },
-                success: function(data){
-                    //Add Passages and Chapters based on data
-                    dataObj = JSON.parse(data);
-                    var passages = dataObj.passages;
-                    var chapters = dataObj.chapters;
-                    var html = '';
-                    passages.docs.forEach(function(passage){
-                        html += share.printPassage(passage);
-                    });
-                    $('#book_of_sasame').append(html);
-                    html = '';
-                    //only if ParentChapter is not Sasame
-                    var parentChapterTitle = $('#parent_chapter_title').text();
-                    if(parentChapterTitle != 'Sasame' && $('#right_side_select').val() === 'chapters'){
-                        chapters.docs.forEach(function(chapter){
-                            html += share.printChapter(chapter);
-                        });
-                        $('#categories').append(html);
-                    }
-                    $('#page').val(++page);
-                    fixIconTitles();
-                }
-            });
-        }
-    }
-};
-fixIconTitles();
-function fixIconTitles(){
-    $('title').each(function(){
-        if($(this).text().split('-')[0] == 'ionicons'){
-            $(this).remove();
-        }
-    });
-}
+// window.onscroll = function(ev) {
+//     if ((window.innerHeight * 1.5 + window.pageYOffset) >= document.body.offsetHeight) {
+//         var chapter = $('#parent_chapter_id').val();
+//         var page = parseInt($('#page').val());
+//         var isProfile = $('#is_profile').val();
+//         if(isProfile != 'true'){
+//             $.ajax({
+//                 type: 'post',
+//                 url: '/paginate',
+//                 data: {
+//                     page: page,
+//                     chapter: chapter
+//                 },
+//                 success: function(data){
+//                     //Add Passages and Chapters based on data
+//                     dataObj = JSON.parse(data);
+//                     var passages = dataObj.passages;
+//                     var chapters = dataObj.chapters;
+//                     var html = '';
+//                     passages.docs.forEach(function(passage){
+//                         html += share.printPassage(passage);
+//                     });
+//                     $('#book_of_sasame').append(html);
+//                     html = '';
+//                     //only if ParentChapter is not Sasame
+//                     var parentChapterTitle = $('#parent_chapter_title').text();
+//                     if(parentChapterTitle != 'Sasame' && $('#right_side_select').val() === 'chapters'){
+//                         chapters.docs.forEach(function(chapter){
+//                             html += share.printChapter(chapter);
+//                         });
+//                         $('#categories').append(html);
+//                     }
+//                     $('#page').val(++page);
+                    
+//                 }
+//             });
+//         }
+//     }
+// };
 
 // var fixmeTop = $('#codeform').offset().top;       // get initial position of the element
 
