@@ -51,8 +51,9 @@
   exports.printPassage = function(passage){
        var ret = '';
         ret += `
-        <div class="passage_`+passage._id+` passage">
-            <div class="passage_author">`;
+        <div class="passage_`+passage._id+` passage">`;
+            ret += `<input class="passage_metadata_`+passage._id+`"type="hidden" value='`+passage.metadata+`'/>`;
+            ret += `<div class="passage_author">`;
             if(passage.author){
                 ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.name+`</a></div>`;
             }else{
@@ -94,9 +95,9 @@
              <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" name="star-outline"></ion-icon>
              <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
-             <ion-icon title="Split"src="images/ionicons/cut-outline.svg"></ion-icon>
              <ion-icon title="Mutate"name="color-palette"></ion-icon>
              <ion-icon title="Play" name="play-circle"></ion-icon>
+             <ion-icon title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
              </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
@@ -158,10 +159,8 @@
              <div class="proteins">
              <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
-             <ion-icon title="Split"src="/images/ionicons/cut-outline.svg"></ion-icon>
              <ion-icon title="Move line from above"src="/images/ionicons/add-outline.svg"></ion-icon>
              <ion-icon title="Move line to above"src="/images/ionicons/remove-outline.svg"></ion-icon>
-
              </div>
             <div class="passage_content" contenteditable="true">`+ content+`</div>
         </div>`;

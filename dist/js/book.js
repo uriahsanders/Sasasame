@@ -68,6 +68,20 @@ $('#add_select').on('change', function(){
         $('#add_passage_icons').show();
     }
 });
+$('[class^=passage_metadata_]').each(function(){
+    var metadata = $(this).val();
+    metadata = JSON.parse(metadata);
+      for (let [key, value] of Object.entries(metadata)) {
+            switch(key){
+                case 'Hyperlink':
+                $(this).siblings('.passage_content').attr('title', value);
+                $(this).siblings('.passage_content').click(function(){
+                    window.open(value, '_blank');
+                });
+                break;
+            }
+        }
+});
 $('[id^=star_]').on('click', function(){
     var _id = $(this).attr('id').split('_')[1];
     $.ajax({
