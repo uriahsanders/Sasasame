@@ -79,6 +79,17 @@ $('[class^=passage_metadata_]').each(function(){
                     window.open(value, '_blank');
                 });
                 break;
+                case 'Color':
+                $(this).siblings('.passage_content').css('color', value);
+                break;
+                case 'CSS':
+                $(this).siblings('.passage_content').css(JSON.parse(value));
+                break;
+                case 'Hidden':
+                $(this).siblings('.passage_content').css('display', 'none');
+                $(this).parent().css('opacity', '0.6');
+                break;
+
             }
         }
 });
