@@ -96,6 +96,21 @@ app.get('/jquery.modal.min.css', function(req, res) {
 app.get('/shared.js', function(req, res) {
     res.sendFile(__dirname + '/shared.js');
 });
+app.get('/ionicons.esm.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/ionicons/dist/ionicons/ionicons.esm.js');
+});
+app.get('/ionicons.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/ionicons/dist/ionicons/ionicons.js');
+});
+app.get('/p-af480238.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/ionicons/dist/ionicons/p-af480238.js');
+});
+app.get('/p-vsz5ekad.entry.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/ionicons/dist/ionicons/p-vsz5ekad.entry.js');
+});
+app.get('/p-763ce0c6.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/ionicons/dist/ionicons/p-763ce0c6.js');
+});
 // Uncomment these lines to password protect while evolving Sasame
 // securedRoutes.get('path1', /* ... */);
 // app.use('/', securedRoutes);

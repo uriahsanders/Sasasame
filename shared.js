@@ -133,13 +133,13 @@
             </div>
             </div>
              <div class="proteins">
-             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"name="settings"></ion-icon></a>
-             <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
-             <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" name="star-outline"></ion-icon>
-             <ion-icon title="Content Warning" class="flag_icon" name="flag"></ion-icon>
+             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings.svg"></ion-icon></a>
+             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
+             <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-outline.svg"></ion-icon>
+             <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
-             <ion-icon title="Mutate"name="color-palette"></ion-icon>
-             <ion-icon title="Play" name="play-circle"></ion-icon>
+             <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
+             <ion-icon title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
              </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
@@ -200,7 +200,7 @@
         ret += `
         <div class="passage">
              <div class="proteins">
-             <ion-icon class="square_icon"title="Add to Queue"name="square-outline"></ion-icon>
+             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
              <ion-icon title="Move line from above"src="/images/ionicons/add-outline.svg"></ion-icon>
              <ion-icon title="Move line to above"src="/images/ionicons/remove-outline.svg"></ion-icon>
