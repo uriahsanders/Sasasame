@@ -4,6 +4,7 @@
     update = update || false;
     var which = (update == false) ? 'add' : 'update';
     var bt_which = (update == false) ? 'Add' : 'Update';
+    var content = (update == false) ? '' : update.content;
     var ret = '';
     ret += `
     <form class="codeform"action="/passage/`+which+`_passage/" method="POST">`;
@@ -23,7 +24,7 @@
                         <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
                         <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-outline.svg"></ion-icon>
                     </div>
-                    <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off"></textarea>
+                    <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
@@ -121,8 +122,7 @@
                     ret += exports.printPropertySelect(key, value);
                 }
               ret += `
-              <br>
-              <p class="passage_delete_`+passage._id+`">Delete passage</p>
+              <p class="passage_delete_`+passage._id+`">DELETE</p>
               <div class="passage_id">`+passage._id+`</div>
             </div>
             </div>
