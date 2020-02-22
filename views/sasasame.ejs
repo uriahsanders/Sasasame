@@ -39,39 +39,15 @@
             </div>
         <%} %>
         <div id="mobile_book_menu_main">
-            <div id="mobile_active_close">
-                X
-            </div>
-            <div class="header">
-                Add Passage
-            </div>
-            <form action="/passage/add_passage/<%=chapter%>" method="POST">
-                <input class="control_input"  name="keys" placeholder="Key 1, Key 2, Key 3, ..." type="text" autocomplete="off" />
-                <textarea class="control_textarea" cols="30" placeholder="" id="" name="passage" rows="10"></textarea>
-                <button class="mobile_control_button" id="mobile_add_passage">Pour Water</button>
-            </form>
-            <div class="header">
-                Add Chapter
-            </div>
-            <form action="/add_chapter/<%=chapter%>" method="GET">
-                <input class="control_input"  name="title" type="text" placeholder="Title"/>
-                <button class="mobile_control_button" id="mobile_add_chapter">Enrich Soil</button>
-            </form>
+            <%-scripts.printAddForm(chapter)%>
             <div class="header">
                 Table of Contents
             </div>
             <div id="mobile_category_list">
                 <%if(chapters){%>
                     <%chapters.forEach(function(f) { %>
-                        <%if(sasasame == 'sasasame'){%>
-                            <%if(!f.chapter){%>
-                                <p class="mobile_category"><a class="basic_link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
-                            <%}%>
-                        <%}%>
-                        <%if(sasasame == 'xyz'){%>
-                            <p class="mobile_category"><a class="basic_link" href="/sasasame/<%=f.title%>/<%=f._id%>"><%= f.title %></a></p>
-                        <%}%>
-                <%});}%>
+                        <%- scripts.printChapter(f) %>
+                <%});} %>
                 <hr/>
                 <br/>
                 <br/>
@@ -92,76 +68,10 @@
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">
-                    <form id="codeform"action="/passage/add_passage/" method="POST">
-                    <div class="header no_cursive">
-                    <select name="type" id="add_select" autocomplete="off">
-                        <option value="passage">Passage</option>
-                        <option value="chapter">Chapter</option>
-                    </select>
-                    </div>
-                    <div id="add_passage_icons"style="text-align:left">
-                        <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
-                        <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                        <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
-                        <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                        <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
-                        <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
-                        <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-outline.svg"></ion-icon>
-                    </div>
-                    <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off"></textarea>
-                    <input name="chapterID" type="hidden" value="<%=chapter%>"/>
-                    <button class="control_button" id="add_passage">Add</button>
-                    <div class="properties">
-                        <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
-                    </div>
-                    </form>
+                    <%-scripts.printAddForm(chapter)%>
                 </div>
                 <div id="property_select">
-                        <div class="property_select">
-                            <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
-                            <!-- For Passages -->
-                            <select name="property_key"class="property_key">
-                                <option>Hyperlink</option>
-                                <option>Color</option>
-                                <option>CSS</option>
-                                <option>Code/Markup</option>
-                                <!-- 
-                                    Ex.
-                                    Javascript
-                                    HTML
-                                    Markdown
-                                    Key Schema
-                                    (Syntax highlight inoperable languages
-                                    Add run button for JS
-                                    Autorun Markdown)
-                                 -->
-                                <option>Access</option>
-                                <option>Key Schema</option>
-                                <!-- User inputs JSON with methods -->
-                                <option>Canvas</option>
-                                <!-- Render passage as canvas -->
-                                <option>Tone</option>
-                                <!-- Render passage via tone.js -->
-                                <option>Hidden</option>
-                                <!-- Hide passage -->
-                                <option>Autorun</option>
-                                <!-- Render unable to modify/delete -->
-                                <option>Permanent</option>
-                            </select>
-                            <!-- For chapters -->
-                            <!-- <select>
-                                <option>Access</option>
-                                <option>Chapter CSS</option>
-                                <option>Passage CSS</option>
-                                <option>Distraction Free Mode</option>
-                                <option>Impress JS</option>
-                                <option>Key Schema</option>
-                                <option>Custom</option>
-                                <option>Autorun</option>
-                            </select> -->
-                            <br><br>
-                            <input name="property_value"class="property_value"type="" name="">
-                        </div>
+                        <%-scripts.printPropertySelect()%>
                     </div>
                 <div  class="control_block" id="book_of_sasame">
                     <div class="header">
@@ -232,50 +142,7 @@
                                 <div id="add_sub_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
                             </div>
                             <div id="sub_property_select">
-                                <div class="property_select">
-                                    <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
-                                    <!-- For Passages -->
-                                    <select>
-                                        <option>Hyperlink</option>
-                                        <option>Color</option>
-                                        <option>CSS</option>
-                                        <option>Code/Markup</option>
-                                        <!-- 
-                                            Ex.
-                                            Javascript
-                                            HTML
-                                            Markdown
-                                            Key Schema
-                                            (Syntax highlight inoperable languages
-                                            Add run button for JS
-                                            Autorun Markdown)
-                                         -->
-                                        <option>Access</option>
-                                        <option>Key Schema</option>
-                                        <!-- User inputs JSON with methods -->
-                                        <option>Canvas</option>
-                                        <!-- Render passage as canvas -->
-                                        <option>Tone</option>
-                                        <!-- Render passage via tone.js -->
-                                        <option>Hidden</option>
-                                        <!-- Hide passage -->
-                                        <option>Autorun</option>
-                                        <option>Reference</option>
-                                        <option>Tags</option>
-                                    </select>
-                                    <!-- For chapters -->
-                                    <!-- <select>
-                                        <option>Chapter CSS</option>
-                                        <option>Passage CSS</option>
-                                        <option>Distraction Free Mode</option>
-                                        <option>Impress JS</option>
-                                        <option>Key Schema</option>
-                                        <option>Custom</option>
-                                        <option>Autorun</option>
-                                    </select> -->
-                                    <br><br>
-                                    <input type="" name="">
-                                </div>
+                                <%-scripts.printPropertySelect()%>
                             </div>
                         </form>
                     </div>
@@ -283,7 +150,7 @@
                     <%if(book){%>
                         <div id="passages">
                         <% book.forEach(function(f) { %>
-                            <%- printPassage(f) %>
+                            <%- scripts.printPassage(f) %>
                         <% }); %>
                         </div>
                         <div id="load_more_passages"class="passage">
@@ -306,7 +173,7 @@
                         </div>
                         <%if(chapters){%>
                             <%chapters.forEach(function(f) { %>
-                                <%- printChapter(f) %>
+                                <%- scripts.printChapter(f) %>
                         <%});} %>
                     </div>
                     <div id="load_more_cats"class="category">Load More</div>

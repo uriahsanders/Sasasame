@@ -23,7 +23,10 @@ const passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     }],
+    //date of creation
     date: {type: Date, default: Date.now},
+    //date last updated
+    updated: {type: Date, default: Date.now},
     //chapter the passage came from
     sourceChapter: String,
     //which users find this passage useful?

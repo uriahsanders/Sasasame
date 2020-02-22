@@ -307,8 +307,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                     chapters: chapters,
                     addPassageAllowed: true,
                     addChapterAllowed: false,
-                    printPassage: scripts.printPassage,
-                    printChapter: scripts.printChapter
+                    scripts: scripts
                 });
             })
             .then(function(err){
@@ -354,8 +353,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                         chapters: chaps,
                         addPassageAllowed: addPassageAllowed,
                         addChapterAllowed: addChapterAllowed,
-                        printPassage: scripts.printPassage,
-                        printChapter: scripts.printChapter
+                        scripts: scripts
                     });
                 })
                 .then(function(err){

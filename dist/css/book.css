@@ -437,7 +437,7 @@
 }
 .passage_canvas{
     display: none;
-    border: 1px solid blue;
+    padding-left: 20px;
 }
 .category_delete{
     float: left;

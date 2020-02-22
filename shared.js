@@ -1,6 +1,41 @@
 //shared code for server/client
 (function(exports){
+  exports.printAddForm = function(chapter, update){
+    update = update || false;
+    var which = (update == false) ? 'add' : 'update';
+    var bt_which = (update == false) ? 'Add' : 'Update';
+    var ret = '';
+    ret += `
+    <form class="codeform"action="/passage/`+which+`_passage/" method="POST">`;
+                    if(!update){
+                      ret += `<div class="header no_cursive"><select name="type" class="add_select" autocomplete="off">
+                        <option value="passage">Passage</option>
+                        <option value="chapter">Chapter</option>
+                    </select></div>`;
+                    }
+                    ret += `
+                    <div class="add_passage_icons"style="text-align:left">
+                        <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
+                        <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
+                        <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
+                        <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
+                        <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+                        <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
+                        <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-outline.svg"></ion-icon>
+                    </div>
+                    <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off"></textarea>
+                    <input name="chapterID" type="hidden" value="<%=chapter%>"/>
+                    <button class="control_button" class="add_passage">`+bt_which+`</button>
+                    <div class="properties">
+                        <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
+                    </div>
+                    </form>
+    `;
+    return ret;
+  };
   exports.printPropertySelect = function(key, value){
+    key = key || 'Custom';
+    value = value || '';
     return `
 <div class="property_select">
     <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
@@ -10,7 +45,7 @@
         <option>Hyperlink</option>
         <option>Color</option>
         <option>CSS</option>
-        <option>Code/Markup</option>
+        <option>Code</option>
         <!-- 
             Ex.
             Javascript
@@ -63,28 +98,30 @@
                 <p>PASSAGE OPTIONS</p>
                 <div class="passage_details">`;
                     //date.toDateString() in future
-                    ret += `<p>Posted: `+passage.date+`</p>`;
+                    ret += `<p>Created: `+passage.date+`</p>`;
                     if(passage.author){
                         ret += `<p>By: `+passage.author.name+` </p>`;
                     }else{
                         ret += `<p>By: Anonymous</p>`;
                     }
-                    ret += `<p>`+passage.stars.length+` Stars </p>
-                </div>`;
-              ret += `<textarea class="control_textarea">`+passage.content+`</textarea>
-              <br><br>
-              `;
+                    ret += `<p>`+passage.stars.length+` Stars </p>`;
+                    var chapterID = '';
+                    if(passage.chapter){
+                      chapterID = passage.chapter._id;
+                      ret += `<p>Chapter:`+passage.chapter.title+`</p>`;
+                    }
+                ret += `</div>`;
+              ret += exports.printAddForm(chapterID, {
+                content: passage.content,
+                flagged: passage.flagged
+              });
               var i = 0;
               var metadata = JSON.parse(passage.metadata);
               for (let [key, value] of Object.entries(metadata)) {
                     ret += exports.printPropertySelect(key, value);
                 }
               ret += `
-              <div class="properties">
-                    <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
-                </div>
               <br>
-              <p class="passage_update">Update passage</p>
               <p class="passage_delete_`+passage._id+`">Delete passage</p>
               <div class="passage_id">`+passage._id+`</div>
             </div>
@@ -102,7 +139,7 @@
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
             <div class="passage_content">`+ passage.content+`</div>
-            <canvas class="passage_canvas"></canvas>
+            <canvas class="passage_canvas" height="100px"></canvas>
             <div class="sub_passages">`;
                 passage.passages.forEach(function(sub){
                     ret += `<div class="sub_passage">

@@ -60,12 +60,12 @@ $('#login_form').on('submit', function(e){
         }
     });
 });
-$('#add_select').on('change', function(){
+$('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
-        $('#add_passage_icons').hide();
+        $(this).parent().siblings('.add_passage_icons').hide();
     }
     else{
-        $('#add_passage_icons').show();
+        $(this).parent().siblings('.add_passage_icons').show();
     }
 });
 $('[class^=passage_metadata_]').each(function(){
@@ -89,6 +89,40 @@ $('[class^=passage_metadata_]').each(function(){
                 $(this).siblings('.passage_content').css('display', 'none');
                 $(this).parent().css('opacity', '0.6');
                 break;
+                case 'Canvas':
+                //circles, squares/rectangles
+                //shape.color.x.y.l.w (value = name)or
+                //name.x.y
+                var canvas = $(this).siblings('.passage_canvas');
+                canvas.css('display', 'block');
+                var content = $(this).siblings('.passage_content').text();
+                var ctx = canvas[0].getContext('2d');
+                var name = value;
+                var vars = content.split('.');
+                var length = vars.length;
+                if(length == 6){
+                    var shape = vars[0];
+                    var color = vars[1];
+                    var x = vars[2];
+                    var y = vars[3];
+                    var l = vars[4];
+                    var w = vars[5];
+                    ctx.fillStyle = color;
+                    if(shape == 'rectangle'){
+                        ctx.rect(x, y, l, w);
+                        ctx.fill();
+                    }
+                    else if(shape == 'ellipse'){
+                        ctx.arc(x, y, l, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+                else if(length == 3){
+                    //Get passage content of canvas with same name
+                    var x = vars[1];
+                    var y = vars[2];
+                }
+                
 
             }
         }
