@@ -260,19 +260,19 @@ app.post('/paginate', function(req, res){
     let page = req.body.page;
     let which = req.body.which; //chap or passage
     let search = req.body.search;
-    if(search == ''){
-        var chapterFind = {};
-    }
-    else{
-        var chapterFind = {
-            title: new RegExp(''+search+'', "i")
-        };
-    }
     //what category is the user looking at?
     let chapter = req.body.chapter;
     let find = {chapter: chapter.trim()};
     if(chapter.trim() == 'Sasame'){
         find = {};
+    }
+    if(search == ''){
+        var chapterFind = find;
+    }
+    else{
+        var chapterFind = {
+            title: new RegExp(''+search+'', "i")
+        };
     }
     if(which == 'passage_load'){
         Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
