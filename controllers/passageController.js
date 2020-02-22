@@ -39,29 +39,42 @@ module.exports = {
             });
         });
     },
-    updatePassage: function(req, res) {
-        let passageID = req.body._id;
-        let content = req.body.content;
-        //remove white space and separate by comma
-        // let keys = req.body.keys.replace(/\s/g,'').split(',');
-        let keys = req.body.keys;
+    updatePassage: function(req, res, callback) {
+        var passageID = req.body._id;
+        var chapterID = req.body.chapterID;
+        var type = req.body.type;
+        var user = req.session.user_id || null;
+        var content = req.body.passage || '';
+        var property_key = req.body['property_key[]'] || req.body.property_key;
+        var property_value = req.body['property_value[]'] || req.body.property_value;
+        //build metadata from separate arrays
+        var metadata = {};
+        var i = 0;
+        if(Array.isArray(property_key)){
+            property_key.forEach(function(key){
+                metadata[key] = property_value[i++];
+            });
+        }
+        else{
+            metadata[property_key] = property_value;
+        }
         Passage.updateOne({_id: passageID.trim()}, {
-            keys: keys,
-            content: content
+            content: content,
+            metadata: JSON.stringify(metadata)
         }, function(err, affected, resp){
             if(err){
                 console.log(err);
             }
-            res.send(resp);
+            callback();
         });
     },
-    deletePassage: function(req, res) {
+    deletePassage: function(req, res, callback) {
         let passageID = req.body._id;
         Passage.deleteOne({ _id: passageID.trim() }, function(err) {
             if(err){
                 console.log(err);
             }
-            res.send('The passage has been deleted.');
+            callback();
         });
     }
 }

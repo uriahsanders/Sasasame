@@ -416,12 +416,9 @@ app.post(/\/add_passage\/?/, (req, res) => {
     }
 });
 app.post(/\/delete_passage\/?/, (req, res) => {
-    var passageID = req.body._id;
-    Passage.deleteOne({_id: passageID.trim()}, function(err){
-        if(err){
-            console.log(err);
-        }
-        res.send('Deleted.');
+    var backURL=req.header('Referer') || '/';
+    passageController.deletePassage(req, res, function(){
+        res.redirect(backURL);
     });
 });
 app.post(/\/delete_category\/?/, (req, res) => {
@@ -477,19 +474,9 @@ app.post(/star/, (req, res) => {
 
 });
 app.post(/\/update_passage\/?/, (req, res) => {
-    var passageID = req.body._id;
-    var content = req.body.content;
-    //remove white space and separate by comma
-    // var keys = req.body.keys.replace(/\s/g,'').split(',');
-    var keys = req.body.keys;
-    Passage.updateOne({_id: passageID.trim()}, {
-        keys: keys,
-        content: content
-    }, function(err, affected, resp){
-        if(err){
-            console.log(err);
-        }
-        res.send(resp);
+    passageController.updatePassage(req, res, function(){
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
     });
 });
 

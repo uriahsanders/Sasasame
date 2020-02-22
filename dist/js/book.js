@@ -179,6 +179,19 @@ var doSomethingFileStream = function(){
         }
     });
 };
+$(document).on('click', '[class^=passage_delete_]', function(){
+    var _id = $(this).attr('class').split('_')[2];
+    $.ajax({
+        type: 'post',
+        url: '/delete_passage',
+        data: {
+            _id: _id
+        },
+        success: function(data){
+            window.location.reload();
+        }
+    });
+});
 $(document).on('click', '.fileStreamChapter', function(){
     var title = $(this).text();
     var fileStreamPath = $('#fileStreamPath').val();
