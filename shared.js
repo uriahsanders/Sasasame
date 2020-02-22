@@ -45,8 +45,8 @@
 <div class="property_select">
     <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
     <!-- For Passages -->
-    <select name="property_key"class="property_key">
-        <option>`+key+`</option>
+    <select name="property_key"class="property_key" autocomplete="off">
+        <option selected="selected">`+key+`</option>
         <option>Hyperlink</option>
         <option>Color</option>
         <option>CSS</option>
