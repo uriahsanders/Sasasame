@@ -255,41 +255,41 @@ app.get('/ppe', function(req, res) {
     res.render('ppe', {session: req.session});
 });
 
-//make app.post for pagination
-//call same queries from function
-//but with changing parameters in paginate
 //simply return new object list for client to add into html
 app.post('/paginate', function(req, res){
-    let passagePage = req.body.passagePage;
-    let chapterPage = req.body.chapterPage;
-    let ret = {};
+    let page = req.body.page;
+    let which = req.body.which; //chap or passage
+    let search = req.body.search;
+    if(search == ''){
+        var chapterFind = {};
+    }
+    else{
+        var chapterFind = {
+            title: new RegExp(''+search+'', "i")
+        };
+    }
     //what category is the user looking at?
     let chapter = req.body.chapter;
     let find = {chapter: chapter.trim()};
     if(chapter.trim() == 'Sasame'){
         find = {};
     }
-    //now properly return both Passages and Chapters in this Chapter
-    Passage.paginate(find, {page: passagePage, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
-    .then(function(passages){
-        Chapter.paginate(find, {page: chapterPage, limit: DOCS_PER_PAGE, sort: 'stars'})
-        .then(function(chapters){
-            ret.passages = passages;
-            ret.chapters = chapters;
-            if(ret.chapters && ret.chapters.docs[0] && ret.chapters.docs[0].chapter){
-                if(typeof ret.chapters.docs[0].chapter == 'undefined' || typeof ret.chapters.docs[0].level != 'undefined'){
-                    if(ret.chapters.docs[0].level == 1){
-                        ret.chapters = {};
-                    }
-                }
-            }
-            res.send(JSON.stringify(ret));
+    if(which == 'passage_load'){
+        Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
+        .then(function(passages){
+            res.send(JSON.stringify(passages));
         }).then(function(err){
             if(err) console.log(err);
         });
-    }).then(function(err){
-        if(err) console.log(err);
-    });
+    }
+    else if(which == 'chapter_load'){
+        Chapter.paginate(chapterFind, {page: page, limit: DOCS_PER_PAGE, sort: 'stars', select: 'title'})
+        .then(function(chapters){
+            res.send(JSON.stringify(chapters));
+        }).then(function(err){
+            if(err) console.log(err);
+        });
+    }
 });
 app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
@@ -347,8 +347,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
         .exec()
         .then(function(passages){
             //get the parent chapter 
-            //(NEEDS TO BE REWORKED, CHAPTERS NO LONGER HAVE SUBCHAPTERS)
             Chapter.findOne({_id:urlEnd})
+            .select('title')
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(chapter){
@@ -356,7 +356,7 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                 Chapter.find()
                 .select('title')
                 .sort('stars')
-                .limit(DOCS_PER_PAGE * 4)
+                .limit(DOCS_PER_PAGE)
                 .exec()
                 .then(function(chaps){
                     res.render("sasasame", {
@@ -459,19 +459,7 @@ app.post(/search/, (req, res) => {
         let html = '';
         if(chapters){
             chapters.forEach(function(f){
-                html += `
-                <div class="category">
-                    <!-- For Future
-                    <div class="chapter_flag">
-                        <ion-icon title="Content Warning" name="flag"></ion-icon>
-                    </div>
-                     -->
-                    <div>
-                        <a class="link" href="/sasasame/`+f.title+`/`+f._id+`">`
-                        +f.title+`</a>
-                    </div>
-                    <div class="category_id">`+f._id+`</div>
-                </div>`;
+                html += scripts.printChapter(f);
             });
         }
         res.send(html);

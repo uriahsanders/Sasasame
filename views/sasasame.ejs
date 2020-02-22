@@ -92,8 +92,7 @@
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
-                                <input id="passage_page" type="hidden" value="2" autocomplete="off"/>
-                                <input id="chapter_page" type="hidden" value="2" autocomplete="off"/>
+                                <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <div id="chapter_settings" class="modal">
                               <p>CHAPTER OPTIONS</p>
                               <p><input class="modal_input"value="<%=parentChapter.title%>"type="" name=""></p>
@@ -156,7 +155,7 @@
                             <%- scripts.printPassage(f) %>
                         <% }); %>
                         </div>
-                        <div id="load_more_passages"class="passage">
+                        <div id="passage_load" class="load_more passage">
                             Load More
                         </div>
                     <%}%>
@@ -170,6 +169,7 @@
                         </select>
                     </div>
                     <!-- Chapters -->
+                    <input id="search_val"type="hidden">
                     <div id="categories">
                         <div>
                             <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
@@ -179,7 +179,7 @@
                                 <%- scripts.printChapter(f) %>
                         <%});} %>
                     </div>
-                    <div id="load_more_cats"class="category">Load More</div>
+                    <div id="chapter_load"class="load_more category">Load More</div>
                     <!-- Brief from #passages via JS -->
                     <!-- Queue -->
                     <div id="queue">

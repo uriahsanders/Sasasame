@@ -556,6 +556,6 @@ select::-ms-expand {
 .fileStreamChapter{
     cursor: pointer;
 }
-#load_more_passages, #load_more_cats{
+.load_more{
     cursor: pointer;
 }

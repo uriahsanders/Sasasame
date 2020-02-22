@@ -32,6 +32,7 @@
   } );
 //search
 $('#chapter_search').on('keypress', function(e){
+    $('#search_val').val($(this).val());
     if(e.which == 13){
         $.ajax({
             type: 'post',
@@ -40,7 +41,7 @@ $('#chapter_search').on('keypress', function(e){
                 title: $(this).val()
             },
             success: function(data){
-                $('.category').remove();
+                $('.category').not('#chapter_load').remove();
                 $('#categories').append(data);
             }
         });
@@ -140,7 +141,6 @@ $('[id^=star_]').on('click', function(){
         }
     });
 });
-
 $('.add_property').on('click', function(){
     $(this).parent().prepend($('#property_select').html());
 });
@@ -333,41 +333,38 @@ $('#right_side_select').on('change', function(){
             break;
     }
 });
-$('#more_chapters').on('click', function(){
+$('.load_more').on('click', function(){
     var chapter = $('#parent_chapter_id').val();
-    var passagePage = parseInt($('#passage_page').val());
-    var chapterPage = parseInt($('#chapter_page').val());
+    var page = parseInt($('#page').val());
     var isProfile = $('#is_profile').val();
+    var which = $(this).attr('id');
     if(isProfile != 'true'){
         $.ajax({
             type: 'post',
             url: '/paginate',
             data: {
-                passagePage: passagePage,
-                chapterPage: chapterPage,
-                chapter: chapter
+                page: page,
+                chapter: chapter,
+                which: which,
+                search: $('#search_val').val()
             },
             success: function(data){
-                //Add Passages and Chapters based on data
-                dataObj = JSON.parse(data);
-                var passages = dataObj.passages;
-                var chapters = dataObj.chapters;
                 var html = '';
-                passages.docs.forEach(function(passage){
-                    html += share.printPassage(passage);
-                });
-                $('#book_of_sasame').append(html);
-                html = '';
-                //only if ParentChapter is not Sasame
-                var parentChapterTitle = $('#parent_chapter_title').text();
-                if(parentChapterTitle != 'Sasame' && $('#right_side_select').val() === 'chapters'){
+                if(which == 'passage_load'){
+                    var passages = JSON.parse(data);
+                    passages.docs.forEach(function(passage){
+                        html += share.printPassage(passage);
+                    });
+                    $('#passages').append(html);
+                }
+                else if(which == 'chapter_load'){
+                    var chapters = JSON.parse(data);
                     chapters.docs.forEach(function(chapter){
                         html += share.printChapter(chapter);
                     });
                     $('#categories').append(html);
                 }
-                $('#passage_page').val(++passagePage);
-                $('#chapter_page').val(++chapterPage);
+                $('#page').val(++page);
             }
         });
     }
