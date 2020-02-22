@@ -89,7 +89,7 @@ $('[class^=passage_metadata_]').each(function(){
                 break;
                 case 'Hidden':
                 $(this).siblings('.passage_content').css('display', 'none');
-                $(this).parent().css('opacity', '0.6');
+                $(this).siblings().not('.passage_canvas').css('opacity', '0.6');
                 break;
                 case 'Canvas':
                 //circles, squares/rectangles
@@ -102,37 +102,38 @@ $('[class^=passage_metadata_]').each(function(){
                 var name = value;
                 // console.log(name);
                 $(this).siblings('.canvas_name').attr('id', '#canvas_name_'+value);
-                var vars = content.split('.');
-                var length = vars.length;
-                if(length == 6){
-                    var shape = vars[0];
-                    var color = vars[1];
-                    var x = vars[2];
-                    var y = vars[3];
-                    var l = vars[4];
-                    var w = vars[5];
-                    ctx.fillStyle = color;
-                    if(shape == 'rectangle'){
-                        ctx.rect(x, y, l, w);
-                        ctx.fill();
+                var lines = content.split("\n");
+                lines.forEach(function(item, index){
+                    var vars = item.split('.');
+                    var length = vars.length;
+                    if(length == 6){
+                        var shape = vars[0];
+                        var color = vars[1];
+                        var x = vars[2];
+                        var y = vars[3];
+                        var l = vars[4];
+                        var w = vars[5];
+                        console.log(color);
+                        ctx.fillStyle = color;
+                        if(shape == 'rectangle'){
+                            ctx.fillRect(x, y, l, w);
+                        }
+                        else if(shape == 'ellipse'){
+                            ctx.arc(x, y, l, 0, 2 * Math.PI);
+                            ctx.fill();
+                        }
                     }
-                    else if(shape == 'ellipse'){
-                        ctx.arc(x, y, l, 0, 2 * Math.PI);
-                        ctx.fill();
+                    else if(length == 3){
+                        //Get passage content of canvas with same name
+                        var x = vars[1];
+                        var y = vars[2];
+                        var find_name = vars[0];
+                        //Find first canvas that has the same name
+                        var image = $('#canvas_name_' + find_name).siblings('.passage_canvas')[0];
+                        var imageContext = image.getContext('2d');
+                        ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
                     }
-                }
-                else if(length == 3){
-                    //Get passage content of canvas with same name
-                    var x = vars[1];
-                    var y = vars[2];
-                    var find_name = vars[0];
-                    //Find first canvas that has the same name
-                    var image = $('#canvas_name_' + find_name).siblings('.passage_canvas')[0];
-                    var imageContext = image.getContext('2d');
-                    ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
-                }
-                
-
+                });
             }
         }
 });
