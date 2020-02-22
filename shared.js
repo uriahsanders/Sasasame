@@ -146,6 +146,7 @@
                 <div class="passage_chapter">Sasame</div>
             <div class="passage_content">`+ passage.content+`</div>
             <canvas class="passage_canvas" height="100px"></canvas>
+            <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
             <div class="sub_passages">`;
                 passage.passages.forEach(function(sub){
                     ret += `<div class="sub_passage">

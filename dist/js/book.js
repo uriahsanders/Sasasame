@@ -71,6 +71,7 @@ $('.add_select').on('change', function(){
 });
 $('[class^=passage_metadata_]').each(function(){
     var metadata = $(this).val();
+    var _id = $(this).attr('class').split('_')[2];
     metadata = JSON.parse(metadata);
       for (let [key, value] of Object.entries(metadata)) {
             switch(key){
@@ -99,6 +100,8 @@ $('[class^=passage_metadata_]').each(function(){
                 var content = $(this).siblings('.passage_content').text();
                 var ctx = canvas[0].getContext('2d');
                 var name = value;
+                // console.log(name);
+                $(this).siblings('.canvas_name').attr('id', '#canvas_name_'+value);
                 var vars = content.split('.');
                 var length = vars.length;
                 if(length == 6){
@@ -122,6 +125,11 @@ $('[class^=passage_metadata_]').each(function(){
                     //Get passage content of canvas with same name
                     var x = vars[1];
                     var y = vars[2];
+                    var find_name = vars[0];
+                    //Find first canvas that has the same name
+                    var image = $('#canvas_name_' + find_name).siblings('.passage_canvas')[0];
+                    var imageContext = image.getContext('2d');
+                    ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
                 }
                 
 
