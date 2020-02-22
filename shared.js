@@ -24,7 +24,7 @@
                         <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-outline.svg"></ion-icon>
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off"></textarea>
-                    <input name="chapterID" type="hidden" value="<%=chapter%>"/>
+                    <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
                         <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
