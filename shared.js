@@ -1,7 +1,8 @@
 //shared code for server/client
 (function(exports){
-  exports.printAddForm = function(chapter, update){
+  exports.printAddForm = function(chapter, update, after){
     update = update || false;
+    after = after || '';
     var which = (update == false) ? 'add' : 'update';
     var bt_which = (update == false) ? 'Add' : 'Update';
     var content = (update == false) ? '' : update.content;
@@ -32,6 +33,7 @@
                     <div class="properties">
                         <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
                     </div>
+                    `+after+`
                     </form>
     `;
     return ret;
@@ -114,16 +116,17 @@
                       ret += `<p>Chapter:`+passage.chapter.title+`</p>`;
                     }
                 ret += `</div>`;
+              var i = 0;
+              var after = '<br>';
+              var metadata = JSON.parse(passage.metadata);
+              for (let [key, value] of Object.entries(metadata)) {
+                    after += exports.printPropertySelect(key, value);
+                }
               ret += exports.printAddForm(chapterID, {
                 content: passage.content,
                 flagged: passage.flagged,
                 _id: passage._id
-              });
-              var i = 0;
-              var metadata = JSON.parse(passage.metadata);
-              for (let [key, value] of Object.entries(metadata)) {
-                    ret += exports.printPropertySelect(key, value);
-                }
+              }, after);
               ret += `
               <p class="passage_delete_`+passage._id+`">DELETE</p>
               <div class="passage_id">`+passage._id+`</div>
