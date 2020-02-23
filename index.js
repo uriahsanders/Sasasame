@@ -445,7 +445,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
 app.post(/\/delete_passage\/?/, (req, res) => {
     var backURL=req.header('Referer') || '/';
     passageController.deletePassage(req, res, function(){
-        res.redirect(backURL);
+        res.send(backURL);
     });
 });
 app.post(/\/delete_category\/?/, (req, res) => {
