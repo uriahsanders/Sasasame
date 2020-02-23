@@ -73,6 +73,7 @@ $('[class^=passage_metadata_]').each(function(){
     var metadata = $(this).val();
     var _id = $(this).attr('class').split('_')[2];
     metadata = JSON.parse(metadata);
+    var content = $(this).siblings('.passage_content').text();
       for (let [key, value] of Object.entries(metadata)) {
             switch(key){
                 case 'Hyperlink':
@@ -91,13 +92,25 @@ $('[class^=passage_metadata_]').each(function(){
                 $(this).siblings('.passage_content').css('display', 'none');
                 $(this).siblings().not('.passage_canvas').css('opacity', '0.6');
                 break;
+                case 'Code':
+                switch(value){
+                    case 'Markdown':
+                    $(this).siblings('.passage_content').html(marked(content));
+                    break;
+                    default:
+                    //syntax highlight
+                    $(this).siblings('.passage_content').html('<pre><code class="language-'+value+'">'+content+'</code></pre>');
+                    document.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightBlock(block);
+                      });
+                    }
+                break;
                 case 'Canvas':
                 //circles, squares/rectangles
                 //shape.color.x.y.l.w (value = name)or
                 //name.x.y
                 var canvas = $(this).siblings('.passage_canvas');
                 canvas.css('display', 'block');
-                var content = $(this).siblings('.passage_content').text();
                 var ctx = canvas[0].getContext('2d');
                 var name = value;
                 // console.log(name);
