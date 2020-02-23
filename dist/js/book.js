@@ -114,18 +114,15 @@ $('[class^=passage_metadata_]').each(function(){
                     });
                 });
                 break;
+                case 'Markdown':
+                $(this).siblings('.passage_content').html(marked(content));
+                break;
                 case 'Code':
-                switch(value){
-                    case 'Markdown':
-                    $(this).siblings('.passage_content').html(marked(content));
-                    break;
-                    default:
-                    //syntax highlight
-                    $(this).siblings('.passage_content').html('<pre><code class="language-'+value+'">'+content+'</code></pre>');
-                    document.querySelectorAll('pre code').forEach((block) => {
-                        hljs.highlightBlock(block);
-                      });
-                    }
+                //syntax highlight
+                $(this).siblings('.passage_content').html('<pre><code class="language-'+value+'">'+content+'</code></pre>');
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                  });
                 break;
                 case 'Canvas':
                 //circles, squares/rectangles
@@ -141,7 +138,7 @@ $('[class^=passage_metadata_]').each(function(){
                 lines.forEach(function(item, index){
                     var vars = item.split('.');
                     var length = vars.length;
-                    if(length == 6){
+                    if(length == 6 || length == 5){
                         var shape = vars[0];
                         var color = vars[1];
                         var x = vars[2];
@@ -150,12 +147,19 @@ $('[class^=passage_metadata_]').each(function(){
                         var w = vars[5];
                         console.log(color);
                         ctx.fillStyle = color;
+                        ctx.strokeStyle = color;
                         if(shape == 'rectangle'){
                             ctx.fillRect(x, y, l, w);
                         }
-                        else if(shape == 'ellipse'){
+                        else if(shape == 'circle'){
                             ctx.arc(x, y, l, 0, 2 * Math.PI);
                             ctx.fill();
+                        }
+                        else if(shape == 'line'){
+                            ctx.beginPath();
+                            ctx.moveTo(x, y);
+                            ctx.lineTo(l, w);
+                            ctx.stroke(); 
                         }
                     }
                     else if(length == 3){
@@ -305,6 +309,24 @@ $('.category').on('mouseout', function(){
 });
 $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
+});
+$(document).on('change', '.property_key', function(){
+    var placeholder = '';
+    switch($(this).val()){
+        case 'Color':
+            placeholder = 'Enter a Color';
+            break;
+        case 'Hidden':
+            placeholder = 'True/False';
+            break;
+        case 'Canvas':
+            placeholder = 'shape.color.x.y.l.w or reference.x.y';
+            break;
+        case 'Tone':
+            placeholder = 'frequency.type.seconds';
+            break;
+    }
+    $(this).siblings('.property_value').attr('placeholder',placeholder);
 });
 $('.star_icon').on('click', function(){
     $(this).attr('src', function(index, attr){

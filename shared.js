@@ -39,11 +39,12 @@
     return ret;
   };
   exports.printPropertySelect = function(key, value){
-    key = key || 'Custom';
+    key = key || 'Color';
     value = value || '';
     return `
 <div class="property_select">
-    <ion-icon class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
+    <ion-icon title="Remove"class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
+    <ion-icon title="Help"class="property_info"src="/images/ionicons/help-circle-outline.svg"></ion-icon> 
     <!-- For Passages -->
     <select name="property_key"class="property_key" autocomplete="off">
         <option selected="selected">`+key+`</option>
@@ -51,16 +52,7 @@
         <option>Color</option>
         <option>CSS</option>
         <option>Code</option>
-        <!-- 
-            Ex.
-            Javascript
-            HTML
-            Markdown
-            Key Schema
-            (Syntax highlight inoperable languages
-            Add run button for JS
-            Autorun Markdown)
-         -->
+        <option>Markdown</option>
         <option>Access</option>
         <option>Key Schema</option>
         <!-- User inputs JSON with methods -->
