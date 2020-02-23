@@ -92,6 +92,28 @@ $('[class^=passage_metadata_]').each(function(){
                 $(this).siblings('.passage_content').css('display', 'none');
                 $(this).siblings().not('.passage_canvas').css('opacity', '0.6');
                 break;
+                case 'Tone':
+                $(this).siblings('.proteins').children('.passage_play').on('click', function(){
+                    var lines = content.split("\n");
+                    lines.forEach(function(item, index){
+                        var context=new AudioContext()
+                        var vars = item.split('.');
+                        var frequency = vars[0];
+                        var type = vars[1];
+                        var time = vars[2];
+                        var o=null;
+                        var g=null;
+                        o=context.createOscillator();
+                        g=context.createGain();
+                        o.type=type;
+                        o.connect(g);
+                        o.frequency.value=frequency;
+                        g.connect(context.destination);
+                        o.start(0);
+                        g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime+time);
+                    });
+                });
+                break;
                 case 'Code':
                 switch(value){
                     case 'Markdown':

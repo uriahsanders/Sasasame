@@ -521,7 +521,7 @@ select::-ms-expand {
 .sub_passages{
     display: none;
 }
-.image_upload_icon, .mic_record_icon, .flag_icon, .icon_top_add{
+.image_upload_icon, .mic_record_icon, .flag_icon, .icon_top_add, .passage_play{
     cursor: pointer;
 }
 .chapter_flag{
@@ -531,6 +531,9 @@ select::-ms-expand {
 }
 .crimson_color{
     color: crimson;
+}
+.gold_color{
+    color: gold;
 }
 .add_sub_passage{
     margin-top: 25px;

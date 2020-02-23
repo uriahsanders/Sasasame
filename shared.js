@@ -65,9 +65,8 @@
         <option>Key Schema</option>
         <!-- User inputs JSON with methods -->
         <option>Canvas</option>
-        <!-- Render passage as canvas -->
+        <option>Animation</option>
         <option>Tone</option>
-        <!-- Render passage via tone.js -->
         <option>Hidden</option>
         <!-- Hide passage -->
         <option>Autorun</option>
@@ -139,7 +138,7 @@
              <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
              <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
-             <ion-icon title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
+             <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
              </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
