@@ -350,6 +350,7 @@ $('.square_icon').on('click', function(){
 $('#right_side_select').on('change', function(){
     switch($(this).val()){
         case 'chapters':
+            $('#chapter_load').show();
             $('#queue').hide();
             $('#categories').show();
             $('#right_passages').remove();
@@ -358,6 +359,7 @@ $('#right_side_select').on('change', function(){
             break;
         case 'brief':
             $('#queue').hide();
+            $('#chapter_load').hide();
             $('#categories').show();
             $('.category').hide();
             $('#chapter_search').hide();
@@ -370,6 +372,7 @@ $('#right_side_select').on('change', function(){
             $('#right_passages').sortable();
             break;
         case 'queue':
+            $('#chapter_load').hide();
             $('#categories').hide();
             $('#right_passages').remove();
             $('#queue').show();
