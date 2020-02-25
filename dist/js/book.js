@@ -442,63 +442,53 @@ $('.load_more').on('click', function(){
         });
     }
 });
-// window.onscroll = function(ev) {
-//     if ((window.innerHeight * 1.5 + window.pageYOffset) >= document.body.offsetHeight) {
-//         var chapter = $('#parent_chapter_id').val();
-//         var page = parseInt($('#page').val());
-//         var isProfile = $('#is_profile').val();
-//         if(isProfile != 'true'){
-//             $.ajax({
-//                 type: 'post',
-//                 url: '/paginate',
-//                 data: {
-//                     page: page,
-//                     chapter: chapter
-//                 },
-//                 success: function(data){
-//                     //Add Passages and Chapters based on data
-//                     dataObj = JSON.parse(data);
-//                     var passages = dataObj.passages;
-//                     var chapters = dataObj.chapters;
-//                     var html = '';
-//                     passages.docs.forEach(function(passage){
-//                         html += share.printPassage(passage);
-//                     });
-//                     $('#book_of_sasame').append(html);
-//                     html = '';
-//                     //only if ParentChapter is not Sasame
-//                     var parentChapterTitle = $('#parent_chapter_title').text();
-//                     if(parentChapterTitle != 'Sasame' && $('#right_side_select').val() === 'chapters'){
-//                         chapters.docs.forEach(function(chapter){
-//                             html += share.printChapter(chapter);
-//                         });
-//                         $('#categories').append(html);
-//                     }
-//                     $('#page').val(++page);
-                    
-//                 }
-//             });
-//         }
-//     }
-// };
-
-// var fixmeTop = $('#codeform').offset().top;       // get initial position of the element
-
-// $(window).scroll(function() {                  // assign scroll event listener
-
-//     var currentScroll = $(window).scrollTop() + 20; // get current position
-
-//     if (currentScroll >= fixmeTop) {           // apply position: fixed if you
-//         $('#codeform').css({                      // scroll to that element or below it
-//             position: 'fixed',
-//             top: '20px',
-//             width: '24%'
-//         });
-//     } else {                                   // apply position: static
-//         $('#codeform').css({                      // if you scroll above it
-//             position: 'relative',
-//             width: 'auto'
-//         });
-//     }
-
-// });
+function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+}
+function replaceSelectedText(replacementText) {
+    var sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(document.createTextNode(replacementText));
+        }
+    } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange();
+        range.text = replacementText;
+    }
+}
+//if in FileStream and Filetype is JS
+$(document).on('keydown', function(e){
+    if(e.keyCode == 191 && e.ctrlKey){
+        var text = getSelectionText().split('\n');
+        var ret = [];
+        text.forEach(function(line){
+            if(line[0] == '/' && line[1] == '/'){
+                //uncomment
+                if(line[2] == ' '){
+                    line = line.substring(3);
+                }else{
+                    line = line.substring(2);
+                }
+            }
+            else{
+                //comment
+                line = '// ' + line;
+            }
+            ret.push(line);
+        });
+        replaceSelectedText(ret.join("\n"))
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+        e.preventDefault();
+    }
+});
