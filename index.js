@@ -455,8 +455,8 @@ app.post(/\/add_passage\/?/, (req, res) => {
     else{
         metadata[property_key] = property_value;
     }
-    var callback = function(){
-        res.redirect(backURL);
+    var callback = function(data){
+        res.send(scripts.printPassage(data));
     };
     if(type == 'passage'){
         passageController.addPassage({

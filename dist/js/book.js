@@ -1,32 +1,32 @@
 //Add passages
-// $.fn.serializeObject = function() {
-//     var o = {};
-//     var a = this.serializeArray();
-//     $.each(a, function() {
-//         if (o[this.name]) {
-//             if (!o[this.name].push) {
-//                 o[this.name] = [o[this.name]];
-//             }
-//             o[this.name].push(this.value || '');
-//         } else {
-//             o[this.name] = this.value || '';
-//         }
-//     });
-//     return o;
-// };
-// $('#codeform').on('submit', function(e){
-//     e.preventDefault();
-//     var info = $(this).serializeObject();
-//     alert(JSON.stringify(info));
-//     $.ajax({
-//         type: 'post',
-//         url: '/passage/add_passage/',
-//         data: info,
-//         success: function(data){
-//             alert(data);
-//         }
-//     });
-// });
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+$('.codeform_add').on('submit', function(e){
+    e.preventDefault();
+    var info = $(this).serializeObject();
+    $.ajax({
+        type: 'post',
+        url: '/passage/add_passage/',
+        data: info,
+        success: function(data){
+            $('#passages').prepend(data);
+            readPassageMetadata($('#passages').find(">:first-child").children('.metadata'));
+        }
+    });
+});
   $( function() {
     $( document ).tooltip();
   } );
@@ -69,31 +69,31 @@ $('.add_select').on('change', function(){
         $(this).parent().siblings('.add_passage_icons').show();
     }
 });
-$('[class^=passage_metadata_]').each(function(){
-    var metadata = $(this).val();
-    var _id = $(this).attr('class').split('_')[2];
+function readPassageMetadata(thiz){
+    var metadata = thiz.val();
+    var _id = thiz.attr('id').split('_')[2];
     metadata = JSON.parse(metadata);
-    var content = $(this).siblings('.passage_content').text();
+    var content = thiz.siblings('.passage_content').text();
       for (let [key, value] of Object.entries(metadata)) {
             switch(key){
                 case 'Hyperlink':
-                $(this).siblings('.passage_content').attr('title', value);
-                $(this).siblings('.passage_content').click(function(){
+                thiz.siblings('.passage_content').attr('title', value);
+                thiz.siblings('.passage_content').click(function(){
                     window.open(value, '_blank');
                 });
                 break;
                 case 'Color':
-                $(this).siblings('.passage_content').css('color', value);
+                thiz.siblings('.passage_content').css('color', value);
                 break;
                 case 'CSS':
-                $(this).siblings('.passage_content').css(JSON.parse(value));
+                thiz.siblings('.passage_content').css(JSON.parse(value));
                 break;
                 case 'Hidden':
-                $(this).siblings('.passage_content').css('display', 'none');
-                $(this).siblings().not('.passage_canvas').css('opacity', '0.6');
+                thiz.siblings('.passage_content').css('display', 'none');
+                thiz.siblings().not('.passage_canvas').css('opacity', '0.6');
                 break;
                 case 'Tone':
-                $(this).siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     var lines = content.split("\n");
                     lines.forEach(function(item, index){
                         var context=new AudioContext()
@@ -115,11 +115,11 @@ $('[class^=passage_metadata_]').each(function(){
                 });
                 break;
                 case 'Markdown':
-                $(this).siblings('.passage_content').html(marked(content));
+                thiz.siblings('.passage_content').html(marked(content));
                 break;
                 case 'Code':
                 //syntax highlight
-                $(this).siblings('.passage_content').html('<pre><code class="language-'+value+'">'+content+'</code></pre>');
+                thiz.siblings('.passage_content').html('<pre><code class="language-'+value+'">'+content+'</code></pre>');
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightBlock(block);
                   });
@@ -128,12 +128,12 @@ $('[class^=passage_metadata_]').each(function(){
                 //circles, squares/rectangles
                 //shape.color.x.y.l.w (value = name)or
                 //name.x.y
-                var canvas = $(this).siblings('.passage_canvas');
+                var canvas = thiz.siblings('.passage_canvas');
                 canvas.css('display', 'block');
                 var ctx = canvas[0].getContext('2d');
                 var name = value;
                 // console.log(name);
-                $(this).siblings('.canvas_name').attr('id', '#canvas_name_'+value);
+                thiz.siblings('.canvas_name').attr('id', '#canvas_name_'+value);
                 var lines = content.split("\n");
                 lines.forEach(function(item, index){
                     var vars = item.split('.');
@@ -175,6 +175,9 @@ $('[class^=passage_metadata_]').each(function(){
                 });
             }
         }
+}
+$('[id^=passage_metadata_]').each(function(){
+    readPassageMetadata($(this));
 });
 $('[id^=star_]').on('click', function(){
     var _id = $(this).attr('id').split('_')[1];
@@ -229,8 +232,8 @@ var doSomethingFileStream = function(){
         }
     });
 };
-$(document).on('click', '[class^=passage_delete_]', function(){
-    var _id = $(this).attr('class').split('_')[2];
+$(document).on('click', '[id^=passage_delete_]', function(){
+    var _id = $(this).attr('id').split('_')[2];
     $.ajax({
         type: 'post',
         url: '/delete_passage',
@@ -238,7 +241,7 @@ $(document).on('click', '[class^=passage_delete_]', function(){
             _id: _id
         },
         success: function(data){
-            window.location.reload();
+            $('.passage_' + _id).remove();
         }
     });
 });

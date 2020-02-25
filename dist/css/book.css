@@ -553,7 +553,7 @@ select::-ms-expand {
 .proteins{
     font-size: 0.6em;
     padding-left: 16px;
-    width: 130px;
+    text-align: left;
 }
 #parent_chapter_title{
     cursor: pointer;
@@ -562,5 +562,8 @@ select::-ms-expand {
     cursor: pointer;
 }
 .load_more{
+    cursor: pointer;
+}
+ion-icon{
     cursor: pointer;
 }

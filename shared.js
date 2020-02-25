@@ -9,7 +9,7 @@
     var _id = (update == false) ? '' : update._id;
     var ret = '';
     ret += `
-    <form class="codeform"action="/passage/`+which+`_passage/" method="POST">`;
+    <form class="codeform_`+which+`"action="/passage/`+which+`_passage/" method="POST">`;
                     if(!update){
                       ret += `<div class="header no_cursive"><select name="type" class="add_select" autocomplete="off">
                         <option value="passage">Passage</option>
@@ -83,7 +83,7 @@
        var ret = '';
         ret += `
         <div class="passage_`+passage._id+` passage">`;
-            ret += `<input class="passage_metadata_`+passage._id+`"type="hidden" value='`+passage.metadata+`'/>`;
+            ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
             if(passage.author){
                 ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.name+`</a></div>`;
@@ -119,7 +119,6 @@
                 _id: passage._id
               }, after);
               ret += `
-              <p class="passage_delete_`+passage._id+`">DELETE</p>
               <div class="passage_id">`+passage._id+`</div>
             </div>
             </div>
@@ -132,6 +131,8 @@
              <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
+             <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-outline.svg"></ion-icon>
+             <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle.svg"></ion-icon>
              </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>

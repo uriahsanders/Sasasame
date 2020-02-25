@@ -1,5 +1,7 @@
 const Passage = require('../models/Passage');
 const Chapter = require('../models/Chapter');
+//Call in Scripts
+const scripts = require('../shared');
 
 module.exports = {
     addPassage: function(options) {
@@ -19,6 +21,7 @@ module.exports = {
                     }
                     chap.save();
                 });
+                options.callback(data);
             });
         }
         else{
@@ -27,9 +30,11 @@ module.exports = {
                 content: options.content,
                 author: options.author,
                 metadata: options.metadata
-            }).save();
+            }).save()
+            .then(data => {
+                options.callback(data);
+            });
         }
-        options.callback();
     },
     addPassageToCategory: function(passageID, chapterID, callback) {
         Chapter.find({_id:chapterID}).sort([['_id', 1]]).exec(function(err, chapter){
