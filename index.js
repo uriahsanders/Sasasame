@@ -272,6 +272,9 @@ app.post('/run_file', function(req, res) {
         case 'js':
         bash = 'node ' + file;
         break;
+        case 'sh':
+        bash = 'sh ' + file;
+        break;
     }
     exec(bash, (err, stdout, stderr) => {
       if (err) {

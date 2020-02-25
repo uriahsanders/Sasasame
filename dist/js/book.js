@@ -210,6 +210,7 @@ var doSomethingThoughtStream = function(){
 var doSomethingFileStream = function(){
     $('#categories').html('');
     $('#passage_load').hide();
+    $('#chapter_load').hide();
     $.ajax({
         type: 'post',
         url: '/fileStream',
