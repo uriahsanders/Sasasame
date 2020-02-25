@@ -236,7 +236,7 @@ app.post('/file', function(req, res) {
         fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
                 if (!err) {
                     res.send({
-                        data: scripts.printFile(data),
+                        data: scripts.printFile(data, file.split('.')[file.split('.').length - 1]),
                         type: 'file'
                     });
                 } else {

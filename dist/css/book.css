@@ -188,8 +188,10 @@
     min-height: 30px;
     /*width:55%;*/
     margin:auto;
-    cursor: pointer;
     text-align: left;
+}
+.view_sub{
+    cursor: pointer;
 }
 .passage_keys{
     display: none;

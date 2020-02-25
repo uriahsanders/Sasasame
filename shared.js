@@ -131,11 +131,11 @@
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
              <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
-             <ion-icon title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
+             <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
              </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
-            <div class="passage_content">`+ passage.content+`</div>
+            <div class="passage_content" contenteditable="true">`+ passage.content+`</div>
             <canvas class="passage_canvas" height="100px"></canvas>
             <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
             <div class="sub_passages">`;
@@ -160,7 +160,7 @@
                     </div>
                     <input type="hidden" class="original_passage_content" value="`+sub.content+`"/>
                         <div class="passage_chapter">Sasame</div>
-                    <div class="passage_content">`+f.content+`</div>
+                    <div class="passage_content" contenteditable="true">`+f.content+`</div>
                     <canvas class="passage_canvas"></canvas>
                     <div class="passage_id">`+f._id+`</div>
                     </div>`;
@@ -187,7 +187,7 @@
     </div>`;
     return ret;
   };
-  exports.printFile = function(content){
+  exports.printFile = function(content, ext=''){
     var ret = '';
         ret += `
         <div class="passage">
@@ -197,7 +197,7 @@
              <ion-icon title="Move line from above"src="/images/ionicons/add-outline.svg"></ion-icon>
              <ion-icon title="Move line to above"src="/images/ionicons/remove-outline.svg"></ion-icon>
              </div>
-            <div class="passage_content" contenteditable="true">`+ content+`</div>
+            <div class="passage_content" contenteditable="true"><pre><code class="lang-`+ext+`">`+ content+`</code></pre></div>
         </div>`;
         return ret;
   };

@@ -201,14 +201,15 @@ $('#add_sub_property').on('click', function(){
 $(document).on('click', '.remove_property', function(){
     $(this).parent().remove();
 });
-$(document).on('click', '.passage_content', function(){
-    $(this).parent().children('.sub_passages').slideToggle();
+$(document).on('click', '.view_sub', function(){
+    $(this).parent().parent().children('.sub_passages').slideToggle();
 });
 var doSomethingThoughtStream = function(){
     window.location.reload();
 };
 var doSomethingFileStream = function(){
     $('#categories').html('');
+    $('#passage_load').hide();
     $.ajax({
         type: 'post',
         url: '/fileStream',
@@ -261,6 +262,9 @@ $(document).on('click', '.fileStreamChapter', function(){
             if(data.type == 'file'){
                 $('#passages').html(data.data);
                 $('#parent_chapter_title').text(fileStreamPath + title);
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                  });
             }
             else if(data.type == 'dir'){
                 var categories = `
