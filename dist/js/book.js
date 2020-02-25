@@ -492,3 +492,31 @@ $(document).on('keydown', function(e){
         e.preventDefault();
     }
 });
+$(document).on('click', '.file_play', function(){
+    var fileName = $('#parent_chapter_title').text();
+    $.ajax({
+        type: 'post',
+        url: '/run_file',
+        data: {
+            file: fileName,
+        },
+        success: function(data){
+            alert(data);
+        }
+    });
+});
+$(document).on('click', '.file_update', function(){
+    var fileName = $('#parent_chapter_title').text();
+    var fileContent = $(this).parent().siblings('.passage_content').text();
+    $.ajax({
+        type: 'post',
+        url: '/update_file',
+        data: {
+            file: fileName,
+            content: fileContent
+        },
+        success: function(data){
+            alert(data);
+        }
+    });
+});

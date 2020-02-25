@@ -124,7 +124,7 @@
             </div>
             </div>
              <div class="proteins">
-             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings.svg"></ion-icon></a>
+             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
              <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-outline.svg"></ion-icon>
              <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
@@ -187,17 +187,20 @@
     </div>`;
     return ret;
   };
-  exports.printFile = function(content, ext=''){
+  exports.printFile = function(content, fileName=''){
     var ret = '';
         ret += `
         <div class="passage">
              <div class="proteins">
+             <input type="hidden" value="`+fileName+`" id="file_name"/>
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
              <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
              <ion-icon title="Move line from above"src="/images/ionicons/add-outline.svg"></ion-icon>
              <ion-icon title="Move line to above"src="/images/ionicons/remove-outline.svg"></ion-icon>
+             <ion-icon class="file_play"title="Run File" src="/images/ionicons/play-circle.svg"></ion-icon>
+             <ion-icon class="file_update"title="Update File" src="/images/ionicons/share-outline.svg"></ion-icon>
              </div>
-            <div class="passage_content" contenteditable="true"><pre><code class="lang-`+ext+`">`+ content+`</code></pre></div>
+            <div class="passage_content" contenteditable="true"><pre><code class="lang-`+fileName.split('.')[fileName.split('.').length - 1]+`">`+ content+`</code></pre></div>
         </div>`;
         return ret;
   };

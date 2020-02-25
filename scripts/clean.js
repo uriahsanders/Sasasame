@@ -20,14 +20,16 @@ mongoose.connect('mongodb://localhost/sasame', {
 //     console.log(chapters);
 //     process.exit(1);
 // });
-User.dropIndex("password_1");
-User.find({}, function(err, users){
-    if (err) console.log(err);
-    console.log(users);
-    process.exit(1);
-});
+// User.dropIndex("password_1");
+// User.find({}, function(err, users){
+//     if (err) console.log(err);
+//     console.log(users);
+//     process.exit(1);
+// });
 // Passage.deleteMany({}, function(err, passages){
 //     if (err) console.log(err);
 //     console.log(passages);
 //     process.exit(1);
 // });
+console.log('Done');
+process.exit();

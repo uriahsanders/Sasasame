@@ -190,7 +190,7 @@
     margin:auto;
     text-align: left;
 }
-.view_sub{
+.view_sub, .update_file, .file_play{
     cursor: pointer;
 }
 .passage_keys{

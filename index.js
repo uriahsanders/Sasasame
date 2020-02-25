@@ -17,6 +17,7 @@ const passageRoutes = require('./routes/passage');
 
 var fs = require('fs'); 
 var path = require('path');
+const { exec } = require('child_process');
 
 const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
 
@@ -236,7 +237,7 @@ app.post('/file', function(req, res) {
         fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
                 if (!err) {
                     res.send({
-                        data: scripts.printFile(data, file.split('.')[file.split('.').length - 1]),
+                        data: scripts.printFile(data, __dirname + '/' +file),
                         type: 'file'
                     });
                 } else {
@@ -262,6 +263,35 @@ app.post('/file', function(req, res) {
           });
         });
     }
+});
+app.post('/run_file', function(req, res) {
+    var file = req.body.file;
+    var ext = file.split('.')[file.split('.').length - 1];
+    var bash = 'ls';
+    switch(ext){
+        case 'js':
+        bash = 'node ' + file;
+        break;
+    }
+    exec(bash, (err, stdout, stderr) => {
+      if (err) {
+        // node couldn't execute the command
+        res.send(JSON.stringify(err));
+        return;
+      }
+      res.send(stdout);
+      // the *entire* stdout and stderr (buffered)
+      // console.log(`stdout: ${stdout}`);
+      // console.log(`stderr: ${stderr}`);
+    });
+});
+app.post('/update_file', function(req, res) {
+    var file = req.body.file;
+    var content = req.body.content;
+    fs.writeFile(file, content, function(err){
+      if (err) return console.log(err);
+      res.send('Done');
+    });
 });
 app.get('/ppe', function(req, res) {
     res.render('ppe', {session: req.session});
