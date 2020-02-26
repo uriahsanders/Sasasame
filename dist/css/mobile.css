@@ -15,6 +15,9 @@
         font-size: 0.7em;
         /*width: 90%;*/
     }
+    .option_distraction_free{
+        display: none;
+    }
     .sasame_button, .eat_fruit {
         border: 3px solid #353535;
         background: #353535;

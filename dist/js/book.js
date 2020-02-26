@@ -312,6 +312,7 @@ var doSomethingFileStream = function(){
     $('#categories').html('');
     $('#passage_load').hide();
     $('#chapter_load').hide();
+    $('#alpha').hide();
     $.ajax({
         type: 'post',
         url: '/fileStream',
