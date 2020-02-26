@@ -62,6 +62,7 @@
         <option>Hidden</option>
         <!-- Hide passage -->
         <option>Autorun</option>
+        <option>Label</option>
     </select>
     <!-- For chapters -->
     <!-- <select>

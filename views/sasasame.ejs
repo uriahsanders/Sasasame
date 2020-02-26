@@ -176,10 +176,12 @@
                         <div>
                             <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
                         </div>
-                        <%if(chapters){%>
-                            <%chapters.forEach(function(f) { %>
-                                <%- scripts.printChapter(f) %>
-                        <%});} %>
+                        <div id="chapters">
+                            <%if(chapters){%>
+                                <%chapters.forEach(function(f) { %>
+                                    <%- scripts.printChapter(f) %>
+                            <%});} %>
+                        </div>
                     </div>
                     <div id="chapter_load"class="load_more category">Load More</div>
                     <!-- Brief from #passages via JS -->

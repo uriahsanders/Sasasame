@@ -455,8 +455,11 @@ app.post(/\/add_passage\/?/, (req, res) => {
     else{
         metadata[property_key] = property_value;
     }
-    var callback = function(data){
+    var passageCallback = function(data){
         res.send(scripts.printPassage(data));
+    };
+    var chapterCallback = function(data){
+        res.send(scripts.printChapter(data));
     };
     if(type == 'passage'){
         passageController.addPassage({
@@ -464,14 +467,14 @@ app.post(/\/add_passage\/?/, (req, res) => {
             'content': content,
             'author': user,
             'metadata': JSON.stringify(metadata),
-            'callback': callback,
+            'callback': passageCallback,
         });
     }
     else if(type == 'chapter' && content != ''){
         chapterController.addChapter({
             'title': content,
             'author': user,
-            'callback': callback
+            'callback': chapterCallback
         });
     }
 });

@@ -8,6 +8,7 @@ module.exports = {
                 chapter: options.chap,
                 author: options.author
             }).save().then(data => {
+                options.callback(data);
             });
         }
         else{
@@ -15,13 +16,11 @@ module.exports = {
             let chapter = new Chapter({
                 title: options.title,
                 author: options.author
-            }).save(function(err,chap){
-                if(err){
-                    console.log(err);
-                }
+            }).save()
+            .then(data => {
+                options.callback(data);
             });
         }
-        options.callback();
     },
     deleteChapter: function(req, res) {
         let chapterID = req.body._id;

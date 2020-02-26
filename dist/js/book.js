@@ -22,8 +22,13 @@ $('.codeform_add').on('submit', function(e){
         url: '/passage/add_passage/',
         data: info,
         success: function(data){
-            $('#passages').prepend(data);
-            readPassageMetadata($('#passages').find(">:first-child").children('.metadata'));
+            if(info.type == 'passage'){
+                $('#passages').prepend(data);
+                readPassageMetadata($('#passages').find(">:first-child").children('.metadata'));
+            }
+            else if(info.type == 'chapter'){
+                $('#chapters').prepend(data);
+            }
         }
     });
 });
