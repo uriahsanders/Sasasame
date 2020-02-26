@@ -171,6 +171,7 @@ function readPassageMetadata(thiz){
             switch(key){
                 case 'Hyperlink':
                 thiz.siblings('.passage_content').attr('title', value);
+                thiz.siblings('.passage_content').css('cursor', 'pointer');
                 thiz.siblings('.passage_content').click(function(){
                     window.open(value, '_blank');
                 });
@@ -364,7 +365,7 @@ $(document).on('click', '[id^=passage_delete_]', function(){
             _id: _id
         },
         success: function(data){
-            $('#passage_' + _id).remove();
+            $('#' + _id).remove();
         }
     });
 });
@@ -569,6 +570,9 @@ $('.load_more').on('click', function(){
                     });
                     $('#passages').append(html);
                     $('#passages').sortable();
+                    $('[id^=passage_metadata_]').each(function(){
+                        readPassageMetadata($(this));
+                    });
                 }
                 else if(which == 'chapter_load'){
                     var chapters = JSON.parse(data);
