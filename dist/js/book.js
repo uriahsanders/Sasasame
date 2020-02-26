@@ -146,6 +146,7 @@ function readPassageMetadata(thiz){
     var _id = thiz.attr('id').split('_')[2];
     metadata = JSON.parse(metadata);
     var content = thiz.siblings('.passage_content').text();
+    thiz.siblings('.proteins').children('.passage_play').hide();
       for (let [key, value] of Object.entries(metadata)) {
             switch(key){
                 case 'Hyperlink':
@@ -165,6 +166,7 @@ function readPassageMetadata(thiz){
                 thiz.siblings().not('.passage_canvas').css('opacity', '0.6');
                 break;
                 case 'Audio':
+                thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                 $(this).parent().siblings('.passage_audio').attr('src', '/recordings/'+value);
                 $(this).parent().siblings('.passage_audio').show();
@@ -172,6 +174,7 @@ function readPassageMetadata(thiz){
                 });
                 break;
                 case 'Tone':
+                thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     var lines = content.split("\n");
                     lines.forEach(function(item, index){

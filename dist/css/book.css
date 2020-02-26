@@ -570,3 +570,6 @@ select::-ms-expand {
 ion-icon{
     cursor: pointer;
 }
+.passage_play{
+    color: red;
+}
