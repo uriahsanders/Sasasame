@@ -20,7 +20,7 @@
                     <div class="add_passage_icons"style="text-align:left">
                         <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                        <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
+                        <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
                         <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
                         <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
@@ -61,7 +61,7 @@
         <option>Tone</option>
         <option>Hidden</option>
         <!-- Hide passage -->
-        <option>Autorun</option>
+        <option>Audio</option>
         <option>Label</option>
     </select>
     <!-- For chapters -->

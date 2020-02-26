@@ -14,6 +14,58 @@ $.fn.serializeObject = function() {
     });
     return o;
 };
+//Record Audio
+//Thanks https://medium.com/@bryanjenningz/how-to-record-and-play-audio-in-javascript-faa1b2b3e49b
+const recordAudio = () =>
+  new Promise(async resolve => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
+    const audioChunks = [];
+
+    mediaRecorder.addEventListener("dataavailable", event => {
+      audioChunks.push(event.data);
+    });
+
+    const start = () => mediaRecorder.start();
+
+    const stop = () =>
+      new Promise(resolve => {
+        mediaRecorder.addEventListener("stop", () => {
+          const audioBlob = new Blob(audioChunks);
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = new Audio(audioUrl);
+          const play = () => audio.play();
+          resolve({ audioBlob, audioUrl, play });
+        });
+
+        mediaRecorder.stop();
+      });
+
+    resolve({ start, stop });
+  });
+const handleAction = async () => {
+    var recorder = await recordAudio();
+    var audio;
+    $('.mic_record_icon').on('click', async function(){
+        switch($(this).data('status')){
+            case 'empty':
+            $(this).data('status', 'recording');
+            $(this).css('color', 'red');
+            recorder.start();
+            break;
+            case 'recording':
+            $(this).data('status', 'empty');
+            $(this).css('color', 'black');
+            audio = await recorder.stop();
+            audio.play();
+            recorder = await recordAudio();
+            $(this).parent().siblings('.control_textarea').text(audio.audioUrl);
+            break;
+        }
+    });
+};
+handleAction();
+
 $('.codeform_add').on('submit', function(e){
     e.preventDefault();
     var info = $(this).serializeObject();
