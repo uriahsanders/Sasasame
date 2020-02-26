@@ -11,6 +11,10 @@
         list-style-type: none;
         margin: 10px;
     }
+    #options{
+        font-size: 0.7em;
+        /*width: 90%;*/
+    }
     .sasame_button, .eat_fruit {
         border: 3px solid #353535;
         background: #353535;
@@ -47,12 +51,7 @@
 
     }
     #mobile_book_menu{
-        display: block;
-        font-size: 1.8em;
-        left: 0px;
-        margin-left: 0px;
-        width: 10%;
-        cursor: pointer;
+        display: inline;
     }
     #code{
         display: none;
@@ -62,23 +61,6 @@
     }
     #book_of_sasame{
         width: 80%;
-    }
-    #mobile_warning{
-        font-size: 0.5em;
-        font-style: italic;
-        color: #fff;
-        display: block;
-    }
-    #mobile_book_menu_main{
-        display: none;
-        /* width: 100%; */
-        background: #353535;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        color: #fff;
-        margin: auto;
-        padding: 15px;
     }
     .basic_link{
         text-decoration: none;

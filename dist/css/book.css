@@ -260,12 +260,6 @@
 }
 #mobile_book_menu{
     display: none;
-    position: absolute;
-    left: 20px;
-    top: 20px;
-}
-#mobile_warning{
-    display: none;
 }
 .golden{
     border-left: 1px solid gold;
@@ -278,9 +272,6 @@
     margin-top: 10px;
 }
 
-#mobile_book_menu_main{
-    display: none;
-}
 #control_desc{
     color: #353535;
     margin: auto;
@@ -580,6 +571,7 @@ ion-icon{
     margin: auto;
     color: white;
     padding-top: 10px;
+    text-align: center;
 }
 .option_distraction_free{
     color: #fff;

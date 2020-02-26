@@ -41,7 +41,7 @@
 
             </div>
         <%} %>
-        <div id="mobile_book_menu_main">
+        <div id="mobile_modal" class="modal">
             <%-scripts.printAddForm(chapter)%>
             <div class="header">
                 Table of Contents
@@ -60,14 +60,12 @@
         <div id="control_panel">
             <div id="control_nav">
                     <div id="main_header">
-                        <div id="mobile_book_menu">
-                            <ion-icon src="/images/ionicons/menu.svg"></ion-icon>
-                        </div>
                         <a href="/">
                             <img id="little_seed" alt="" src="/images/test.png"/>
                         </a><!-- 
                         <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">Sasame</a></div> -->
                         <div id="options">
+                            <a id="mobile_book_menu"class="basic_link white" rel="modal:open"href="#mobile_modal"><ion-icon title="Mobile Menu"src="/images/ionicons/menu-sharp.svg"></ion-icon></a>
                             <div id="help_modal" class="modal">
                               <p>Welcome!</p>
                               <p>Sasame is under heavy development. Keep checking back for more updates! Sasame is meant to make the world a better place, one module at a time!</p>
