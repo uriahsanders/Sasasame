@@ -141,6 +141,16 @@ $('.add_select').on('change', function(){
         $(this).parent().siblings('.add_passage_icons').show();
     }
 });
+function jqueryToggle(thiz, func1, func2){
+    if(thiz.data('toggle') == 0){
+        thiz.data('toggle', 1);
+        func2();
+    }
+    else{
+        thiz.data('toggle', 0);
+        func1();
+    }
+}
 function readPassageMetadata(thiz){
     var metadata = thiz.val();
     var _id = thiz.attr('id').split('_')[2];
@@ -197,7 +207,14 @@ function readPassageMetadata(thiz){
                 });
                 break;
                 case 'Markdown':
-                thiz.siblings('.passage_content').html(marked(content));
+                thiz.siblings('.proteins').children('.passage_play').show();
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    jqueryToggle(thiz, function(){
+                        thiz.siblings('.passage_content').html(marked(thiz.siblings('.passage_content').text()));
+                    }, function(){
+                        thiz.siblings('.passage_content').html(content);
+                    });
+                });
                 break;
                 case 'Code':
                 //syntax highlight
@@ -326,6 +343,27 @@ $(document).on('click', '[id^=passage_delete_]', function(){
         }
     });
 });
+$(document).on('click', '[id^=passage_update_]', function(){
+    var _id = $(this).attr('id').split('_')[2];
+    var content = $(this).parent().siblings('.passage_content').text();
+    var thiz = $(this);
+    jqueryToggle(thiz, function(){
+        thiz.css('color', 'red');
+    }, function(){
+        thiz.css('color', 'green');
+    });
+    $.ajax({
+        type: 'post',
+        url: '/update_passage_content',
+        data: {
+            _id: _id,
+            content: content
+        },
+        success: function(data){
+                console.log(data);
+        }
+    });
+});
 $(document).on('click', '.fileStreamChapter', function(){
     var title = $(this).text();
     var fileStreamPath = $('#fileStreamPath').val();
@@ -416,7 +454,7 @@ $(document).on('change', '.property_key', function(){
 });
 $('.star_icon').on('click', function(){
     $(this).attr('src', function(index, attr){
-        return attr == '/images/ionicons/star-outline.svg' ? '/images/ionicons/star.svg' : '/images/ionicons/star-outline.svg';
+        return attr == '/images/ionicons/star-sharp.svg' ? '/images/ionicons/star.svg' : '/images/ionicons/star-sharp.svg';
     });
     $(this).toggleClass('gold_color');
 });
@@ -429,28 +467,28 @@ $('.flag_icon').on('click', function(){
 $(document).on('click', '.icon_top_add', function(){
     var thiz = $(this);
     $(this).attr('src', function(index, attr){
-        if(attr == '/images/ionicons/caret-up-outline.svg'){
+        if(attr == '/images/ionicons/caret-up-sharp.svg'){
             thiz.prop('title', 'Add to Bottom');
-            return '/images/ionicons/caret-down-outline.svg';
+            return '/images/ionicons/caret-down-sharp.svg';
         }
         else{
             thiz.prop('title', 'Add to Top');
-            return '/images/ionicons/caret-up-outline.svg';
+            return '/images/ionicons/caret-up-sharp.svg';
         }
     });
 });
 $('.square_icon').on('click', function(){
     var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
     $(this).attr('src', function(index, attr){
-        if(attr == '/images/ionicons/square-outline.svg'){
+        if(attr == '/images/ionicons/square-sharp.svg'){
             //add passage to queue
             $('#queue_items').append($('.'+parentClass).clone());
-            return '/images/ionicons/checkbox-outline.svg';
+            return '/images/ionicons/checkbox-sharp.svg';
         }
         else{
             //remove passage from queue
             $('#queue_items .'+parentClass).hide();
-            return '/images/ionicons/square-outline.svg';
+            return '/images/ionicons/square-sharp.svg';
         }
     });
 });
@@ -601,4 +639,30 @@ $(document).on('click', '.file_update', function(){
             alert(data);
         }
     });
+});
+$('.option_distraction_free').on('click', function(){
+    if($(this).data('hidden') == 'true'){
+        $('#toc').show();
+        $('#code').show();
+        $('#passage_load').show();
+        $(this).data('hidden', 'false')
+    }
+    else{
+        $('#toc').hide();
+        $('#code').hide();
+        $('#passage_load').hide();
+        $(this).data('hidden', 'true')
+    }
+});
+$('.toggle_tools').on('click', function(){
+    if($(this).data('hidden') == 'true'){
+        $('.proteins').show();
+        $('.passage_author').show();
+        $(this).data('hidden', 'false')
+    }
+    else{
+        $('.proteins').hide();
+        $('.passage_author').hide();
+        $(this).data('hidden', 'true')
+    }
 });

@@ -73,6 +73,18 @@ module.exports = {
             callback();
         });
     },
+    updatePassageContent: function(req, res, callback) {
+        var passageID = req.body._id;
+        var content = req.body.content || '';
+        Passage.updateOne({_id: passageID.trim()}, {
+            content: content,
+        }, function(err, affected, resp){
+            if(err){
+                console.log(err);
+            }
+            callback();
+        });
+    },
     deletePassage: function(req, res, callback) {
         let passageID = req.body._id;
         Passage.deleteOne({ _id: passageID.trim() }, function(err) {

@@ -554,10 +554,15 @@ app.post(/star/, (req, res) => {
     })
 
 });
-app.post(/\/update_passage\/?/, (req, res) => {
+app.post('/update_passage/', (req, res) => {
     passageController.updatePassage(req, res, function(){
         var backURL=req.header('Referer') || '/';
         res.redirect(backURL);
+    });
+});
+app.post('/update_passage_content', (req, res) => {
+    passageController.updatePassageContent(req, res, function(){
+        res.send('Updated');
     });
 });
 

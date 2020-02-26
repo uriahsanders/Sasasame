@@ -9,7 +9,7 @@
     var _id = (update == false) ? '' : update._id;
     var ret = '';
     ret += `
-    <form class="codeform_`+which+`"action="/passage/`+which+`_passage/" method="POST">`;
+    <form class="codeform_`+which+`"action="/`+which+`_passage/" method="POST">`;
                     if(!update){
                       ret += `<div class="header no_cursive"><select name="type" class="add_select" autocomplete="off">
                         <option value="passage">Passage</option>
@@ -24,14 +24,14 @@
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
                         <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
                         <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
-                        <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-outline.svg"></ion-icon>
+                        <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-sharp.svg"></ion-icon>
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
-                        <div class="add_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
+                        <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Property</div> 
                     </div>
                     `+after+`
                     </form>
@@ -43,8 +43,8 @@
     value = value || '';
     return `
 <div class="property_select">
-    <ion-icon title="Remove"class="remove_property"src="/images/ionicons/remove-circle-outline.svg"></ion-icon> 
-    <ion-icon title="Help"class="property_info"src="/images/ionicons/help-circle-outline.svg"></ion-icon> 
+    <ion-icon title="Remove"class="remove_property"src="/images/ionicons/remove-circle-sharp.svg"></ion-icon> 
+    <ion-icon title="Help"class="property_info"src="/images/ionicons/help-circle-sharp.svg"></ion-icon> 
     <!-- For Passages -->
     <select name="property_key"class="property_key" autocomplete="off">
         <option selected="selected">`+key+`</option>
@@ -55,14 +55,13 @@
         <option>Markdown</option>
         <option>Access</option>
         <option>Key Schema</option>
-        <!-- User inputs JSON with methods -->
         <option>Canvas</option>
         <option>Animation</option>
         <option>Tone</option>
         <option>Hidden</option>
-        <!-- Hide passage -->
         <option>Audio</option>
         <option>Label</option>
+        <option>Graph</option>
     </select>
     <!-- For chapters -->
     <!-- <select>
@@ -125,14 +124,14 @@
             </div>
              <div class="proteins">
              <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
-             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
-             <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-outline.svg"></ion-icon>
+             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
+             <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon>
              <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
-             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
+             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-sharp.svg"></ion-icon>
              <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
-             <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-outline.svg"></ion-icon>
-             <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-outline.svg"></ion-icon>
+             <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
+             <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle.svg"></ion-icon>
              </div>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
@@ -158,7 +157,7 @@
                       <a href="#" rel="modal:close">Close</a>
                     </div>
                      <a class="basic_link" href="#modal_`+sub._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
-                     <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-outline.svg"></ion-icon>
+                     <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
 
                     </div>
                     <input type="hidden" class="original_passage_content" value="`+sub.content+`"/>
@@ -168,7 +167,7 @@
                     <div class="passage_id">`+f._id+`</div>
                     </div>`;
                 });
-                ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-outline.svg"></ion-icon></a></div>
+                ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
             </div>
 
         </div>`;
@@ -190,20 +189,28 @@
     </div>`;
     return ret;
   };
+  function escapeHTML(s) { 
+    return s.replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+}
   exports.printFile = function(content, fileName=''){
+    var lang = fileName.split('.')[fileName.split('.').length - 1];
+    lang = (lang == 'ejs') ? 'html' : lang;
     var ret = '';
         ret += `
         <div class="passage">
              <div class="proteins">
              <input type="hidden" value="`+fileName+`" id="file_name"/>
-             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-outline.svg"></ion-icon>
-             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-outline.svg"></ion-icon>
-             <ion-icon title="Move line from above"src="/images/ionicons/add-outline.svg"></ion-icon>
-             <ion-icon title="Move line to above"src="/images/ionicons/remove-outline.svg"></ion-icon>
+             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
+             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-sharp.svg"></ion-icon>
+             <ion-icon title="Move line from above"src="/images/ionicons/add-sharp.svg"></ion-icon>
+             <ion-icon title="Move line to above"src="/images/ionicons/remove-sharp.svg"></ion-icon>
              <ion-icon class="file_play"title="Run File" src="/images/ionicons/play-circle.svg"></ion-icon>
-             <ion-icon class="file_update"title="Update File" src="/images/ionicons/share-outline.svg"></ion-icon>
+             <ion-icon class="file_update"title="Update File" src="/images/ionicons/share-sharp.svg"></ion-icon>
              </div>
-            <div class="passage_content" contenteditable="true"><pre><code class="lang-`+fileName.split('.')[fileName.split('.').length - 1]+`">`+ content+`</code></pre></div>
+            <div class="passage_content" contenteditable="true"><pre><code class="lang-`+lang+`">`+ escapeHTML(content)+`</code></pre></div>
         </div>`;
         return ret;
   };
