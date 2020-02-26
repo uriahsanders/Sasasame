@@ -104,7 +104,7 @@
                     var chapterID = '';
                     if(passage.chapter){
                       chapterID = passage.chapter._id;
-                      ret += `<p>Chapter:`+passage.chapter.title+`</p>`;
+                      ret += `<p>Chapter:<a class="link" href="/${passage.chapter.title}/${passage.chapter._id}">`+passage.chapter.title+`</a></p>`;
                     }
                 ret += `</div>`;
               var i = 0;
