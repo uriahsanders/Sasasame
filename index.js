@@ -344,7 +344,7 @@ app.post('/paginate', function(req, res){
         find = {};
     }
     if(search == ''){
-        var chapterFind = find;
+        var chapterFind = {};
     }
     else{
         var chapterFind = {
