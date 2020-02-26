@@ -561,6 +561,9 @@ select::-ms-expand {
 .fileStreamChapter{
     cursor: pointer;
 }
+.passage_audio{
+    display: none;
+}
 .load_more{
     cursor: pointer;
 }

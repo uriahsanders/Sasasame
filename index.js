@@ -18,6 +18,11 @@ const passageRoutes = require('./routes/passage');
 var fs = require('fs'); 
 var path = require('path');
 const { exec } = require('child_process');
+const { promisify } = require('util');
+const { v4 } = require('uuid');
+
+const writeFile = promisify(fs.writeFile);
+const readdir = promisify(fs.readdir);
 
 const DOCS_PER_PAGE = 10; // Documents per Page Limit (Pagination)
 
@@ -31,6 +36,13 @@ mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
 
 var app = express();
 app.use(helmet());
+
+// make sure recordings folder exists
+const recordingFolder = './dist/recordings/';
+if (!fs.existsSync(recordingFolder)) {
+  fs.mkdirSync(recordingFolder);
+}
+
 
 // Setup Frontend Templating Engine - ejs
 const ejs = require('ejs');
@@ -82,6 +94,34 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
+//recordings
+app.get('/recordings', (req, res) => {
+  readdir(recordingFolder)
+    .then(messageFilenames => {
+      res.status(200).json({ messageFilenames });
+    })
+    .catch(err => {
+      console.log('Error reading message directory', err);
+      res.sendStatus(500);
+    });
+});
+
+app.post('/recordings', (req, res) => {
+  if (!req.body.recording) {
+    return res.status(400).json({ error: 'No req.body.message' });
+  }
+  const messageId = v4();
+  writeFile(recordingFolder + messageId, req.body.recording, 'base64')
+    .then(() => {
+        res.send(messageId);
+    })
+    .catch(err => {
+      console.log('Error writing message to file', err);
+      res.sendStatus(500);
+    });
+});
+
+
 app.get('/jquery.min.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery/dist/jquery.min.js');
 });

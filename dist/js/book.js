@@ -56,10 +56,25 @@ const handleAction = async () => {
             case 'recording':
             $(this).data('status', 'empty');
             $(this).css('color', 'black');
+            var thiz = $(this);
             audio = await recorder.stop();
             audio.play();
+            const reader = new FileReader();
+            reader.readAsDataURL(audio.audioBlob);
+            reader.onload = () => {
+              const base64AudioMessage = reader.result.split(',')[1];
+              $.ajax({
+                    type: 'post',
+                    url: '/recordings',
+                    data: {
+                        recording: base64AudioMessage
+                    },
+                    success: function(data){
+                        thiz.parent().parent().children('.properties').prepend(share.printPropertySelect('Audio', data));
+                    }
+                });
+            };
             recorder = await recordAudio();
-            $(this).parent().siblings('.control_textarea').text(audio.audioUrl);
             break;
         }
     });
@@ -149,6 +164,13 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.passage_content').css('display', 'none');
                 thiz.siblings().not('.passage_canvas').css('opacity', '0.6');
                 break;
+                case 'Audio':
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                $(this).parent().siblings('.passage_audio').attr('src', '/recordings/'+value);
+                $(this).parent().siblings('.passage_audio').show();
+                $(this).parent().siblings('.passage_audio')[0].play();
+                });
+                break;
                 case 'Tone':
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     var lines = content.split("\n");
@@ -202,7 +224,6 @@ function readPassageMetadata(thiz){
                         var y = vars[3];
                         var l = vars[4];
                         var w = vars[5];
-                        console.log(color);
                         ctx.fillStyle = color;
                         ctx.strokeStyle = color;
                         if(shape == 'rectangle'){
