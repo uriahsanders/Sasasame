@@ -369,14 +369,11 @@ $(document).on('click', '.fileStreamChapter', function(){
 });
 $('#parent_chapter_title').on('click', function(){
     var something = $(this).text();
-    //The File Stream is stored in the File Stream
-    //and is very dangerous
-    if(something == 'Thought Stream'){
+    if(something == 'Sasame'){
         doSomethingFileStream();
     }
     else{
-        //The Thought Stream is stored in the database
-        something = "Thought Stream"
+        something = "Sasame"
         doSomethingThoughtStream();
         $(this).text(something);
     }

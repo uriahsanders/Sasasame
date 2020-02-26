@@ -184,7 +184,7 @@
         </div>
          -->
         <div>
-            <a class="link" href="/sasasame/`+chapter.title+`/`+chapter._id+`">`+chapter.title+`</a>
+            <a class="link" href="/`+chapter.title+`/`+chapter._id+`">`+chapter.title+`</a>
         </div>
         <div class="category_id">`+chapter._id+`</div>
     </div>`;

@@ -164,13 +164,6 @@ app.get('/highlight/javascript.js', function(req, res) {
 app.get('/highlight/default.css', function(req, res) {
     res.sendFile(__dirname + '/node_modules/highlight.js/styles/tomorrow.css');
 });
-// Uncomment these lines to password protect while evolving Sasame
-// securedRoutes.get('path1', /* ... */);
-// app.use('/', securedRoutes);
-// app.get('public', /* ... */);
-app.get('/', function(req, res) {
-    res.redirect('/sasasame');
-});
 app.post('/login/', function(req, res) {
     let name = req.body.name;
     User.findOne({name: name}, function(err, user) {
@@ -220,11 +213,10 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(passages){
-                res.render("sasasame", {
+                res.render("index", {
                     session: req.session,
                     isProfile: 'true',
                     chapter: '',
-                    sasasame: 'sasasame',
                     chapterTitle: 'Sasame',
                     parentChapter: null,
                     book: passages,
@@ -376,7 +368,7 @@ app.post('/paginate', function(req, res){
         });
     }
 });
-app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
+app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
@@ -397,10 +389,9 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(passages){
-                res.render("sasasame", {
+                res.render("index", {
                     session: req.session,
                     chapter: '',
-                    sasasame: 'sasasame',
                     chapterTitle: 'Sasame',
                     parentChapter: null,
                     book: passages,
@@ -444,9 +435,8 @@ app.get(/\/sasasame\/?(:category\/:category_ID)?/, function(req, res) {
                 .limit(DOCS_PER_PAGE)
                 .exec()
                 .then(function(chaps){
-                    res.render("sasasame", {
+                    res.render("index", {
                         session: req.session,
-                        sasasame: 'xyz',
                         parentChapter: chapter,
                         chapter: urlEnd,
                         book: passages,

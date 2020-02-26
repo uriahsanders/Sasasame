@@ -1,24 +1,203 @@
-    <%- include('header') -%>
-        <div id="bottom">
-            <form action="/feed_sasame" method="GET">
-                <!-- <input type="text" name="name"> -->
-		<%if(locals.passage){%>
-			<textarea id="sasame_text_area" name="content"><%=passage.content%></textarea>
-		<%}else{%>
-			<textarea id="sasame_text_area" name="content"></textarea>
-		<%}%>
-                <br/>
-                <!-- <input class="sasame_button" type="submit" name="submit" value="Shine Light"> -->
-                <input class="sasame_button" type="submit" name="submit" value="Feed Me">
-                <!-- <input class="eat_fruit" type="submit" name="submit" value="Enter Seed"> -->
-            </form>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sasame</title>
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/book.css">
+        <link rel="stylesheet" href="/css/mobile.css">
+        <link rel="shortcut icon" type="image/x-icon" href="/images/bitmap.png" />
+        <script src="/jquery.min.js"></script>
+        <script src="/jquery-ui.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="/jquery.modal.min.js"></script>
+        <link rel="stylesheet" href="/jquery.modal.min.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script type="module" src="/ionicons.esm.js"></script>
+        <script nomodule="" src="/ionicons.js"></script>
+        <link rel="stylesheet" href="/highlight/default.css">
+        <script src="/js/highlight.js"></script>
+    </head>
+    <body>
+        <div id="login_modal" class="modal">
+          <p>Login/Register</p>
+          <form id="login_form" action="/login" method="POST">
+            <p><input id="login_name"class="modal_input"value=""type="" name="name"></p>
+            <p><button>Go</button></p>
+          </form>
         </div>
-        <script>
-         $('.eat_fruit').click(function(e){
-             e.preventDefault()
-             window.location.href = '/fruit';
-         });
-        </script>
+        <% if(locals.session && locals.session.user != null){ %>
+            <div id="login">
+                <br/>
+                <br/>
+                <a class="link white" href="/user/<%=locals.session.user_id%>">Profile</a> |
+                <a class="link white" href="/logout">Logout</a>
+            </div>
+        <%} else{ %>
+            <div id="login">
+                <br/>
+                <br/>
+                <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
+                <a class="link white" rel="modal:open"href="#login_modal">Login</a> <!-- |
+                <a class="link white" href="#">Donate</a> -->
+
+            </div>
+        <%} %>
+        <div id="mobile_book_menu_main">
+            <%-scripts.printAddForm(chapter)%>
+            <div class="header">
+                Table of Contents
+            </div>
+            <div id="mobile_category_list">
+                <%if(chapters){%>
+                    <%chapters.forEach(function(f) { %>
+                        <%- scripts.printChapter(f) %>
+                <%});} %>
+                <hr/>
+                <br/>
+                <br/>
+
+            </div>
+        </div>
+        <div id="control_panel">
+            <div id="control_nav">
+                    <div id="main_header">
+                        <div id="mobile_book_menu">
+                            <ion-icon src="/images/ionicons/menu.svg"></ion-icon>
+                        </div>
+                        <a href="/">
+                            <img id="little_seed" alt="" src="/images/test.png"/>
+                        </a><!-- 
+                        <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">Sasame</a></div> -->
+                    </div>
+            </div>
+            <div id="control_blocks">
+                <div class="control_block" id="code">
+                    <%-scripts.printAddForm(chapter)%>
+                </div>
+                <div id="property_select">
+                        <%-scripts.printPropertySelect()%>
+                    </div>
+                <div  class="control_block" id="book_of_sasame">
+                    <div class="header">
+                        <%if(parentChapter != null){%>
+                            <div>
+                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>
+                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
+                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-outline.svg"></ion-icon>
+                                 <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-outline.svg"></ion-icon>
+                                 <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
+                                 <ion-icon title="Play All" src="/images/ionicons/play-circle.svg"></ion-icon>
+                                 <ion-icon title="Load All"src="/images/ionicons/reload-circle-outline.svg"></ion-icon>
+                                 <ion-icon title="Download as PDF"src="/images/ionicons/download-outline.svg"></ion-icon>
+                            </div>
+                            <br>
+                            <span id="parent_chapter_title"><%=parentChapter.title%></span>
+                                <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
+                                <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <div id="chapter_settings" class="modal">
+                              <p>CHAPTER OPTIONS</p>
+                              <p><input class="modal_input"value="<%=parentChapter.title%>"type="" name=""></p>
+                              <select class="modal_select">
+                                  <option>Public (Everyone can add and edit/delete everything)</option>
+                                  <option>Protected (Others can add and edit/delete their own work)</option>
+                                  <option>Private (Others can only see it)</option>
+                                  <option>Local (Only you can see it)</option>
+                              </select>
+                              <p>Distraction Free Mode</p>
+                              <p>Download as PDF</p>
+                              <p>Upload File(s)</p>
+                              <p class="chapter_update">Update Chapter</p>
+                              <p class="chapter_delete_<%=parentChapter._id%>">Delete Chapter</p>
+                              <a href="#" rel="modal:close">Close</a>
+                            </div>
+                        <%}else{%>
+                            <%if(locals.isProfile){%>
+                            <input type="hidden" value="true", id="is_profile"/>
+                            <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
+                            <%}else{%>
+                                <span id="parent_chapter_title">Sasame</span>
+                                <input id="fileStreamPath" type="hidden"></input>
+                                
+
+                                <input id="parent_chapter_id"type="hidden" value="Sasame"/>
+                                <input id="page" type="hidden" value="2" autocomplete="off"/>
+                            <%}%>
+                        <%}%>
+                    </div>
+                    <!-- Modal HTML embedded directly into document -->
+                    <div id="modal_add_sub_passage" class="modal">
+                        <form id="add_sub_passage_form"action="/passage/add_sub_passage/" method="POST">
+                            <div class="header no_cursive">
+                                Add Sub Passage
+                            </div>
+                            <div style="text-align:left">
+                                <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
+                                <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
+                                <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
+                                <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
+                                <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+
+                            </div>
+                            <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6"></textarea>
+                            <input name="chapterID" type="hidden" value="<%=chapter%>"/>
+                            <button class="control_button" id="add_sub_passage">Add</button>
+                            <div id="sub_properties">
+                                <div id="add_sub_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
+                            </div>
+                            <div id="sub_property_select">
+                                <%-scripts.printPropertySelect()%>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Add upon scroll -->
+                    <%if(book){%>
+                        <div id="passages">
+                        <% book.forEach(function(f) { %>
+                            <%- scripts.printPassage(f) %>
+                        <% }); %>
+                        </div>
+                        <div id="passage_load" class="load_more passage">
+                            Load More
+                        </div>
+                    <%}%>
+                </div>
+                <div class="control_block" id="toc">
+                    <div class="header">
+                        <select id="right_side_select" autocomplete="off">
+                            <option value="chapters">Chapters</option>
+                            <option value="chapters">Passages</option>
+                            <option value="queue">Queue</option>
+                            <option value="brief">Brief</option>
+                        </select>
+                    </div>
+                    <!-- Chapters -->
+                    <input id="search_val"type="hidden"autocomplete="false">
+                    <div id="categories">
+                        <div>
+                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
+                        </div>
+                        <div id="chapters">
+                            <%if(chapters){%>
+                                <%chapters.forEach(function(f) { %>
+                                    <%- scripts.printChapter(f) %>
+                            <%});} %>
+                        </div>
+                    </div>
+                    <div id="chapter_load"class="load_more category">Load More</div>
+                    <!-- Brief from #passages via JS -->
+                    <!-- Queue -->
+                    <div id="queue">
+                        <input class="control_input"placeholder="Chapter Title" type="" name="">
+                        <button class="control_button">Create!</button>
+                        <div id="queue_items"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script src="/marked.min.js"></script>
+        <script src="/shared.js"></script>
+        <script src="/js/app.js"></script>
+        <script src="/js/book.js"></script>
     </body>
-    <script src="js/app.js"></script>
 </html>
