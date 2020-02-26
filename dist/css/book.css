@@ -584,3 +584,7 @@ ion-icon{
 .option_distraction_free{
     color: #fff;
 }
+#alpha{
+    /*font-weight: light;*/
+    font-size: 0.6em;
+}
