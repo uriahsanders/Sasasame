@@ -86,17 +86,19 @@
                         <%-scripts.printPropertySelect()%>
                     </div>
                 <div  class="control_block" id="book_of_sasame">
+                    <input type="hidden" id="add_position" value="top">
                     <div class="header">
                         <%if(parentChapter != null){%>
                             <div>
                                   <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
-                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-outline.svg"></ion-icon>
-                                 <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-outline.svg"></ion-icon>
+                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-sharp.svg"></ion-icon>
+                                 <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
                                  <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
                                  <ion-icon title="Play All" src="/images/ionicons/play-circle.svg"></ion-icon>
-                                 <ion-icon title="Load All"src="/images/ionicons/reload-circle-outline.svg"></ion-icon>
-                                 <ion-icon title="Download as PDF"src="/images/ionicons/download-outline.svg"></ion-icon>
+                                 <ion-icon title="Load All"src="/images/ionicons/reload-circle-sharp.svg"></ion-icon>
+                                 <ion-icon title="Download as PDF"src="/images/ionicons/download-sharp.svg"></ion-icon>
+                                 <ion-icon title="Update Order" id="update_order_<%=parentChapter._id%>"src="/images/ionicons/documents-sharp.svg"></ion-icon>
                             </div>
                             <br>
                             <span id="parent_chapter_title"><%=parentChapter.title%></span>
@@ -150,7 +152,7 @@
                             <input name="chapterID" type="hidden" value="<%=chapter%>"/>
                             <button class="control_button" id="add_sub_passage">Add</button>
                             <div id="sub_properties">
-                                <div id="add_sub_property"><ion-icon src="/images/ionicons/add-circle-outline.svg"></ion-icon> Add Property</div> 
+                                <div id="add_sub_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Property</div> 
                             </div>
                             <div id="sub_property_select">
                                 <%-scripts.printPropertySelect()%>
@@ -164,9 +166,11 @@
                             <%- scripts.printPassage(f) %>
                         <% }); %>
                         </div>
+                        <%if(parentChapter == null){%>
                         <div id="passage_load" class="load_more passage">
                             Load More
                         </div>
+                        <%}%>
                     <%}%>
                 </div>
                 <div class="control_block" id="toc">

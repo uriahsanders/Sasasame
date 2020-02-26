@@ -419,7 +419,7 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         Passage.find({chapter: urlEnd})
         .sort({_id: -1})
         .populate('chapter author')
-        .limit(DOCS_PER_PAGE)
+        // .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(passages){
             //get the parent chapter 

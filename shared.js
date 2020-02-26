@@ -82,7 +82,7 @@
   exports.printPassage = function(passage){
        var ret = '';
         ret += `
-        <div class="passage_`+passage._id+` passage">`;
+        <div id="`+passage._id+`" class="passage">`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
             if(passage.author){

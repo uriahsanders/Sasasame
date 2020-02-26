@@ -14,6 +14,7 @@ module.exports = {
             }).save().then(data => {
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                     if(chap.passages){
+                        console.log(chap.passages);
                         chap.passages.push(data);
                     }
                     else{

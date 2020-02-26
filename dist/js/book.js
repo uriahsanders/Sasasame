@@ -1,3 +1,4 @@
+$('#passages').sortable();
 //Add passages
 $.fn.serializeObject = function() {
     var o = {};
@@ -84,14 +85,23 @@ handleAction();
 $('.codeform_add').on('submit', function(e){
     e.preventDefault();
     var info = $(this).serializeObject();
+    var thiz = $(this);
     $.ajax({
         type: 'post',
         url: '/passage/add_passage/',
         data: info,
         success: function(data){
             if(info.type == 'passage'){
-                $('#passages').prepend(data);
-                readPassageMetadata($('#passages').find(">:first-child").children('.metadata'));
+                thiz.children('.control_textarea').val('');
+                $('.property_select').remove();
+                if($('#add_position').val() == 'bottom'){
+                    $('#passages').append(data);
+                    readPassageMetadata($('#passages').find(">:last-child").children('.metadata'));
+                }
+                else{
+                    $('#passages').prepend(data);
+                    readPassageMetadata($('#passages').find(">:first-child").children('.metadata'));
+                }
             }
             else if(info.type == 'chapter'){
                 $('#chapters').prepend(data);
@@ -290,6 +300,19 @@ $('[id^=star_]').on('click', function(){
         }
     });
 });
+$('[id^=update_order_]').on('click', function(){
+    var _id = $(this).attr('id').split('_')[1];
+    $.ajax({
+        type: 'post',
+        url: '/update_order/',
+        data: {
+            passages: JSON.stringify($('#passages').sortable('toArray'))
+        },
+        success: function(data){
+            alert(data);
+        }
+    });
+});
 $('.add_property').on('click', function(){
     $(this).parent().prepend($('#property_select').html());
 });
@@ -340,7 +363,7 @@ $(document).on('click', '[id^=passage_delete_]', function(){
             _id: _id
         },
         success: function(data){
-            $('.passage_' + _id).remove();
+            $('#passage_' + _id).remove();
         }
     });
 });
@@ -462,10 +485,12 @@ $(document).on('click', '.icon_top_add', function(){
     $(this).attr('src', function(index, attr){
         if(attr == '/images/ionicons/caret-up-sharp.svg'){
             thiz.prop('title', 'Add to Bottom');
+            $('#add_position').val('bottom');
             return '/images/ionicons/caret-down-sharp.svg';
         }
         else{
             thiz.prop('title', 'Add to Top');
+            $('#add_position').val('top');
             return '/images/ionicons/caret-up-sharp.svg';
         }
     });
@@ -542,6 +567,7 @@ $('.load_more').on('click', function(){
                         html += share.printPassage(passage);
                     });
                     $('#passages').append(html);
+                    $('#passages').sortable();
                 }
                 else if(which == 'chapter_load'){
                     var chapters = JSON.parse(data);
@@ -638,11 +664,13 @@ $('.option_distraction_free').on('click', function(){
         $('#toc').show();
         $('#code').show();
         $('#passage_load').show();
+        $('.header').show();
         $(this).data('hidden', 'false')
     }
     else{
         $('#toc').hide();
         $('#code').hide();
+        $('.header').hide();
         $('#passage_load').hide();
         $(this).data('hidden', 'true')
     }
