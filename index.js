@@ -415,48 +415,27 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     }
     //category ID
     else{
-        //find all passages in this chapter
-        Passage.find({chapter: urlEnd})
-        .sort({_id: -1})
-        .populate('chapter author')
-        // .limit(DOCS_PER_PAGE)
+        Chapter.findOne({_id:urlEnd})
+        .populate('passages')
         .exec()
-        .then(function(passages){
-            //get the parent chapter 
-            Chapter.findOne({_id:urlEnd})
+        .then(function(chapter){
+            Chapter.find()
             .select('title')
+            .sort('stars')
             .limit(DOCS_PER_PAGE)
             .exec()
-            .then(function(chapter){
-                //find all chapters
-                Chapter.find()
-                .select('title')
-                .sort('stars')
-                .limit(DOCS_PER_PAGE)
-                .exec()
-                .then(function(chaps){
-                    res.render("index", {
-                        session: req.session,
-                        parentChapter: chapter,
-                        chapter: urlEnd,
-                        book: passages,
-                        chapters: chaps,
-                        addPassageAllowed: addPassageAllowed,
-                        addChapterAllowed: addChapterAllowed,
-                        scripts: scripts
-                    });
-                })
-                .then(function(err){
-                    if(err){
-                        console.log(err);
-                    }
+            .then(function(chaps){
+                res.render("index", {
+                    session: req.session,
+                    parentChapter: chapter,
+                    chapter: urlEnd,
+                    book: chapter.passages,
+                    chapters: chaps,
+                    addPassageAllowed: addPassageAllowed,
+                    addChapterAllowed: addChapterAllowed,
+                    scripts: scripts
                 });
             })
-            .then(function(err){
-                if(err){
-                    console.log(err);
-                }
-            });
         })
         .then(function(err){
             if(err){
@@ -558,6 +537,11 @@ app.post('/update_passage/', (req, res) => {
     passageController.updatePassage(req, res, function(){
         var backURL=req.header('Referer') || '/';
         res.redirect(backURL);
+    });
+});
+app.post('/update_chapter_order/', (req, res) => {
+    chapterController.updateChapterOrder(req, res, function(){
+        res.send('Updated');
     });
 });
 app.post('/update_passage_content', (req, res) => {

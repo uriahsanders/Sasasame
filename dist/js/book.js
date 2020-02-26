@@ -304,12 +304,13 @@ $('[id^=update_order_]').on('click', function(){
     var _id = $(this).attr('id').split('_')[1];
     $.ajax({
         type: 'post',
-        url: '/update_order/',
+        url: '/update_chapter_order/',
         data: {
-            passages: JSON.stringify($('#passages').sortable('toArray'))
+            passages: JSON.stringify($('#passages').sortable('toArray')),
+            chapterID: $('#parent_chapter_id').val()
         },
         success: function(data){
-            alert(data);
+            alert('Updated');
         }
     });
 });

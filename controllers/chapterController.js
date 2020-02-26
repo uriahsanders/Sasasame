@@ -32,5 +32,18 @@ module.exports = {
             }
             res.send('The chapter has been deleted.');
         });
-    }
+    },
+    updateChapterOrder: function(req, res, callback) {
+        var chapterID = req.body.chapterID;
+        var passages = JSON.parse(req.body.passages);
+        let trimmedPassages = passages.map(str => str.trim());
+        Chapter.updateOne({_id: chapterID.trim()}, {
+            passages: trimmedPassages,
+        }, function(err, affected, resp){
+            if(err){
+                console.log(err);
+            }
+            callback();
+        });
+    },
 }
