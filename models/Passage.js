@@ -44,6 +44,7 @@ const passageSchema = mongoose.Schema({
     flagged: Boolean, //content warning
     //display order within chapter from top to bottom
     order: Number,
+    label: String,
     canvas: Boolean // Has Canvas tag?
 });
 passageSchema.plugin(mongoosePaginate);

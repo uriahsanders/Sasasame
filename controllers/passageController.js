@@ -11,6 +11,7 @@ module.exports = {
                 chapter: options.chapter,
                 author: options.author,
                 canvas: options.canvas,
+                label: options.label,
                 metadata: options.metadata
             }).save().then(data => {
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
@@ -57,21 +58,32 @@ module.exports = {
         //build metadata from separate arrays
         var metadata = {};
         var canvas = false;
+        var label = '';
         var i = 0;
         if(Array.isArray(property_key)){
             property_key.forEach(function(key){
                 if(key == 'Canvas'){
                     canvas = true;
                 }
+                if(key == 'Label'){
+                    label = property_value[i];
+                }
                 metadata[key] = property_value[i++];
             });
         }
         else{
+            if(property_key == 'Canvas'){
+            canvas = true;
+            }
+            if(property_key == 'Label'){
+                label = property_value;
+            }
             metadata[property_key] = property_value;
         }
         Passage.updateOne({_id: passageID.trim()}, {
             content: content,
             canvas: canvas,
+            label: label,
             metadata: JSON.stringify(metadata)
         }, function(err, affected, resp){
             if(err){

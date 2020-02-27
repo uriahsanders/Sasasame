@@ -224,5 +224,12 @@
     </div>`;
     return ret;
   };
+  exports.printCanvas = function(passage){
+    var metadata = JSON.parse(passage.metadata);
+    var ret = '';
+    ret += `
+    <canvas data-canvas="${metadata['Canvas']}"class="ppe_queue_canvas" height="100px"width="100px"></canvas>`;
+    return ret;
+  };
 
 }(typeof exports === 'undefined' ? this.share = {} : exports));

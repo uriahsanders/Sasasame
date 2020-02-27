@@ -328,8 +328,18 @@ app.post('/update_file', function(req, res) {
       res.send('Done');
     });
 });
-app.get('/ppe', function(req, res) {
-    res.render('ppe', {session: req.session});
+app.post('/ppe', function(req, res) {
+    Passage.find({canvas: true})
+    .select('metadata')
+    .exec()
+    .then(function(passages){
+        console.log(passages);
+        var ret = '';
+        passages.forEach(passage => {
+            ret += scripts.printCanvas(passage);
+        });
+        res.send(ret);
+    });
 });
 
 //simply return new object list for client to add into html
@@ -462,10 +472,19 @@ app.post(/\/add_passage\/?/, (req, res) => {
             if(key == 'Canvas'){
                 canvas = true;
             }
+            if(key == 'Label'){
+                label = property_value[i];
+            }
             metadata[key] = property_value[i++];
         });
     }
     else{
+        if(property_key == 'Canvas'){
+            canvas = true;
+        }
+        if(property_key == 'Label'){
+            label = property_value;
+        }
         metadata[property_key] = property_value;
     }
     var passageCallback = function(data){
