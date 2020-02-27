@@ -482,6 +482,15 @@ $('.sun_icon').on('click', function(){
 $('.flag_icon').on('click', function(){
     $(this).toggleClass('crimson_color');
 });
+$('.graphic_mode').on('click', function(){
+    jqueryToggle($(this), function(){
+        $('#control_blocks').hide();
+        $('#ppe').show();
+    }, function(){
+        $('#control_blocks').show();
+        $('#ppe').hide();
+    });
+});
 $(document).on('click', '.icon_top_add', function(){
     var thiz = $(this);
     $(this).attr('src', function(index, attr){

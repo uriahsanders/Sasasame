@@ -1,14 +1,13 @@
-* {
-	margin: 0;
-	padding: 0;
+#ppe{
+	display: none;
 }
-#canvas{
+#ppe_canvas{
 	cursor: none;
 }
-#queue{
-	border: 1px solid black;
+#ppe_queue{
+	border-top: 1px solid black;
 }
-.queue_canvas{
+.ppe_queue_canvas{
 	border: 1px solid black;
 	margin: 0px;
 }

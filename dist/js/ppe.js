@@ -1,7 +1,7 @@
-var canvas = document.getElementById('canvas');
+var canvas = document.getElementById('ppe_canvas');
 var ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight - 100;
+canvas.height = window.innerHeight - 200;
 
 function draw(e) {
     var pos = getMousePos(canvas, e);

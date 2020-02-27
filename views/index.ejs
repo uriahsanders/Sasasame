@@ -16,6 +16,7 @@
         <script nomodule="" src="/ionicons.js"></script>
         <link rel="stylesheet" href="/highlight/default.css">
         <script src="/js/highlight.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/ppe.css">
     </head>
     <body>
         <div id="login_modal" class="modal">
@@ -77,6 +78,12 @@
                         </div>
             
                     </div>
+            </div>
+            <div id="ppe">
+                <canvas id="ppe_canvas"></canvas>
+                <div id="ppe_queue">
+                    <canvas class="ppe_queue_canvas" height="100px"width="100px"></canvas>
+                </div>
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">
@@ -211,5 +218,6 @@
         <script src="/shared.js"></script>
         <script src="/js/app.js"></script>
         <script src="/js/book.js"></script>
+        <script src="/js/ppe.js"></script>
     </body>
 </html>
