@@ -455,9 +455,13 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var property_value = req.body['property_value[]'] || req.body.property_value;
     //build metadata from separate arrays
     var metadata = {};
+    var canvas = false;
     var i = 0;
     if(Array.isArray(property_key)){
         property_key.forEach(function(key){
+            if(key == 'Canvas'){
+                canvas = true;
+            }
             metadata[key] = property_value[i++];
         });
     }
@@ -475,6 +479,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
             'chapter': chapterID,
             'content': content,
             'author': user,
+            'canvas': canvas,
             'metadata': JSON.stringify(metadata),
             'callback': passageCallback,
         });

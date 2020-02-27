@@ -137,7 +137,7 @@
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
             <div class="passage_content" contenteditable="true">`+ passage.content+`</div>
-            <canvas class="passage_canvas" height="100px"></canvas>
+            <canvas class="passage_canvas"></canvas>
             <audio class="passage_audio"controls="true"></audio>
             <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
             <div class="sub_passages">`;

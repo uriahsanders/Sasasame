@@ -235,53 +235,72 @@ function readPassageMetadata(thiz){
                   });
                 break;
                 case 'Canvas':
+                //create a colored polygon
+                //format: color, x,y, x,y x,y ...
+                var arr = value.split(',').map(x => x.trim());
+                var color = arr.shift();
+                var poly = arr.slice();
+                var canvas = thiz.siblings('.passage_canvas');
+                var max = Math.max.apply(Math, poly.map(x => parseInt(x, 10)));
+                canvas[0].height = max;
+                canvas[0].width = max;
+                canvas.css('display', 'block');
+                var ctx = canvas[0].getContext('2d');
+                ctx.fillStyle = color;
+
+                ctx.beginPath();
+                ctx.moveTo(poly[0], poly[1]);
+                for( item=2 ; item < poly.length-1 ; item+=2 ){ctx.lineTo( poly[item] , poly[item+1] )}
+
+                ctx.closePath();
+                ctx.fill();
                 //circles, squares/rectangles
                 //shape.color.x.y.l.w (value = name)or
                 //name.x.y
-                var canvas = thiz.siblings('.passage_canvas');
-                canvas.css('display', 'block');
-                var ctx = canvas[0].getContext('2d');
-                var name = value;
-                // console.log(name);
-                thiz.siblings('.canvas_name').attr('id', '#canvas_name_'+value);
-                var lines = content.split("\n");
-                lines.forEach(function(item, index){
-                    var vars = item.split('.');
-                    var length = vars.length;
-                    if(length == 6 || length == 5){
-                        var shape = vars[0];
-                        var color = vars[1];
-                        var x = vars[2];
-                        var y = vars[3];
-                        var l = vars[4];
-                        var w = vars[5];
-                        ctx.fillStyle = color;
-                        ctx.strokeStyle = color;
-                        if(shape == 'rectangle'){
-                            ctx.fillRect(x, y, l, w);
-                        }
-                        else if(shape == 'circle'){
-                            ctx.arc(x, y, l, 0, 2 * Math.PI);
-                            ctx.fill();
-                        }
-                        else if(shape == 'line'){
-                            ctx.beginPath();
-                            ctx.moveTo(x, y);
-                            ctx.lineTo(l, w);
-                            ctx.stroke(); 
-                        }
-                    }
-                    else if(length == 3){
-                        //Get passage content of canvas with same name
-                        var x = vars[1];
-                        var y = vars[2];
-                        var find_name = vars[0];
-                        //Find first canvas that has the same name
-                        var image = $('#canvas_name_' + find_name).siblings('.passage_canvas')[0];
-                        var imageContext = image.getContext('2d');
-                        ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
-                    }
-                });
+                // var canvas = thiz.siblings('.passage_canvas');
+                // canvas.css('display', 'block');
+                // var ctx = canvas[0].getContext('2d');
+                // var name = value;
+                // // console.log(name);
+                // thiz.siblings('.canvas_name').attr('id', '#canvas_name_'+value);
+                // var lines = content.split("\n");
+                // lines.forEach(function(item, index){
+                //     var vars = item.split('.');
+                //     var length = vars.length;
+                //     if(length == 6 || length == 5){
+                //         var shape = vars[0];
+                //         var color = vars[1];
+                //         var x = vars[2];
+                //         var y = vars[3];
+                //         var l = vars[4];
+                //         var w = vars[5];
+                //         ctx.fillStyle = color;
+                //         ctx.strokeStyle = color;
+                //         if(shape == 'rectangle'){
+                //             ctx.fillRect(x, y, l, w);
+                //         }
+                //         else if(shape == 'circle'){
+                //             ctx.arc(x, y, l, 0, 2 * Math.PI);
+                //             ctx.fill();
+                //         }
+                //         else if(shape == 'line'){
+                //             ctx.beginPath();
+                //             ctx.moveTo(x, y);
+                //             ctx.lineTo(l, w);
+                //             ctx.stroke(); 
+                //         }
+                //     }
+                    // else if(length == 3){
+                    //     //Get passage content of canvas with same name
+                    //     var x = vars[1];
+                    //     var y = vars[2];
+                    //     var find_name = vars[0];
+                    //     //Find first canvas that has the same name
+                    //     var image = $('#canvas_name_' + find_name).siblings('.passage_canvas')[0];
+                    //     var imageContext = image.getContext('2d');
+                    //     ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
+                    // }
+                // });
             }
         }
 }
