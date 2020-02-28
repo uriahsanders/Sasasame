@@ -12,11 +12,10 @@ module.exports = {
                 author: options.author,
                 canvas: options.canvas,
                 label: options.label,
-                metadata: options.metadata
+                metadata: options.metadata,
             }).save().then(data => {
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                     if(chap.passages){
-                        console.log(chap.passages);
                         chap.passages.push(data);
                     }
                     else{
@@ -28,16 +27,40 @@ module.exports = {
             });
         }
         else{
-            //level 1 passage
-            let post = new Passage({
-                content: options.content,
-                author: options.author,
-                metadata: options.metadata,
-                canvas: options.canvas
-            }).save()
-            .then(data => {
-                options.callback(data);
-            });
+            //level 1 sub passage
+            if(options.parentPassage != '' && options.parentPassage != null){
+                let post = new Passage({
+                    content: options.content,
+                    author: options.author,
+                    metadata: options.metadata,
+                    canvas: options.canvas,
+                    parentPassage: options.parentPassage
+                }).save()
+                .then(data => {
+                    Passage.findOne({_id:options.parentPassage}).exec(function(err, passage){
+                        if(passage.passages){
+                            passage.passages.push(data);
+                        }
+                        else{
+                            passage.passages = [data];
+                        }
+                        passage.save();
+                    });
+                    options.callback(data);
+                });
+            }else{
+                //level 1 passage
+                let post = new Passage({
+                    content: options.content,
+                    author: options.author,
+                    metadata: options.metadata,
+                    canvas: options.canvas
+                }).save()
+                .then(data => {
+                    options.callback(data);
+                });
+            }
+            
         }
     },
     addPassageToCategory: function(passageID, chapterID, callback) {

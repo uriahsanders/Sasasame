@@ -395,7 +395,7 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         .exec()
         .then(function(chapters){
             Passage.find({})
-            .populate('chapter author')
+            .populate('chapter author passages')
             .sort([['_id', -1]])
             .limit(DOCS_PER_PAGE)
             .exec()
@@ -455,39 +455,47 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
-
-app.post(/\/add_passage\/?/, (req, res) => {
-    var chapterID = req.body.chapterID;
-    var type = req.body.type;
-    var user = req.session.user_id || null;
-    var backURL=req.header('Referer') || '/';
-    var content = req.body.passage || '';
-    var property_key = req.body['property_key[]'] || req.body.property_key;
-    var property_value = req.body['property_value[]'] || req.body.property_value;
-    //build metadata from separate arrays
+function generateMetadata(property_keys, property_values){
     var metadata = {};
     var canvas = false;
     var i = 0;
-    if(Array.isArray(property_key)){
-        property_key.forEach(function(key){
+    if(Array.isArray(property_keys)){
+        property_keys.forEach(function(key){
             if(key == 'Canvas'){
                 canvas = true;
             }
             if(key == 'Label'){
-                label = property_value[i];
+                label = property_values[i];
             }
-            metadata[key] = property_value[i++];
+            metadata[key] = property_values[i++];
         });
     }
     else{
-        if(property_key == 'Canvas'){
+        if(property_keys == 'Canvas'){
             canvas = true;
         }
-        if(property_key == 'Label'){
-            label = property_value;
+        if(property_keys == 'Label'){
+            label = property_values;
         }
-        metadata[property_key] = property_value;
+        metadata[property_keys] = property_values;
     }
+    return {
+        canvas: canvas,
+        json: metadata
+    };
+}
+app.post(/\/add_passage\/?/, (req, res) => {
+    var chapterID = req.body.chapterID;
+    var type = req.body.type;
+    var user = req.session.user_id || null;
+    var content = req.body.passage || '';
+    var parentPassage = req.body.parentPassage || '';
+    var property_key = req.body['property_key[]'] || req.body.property_key;
+    var property_value = req.body['property_value[]'] || req.body.property_value;
+    //build metadata from separate arrays
+    var metadata = generateMetadata(property_key, property_value);
+    var json = metadata.json;
+    var canvas = metadata.canvas;
     var passageCallback = function(data){
         res.send(scripts.printPassage(data));
     };
@@ -500,8 +508,9 @@ app.post(/\/add_passage\/?/, (req, res) => {
             'content': content,
             'author': user,
             'canvas': canvas,
-            'metadata': JSON.stringify(metadata),
+            'metadata': JSON.stringify(json),
             'callback': passageCallback,
+            'parentPassage': parentPassage
         });
     }
     else if(type == 'chapter' && content != ''){
@@ -557,6 +566,12 @@ app.post(/star/, (req, res) => {
         res.send(documents);
     })
 
+});
+app.post('/add_sub_passage/', (req, res) => {
+    passageController.addSubPassage(req, res, function(){
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
+    });
 });
 app.post('/update_passage/', (req, res) => {
     passageController.updatePassage(req, res, function(){

@@ -8,6 +8,7 @@ function ppe(){
     cursor.width = window.innerWidth - 10;
     cursor.height = window.innerHeight;
     var queuePos = 0;
+
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
 
@@ -26,7 +27,7 @@ function ppe(){
         var imageContext = image.getContext('2d');
         cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
     }
-    $(document).on('click', function(){
+    $(document).on('click', '#ppe_cursor', function(){
         var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
         var imageContext = image.getContext('2d');
         ctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);

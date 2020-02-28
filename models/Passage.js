@@ -30,10 +30,7 @@ const passageSchema = mongoose.Schema({
     //chapter the passage came from
     sourceChapter: String,
     //which users find this passage useful?
-    stars: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
+    stars: Number,
     //JSON for properties
     metadata: String,
     // What rules are being used to read the metadata?
@@ -47,6 +44,14 @@ const passageSchema = mongoose.Schema({
     label: String,
     canvas: Boolean // Has Canvas tag?
 });
+var autoPopulateChildren = function(next) {
+    this.populate('passages');
+    next();
+};
+
+passageSchema
+.pre('findOne', autoPopulateChildren)
+.pre('find', autoPopulateChildren)
 passageSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Passage', passageSchema, 'Passages');

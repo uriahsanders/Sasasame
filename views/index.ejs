@@ -78,6 +78,7 @@
                              <!-- PPE Options -->
                              <ion-icon class="ppe_option"title="Paint"src="/images/ionicons/brush-sharp.svg"></ion-icon>
                              <ion-icon class="ppe_option"title="Select"src="/images/ionicons/scan-sharp.svg"></ion-icon>
+                             <ion-icon class="ppe_option"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
                              <ion-icon class="ppe_option"title="Search"src="/images/ionicons/search-sharp.svg"></ion-icon>
 
                              <ion-icon class="graphic_mode"title="Graphic Mode"src="/images/ionicons/brush-sharp.svg"></ion-icon>
@@ -146,36 +147,15 @@
                             <%}%>
                         <%}%>
                     </div>
-                    <!-- Modal HTML embedded directly into document -->
-                    <div id="modal_add_sub_passage" class="modal">
-                        <form id="add_sub_passage_form"action="/passage/add_sub_passage/" method="POST">
-                            <div class="header no_cursive">
-                                Add Sub Passage
-                            </div>
-                            <div style="text-align:left">
-                                <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
-                                <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                                <ion-icon title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
-                                <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                                <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
-
-                            </div>
-                            <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6"></textarea>
-                            <input name="chapterID" type="hidden" value="<%=chapter%>"/>
-                            <button class="control_button" id="add_sub_passage">Add</button>
-                            <div id="sub_properties">
-                                <div id="add_sub_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Property</div> 
-                            </div>
-                            <div id="sub_property_select">
-                                <%-scripts.printPropertySelect()%>
-                            </div>
-                        </form>
-                    </div>
                     <!-- Add upon scroll -->
                     <%if(book){%>
                         <div id="passages">
                         <% book.forEach(function(f) { %>
-                            <%- scripts.printPassage(f) %>
+                            <!-- Modal HTML embedded directly into document -->
+                            <div id="modal_add_sub_passage_<%=f._id%>" class="modal">
+                                <%-scripts.printAddForm('', false, '', f._id);%>
+                            </div>
+                            <%- scripts.printPassage(f); %>
                         <% }); %>
                         </div>
                         <%if(parentChapter == null){%>
@@ -222,7 +202,7 @@
         <script src="/marked.min.js"></script>
         <script src="/shared.js"></script>
         <script src="/js/app.js"></script>
-        <script src="/js/ppe.js"></script>
         <script src="/js/book.js"></script>
+        <script src="/js/ppe.js"></script>
     </body>
 </html>

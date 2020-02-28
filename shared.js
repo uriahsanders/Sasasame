@@ -1,7 +1,8 @@
 //shared code for server/client
 (function(exports){
-  exports.printAddForm = function(chapter, update, after){
+  exports.printAddForm = function(chapter, update, after, parentPassage){
     update = update || false;
+    parentPassage = parentPassage || '';
     after = after || '';
     var which = (update == false) ? 'add' : 'update';
     var bt_which = (update == false) ? 'Add' : 'Update';
@@ -28,6 +29,7 @@
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
+                    <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
@@ -62,6 +64,11 @@
         <option>Audio</option>
         <option>Label</option>
         <option>Graph</option>
+        <option>Directory</option>
+        <option>Webpage</option>
+        <option>File</option>
+        <!-- Point to another passage -->
+        <option>Pointer</option>
     </select>
     <!-- For chapters -->
     <!-- <select>
@@ -100,7 +107,7 @@
                     }else{
                         ret += `<p>By: Anonymous</p>`;
                     }
-                    ret += `<p>`+passage.stars.length+` Stars </p>`;
+                    ret += `<p>`+(passage.stars || 0 )+` Stars </p>`;
                     var chapterID = '';
                     if(passage.chapter){
                       chapterID = passage.chapter._id;
@@ -142,32 +149,11 @@
             <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
             <div class="sub_passages">`;
                 passage.passages.forEach(function(sub){
-                    ret += `<div class="sub_passage">
-                    <div class="passage_author">`;
-                    if(sub.author){
-                         ret += `<div><a>`+sub.author.name+`</a></div>`;
-                     }else{
-                         ret += `<div><a class="basic_link" href="#">Anonymous</a></div>`;
-                     }
-                     ret += `<div id="modal_`+sub._id+`" class="modal">
-                        <p>PASSAGE OPTIONS</p>
-                      <textarea class="control_textarea">`+sub.content+`</textarea>
-                      <p>Update passage</p>
-                      <p>Delete passage</p>
-                      <a href="#" rel="modal:close">Close</a>
-                    </div>
-                     <a class="basic_link" href="#modal_`+sub._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
-                     <ion-icon title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
-
-                    </div>
-                    <input type="hidden" class="original_passage_content" value="`+sub.content+`"/>
-                        <div class="passage_chapter">Sasame</div>
-                    <div class="passage_content" contenteditable="true">`+f.content+`</div>
-                    <canvas class="passage_canvas"></canvas>
-                    <div class="passage_id">`+f._id+`</div>
-                    </div>`;
+                    ret += `<div class="sub_passage">`;
+                     ret += exports.printPassage(sub);
+                     ret += `</div>`;
                 });
-                ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
+                ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
             </div>
 
         </div>`;
