@@ -13,15 +13,10 @@ const chapterSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     }],
-    level: Number,
     date: {type: Date, default: Date.now},
     //which users find this chapter useful?
     stars: Number,
-    // JSON for whether chapter is shared, public, design, etc.
-    metadata: String,
-    // What rules are being used to read the metadata?
-    //also JSON
-    keySchema: String,
+    access: Number,
     flagged: Boolean //content warning
 });
 chapterSchema.plugin(mongoosePaginate);

@@ -294,8 +294,8 @@ function runCanvasKey(canvas, value){
 $('[id^=passage_metadata_]').each(function(){
     readPassageMetadata($(this));
 });
-function flashIcon(thiz){
-    thiz.css('color', 'gold');
+function flashIcon(thiz, color='gold'){
+    thiz.css('color', color);
     console.log('ss');
     setTimeout(function(){
         console.log('tttt');
@@ -404,11 +404,6 @@ $(document).on('click', '[id^=passage_update_]', function(){
     var _id = $(this).attr('id').split('_')[2];
     var content = $(this).parent().siblings('.passage_content').text();
     var thiz = $(this);
-    jqueryToggle(thiz, function(){
-        thiz.css('color', 'red');
-    }, function(){
-        thiz.css('color', 'green');
-    });
     $.ajax({
         type: 'post',
         url: '/update_passage_content',
@@ -417,7 +412,7 @@ $(document).on('click', '[id^=passage_update_]', function(){
             content: content
         },
         success: function(data){
-                console.log(data);
+            flashIcon(thiz, 'gold');
         }
     });
 });
@@ -567,16 +562,17 @@ $(document).on('click', '.icon_top_add', function(){
     });
 });
 $('.square_icon').on('click', function(){
-    var parentClass = $(this).parent().parent().attr('class').split(' ')[0];
+    var passage = $(this).parent().parent();
+    var id = passage.attr('id');
     $(this).attr('src', function(index, attr){
         if(attr == '/images/ionicons/square-sharp.svg'){
             //add passage to queue
-            $('#queue_items').append($('.'+parentClass).clone());
+            $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
             return '/images/ionicons/checkbox-sharp.svg';
         }
         else{
             //remove passage from queue
-            $('#queue_items .'+parentClass).hide();
+            $('#queue_items #clone_'+id).remove();
             return '/images/ionicons/square-sharp.svg';
         }
     });

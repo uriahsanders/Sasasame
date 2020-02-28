@@ -37,8 +37,6 @@ const passageSchema = mongoose.Schema({
     //is this passage a key schema?
     isSchema: Boolean,
     flagged: Boolean, //content warning
-    //display order within chapter from top to bottom
-    order: Number,
     label: String,
     canvas: Boolean // Has Canvas tag?
 });
