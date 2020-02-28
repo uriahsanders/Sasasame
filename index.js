@@ -394,7 +394,9 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(chapters){
-            Passage.find({})
+            Passage.find({
+                parent: undefined
+            })
             .populate('chapter author passages')
             .sort([['_id', -1]])
             .limit(DOCS_PER_PAGE)

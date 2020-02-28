@@ -10,7 +10,7 @@
     var _id = (update == false) ? '' : update._id;
     var ret = '';
     ret += `
-    <form class="codeform_`+which+`"action="/`+which+`_passage/" method="POST">`;
+    <form class="codeform_`+which+` add_form"action="/`+which+`_passage/" method="POST">`;
                     if(!update){
                       ret += `<div class="header no_cursive"><select name="type" class="add_select" autocomplete="off">
                         <option value="passage">Passage</option>
@@ -153,7 +153,7 @@
                      ret += exports.printPassage(sub);
                      ret += `</div>`;
                 });
-                ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
+            ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
             </div>
 
         </div>`;

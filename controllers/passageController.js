@@ -34,7 +34,7 @@ module.exports = {
                     author: options.author,
                     metadata: options.metadata,
                     canvas: options.canvas,
-                    parentPassage: options.parentPassage
+                    parent: options.parentPassage
                 }).save()
                 .then(data => {
                     Passage.findOne({_id:options.parentPassage}).exec(function(err, passage){

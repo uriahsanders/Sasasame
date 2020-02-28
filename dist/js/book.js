@@ -154,9 +154,11 @@ $('#login_form').on('submit', function(e){
 $('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
         $(this).parent().siblings('.add_passage_icons').hide();
+        $('#code').find('.add_form').children('.properties').hide();
     }
     else{
         $(this).parent().siblings('.add_passage_icons').show();
+        $('#code').find('.add_form').children('.properties').show();
     }
 });
 function jqueryToggle(thiz, func1, func2){
