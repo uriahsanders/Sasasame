@@ -292,8 +292,18 @@ function runCanvasKey(canvas, value){
 $('[id^=passage_metadata_]').each(function(){
     readPassageMetadata($(this));
 });
-$('[id^=star_]').on('click', function(){
+function flashIcon(thiz){
+    thiz.css('color', 'gold');
+    console.log('ss');
+    setTimeout(function(){
+        console.log('tttt');
+        thiz.css('color', 'black');
+    }, 250);
+}
+$(document).on('click', '[id^=star_]', function(){
     var _id = $(this).attr('id').split('_')[1];
+    var thiz = $(this);
+    var newCount = parseInt($('.star_count_'+_id).text(), 10) + 1;
     $.ajax({
         type: 'post',
         url: '/star/',
@@ -301,7 +311,8 @@ $('[id^=star_]').on('click', function(){
             _id: _id
         },
         success: function(data){
-            // alert(JSON.stringify(data));
+            flashIcon(thiz);
+            $('.star_count_'+_id).text(newCount);
         }
     });
 });
@@ -475,10 +486,7 @@ $(document).on('change', '.property_key', function(){
     $(this).siblings('.property_value').attr('placeholder',placeholder);
 });
 $('.star_icon').on('click', function(){
-    $(this).attr('src', function(index, attr){
-        return attr == '/images/ionicons/star-sharp.svg' ? '/images/ionicons/star.svg' : '/images/ionicons/star-sharp.svg';
-    });
-    $(this).toggleClass('gold_color');
+    // $(this).toggleClass('gold_color');
 });
 $('.sun_icon').on('click', function(){
     $(this).toggleClass('gold_color');

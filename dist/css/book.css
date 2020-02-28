@@ -175,8 +175,11 @@
 }
 .passage_author{
     padding-left: 18px;
-    width: 100px;
+    /*width: 100px;*/
     text-align: left;
+}
+.star_container{
+    float: right;
 }
 .passage_author_image{
     width: 50px;

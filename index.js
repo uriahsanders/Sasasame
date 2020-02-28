@@ -397,7 +397,7 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
             Passage.find({
                 parent: undefined
             })
-            .populate('chapter author passages')
+            .populate('chapter author')
             .sort([['_id', -1]])
             .limit(DOCS_PER_PAGE)
             .exec()
@@ -561,13 +561,22 @@ app.post(/search/, (req, res) => {
 app.post(/star/, (req, res) => {
     var _id = req.body._id.trim();
     Passage.findOneAndUpdate({_id: _id}, {
-        $push: {
-            stars: req.session.user
+        $inc: {
+            stars: 1
         }
     }, function(err, documents){
         res.send(documents);
-    })
-
+    });
+});
+app.post(/star_chapter/, (req, res) => {
+    var _id = req.body._id.trim();
+    Chapter.findOneAndUpdate({_id: _id}, {
+        $inc: {
+            stars: 1
+        }
+    }, function(err, documents){
+        res.send(documents);
+    });
 });
 app.post('/add_sub_passage/', (req, res) => {
     passageController.addSubPassage(req, res, function(){

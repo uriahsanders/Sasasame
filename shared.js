@@ -95,8 +95,10 @@
             if(passage.author){
                 ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.name+`</a></div>`;
             }else{
-                ret += `<div><a class="basic_link" href="#">Anonymous</a></div>`;
+                ret += `<div><a class="basic_link" href="#">Anonymous</a>`;
             }
+            ret += '<span class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'<span>';
+            ret += '</div>';
             ret += `<div id="modal_`+passage._id+`" class="modal">
                 <p>PASSAGE OPTIONS</p>
                 <div class="passage_details">`;

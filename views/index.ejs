@@ -119,6 +119,7 @@
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <div id="chapter_settings" class="modal">
                               <p>CHAPTER OPTIONS</p>
+                              <p><%=(parentChapter.stars || 0 )%> Stars </p>
                               <p><input class="modal_input"value="<%=parentChapter.title%>"type="" name=""></p>
                               <select class="modal_select">
                                   <option>Public (Everyone can add and edit/delete everything)</option>
@@ -126,12 +127,8 @@
                                   <option>Private (Others can only see it)</option>
                                   <option>Local (Only you can see it)</option>
                               </select>
-                              <p>Distraction Free Mode</p>
-                              <p>Download as PDF</p>
-                              <p>Upload File(s)</p>
                               <p class="chapter_update">Update Chapter</p>
                               <p class="chapter_delete_<%=parentChapter._id%>">Delete Chapter</p>
-                              <a href="#" rel="modal:close">Close</a>
                             </div>
                         <%}else{%>
                             <%if(locals.isProfile){%>
