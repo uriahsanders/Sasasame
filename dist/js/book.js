@@ -155,10 +155,12 @@ $('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
         $(this).parent().siblings('.add_passage_icons').hide();
         $('#code').find('.add_form').children('.properties').hide();
+        $('#mobile_modal').find('.add_form').children('.properties').hide();
     }
     else{
         $(this).parent().siblings('.add_passage_icons').show();
         $('#code').find('.add_form').children('.properties').show();
+        $('#mobile_modal').find('.add_form').children('.properties').show();
     }
 });
 function jqueryToggle(thiz, func1, func2){
@@ -503,6 +505,7 @@ $('.graphic_mode').on('click', function(){
         $('#ppe').show();
         $('.ppe_option').css('display', 'inline-block');
         $('.book_option').hide();
+        $('.option_distraction_free').hide();
         $.ajax({
             type: 'post',
             url: '/ppe',
@@ -528,7 +531,9 @@ $('.graphic_mode').on('click', function(){
         $('#ppe').hide();
         $('.ppe_option').hide();
         $('.book_option').show();
-        // window.addEventListener('mousemove', draw, false);
+        if(!$('#mobile_book_menu').is(':visible')){
+            $('.option_distraction_free').show();
+        }
     });
 });
 
@@ -630,6 +635,7 @@ $('.load_more').on('click', function(){
                         html += share.printChapter(chapter);
                     });
                     $('#categories').append(html);
+                    $('#mobile_category_list').append(html);
                 }
                 $('#page').val(++page);
             }
