@@ -229,6 +229,7 @@
     margin-top: 10px;
     font-size: 1.2em;
     cursor: pointer;
+    text-align: center;
 }
 
 #toc{
@@ -558,6 +559,7 @@ select::-ms-expand {
 }
 .load_more{
     cursor: pointer;
+    text-align: center;
 }
 ion-icon{
     cursor: pointer;

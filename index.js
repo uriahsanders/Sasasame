@@ -331,6 +331,7 @@ app.post('/update_file', function(req, res) {
 app.post('/ppe', function(req, res) {
     Passage.find({canvas: true})
     .select('metadata')
+    .limit(20)
     .exec()
     .then(function(passages){
         console.log(passages);

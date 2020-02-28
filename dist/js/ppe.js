@@ -31,6 +31,7 @@ function ppe(){
         var imageContext = image.getContext('2d');
         ctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
     });
+    cursor.addEventListener('mousemove', draw, 0);
     $(document).on('keydown', function(e){
         if(e.keyCode == 37){
             ++queuePos;
@@ -41,7 +42,6 @@ function ppe(){
         $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
         $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
     });
-    window.addEventListener('mousemove', draw, false);
 
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
