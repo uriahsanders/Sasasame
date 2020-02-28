@@ -370,7 +370,7 @@ app.post('/paginate', function(req, res){
             if(err) console.log(err);
         });
     }
-    else if(which == 'chapter_load'){
+    else if(which == 'chapter_load' || which == 'chapter_load_mobile'){
         Chapter.paginate(chapterFind, {page: page, limit: DOCS_PER_PAGE, sort: 'stars', select: 'title'})
         .then(function(chapters){
             res.send(JSON.stringify(chapters));

@@ -16,7 +16,7 @@ const chapterSchema = mongoose.Schema({
     date: {type: Date, default: Date.now},
     //which users find this chapter useful?
     stars: Number,
-    access: Number,
+    access: String,
     flagged: Boolean //content warning
 });
 chapterSchema.plugin(mongoosePaginate);

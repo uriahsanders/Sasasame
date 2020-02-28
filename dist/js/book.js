@@ -1,4 +1,6 @@
-$('#passages').sortable();
+if($('#parent_chapter_id').val() != 'Sasame'){
+    $('#passages').sortable();
+}
 $(document).on('focus', '.passage_content', function(){
     $('#passages').sortable('disable');
 });
@@ -131,7 +133,7 @@ $('#chapter_search').on('keypress', function(e){
                 title: $(this).val()
             },
             success: function(data){
-                $('.category').not('#chapter_load').remove();
+                $('.category').not('#chapter_load').not('#chapter_load_mobile').remove();
                 $('#categories').append(data);
             }
         });
@@ -611,7 +613,7 @@ $('#right_side_select').on('change', function(){
             break;
     }
 });
-$('.load_more').on('click', function(){
+$(document).on('click', '.load_more', function(){
     var chapter = $('#parent_chapter_id').val();
     var page = parseInt($('#page').val());
     var isProfile = $('#is_profile').val();
@@ -639,7 +641,7 @@ $('.load_more').on('click', function(){
                         readPassageMetadata($(this));
                     });
                 }
-                else if(which == 'chapter_load'){
+                else if(which == 'chapter_load' || which == 'chapter_load_mobile'){
                     var chapters = JSON.parse(data);
                     chapters.docs.forEach(function(chapter){
                         html += share.printChapter(chapter);

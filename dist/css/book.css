@@ -107,7 +107,7 @@
 #book_of_sasame{
     word-wrap: break-word;
     cursor: default;
-    width: 50%;
+    width: 40%;
     /* margin: auto; */
 }
 .passage{
@@ -185,7 +185,7 @@
     width: 50px;
 }
 .passage_content{
-    white-space: pre;
+    /*white-space: pre;*/
     overflow-x: auto;
     padding-left: 20px;
     padding-bottom: 10px;
