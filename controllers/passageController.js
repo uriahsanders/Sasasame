@@ -32,7 +32,8 @@ module.exports = {
             let post = new Passage({
                 content: options.content,
                 author: options.author,
-                metadata: options.metadata
+                metadata: options.metadata,
+                canvas: options.canvas
             }).save()
             .then(data => {
                 options.callback(data);

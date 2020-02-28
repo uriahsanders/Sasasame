@@ -1,4 +1,12 @@
 $('#passages').sortable();
+$(document).on('focus', '.passage_content', function(){
+    $('#passages').sortable('disable');
+});
+$(document).on('focusout', '.passage_content', function(){
+    $('#passages').sortable({
+        disabled: false
+    });
+});
 //Add passages
 $.fn.serializeObject = function() {
     var o = {};
@@ -258,15 +266,23 @@ function runCanvasKey(canvas, value){
     var color = arr.shift();
     var poly = arr.slice();
     var max = Math.max.apply(Math, poly.map(x => parseInt(x, 10)));
-    canvas[0].height = max;
-    canvas[0].width = max;
-    canvas.css('display', 'block');
+    var x = [];
+    var y = [];
+    for(var i=0 ; i < poly.length; i +=2){
+        x.push(poly[i])
+        y.push(poly[i+1]);
+    }
+    canvas[0].height = Math.max.apply(Math, y.map(a => parseInt(a, 10)));
+    canvas[0].width = Math.max.apply(Math, x.map(a => parseInt(a, 10)));
+    canvas.css('display', 'inline-block');
     var ctx = canvas[0].getContext('2d');
     ctx.fillStyle = color;
 
     ctx.beginPath();
     ctx.moveTo(poly[0], poly[1]);
-    for( item=2 ; item < poly.length-1 ; item+=2 ){ctx.lineTo( poly[item] , poly[item+1] )}
+    for( item=2 ; item < poly.length-1 ; item+=2 ){
+        ctx.lineTo( poly[item] , poly[item+1] )
+    }
 
     ctx.closePath();
     ctx.fill();
@@ -480,7 +496,12 @@ $('.graphic_mode').on('click', function(){
             },
             success: function(data){
                 $('#ppe_queue').html(data);
+                var first = true;
                 $('.ppe_queue_canvas').each(function(){
+                    if(first){
+                        $(this).addClass('ppe_queue_selected');
+                    }
+                    first = false;
                     runCanvasKey($(this), $(this).data('canvas'));
                 });
             }
@@ -488,8 +509,11 @@ $('.graphic_mode').on('click', function(){
     }, function(){
         $('#control_blocks').show();
         $('#ppe').hide();
+        share.runEngine();
+        // window.addEventListener('mousemove', draw, false);
     });
 });
+
 $(document).on('click', '.icon_top_add', function(){
     var thiz = $(this);
     $(this).attr('src', function(index, attr){

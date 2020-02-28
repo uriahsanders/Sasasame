@@ -38,11 +38,10 @@
     padding-top: 0px;
 }
 #control_nav{
-    padding: 10px;
+    padding-top: 15px;
     background: #353535;
     color: #fff;
-    padding-top: 30px;
-    height: 50px;
+    height: 60px;
 }
 .control_button{
     padding: 10px;
@@ -115,7 +114,7 @@
     /* border-left: 1px solid #353535; */
     /* border-right: 1px solid #353535; */
     margin: auto;
-    text-align: center;
+    text-align: left;
     /* padding-left: 40px; */
     /* padding-right: 40px; */
     font-family: 'Patua One';
@@ -145,7 +144,7 @@
     padding-top: 12px;
     padding-bottom: 12px;
     margin: 0;
-    text-align: center;
+    text-align: left;
     line-height: 30px;
     font-size: 1.2em;
 }

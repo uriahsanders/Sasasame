@@ -3,11 +3,23 @@
 }
 #ppe_canvas{
 	cursor: none;
+	position: absolute;
+	z-index: 1;
+}
+#ppe_cursor{
+	cursor: none;
+	position: absolute;
+	z-index: 2;
 }
 #ppe_queue{
-	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	z-index: 3;
 }
 .ppe_queue_canvas{
-	border: 1px solid black;
 	margin: 0px;
+	padding: 5px;
+	z-index: 4;
+}
+.ppe_queue_selected{
+	border: 5px solid gold;
 }
