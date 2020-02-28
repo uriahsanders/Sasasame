@@ -128,7 +128,6 @@
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
              <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon>
              <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
-             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-sharp.svg"></ion-icon>
              <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
