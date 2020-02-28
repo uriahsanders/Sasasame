@@ -485,9 +485,14 @@ $('.flag_icon').on('click', function(){
     $(this).toggleClass('crimson_color');
 });
 $('.graphic_mode').on('click', function(){
+    var thiz = $(this);
     jqueryToggle($(this), function(){
+        thiz.attr('src', '/images/ionicons/book-sharp.svg');
+        thiz.attr('title', 'Book Mode');
         $('#control_blocks').hide();
         $('#ppe').show();
+        $('.ppe_option').css('display', 'inline-block');
+        $('.book_option').hide();
         $.ajax({
             type: 'post',
             url: '/ppe',
@@ -507,9 +512,12 @@ $('.graphic_mode').on('click', function(){
             }
         });
     }, function(){
+        thiz.attr('src', '/images/ionicons/brush-sharp.svg');
+        thiz.attr('title', 'Graphic Mode');
         $('#control_blocks').show();
         $('#ppe').hide();
-        share.runEngine();
+        $('.ppe_option').hide();
+        $('.book_option').show();
         // window.addEventListener('mousemove', draw, false);
     });
 });
