@@ -558,7 +558,7 @@ app.post(/search/, (req, res) => {
         res.send(html);
     });
 });
-app.post(/star/, (req, res) => {
+app.post('/star/', (req, res) => {
     var _id = req.body._id.trim();
     Passage.findOneAndUpdate({_id: _id}, {
         $inc: {
@@ -566,9 +566,12 @@ app.post(/star/, (req, res) => {
         }
     }, function(err, documents){
         res.send(documents);
+        //then star the chapter it's in
+        //and any passage it points to
+        //and and that passage's chapter
     });
 });
-app.post(/star_chapter/, (req, res) => {
+app.post('/star_chapter/', (req, res) => {
     var _id = req.body._id.trim();
     Chapter.findOneAndUpdate({_id: _id}, {
         $inc: {

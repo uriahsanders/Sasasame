@@ -33,7 +33,7 @@
                     <input name="_id" type="hidden" value="`+_id+`"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
-                        <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Property</div> 
+                        <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Key</div> 
                     </div>
                     `+after+`
                     </form>
@@ -51,12 +51,11 @@
     <select name="property_key"class="property_key" autocomplete="off">
         <option selected="selected">`+key+`</option>
         <option>Hyperlink</option>
-        <option>Color</option>
+        <option>Text Color</option>
         <option>CSS</option>
-        <option>Code</option>
+        <option>Syntax Highlight</option>
         <option>Markdown</option>
         <option>Access</option>
-        <option>Key Schema</option>
         <option>Canvas</option>
         <option>Animation</option>
         <option>Tone</option>
@@ -69,18 +68,12 @@
         <option>File</option>
         <!-- Point to another passage -->
         <option>Pointer</option>
-    </select>
-    <!-- For chapters -->
-    <!-- <select>
-        <option>Access</option>
-        <option>Chapter CSS</option>
-        <option>Passage CSS</option>
-        <option>Distraction Free Mode</option>
-        <option>Impress JS</option>
+        <option>Free Polygon</option>
+        <option>Regular Polygon</option>
         <option>Key Schema</option>
-        <option>Custom</option>
-        <option>Autorun</option>
-    </select> -->
+        <option>Is Key Schema?</option>
+        <option>Impress JS</option>
+    </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">
 </div>

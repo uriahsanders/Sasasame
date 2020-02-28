@@ -27,8 +27,6 @@ const passageSchema = mongoose.Schema({
     date: {type: Date, default: Date.now},
     //date last updated
     updated: {type: Date, default: Date.now},
-    //chapter the passage came from
-    sourceChapter: String,
     //which users find this passage useful?
     stars: Number,
     //JSON for properties

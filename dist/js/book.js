@@ -318,6 +318,20 @@ $(document).on('click', '[id^=star_]', function(){
         }
     });
 });
+$(document).on('click', '[id^=chapter_star_]', function(){
+    var _id = $(this).attr('id').split('_')[2];
+    var thiz = $(this);
+    $.ajax({
+        type: 'post',
+        url: '/star_chapter/',
+        data: {
+            _id: _id
+        },
+        success: function(data){
+            flashIcon(thiz);
+        }
+    });
+});
 $('[id^=update_order_]').on('click', function(){
     var _id = $(this).attr('id').split('_')[1];
     $.ajax({
