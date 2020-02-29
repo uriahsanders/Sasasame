@@ -76,6 +76,7 @@
         <option>Quill</option>
         <option>Code Mirror</option>
         <option>Eval JS</option>
+        <option>Reference</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">
