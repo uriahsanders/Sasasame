@@ -77,6 +77,7 @@
         <option>Code Mirror</option>
         <option>Eval JS</option>
         <option>Reference</option>
+        <option>Description</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">

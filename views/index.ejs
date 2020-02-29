@@ -22,8 +22,17 @@
         <div id="login_modal" class="modal">
           <p>Login/Register</p>
           <form id="login_form" action="/login" method="POST">
-            <p><input id="login_name"class="modal_input"value=""type="" name="name"></p>
-            <p><button>Go</button></p>
+            <div>
+                <label>Username:</label>
+                <input type="text" name="username"/>
+            </div>
+            <div>
+                <label>Password:</label>
+                <input type="password" name="password"/>
+            </div>
+            <div>
+                <input type="submit" value="Log In"/>
+            </div>
           </form>
         </div>
         <% if(locals.session && locals.session.user != null){ %>

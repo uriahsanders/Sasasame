@@ -194,6 +194,31 @@ function readPassageMetadata(thiz){
     var content = thiz.siblings('.passage_content').text();
     thiz.siblings('.proteins').children('.passage_play').hide();
       for (let [key, value] of Object.entries(metadata)) {
+            function playTone(content, lineNumber){
+                var lines = content.split("\n");
+                var numLines = lines.length;
+                var item = lines[lineNumber];
+                var vars = item.split('.');
+                var frequency = vars[0];
+                var type = vars[1];
+                var time = vars[2];
+                var context=new AudioContext()
+                var o=null;
+                var g=null;
+                o=context.createOscillator();
+                g=context.createGain();
+                o.type=type;
+                o.connect(g);
+                o.frequency.value=frequency;
+                g.connect(context.destination);
+                o.start(0);
+                g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime+time);
+                setTimeout(function(){
+                    if(lineNumber + 1 < numLines){
+                        playTone(content, lineNumber + 1);
+                    }
+                }, time * 1000);
+            }
             switch(key){
                 case 'Hyperlink':
                 thiz.siblings('.passage_content').attr('title', value);
@@ -223,24 +248,7 @@ function readPassageMetadata(thiz){
                 case 'Tone':
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
-                    var lines = content.split("\n");
-                    lines.forEach(function(item, index){
-                        var context=new AudioContext()
-                        var vars = item.split('.');
-                        var frequency = vars[0];
-                        var type = vars[1];
-                        var time = vars[2];
-                        var o=null;
-                        var g=null;
-                        o=context.createOscillator();
-                        g=context.createGain();
-                        o.type=type;
-                        o.connect(g);
-                        o.frequency.value=frequency;
-                        g.connect(context.destination);
-                        o.start(0);
-                        g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime+time);
-                    });
+                    playTone(content, 0);   
                 });
                 break;
                 case 'Markdown':
@@ -310,9 +318,7 @@ $('[id^=passage_metadata_]').each(function(){
 });
 function flashIcon(thiz, color='gold'){
     thiz.css('color', color);
-    console.log('ss');
     setTimeout(function(){
-        console.log('tttt');
         thiz.css('color', 'black');
     }, 250);
 }
@@ -601,7 +607,7 @@ $(document).on('click', '.icon_top_add', function(){
         }
     });
 });
-$('.square_icon').on('click', function(){
+$(document).on('click', '.square_icon', function(){
     var passage = $(this).parent().parent();
     var id = passage.attr('id');
     var content = passage.children('.passage_content').text();

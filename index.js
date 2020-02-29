@@ -58,7 +58,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(session({
-    secret: "Shh, its a secret!",
+    secret: "Sasame; just a cute little seed with a Really Big HEART!",
     resave: true,
     saveUninitialized: true
 }));
@@ -94,6 +94,118 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+passport.use('local-signup', new LocalStrategy({
+        // by default, local strategy uses username and password, we will override with email
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true // allows us to pass back the entire request to the callback
+    },
+
+    function (username, password, done) {
+        User.findOne({ username: username }, function(err, user) {
+          if (err) { return done(err); }
+          if (!user) {
+            return done(null, false, { message: 'Incorrect username.' });
+          }
+          if (!user.validPassword(password)) {
+            return done(null, false, { message: 'Incorrect password.' });
+          }
+          return done(null, user);
+        });
+        // asynchronous
+        // User.findOne wont fire unless data is sent back
+        process.nextTick(function () {
+            // find a user whose email is the same as the forms email
+            // we are checking to see if the user trying to login already exists
+            User.findOne({'email': email}, function (err, user) {
+                // if there are any errors, return the error
+                if (err) {
+                    return done(err);
+                }
+
+                // check to see if theres already a user with that email
+                if (user) {
+                    console.log('that email exists');
+                    return done(null, false, req.flash('signupMessage', email + ' is already in use. '));
+
+                } else {
+                    User.findOne({'local.username': req.body.email}, function (err, user) {
+                        if (user) {
+                            console.log('That username exists');
+                            return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                        }
+
+                        if (req.body.password != req.body.confirm_password) {
+                            console.log('Passwords do not match');
+                            return done(null, false, req.flash('signupMessage', 'Your passwords do not match'));
+                        }
+
+                        else {
+                            // create the user
+                            var newUser = new User();
+
+                            var permalink = req.body.username.toLowerCase().replace(' ', '').replace(/[^\w\s]/gi, '').trim();
+
+                            var verification_token = randomstring.generate({
+                                length: 64
+                            });
+
+
+                            newUser.local.email = email;
+
+                            newUser.local.password = newUser.generateHash(password);
+
+                            newUser.local.permalink = permalink;
+
+                            //Verified will get turned to true when they verify email address
+                            newUser.local.verified = false;
+                            newUser.local.verify_token = verification_token;
+
+                            try {
+                                newUser.save(function (err) {
+                                    if (err) {
+
+                                        throw err;
+                                    } else {
+                                        VerifyEmail.sendverification(email, verification_token, permalink);
+                                        return done(null, newUser);
+                                    }
+                                });
+                            } catch (err) {
+
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }));
+app.post('/login', 
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+app.get('/verify/:permaink/:token', function (req, res) {
+        var permalink = req.params.permaink;
+        var token = req.params.token;
+
+        User.findOne({'local.permalink': permalink}, function (err, user) {
+            if (user.local.verify_token == token) {
+                console.log('that token is correct! Verify the user');
+
+                User.findOneAndUpdate({'local.permalink': permalink}, {'local.verified': true}, function (err, resp) {
+                    console.log('The user has been verified!');
+                });
+
+                res.redirect('/login');
+            } else {
+                console.log('The token is wrong! Reject the user. token should be: ' + user.local.verify_token);
+            }
+        });
+    });
+
 //recordings
 app.get('/recordings', (req, res) => {
   readdir(recordingFolder)
@@ -164,29 +276,29 @@ app.get('/highlight/javascript.js', function(req, res) {
 app.get('/highlight/default.css', function(req, res) {
     res.sendFile(__dirname + '/node_modules/highlight.js/styles/tomorrow.css');
 });
-app.post('/login/', function(req, res) {
-    let name = req.body.name;
-    User.findOne({name: name}, function(err, user) {
-        //Register
-        if(!user){
-           var obj = new User();
-           obj.name = name;
-           obj.save(function(err2, newUser) {
-              req.session.user = newUser;
-              req.session.name = newUser.name;
-              req.session.user_id = newUser._id;
-              res.send('/user/' + newUser._id);
-           });
-        }
-        //Login
-        else{
-            req.session.user = user;
-            req.session.name = user.name;
-            req.session.user_id = user._id;
-            res.send('/user/' + user._id);
-        }
-    });
-});
+// app.post('/login/', function(req, res) {
+//     let name = req.body.name;
+//     User.findOne({name: name}, function(err, user) {
+//         //Register
+//         if(!user){
+//            var obj = new User();
+//            obj.name = name;
+//            obj.save(function(err2, newUser) {
+//               req.session.user = newUser;
+//               req.session.name = newUser.name;
+//               req.session.user_id = newUser._id;
+//               res.send('/user/' + newUser._id);
+//            });
+//         }
+//         //Login
+//         else{
+//             req.session.user = user;
+//             req.session.name = user.name;
+//             req.session.user_id = user._id;
+//             res.send('/user/' + user._id);
+//         }
+//     });
+// });
 app.get('/logout', function(req, res) {
     req.session.user = null;
     res.redirect('/');

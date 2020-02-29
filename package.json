@@ -26,6 +26,8 @@
     "mongoose": "^5.7.1",
     "mongoose-paginate": "^5.0.3",
     "pagedown": "^1.1.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "pug": "^2.0.4",
     "uuid": "^7.0.1"
   },
