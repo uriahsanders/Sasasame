@@ -184,6 +184,9 @@
 .passage_author_image{
     width: 50px;
 }
+.flagged{
+    color: red;
+}
 .passage_content{
     /*white-space: pre;*/
     overflow-x: auto;

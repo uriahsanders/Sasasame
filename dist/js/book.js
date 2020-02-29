@@ -401,6 +401,32 @@ var doSomethingFileStream = function(){
         }
     });
 };
+$(document).on('click', '[id^=passage_flag_]', function(){
+    var _id = $(this).attr('id').split('_')[2];
+    $.ajax({
+        type: 'post',
+        url: '/flag_passage',
+        data: {
+            _id: _id
+        },
+        success: function(data){
+            
+        }
+    });
+});
+$(document).on('click', '[id^=chapter_flag_]', function(){
+    var _id = $(this).attr('id').split('_')[2];
+    $.ajax({
+        type: 'post',
+        url: '/flag_chapter',
+        data: {
+            _id: _id
+        },
+        success: function(data){
+            
+        }
+    });
+});
 $(document).on('click', '[id^=passage_delete_]', function(){
     var _id = $(this).attr('id').split('_')[2];
     $.ajax({
@@ -517,7 +543,7 @@ $('.sun_icon').on('click', function(){
     $(this).toggleClass('gold_color');
 });
 $('.flag_icon').on('click', function(){
-    $(this).toggleClass('crimson_color');
+    $(this).toggleClass('flagged');
 });
 $('.graphic_mode').on('click', function(){
     var thiz = $(this);
@@ -594,6 +620,7 @@ $('.square_icon').on('click', function(){
             //add passage to queue
             $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
             $('#clone_'+id).children('.sub_passages').remove();
+            $('#clone_'+id).children('.proteins').hide();
             $('#queue_items')
             passages[id] = {
                 content: content,
@@ -612,7 +639,6 @@ $('.square_icon').on('click', function(){
             return '/images/ionicons/square-sharp.svg';
         }
     });
-    alert($('#queue_passages').val());
 });
 
 $('#right_side_select').on('change', function(){
@@ -637,14 +663,14 @@ $('#right_side_select').on('change', function(){
                 'padding': '0px',
                 'line-height': '10px'
             });
-            $('#right_passages').sortable();
+            // $('#right_passages').sortable();
             break;
         case 'queue':
             $('#chapter_load').hide();
             $('#categories').hide();
             $('#right_passages').remove();
             $('#queue').show();
-            $('#queue_items').sortable();
+            // $('#queue_items').sortable();
             break;
     }
 });

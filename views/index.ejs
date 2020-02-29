@@ -104,7 +104,7 @@
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
                                  <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-sharp.svg"></ion-icon>
                                  <ion-icon id="chapter_star_<%=parentChapter._id%>"title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
-                                 <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag.svg"></ion-icon>
+                                 <ion-icon id="chapter_flag_<%=parentChapter._id%>"title="Content Warning" class="flag_icon<%=(parentChapter.flagged == true ? ' flagged' : '')%>" src="/images/ionicons/flag.svg"></ion-icon>
                                  <ion-icon title="Play All" src="/images/ionicons/play-circle.svg"></ion-icon>
                                  <ion-icon title="Load All"src="/images/ionicons/reload-circle-sharp.svg"></ion-icon>
                                  <ion-icon title="Download as PDF"src="/images/ionicons/download-sharp.svg"></ion-icon>

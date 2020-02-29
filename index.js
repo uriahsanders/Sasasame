@@ -587,6 +587,20 @@ app.post(/search/, (req, res) => {
         res.send(html);
     });
 });
+app.post('/flag_passage', (req, res) => {
+    var _id = req.body._id.trim();
+    Passage.findOne({_id: _id}, function(err, passage){
+        passage.flagged = !passage.flagged;
+        passage.save();
+    });
+});
+app.post('/flag_chapter', (req, res) => {
+    var _id = req.body._id.trim();
+    Chapter.findOne({_id: _id}, function(err, chapter){
+        chapter.flagged = !chapter.flagged;
+        chapter.save();
+    });
+});
 app.post('/star/', (req, res) => {
     var _id = req.body._id.trim();
     Passage.findOneAndUpdate({_id: _id}, {
