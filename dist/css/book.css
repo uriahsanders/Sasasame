@@ -188,7 +188,7 @@
     color: red;
 }
 .passage_content{
-    /*white-space: pre;*/
+    white-space: pre-line;
     overflow-x: auto;
     padding-left: 20px;
     padding-bottom: 10px;
