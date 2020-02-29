@@ -163,7 +163,6 @@
                     <div class="header">
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
-                            <option value="chapters">Passages</option>
                             <option value="queue">Queue</option>
                             <option value="brief">Brief</option>
                         </select>
@@ -185,8 +184,11 @@
                     <!-- Brief from #passages via JS -->
                     <!-- Queue -->
                     <div id="queue">
-                        <input class="control_input"placeholder="Chapter Title" type="" name="">
-                        <button class="control_button">Create!</button>
+                        <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
+                        <form id="queue_form">
+                            <input id="queue_title"class="control_input"placeholder="Chapter Title" type="" name="chapter_title">
+                            <button class="control_button">Create!</button>
+                        </form>
                         <div id="queue_items"></div>
                     </div>
 

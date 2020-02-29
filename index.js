@@ -486,6 +486,35 @@ function generateMetadata(property_keys, property_values){
         json: metadata
     };
 }
+app.post(/\/create_queue_chapter\/?/, (req, res) => {
+    var user = req.session.user_id || null;
+    var passages = JSON.parse(req.body.passages);
+    chapterController.addChapter({
+        'title': req.body.title,
+        'author': user,
+        'callback': function(chapter){
+            for(var key in passages){
+                var parentPassage = passages[key].parentPassage || '';
+                //build metadata from separate arrays
+                var json = passages[key].metadata;
+                var canvas = json.canvas || false;
+                passageController.addPassage({
+                    'chapter': chapter._id,
+                    'content': passages[key].content,
+                    'author': user,
+                    // 'originalAuthor': passage.user,
+                    'canvas': canvas,
+                    'metadata': JSON.stringify(json),
+                    'callback': function(psg){
+                        // console.log(psg);
+                    },
+                    'parentPassage': parentPassage
+                });
+            }
+            res.send(scripts.printChapter(chapter));
+        }
+    });
+});
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
     var type = req.body.type;

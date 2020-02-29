@@ -52,6 +52,7 @@
         <option selected="selected">`+key+`</option>
         <option>Hyperlink</option>
         <option>Text Color</option>
+        <option>Background Color</option>
         <option>CSS</option>
         <option>Syntax Highlight</option>
         <option>Markdown</option>
@@ -60,7 +61,6 @@
         <option>Tone</option>
         <option>Hidden</option>
         <option>Audio</option>
-        <option>Label</option>
         <option>Graph</option>
         <option>Directory</option>
         <option>Webpage</option>
@@ -72,6 +72,10 @@
         <option>Key Schema</option>
         <option>Is Key Schema?</option>
         <option>Impress JS</option>
+        <option>Auto Expand</option>
+        <option>Quill</option>
+        <option>Code Mirror</option>
+        <option>Eval JS</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">
@@ -134,6 +138,7 @@
              <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle.svg"></ion-icon>
              </div>
+             <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
             <div class="passage_content" contenteditable="true">`+ passage.content+`</div>
@@ -183,7 +188,7 @@
              <div class="proteins">
              <input type="hidden" value="`+fileName+`" id="file_name"/>
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
-             <ion-icon title="Duplicate" src="/images/ionicons/duplicate-sharp.svg"></ion-icon>
+             <ion-icon title="Split" src="/images/ionicons/cut-sharp.svg"></ion-icon>
              <ion-icon title="Move line from above"src="/images/ionicons/add-sharp.svg"></ion-icon>
              <ion-icon title="Move line to above"src="/images/ionicons/remove-sharp.svg"></ion-icon>
              <ion-icon class="file_play"title="Run File" src="/images/ionicons/play-circle.svg"></ion-icon>

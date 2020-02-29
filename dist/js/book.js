@@ -1,14 +1,14 @@
 if($('#parent_chapter_id').val() != 'Sasame'){
     $('#passages').sortable();
-}
-$(document).on('focus', '.passage_content', function(){
-    $('#passages').sortable('disable');
-});
-$(document).on('focusout', '.passage_content', function(){
-    $('#passages').sortable({
-        disabled: false
+    $(document).on('focus', '.passage_content', function(){
+        $('#passages').sortable('disable');
     });
-});
+    $(document).on('focusout', '.passage_content', function(){
+        $('#passages').sortable({
+            disabled: false
+        });
+    });
+}
 //Add passages
 $.fn.serializeObject = function() {
     var o = {};
@@ -116,6 +116,20 @@ $('.codeform_add').on('submit', function(e){
             else if(info.type == 'chapter'){
                 $('#chapters').prepend(data);
             }
+        }
+    });
+});
+$('#queue_form').on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        type: 'post',
+        url: '/create_queue_chapter/',
+        data: {
+            passages: $('#queue_passages').val(),
+            title: $('#queue_title').val()
+        },
+        success: function(data){
+            $('#queue').prepend(data);
         }
     });
 });
@@ -564,18 +578,39 @@ $(document).on('click', '.icon_top_add', function(){
 $('.square_icon').on('click', function(){
     var passage = $(this).parent().parent();
     var id = passage.attr('id');
+    var content = passage.children('.passage_content').text();
+    var metadata = passage.children('.metadata').val();
+    var parentPassage = passage.children('.parentPassage').val();
+    var passagesJSON = $('#queue_passages').val();
+    var passages;
+    if(passagesJSON != ''){
+        passages = JSON.parse(passagesJSON);
+    }
+    else{
+        passages = {};
+    }
     $(this).attr('src', function(index, attr){
         if(attr == '/images/ionicons/square-sharp.svg'){
             //add passage to queue
             $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
+            passages[id] = {
+                content: content,
+                metadata: metadata,
+                parentPassage: parentPassage,
+                // originalAuthor: passage.author,
+            };
+            $('#queue_passages').val(JSON.stringify(passages));
             return '/images/ionicons/checkbox-sharp.svg';
         }
         else{
             //remove passage from queue
             $('#queue_items #clone_'+id).remove();
+            delete passages[id];
+            $('#queue_passages').val(JSON.stringify(passages));
             return '/images/ionicons/square-sharp.svg';
         }
     });
+    alert($('#queue_passages').val());
 });
 
 $('#right_side_select').on('change', function(){
