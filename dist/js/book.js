@@ -593,6 +593,8 @@ $('.square_icon').on('click', function(){
         if(attr == '/images/ionicons/square-sharp.svg'){
             //add passage to queue
             $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
+            $('#clone_'+id).children('.sub_passages').remove();
+            $('#queue_items')
             passages[id] = {
                 content: content,
                 metadata: metadata,
