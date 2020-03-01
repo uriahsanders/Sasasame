@@ -241,7 +241,8 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.passage_content').css('color', value);
                 break;
                 case 'CSS':
-                thiz.siblings('.passage_content').css(JSON.parse(value));
+                // thiz.siblings('.passage_content').css(JSON.parse(value));
+                thiz.siblings('.passage_content')[0].style = value;
                 break;
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');

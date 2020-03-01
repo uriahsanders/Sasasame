@@ -52,7 +52,6 @@
         <option selected="selected">`+key+`</option>
         <option>Hyperlink</option>
         <option>Text Color</option>
-        <option>Background Color</option>
         <option>CSS</option>
         <option>Syntax Highlight</option>
         <option>Markdown</option>
