@@ -193,7 +193,11 @@ function readPassageMetadata(thiz){
     metadata = JSON.parse(metadata);
     var content = thiz.siblings('.passage_content').text();
     thiz.siblings('.proteins').children('.passage_play').hide();
+    var autoplay = false;
       for (let [key, value] of Object.entries(metadata)) {
+            if(key == 'Autoplay'){
+                autoplay = true;
+            }
             function playTone(content, lineNumber){
                 var lines = content.split("\n");
                 var numLines = lines.length;
@@ -244,12 +248,20 @@ function readPassageMetadata(thiz){
                 $(this).parent().siblings('.passage_audio').show();
                 $(this).parent().siblings('.passage_audio')[0].play();
                 });
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autplay = false;
+                }
                 break;
                 case 'Tone':
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     playTone(content, 0);   
                 });
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autplay = false;
+                }
                 break;
                 case 'Markdown':
                 thiz.siblings('.proteins').children('.passage_play').show();
@@ -260,6 +272,10 @@ function readPassageMetadata(thiz){
                         thiz.siblings('.passage_content').html(content);
                     });
                 });
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autplay = false;
+                }
                 break;
                 case 'Code':
                 //syntax highlight
@@ -301,23 +317,40 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     eval(content); 
                 });
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autplay = false;
+                }
                 break;
                 case 'Custom':
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     //read all value/content pairs from DOM as
-                    var pairs = JSON.parse($('#custom_pairs').val());
-                    var string = `switch(value){`;
-                    for(var key in pairs){
-                        string += `
-                            case '${key}':
-                            ${pairs[key]}
-                            break;
-                        `;
+                    var storage = $('#custom_pairs').val();
+                    if(storage !== ''){
+                        var pairs = JSON.parse($('#custom_pairs').val());
+                        var string = `switch(value){`;
+                        for(var key in pairs){
+                            string += `
+                                case '${key}':
+                                ${pairs[key]}
+                                break;
+                            `;
+                        }
+                        string += '}';
+                        eval(string);
                     }
-                    string += '}';
-                    eval(string);
                 });
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autplay = false;
+                }
+                break;
+                case 'Autoplay':
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autplay = false;
+                }
                 break;
             }
         }
