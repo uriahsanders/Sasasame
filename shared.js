@@ -53,6 +53,7 @@
         <option>Hyperlink</option>
         <option>Text Color</option>
         <option>CSS</option>
+        <option>HTML</option>
         <option>Syntax Highlight</option>
         <option>Markdown</option>
         <option>Canvas</option>

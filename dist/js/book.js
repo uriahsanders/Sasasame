@@ -1,4 +1,6 @@
+var Sasame = true;
 if($('#parent_chapter_id').val() != 'Sasame'){
+    Sasame = false;
     $('#passages').sortable();
     $(document).on('focus', '.passage_content', function(){
         $('#passages').sortable('disable');
@@ -9,7 +11,7 @@ if($('#parent_chapter_id').val() != 'Sasame'){
         });
     });
 }
-//Add passages
+//For forms
 $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
@@ -224,7 +226,7 @@ function readPassageMetadata(thiz){
                 }, time * 1000);
             }
             function autoPlay(autoplay, thiz){
-                if(autoplay == true){
+                if(autoplay == true && !Sasame){
                     thiz.siblings('.proteins').children('.passage_play').click();
                     autoplay = false;
                 }
@@ -243,6 +245,32 @@ function readPassageMetadata(thiz){
                 case 'CSS':
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
                 thiz.siblings('.passage_content')[0].style = value;
+                break;
+                case 'HTML':
+                var html = thiz.siblings('.passage_content').html();
+                function escapeHtml(unsafe) {
+                return unsafe
+                     .replace(/&/g, "&amp;")
+                     .replace(/</g, "&lt;")
+                     .replace(/>/g, "&gt;")
+                     .replace(/"/g, "&quot;")
+                     .replace(/'/g, "&#039;");
+                }
+                // thiz.siblings('.passage_content').text(html);
+                //syntax highlight
+                thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(html)+'</code></pre>');
+                hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                thiz.siblings('.proteins').children('.passage_play').show();
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    jqueryToggle(thiz, function(){
+                        thiz.siblings('.passage_content').html(html);
+                    }, function(){
+                        // thiz.siblings('.passage_content').text(html);
+                        //syntax highlight
+                        thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(html)+'</code></pre>');
+                        hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                    })
+                });
                 break;
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');
@@ -316,6 +344,11 @@ function readPassageMetadata(thiz){
                     eval(content); 
                 });
                 autoPlay(autoplay, thiz);
+                //syntax highlight
+                thiz.siblings('.passage_content').html('<pre><code class="language-js">'+content+'</code></pre>');
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                  });
                 break;
                 case 'Custom':
                 thiz.siblings('.proteins').children('.passage_play').show();

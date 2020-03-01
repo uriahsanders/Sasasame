@@ -17,6 +17,8 @@ const chapterSchema = mongoose.Schema({
     //which users find this chapter useful?
     stars: Number,
     access: String,
+    distraction: Boolean,
+    tools: Boolean,
     flagged: Boolean //content warning
 });
 chapterSchema.plugin(mongoosePaginate);
