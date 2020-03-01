@@ -76,8 +76,13 @@
         <option>Quill</option>
         <option>Code Mirror</option>
         <option>Eval JS</option>
+        <option>Custom</option>
         <option>Reference</option>
         <option>Description</option>
+        <option>Autoplay</option>
+        <option>Loop</option>
+        <option>Question</option>
+        <option>Task</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">

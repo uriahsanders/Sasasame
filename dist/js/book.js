@@ -201,7 +201,7 @@ function readPassageMetadata(thiz){
                 var vars = item.split('.');
                 var frequency = vars[0];
                 var type = vars[1];
-                var time = vars[2];
+                var time = vars[2] / 1000;
                 var context=new AudioContext()
                 var o=null;
                 var g=null;
@@ -284,6 +284,41 @@ function readPassageMetadata(thiz){
                     //     ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
                     // }
                 // });
+                break;
+                case 'Eval JS':
+                //store value in DOM
+                var storage = $('#custom_pairs').val();
+                if(storage == ''){
+                    storage = {};
+                    storage[value] = content;
+                }
+                else{
+                    storage = JSON.parse(storage);
+                    storage[value] = content;
+                }
+                $('#custom_pairs').val(JSON.stringify(storage));
+                thiz.siblings('.proteins').children('.passage_play').show();
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    eval(content); 
+                });
+                break;
+                case 'Custom':
+                thiz.siblings('.proteins').children('.passage_play').show();
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    //read all value/content pairs from DOM as
+                    var pairs = JSON.parse($('#custom_pairs').val());
+                    var string = `switch(value){`;
+                    for(var key in pairs){
+                        string += `
+                            case '${key}':
+                            ${pairs[key]}
+                            break;
+                        `;
+                    }
+                    string += '}';
+                    eval(string);
+                });
+                break;
             }
         }
 }
