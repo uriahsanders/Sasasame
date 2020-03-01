@@ -34,23 +34,25 @@ function ppe(){
     });
     cursor.addEventListener('mousemove', draw, 0);
     $(document).on('keydown', function(e){
-        if(e.keyCode == 37){
-            ++queuePos;
+        if($('.graphic_mode').attr('title') == 'Book Mode'){
+            if(e.keyCode == 37){
+                ++queuePos;
+            }
+            if(e.keyCode == 39){
+                queuePos = queuePos - 1;
+            }
+            $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
+            $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
+            // Clear and redraw cursor with new item
+            cursorctx.fillStyle = "#000000";
+            cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
+            cursorctx.beginPath();
+            cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
+            cursorctx.stroke();
+            var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+            var imageContext = image.getContext('2d');
+            cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
         }
-        if(e.keyCode == 39){
-            queuePos = queuePos - 1;
-        }
-        $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
-        $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
-        // Clear and redraw cursor with new item
-        cursorctx.fillStyle = "#000000";
-        cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
-        cursorctx.beginPath();
-        cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
-        cursorctx.stroke();
-        var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-        var imageContext = image.getContext('2d');
-        cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
     });
 
     function getMousePos(canvas, evt) {

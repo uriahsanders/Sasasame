@@ -105,7 +105,7 @@ $('.codeform_add').on('submit', function(e){
         success: function(data){
             if(info.type == 'passage'){
                 thiz.children('.control_textarea').val('');
-                $('.property_select').remove();
+                $('.property_select:visible').remove();
                 if($('#add_position').val() == 'bottom'){
                     $('#passages').append(data);
                     readPassageMetadata($('#passages').find(">:last-child").children('.metadata'));
@@ -196,6 +196,14 @@ function readPassageMetadata(thiz){
     var content = thiz.siblings('.passage_content').text();
     thiz.siblings('.proteins').children('.passage_play').hide();
     var autoplay = false;
+    function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+    }
       for (let [key, value] of Object.entries(metadata)) {
             if(key == 'Autoplay'){
                 autoplay = true;
@@ -248,14 +256,6 @@ function readPassageMetadata(thiz){
                 break;
                 case 'HTML':
                 var html = thiz.siblings('.passage_content').html();
-                function escapeHtml(unsafe) {
-                return unsafe
-                     .replace(/&/g, "&amp;")
-                     .replace(/</g, "&lt;")
-                     .replace(/>/g, "&gt;")
-                     .replace(/"/g, "&quot;")
-                     .replace(/'/g, "&#039;");
-                }
                 // thiz.siblings('.passage_content').text(html);
                 //syntax highlight
                 thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(html)+'</code></pre>');
@@ -271,6 +271,7 @@ function readPassageMetadata(thiz){
                         hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
                     })
                 });
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');
@@ -374,7 +375,14 @@ function readPassageMetadata(thiz){
                 case 'Autoplay':
                 autoPlay(autoplay, thiz);
                 break;
+                default:
+                var html = thiz.siblings('.passage_content').text();
+                thiz.siblings('.passage_content').html(escapeHtml(html));
             }
+        }
+        if(Object.keys(metadata).length === 0){
+            var html = thiz.siblings('.passage_content').text();
+            thiz.siblings('.passage_content').html(escapeHtml(html));
         }
 }
 function runCanvasKey(canvas, value){
