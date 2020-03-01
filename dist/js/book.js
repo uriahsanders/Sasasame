@@ -223,6 +223,12 @@ function readPassageMetadata(thiz){
                     }
                 }, time * 1000);
             }
+            function autoPlay(autoplay, thiz){
+                if(autoplay == true){
+                    thiz.siblings('.proteins').children('.passage_play').click();
+                    autoplay = false;
+                }
+            }
             switch(key){
                 case 'Hyperlink':
                 thiz.siblings('.passage_content').attr('title', value);
@@ -248,20 +254,14 @@ function readPassageMetadata(thiz){
                 $(this).parent().siblings('.passage_audio').show();
                 $(this).parent().siblings('.passage_audio')[0].play();
                 });
-                if(autoplay == true){
-                    thiz.siblings('.proteins').children('.passage_play').click();
-                    autplay = false;
-                }
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Tone':
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     playTone(content, 0);   
                 });
-                if(autoplay == true){
-                    thiz.siblings('.proteins').children('.passage_play').click();
-                    autplay = false;
-                }
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Markdown':
                 thiz.siblings('.proteins').children('.passage_play').show();
@@ -272,10 +272,7 @@ function readPassageMetadata(thiz){
                         thiz.siblings('.passage_content').html(content);
                     });
                 });
-                if(autoplay == true){
-                    thiz.siblings('.proteins').children('.passage_play').click();
-                    autplay = false;
-                }
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Code':
                 //syntax highlight
@@ -317,10 +314,7 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     eval(content); 
                 });
-                if(autoplay == true){
-                    thiz.siblings('.proteins').children('.passage_play').click();
-                    autplay = false;
-                }
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Custom':
                 thiz.siblings('.proteins').children('.passage_play').show();
@@ -341,16 +335,10 @@ function readPassageMetadata(thiz){
                         eval(string);
                     }
                 });
-                if(autoplay == true){
-                    thiz.siblings('.proteins').children('.passage_play').click();
-                    autplay = false;
-                }
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Autoplay':
-                if(autoplay == true){
-                    thiz.siblings('.proteins').children('.passage_play').click();
-                    autplay = false;
-                }
+                autoPlay(autoplay, thiz);
                 break;
             }
         }
