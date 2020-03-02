@@ -298,6 +298,7 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                 $(this).parent().siblings('.passage_audio').attr('src', '/recordings/'+value);
                 $(this).parent().siblings('.passage_audio').show();
+                $(this).parent().siblings('.passage_audio')[0].loop = true;
                 $(this).parent().siblings('.passage_audio')[0].play();
                 });
                 autoPlay(autoplay, thiz);
@@ -480,7 +481,7 @@ $('[id^=update_order_]').on('click', function(){
         }
     });
 });
-$('.add_property').on('click', function(){
+$(document).on('click', '.add_property', function(){
     $(this).parent().prepend($('#property_select').html());
 });
 $(document).on('click', '.remove_property', function(){
@@ -946,6 +947,12 @@ $('.toggle_tools').on('click', function(){
 if($('#is_distraction_free').is(':checked')){
     $('.option_distraction_free').click();
 }
-if(!$('#is_tools_active').is(':checked')){
+if(!$('#is_tools_active').is(':checked') && !Sasame){
     $('.toggle_tools').click();
 }
+$('#play_all').on('click', function(){
+    flashIcon($(this), 'red');
+    $('.passage_play').each(function(){
+        $(this).click();
+    });
+});

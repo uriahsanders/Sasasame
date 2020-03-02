@@ -50,8 +50,8 @@ app.use(express.static('./dist'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 // User Session Setup Logic
 const session = require('express-session');
