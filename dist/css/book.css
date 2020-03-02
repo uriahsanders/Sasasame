@@ -110,19 +110,7 @@
     width: 40%;
     /* margin: auto; */
 }
-.passage{
-    /* border-left: 1px solid #353535; */
-    /* border-right: 1px solid #353535; */
-    margin: auto;
-    text-align: left;
-    /* padding-left: 40px; */
-    /* padding-right: 40px; */
-    font-family: 'Patua One';
-}
-.passage:hover{
-    
 
-}
 .category{
     font-family: 'Nanum Brush Script', cursive;
 }
@@ -147,6 +135,7 @@
     text-align: left;
     line-height: 30px;
     font-size: 1.2em;
+    font-family: 'Patua One';
 }
 .passage_id{
     display: none;
@@ -166,7 +155,7 @@
 }
 .passage_title{
     white-space: pre-wrap;
-    padding-left: 40px;
+    /*padding-left: 40px;*/
     padding-right: 40px;
     min-height: 30px;
     width:55%;
@@ -174,7 +163,7 @@
     font-weight: bold;
 }
 .passage_author{
-    padding-left: 18px;
+    /*padding-left: 18px;*/
     /*width: 100px;*/
     text-align: left;
 }
@@ -190,7 +179,7 @@
 .passage_content{
     white-space: pre-line;
     overflow-x: auto;
-    padding-left: 20px;
+    /*padding-left: 20px;*/
     padding-bottom: 10px;
     min-height: 30px;
     /*width:55%;*/
@@ -200,20 +189,7 @@
 .view_sub, .update_file, .file_play{
     cursor: pointer;
 }
-.passage_keys{
-    display: none;
-    font-weight: 200;
-    font-size: 0.6em;
-    padding-bottom: 5px;
-    padding-left: 40px;
-    padding-right: 40px;
-}
-.passage_edit_keys{
-    border-left: 1px solid #353535;
-    border-right: 1px solid #353535;
-    min-height: 30px;
 
-}
 .passage_author{
     font-weight: 200;
     font-size: 0.6em;
@@ -438,7 +414,7 @@
 }
 .passage_canvas{
     display: none;
-    padding-left: 20px;
+    /*padding-left: 20px;*/
 }
 .category_delete{
     float: left;
@@ -551,7 +527,6 @@ select::-ms-expand {
 }
 .proteins{
     font-size: 0.6em;
-    padding-left: 16px;
     text-align: left;
 }
 #parent_chapter_title{

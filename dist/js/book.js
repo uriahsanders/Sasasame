@@ -332,7 +332,7 @@ function readPassageMetadata(thiz){
                 //create a colored polygon
                 //format: color, x,y, x,y x,y ...
                 var canvas = thiz.siblings('.passage_canvas');
-                runCanvasKey(canvas, value);
+                runCanvasKey(canvas, content, value);
                     // else if(length == 3){
                     //     //Get passage content of canvas with same name
                     //     var x = vars[1];
@@ -402,31 +402,100 @@ function readPassageMetadata(thiz){
             thiz.siblings('.passage_content').html(escapeHtml(html));
         }
 }
-function runCanvasKey(canvas, value){
-    var arr = value.split(',').map(x => x.trim());
-    var color = arr.shift();
-    var poly = arr.slice();
-    var max = Math.max.apply(Math, poly.map(x => parseInt(x, 10)));
-    var x = [];
-    var y = [];
-    for(var i=0 ; i < poly.length; i +=2){
-        x.push(poly[i])
-        y.push(poly[i+1]);
-    }
-    canvas[0].height = Math.max.apply(Math, y.map(a => parseInt(a, 10)));
-    canvas[0].width = Math.max.apply(Math, x.map(a => parseInt(a, 10)));
+function runCanvasKey(canvas, content, canvas_size){
     canvas.css('display', 'inline-block');
     var ctx = canvas[0].getContext('2d');
-    ctx.fillStyle = color;
+    //read value line by line
+    var lines = content.split("\n");
+    canvas[0].height = canvas_size;
+        canvas[0].width = canvas_size;
+    // numSides.color.size
+    // numSides.fill.stroke.size
+    // numSides.color.size.x.y
+    // numSides.color.size.x.y.r
+    // numSides.fill.stroke.size.x.y
+    // numSides.fill.stroke.size.x.y.r
+    lines.forEach(function(line){
+        var parts = line.split('.');
+        var numParts = parts.length;
+        var numSides = parts[0];
+        //init
+        var fill = parts[1];
+        var color = parts[1];
+        var stroke = parts[1];
+        var size;
+        var x = false;
+        var y = false;
+        var r = 0;
+        //
+        switch(numParts){
+            case 3:
+            color = parts[1];
+            size = parts[2];
+            break;
+            case 4:
+            fill = parts[1];
+            stroke = parts[2];
+            size = parts[3];
+            break;
+            case 5:
+            color = parts[1];
+            size = parts[2];
+            x = parseInt(parts[3], 10);
+            y = parseInt(parts[4], 10);
+            break;
+            case 6:
+            //is it defining strokeStyle or size?
+            if(parseInt(parts[2])){
+                //size
+                color = parts[1];
+                size = parts[2];
+                x = parseInt(parts[3], 10);
+                y = parseInt(parts[4], 10);
 
-    ctx.beginPath();
-    ctx.moveTo(poly[0], poly[1]);
-    for( item=2 ; item < poly.length-1 ; item+=2 ){
-        ctx.lineTo( poly[item] , poly[item+1] )
-    }
+            }
+            else{
+                fill = parts[1];
+                stroke = parts[2];
+                size = parts[3];
+                x = parseInt(parts[4], 10);
+                y = parseInt(parts[5], 10);
+            }
+            break;
+            case 7:
+            fill = parts[1];
+            stroke = parts[2];
+            size = parts[3];
+            x = parseInt(parts[4], 10);
+            y = parseInt(parts[5], 10);
+            r = parseInt(parts[6], 10);
+            break;
+        }
+        var height = size,
+        width = size,
+        sideLen = size/2,
+        sideNumb = numSides,
+        rotation = r;
+        rotation *= Math.PI/180;
+        var xCenter = x || width/2;
+        var yCenter = y || height/2;
+        ctx.beginPath();
+        if(sideNumb == 0){
+            ctx.arc(xCenter, yCenter, sideLen, 0, 2 * Math.PI);
+        }
+        else{
+            ctx.moveTo (xCenter +  sideLen * Math.cos(rotation), yCenter +  sideLen *  Math.sin(rotation));           
 
-    ctx.closePath();
-    ctx.fill();
+        }
+        for (var i = 1; i <= sideNumb; i += 1) {
+            ctx.lineTo (xCenter +  sideLen * Math.cos(rotation + (i * 2 * Math.PI / sideNumb)), yCenter +  sideLen *  Math.sin(rotation + (i * 2 * Math.PI / sideNumb)));
+        }
+        ctx.strokeStyle = stroke;
+        ctx.fillStyle = fill;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fill();
+    });
 }
 $('[id^=passage_metadata_]').each(function(){
     readPassageMetadata($(this));
@@ -690,7 +759,7 @@ $('.graphic_mode').on('click', function(){
                         $(this).addClass('ppe_queue_selected');
                     }
                     first = false;
-                    runCanvasKey($(this), $(this).data('canvas'));
+                    runCanvasKey($(this), $(this).data('canvas'), $(this).data('canvas_size'));
                 });
             }
         });

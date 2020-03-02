@@ -223,7 +223,7 @@
     var metadata = JSON.parse(passage.metadata);
     var ret = '';
     ret += `
-    <canvas data-canvas="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
+    <canvas data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
     return ret;
   };
 
