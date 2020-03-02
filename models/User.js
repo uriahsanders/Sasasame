@@ -14,6 +14,9 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     }],
+    //You can give away twice as many stars as you have
+    numStars: Number,
+    starsGiven: Number
 });
 
 module.exports = mongoose.model('User', userSchema, 'Users');

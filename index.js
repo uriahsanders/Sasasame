@@ -502,7 +502,7 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
         Chapter.find()
-        .sort('stars')
+        .sort([['stars', -1]])
         .limit(DOCS_PER_PAGE)
         .exec()
         .then(function(chapters){
@@ -546,7 +546,7 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         .then(function(chapter){
             Chapter.find()
             .select('title')
-            .sort('stars')
+            .sort([['stars', -1]])
             .limit(DOCS_PER_PAGE)
             .exec()
             .then(function(chaps){
@@ -726,15 +726,15 @@ app.post('/flag_chapter', (req, res) => {
 });
 app.post('/star/', (req, res) => {
     var _id = req.body._id.trim();
-    Passage.findOneAndUpdate({_id: _id}, {
-        $inc: {
-            stars: 1
-        }
-    }, function(err, documents){
-        res.send(documents);
-        //then star the chapter it's in
-        //and any passage it points to
-        //and and that passage's chapter
+    Passage.findOne({_id: _id})
+    .populate('chapter')
+    .exec(function(err, passage){
+        console.log(passage);
+        passage.stars += 1;
+        passage.chapter.stars += 1;
+        passage.save();
+        passage.chapter.save();
+        res.send('Done');
     });
 });
 app.post('/star_chapter/', (req, res) => {
