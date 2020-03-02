@@ -6,7 +6,9 @@ module.exports = {
             let chapter = new Chapter({
                 title: options.title,
                 chapter: options.chap,
-                author: options.author
+                author: options.author,
+                tools: true,
+                distraction_free: false
             }).save().then(data => {
                 options.callback(data);
             });
@@ -15,7 +17,9 @@ module.exports = {
             // Level 1
             let chapter = new Chapter({
                 title: options.title,
-                author: options.author
+                author: options.author,
+                tools: true,
+                distraction_free: false
             }).save()
             .then(data => {
                 options.callback(data);
@@ -31,6 +35,24 @@ module.exports = {
                 console.log(err);
             }
             res.send('The chapter has been deleted.');
+        });
+    },
+    updateChapter: function(req, res, callback){
+        var chapterID = req.body._id;
+        var distraction_free = req.body.distraction_free || false;
+        distraction_free = distraction_free == 'on' ? true : false;
+        var tools = req.body.tools || true;
+        tools = tools == 'on' ? true : false;
+        Chapter.updateOne({_id: chapterID.trim()}, {
+            title: req.body.title,
+            distraction_free: distraction_free,
+            tools: tools,
+            access: req.body.access
+        }, function(err, affected, resp){
+            if(err){
+                console.log(err);
+            }
+            callback();
         });
     },
     updateChapterOrder: function(req, res, callback) {

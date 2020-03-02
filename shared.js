@@ -82,6 +82,8 @@
         <option>Loop</option>
         <option>Question</option>
         <option>Task</option>
+        <option>Hide Tools</option>
+        <option>Category</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">

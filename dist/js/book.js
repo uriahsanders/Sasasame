@@ -121,6 +121,19 @@ $('.codeform_add').on('submit', function(e){
         }
     });
 });
+$('#update_chapter_form').on('submit', function(e){
+    e.preventDefault();
+    var info = $(this).serializeObject();
+    var thiz = $(this);
+    $.ajax({
+        type: 'post',
+        url: '/update_chapter/',
+        data: info,
+        success: function(data){
+            window.location.reload();
+        }
+    });
+});
 $('#queue_form').on('submit', function(e){
     e.preventDefault();
     $.ajax({
@@ -276,6 +289,9 @@ function readPassageMetadata(thiz){
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');
                 thiz.siblings().not('.passage_canvas').css('opacity', '0.6');
+                break;
+                case 'Hide Tools':
+                thiz.siblings('.proteins').hide();
                 break;
                 case 'Audio':
                 thiz.siblings('.proteins').children('.passage_play').show();
@@ -927,3 +943,9 @@ $('.toggle_tools').on('click', function(){
         $(this).data('hidden', 'true')
     }
 });
+if($('#is_distraction_free').is(':checked')){
+    $('.option_distraction_free').click();
+}
+if(!$('#is_tools_active').is(':checked')){
+    $('.toggle_tools').click();
+}

@@ -126,14 +126,26 @@
                             <div id="chapter_settings" class="modal">
                               <p>CHAPTER OPTIONS</p>
                               <p><%=(parentChapter.stars || 0 )%> Stars </p>
-                              <p><input class="modal_input"value="<%=parentChapter.title%>"type="" name=""></p>
-                              <select class="modal_select">
-                                  <option>Public (Everyone can add and edit/delete everything)</option>
-                                  <option>Protected (Others can add and edit/delete their own work)</option>
-                                  <option>Private (Others can only see it)</option>
-                                  <option>Local (Only you can see it)</option>
-                              </select>
-                              <p class="chapter_update">Update Chapter</p>
+                              <form id="update_chapter_form">
+                                  Title:
+                                  <p><input class="control_input"value="<%=parentChapter.title%>"type="" name="title" autocomplete="off"></p>
+                                  Access (Currently <%=parentChapter.access%>):<br><br>
+                                  <div>
+                                      <select class="modal_select" name="access" autocomplete="off">
+                                      <option value="public">Public (Everyone can add and edit/delete everything)</option>
+                                      <option value="protected">Protected (Users can add and edit/delete their own work)</option>
+                                      <option value="private">Private (Only Author can add/edit/delete)</option>
+                                      <option value="local">Local (Only Author can see Chapter)</option>
+                                  </select>
+                                  <br><br>
+                                  <input id="is_distraction_free"type="checkbox" name="distraction_free" <%=(parentChapter.distraction_free == true ? 'checked' : '')%> autocomplete="off"> Distraction Free Mode
+                                  <br>
+                                  <input id="is_tools_active"type="checkbox" name="tools"  <%=(parentChapter.tools == true ? 'checked' : '')%> autocomplete="off"> Tools
+                                  <br><br>
+                                  </div>
+                                  <input type="hidden" name="_id" value="<%=parentChapter._id%>" autocomplete="off">
+                                  <button class="control_button">Update</button>
+                              </form>
                               <p class="chapter_delete_<%=parentChapter._id%>">Delete Chapter</p>
                             </div>
                         <%}else{%>

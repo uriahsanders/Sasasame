@@ -18,7 +18,6 @@ mongoose.connect('mongodb://localhost/sasame', {
 // Chapter.deleteMany({}, function(err, chapters){
 //     if (err) console.log(err);
 //     console.log(chapters);
-//     process.exit(1);
 // });
 // User.dropIndex("password_1");
 // User.find({}, function(err, users){
@@ -29,7 +28,6 @@ mongoose.connect('mongodb://localhost/sasame', {
 // Passage.deleteMany({}, function(err, passages){
 //     if (err) console.log(err);
 //     console.log(passages);
-//     process.exit(1);
 // });
 console.log('Done');
 process.exit();

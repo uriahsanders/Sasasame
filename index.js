@@ -573,7 +573,7 @@ function generateMetadata(property_keys, property_values){
     var metadata = {};
     var canvas = false;
     var i = 0;
-    if(Array.isArray(property_keys)){
+    if(Array.isArray(property_keys) && Array.isArray(property_values)){
         property_keys.forEach(function(key){
             if(key == 'Canvas'){
                 canvas = true;
@@ -582,6 +582,17 @@ function generateMetadata(property_keys, property_values){
                 label = property_values[i];
             }
             metadata[key] = property_values[i++];
+        });
+    }
+    else if(Array.isArray(property_keys)){
+        property_keys.forEach(function(key){
+            if(key == 'Canvas'){
+                canvas = true;
+            }
+            if(key == 'Label'){
+                label = '';
+            }
+            metadata[key] = '';
         });
     }
     else{
@@ -746,6 +757,11 @@ app.post('/update_passage/', (req, res) => {
     passageController.updatePassage(req, res, function(){
         var backURL=req.header('Referer') || '/';
         res.redirect(backURL);
+    });
+});
+app.post('/update_chapter/', (req, res) => {
+    chapterController.updateChapter(req, res, function(){
+        res.send('Updated');
     });
 });
 app.post('/update_chapter_order/', (req, res) => {

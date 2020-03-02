@@ -17,7 +17,7 @@ const chapterSchema = mongoose.Schema({
     //which users find this chapter useful?
     stars: Number,
     access: String,
-    distraction: Boolean,
+    distraction_free: Boolean,
     tools: Boolean,
     flagged: Boolean //content warning
 });
