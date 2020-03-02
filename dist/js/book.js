@@ -903,6 +903,7 @@ $('.option_distraction_free').on('click', function(){
         $('#code').show();
         $('#passage_load').show();
         $('.header').show();
+        $('#book_of_sasame').css('width', '40%');
         $(this).data('hidden', 'false')
     }
     else{
@@ -910,6 +911,7 @@ $('.option_distraction_free').on('click', function(){
         $('#code').hide();
         $('.header').hide();
         $('#passage_load').hide();
+        $('#book_of_sasame').css('width', '100%');
         $(this).data('hidden', 'true')
     }
 });

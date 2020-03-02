@@ -154,10 +154,6 @@
                     <%if(book){%>
                         <div id="passages">
                         <% book.forEach(function(f) { %>
-                            <!-- Modal HTML embedded directly into document -->
-                            <div id="modal_add_sub_passage_<%=f._id%>" class="modal">
-                                <%-scripts.printAddForm('', false, '', f._id);%>
-                            </div>
                             <%- scripts.printPassage(f); %>
                         <% }); %>
                         </div>

@@ -51,7 +51,6 @@
     <select name="property_key"class="property_key" autocomplete="off">
         <option selected="selected">`+key+`</option>
         <option>Hyperlink</option>
-        <option>Text Color</option>
         <option>CSS</option>
         <option>HTML</option>
         <option>Syntax Highlight</option>
@@ -93,6 +92,9 @@
        var ret = '';
         ret += `
         <div id="`+passage._id+`" class="passage">`;
+            ret += `<div id="modal_add_sub_passage_`+passage._id+`" class="modal">`
+          ret += exports.printAddForm('', false, '', passage._id)
+         ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
             if(passage.author){
