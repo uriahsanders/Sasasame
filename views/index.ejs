@@ -20,26 +20,53 @@
     </head>
     <body>
         <div id="login_modal" class="modal">
-          <p>Login/Register</p>
-          <form id="login_form" action="/login" method="POST">
+          <p>Login</p>
+          <form id="login_form" action="/login/" method="POST">
             <div>
                 <label>Username:</label>
-                <input type="text" name="username"/>
+                <input class="control_input"type="text" name="username"autocomplete="off"/>
+            </div>
+            <div>
+                <label>Email:</label>
+                <input class="control_input"type="text" name="email"autocomplete="off"/>
             </div>
             <div>
                 <label>Password:</label>
-                <input type="password" name="password"/>
+                <input class="control_input"type="password" name="password"autocomplete="off"/>
             </div>
             <div>
-                <input type="submit" value="Log In"/>
+                <input class="control_button"type="submit" value="Login"autocomplete="off"/>
+            </div>
+          </form>
+          <hr>
+          <p>Register</p>
+          <form id="register_form" action="/register/" method="POST">
+            <div>
+                <label>Username:</label>
+                <input class="control_input"type="text" name="username"autocomplete="off"/>
+            </div>
+            <div>
+                <label>Email:</label>
+                <input class="control_input"type="text" name="email"autocomplete="off"/>
+            </div>
+            <div>
+                <label>Password:</label>
+                <input class="control_input"type="password" name="password"autocomplete="off"/>
+            </div>
+            <div>
+                <label>Confirm Password:</label>
+                <input class="control_input"type="password" name="passwordConf"autocomplete="off"/>
+            </div>
+            <div>
+                <input class="control_button"type="submit" value="Register"/>
             </div>
           </form>
         </div>
-        <% if(locals.session && locals.session.user != null){ %>
+        <% if(user != null){ %>
             <div id="login">
                 <br/>
                 <br/>
-                <a class="link white" href="/user/<%=locals.session.user_id%>">Profile</a> |
+                <a class="link white" href="/user/<%=user._id%>">Profile</a> |
                 <a class="link white" href="/logout">Logout</a>
             </div>
         <%} else{ %>
@@ -150,8 +177,14 @@
                             </div>
                         <%}else{%>
                             <%if(locals.isProfile){%>
+                            <div id="profile_modal" class="modal">
+                                <p><%=user.username%></p>
+                                <p><%=user.stars%> Stars</p>
+                                <p><%=user.starsGiven%> Stars Given</p>
+                            </div>
                             <input type="hidden" value="true", id="is_profile"/>
-                            <span id="parent_chapter_title"><%=session.name%></span> <div title="Chapter Options"id="chapter_options"></div>
+                            <a class="basic_link" href="#profile_modal" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+                            <span id="parent_chapter_title"><%=user.username%></span>
                             <%}else{%>
                                 <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span>
                                 <input id="fileStreamPath" type="hidden"></input>

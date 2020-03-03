@@ -169,19 +169,7 @@ $('#chapter_search').on('keypress', function(e){
 
     }
 });
-$('#login_form').on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-        type: 'post',
-        url: '/login/',
-        data: {
-            name: $('#login_name').val()
-        },
-        success: function(data){
-            window.location.replace(data);
-        }
-    });
-});
+
 $('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
         $(this).parent().siblings('.add_passage_icons').hide();
@@ -1016,7 +1004,7 @@ $('.toggle_tools').on('click', function(){
 if($('#is_distraction_free').is(':checked')){
     $('.option_distraction_free').click();
 }
-if(!$('#is_tools_active').is(':checked') && !Sasame){
+if($('#is_tools_active').length && !$('#is_tools_active').is(':checked') && !Sasame){
     $('.toggle_tools').click();
 }
 $('#play_all').on('click', function(){

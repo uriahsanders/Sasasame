@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const helmet = require('helmet');
@@ -56,12 +57,20 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // User Session Setup Logic
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+var MongoStore  = require('connect-mongo');
 app.use(cookieParser());
 app.use(session({
     secret: "Sasame; just a cute little seed with a Really Big HEART!",
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    // store: new MongoStore({
+    //     url: process.env.MONGODB_CONNECTION_URL
+    // })
 }));
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+});
 
 //Call in Scripts
 const scripts = require('./shared');
@@ -94,117 +103,7 @@ securedRoutes.use((req, res, next) => {
   // -----------------------------------------------------------------------
 
 });
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-passport.use('local-signup', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField: 'email',
-        passwordField: 'password',
-        passReqToCallback: true // allows us to pass back the entire request to the callback
-    },
 
-    function (username, password, done) {
-        User.findOne({ username: username }, function(err, user) {
-          if (err) { return done(err); }
-          if (!user) {
-            return done(null, false, { message: 'Incorrect username.' });
-          }
-          if (!user.validPassword(password)) {
-            return done(null, false, { message: 'Incorrect password.' });
-          }
-          return done(null, user);
-        });
-        // asynchronous
-        // User.findOne wont fire unless data is sent back
-        process.nextTick(function () {
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-            User.findOne({'email': email}, function (err, user) {
-                // if there are any errors, return the error
-                if (err) {
-                    return done(err);
-                }
-
-                // check to see if theres already a user with that email
-                if (user) {
-                    console.log('that email exists');
-                    return done(null, false, req.flash('signupMessage', email + ' is already in use. '));
-
-                } else {
-                    User.findOne({'local.username': req.body.email}, function (err, user) {
-                        if (user) {
-                            console.log('That username exists');
-                            return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
-                        }
-
-                        if (req.body.password != req.body.confirm_password) {
-                            console.log('Passwords do not match');
-                            return done(null, false, req.flash('signupMessage', 'Your passwords do not match'));
-                        }
-
-                        else {
-                            // create the user
-                            var newUser = new User();
-
-                            var permalink = req.body.username.toLowerCase().replace(' ', '').replace(/[^\w\s]/gi, '').trim();
-
-                            var verification_token = randomstring.generate({
-                                length: 64
-                            });
-
-
-                            newUser.local.email = email;
-
-                            newUser.local.password = newUser.generateHash(password);
-
-                            newUser.local.permalink = permalink;
-
-                            //Verified will get turned to true when they verify email address
-                            newUser.local.verified = false;
-                            newUser.local.verify_token = verification_token;
-
-                            try {
-                                newUser.save(function (err) {
-                                    if (err) {
-
-                                        throw err;
-                                    } else {
-                                        VerifyEmail.sendverification(email, verification_token, permalink);
-                                        return done(null, newUser);
-                                    }
-                                });
-                            } catch (err) {
-
-                            }
-                        }
-                    });
-                }
-            });
-        });
-    }));
-app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-app.get('/verify/:permaink/:token', function (req, res) {
-        var permalink = req.params.permaink;
-        var token = req.params.token;
-
-        User.findOne({'local.permalink': permalink}, function (err, user) {
-            if (user.local.verify_token == token) {
-                console.log('that token is correct! Verify the user');
-
-                User.findOneAndUpdate({'local.permalink': permalink}, {'local.verified': true}, function (err, resp) {
-                    console.log('The user has been verified!');
-                });
-
-                res.redirect('/login');
-            } else {
-                console.log('The token is wrong! Reject the user. token should be: ' + user.local.verify_token);
-            }
-        });
-    });
 
 //recordings
 app.get('/recordings', (req, res) => {
@@ -276,31 +175,96 @@ app.get('/highlight/javascript.js', function(req, res) {
 app.get('/highlight/default.css', function(req, res) {
     res.sendFile(__dirname + '/node_modules/highlight.js/styles/tomorrow.css');
 });
-// app.post('/login/', function(req, res) {
-//     let name = req.body.name;
-//     User.findOne({name: name}, function(err, user) {
-//         //Register
-//         if(!user){
-//            var obj = new User();
-//            obj.name = name;
-//            obj.save(function(err2, newUser) {
-//               req.session.user = newUser;
-//               req.session.name = newUser.name;
-//               req.session.user_id = newUser._id;
-//               res.send('/user/' + newUser._id);
-//            });
-//         }
-//         //Login
-//         else{
-//             req.session.user = user;
-//             req.session.name = user.name;
-//             req.session.user_id = user._id;
-//             res.send('/user/' + user._id);
-//         }
-//     });
-// });
+
+function requiresLogin(req, res, next) {
+  if (req.session && req.session.userId) {
+    return next();
+  } else {
+    var err = new Error('You must be logged in to view this page.');
+    err.status = 401;
+    return next(err);
+  }
+}
+
+app.get('/verify/:permalink/:token', function (req, res) {
+    var permalink = req.params.permalink;
+    var token = req.params.token;
+
+    User.findOne({'permalink': permalink}, function (err, user) {
+        if (user.verify_token == token) {
+            console.log('that token is correct! Verify the user');
+
+            User.findOneAndUpdate({'permalink': permalink}, {'verified': true}, function (err, resp) {
+                console.log('The user has been verified!');
+            });
+
+            res.redirect('/login');
+        } else {
+            console.log('The token is wrong! Reject the user. token should be: ' + user.verify_token);
+        }
+    });
+});
+//authenticate input against database
+var authenticateUser = function (email, password, callback) {
+  User.findOne({ email: email })
+    .exec(function (err, user) {
+      if (err) {
+        return callback(err)
+      } else if (!user) {
+        var err = new Error('User not found.');
+        err.status = 401;
+        return callback(err);
+      }
+      bcrypt.compare(password, user.password, function (err, result) {
+        if (result === true) {
+          return callback(err, user);
+        } else {
+          return callback(err);
+        }
+      })
+    });
+}
+app.post('/login/', function(req, res) {
+    //check if email has been verified
+    authenticateUser(req.body.email, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+        }
+        req.session.user = user;
+        return res.redirect('/user/' + user._id);
+    });
+});
+app.post('/register/', function(req, res) {
+    if (req.body.email &&
+      req.body.username &&
+      req.body.password &&
+      req.body.passwordConf) {  
+        var userData = {
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password,
+      }  //use schema.create to insert data into the db
+      User.create(userData, function (err, user) {
+        req.session.user = user;
+        //send verification email
+        if (err) {
+          console.log(err);
+        } else {
+          res.redirect('/user/' + user._id);
+        }
+      });
+    }
+});
 app.get('/logout', function(req, res) {
-    req.session.user = null;
+    if (req.session) {
+        // delete session object
+        req.session.destroy(function(err) {
+          if(err) {
+            return next(err);
+          } else {
+          }
+        });
+      }
     res.redirect('/');
 });
 app.get(/\/user\/?(:user_id)?/, function(req, res) {
@@ -326,7 +290,8 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
             .exec()
             .then(function(passages){
                 res.render("index", {
-                    session: req.session,
+                    session: req.session.user,
+                    user: profile_user,
                     isProfile: 'true',
                     chapter: '',
                     chapterTitle: 'Sasame',
@@ -335,9 +300,7 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
                     chapters: chapters,
                     paginate: 'profile',
                     addChapterAllowed: false,
-                    parentChapter: {title: profile_user.name},
-                    printPassage: scripts.printPassage,
-                    printChapter: scripts.printChapter
+                    scripts: scripts
                 });
             })
             .then(function(err){
@@ -541,7 +504,15 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //category ID
     else{
         Chapter.findOne({_id:urlEnd})
-        .populate('passages')
+        .populate({
+            path: 'passages',
+            model: 'Passage',
+            populate: {
+                path: 'author',
+                model: 'User',
+            },
+            
+        })
         .exec()
         .then(function(chapter){
             Chapter.find()
@@ -625,7 +596,8 @@ app.post(/\/create_queue_chapter\/?/, (req, res) => {
                     'chapter': chapter._id,
                     'content': passages[key].content,
                     'author': user,
-                    // 'originalAuthor': passage.user,
+                    // 'sourceAuthor': passage.user,
+                    // 'sourceChapter': passages[key].chapter,
                     'canvas': canvas,
                     'metadata': JSON.stringify(json),
                     'callback': function(psg){
@@ -641,7 +613,7 @@ app.post(/\/create_queue_chapter\/?/, (req, res) => {
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
     var type = req.body.type;
-    var user = req.session.user_id || null;
+    var user = req.session.user || null;
     var content = req.body.passage || '';
     var parentPassage = req.body.parentPassage || '';
     var property_key = req.body['property_key[]'] || req.body.property_key;
@@ -727,24 +699,27 @@ app.post('/flag_chapter', (req, res) => {
 app.post('/star/', (req, res) => {
     var _id = req.body._id.trim();
     Passage.findOne({_id: _id})
-    .populate('chapter')
+    .populate('chapter author')
     .exec(function(err, passage){
-        console.log(passage);
         passage.stars += 1;
         passage.chapter.stars += 1;
+        passage.author.stars += 1;
         passage.save();
         passage.chapter.save();
+        passage.author.save();
         res.send('Done');
     });
 });
 app.post('/star_chapter/', (req, res) => {
     var _id = req.body._id.trim();
-    Chapter.findOneAndUpdate({_id: _id}, {
-        $inc: {
-            stars: 1
-        }
-    }, function(err, documents){
-        res.send(documents);
+    Chapter.findOne({_id: _id})
+    .populate('author')
+    .exec(function(err, chapter){
+        chapter.stars += 1;
+        chapter.author.stars += 1;
+        chapter.save();
+        chapter.author.save();
+        res.send('Done');
     });
 });
 app.post('/add_sub_passage/', (req, res) => {
@@ -773,31 +748,6 @@ app.post('/update_passage_content', (req, res) => {
     passageController.updatePassageContent(req, res, function(){
         res.send('Updated');
     });
-});
-
-app.post('/make_golden_road', (req, res) => {
-    let title = req.body.title;
-    let passages = JSON.parse(req.body.passages);
-    //Find the Category for all Golden Roads first
-    Chapter.findOne({level: 1, title: 'Golden Roads'})
-    .exec(function(err, chapter){
-        //We need to make a new category and add all the selected passages to it
-        let cat = new Chapter({
-            title: title,
-            chapter: chapter,
-        }).save(function(err, new_chapter){
-            //now get all passages by the ID list sent to use by the client
-            //And then create the new passages
-            //Make sure they're linked to the chapter
-            passages.forEach(function(p){
-                p.chapter = new_chapter;
-            });
-            Passage.create(passages, function(err, ps){
-                if(err) console.log(err);
-            });
-        });
-    });
-    res.send('Done');
 });
 
 var server = app.listen(PORT, () => {

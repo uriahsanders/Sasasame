@@ -9,7 +9,9 @@ module.exports = {
             let post = new Passage({
                 content: options.content,
                 chapter: options.chapter,
+                sourceChapter: options.chapter,
                 author: options.author,
+                sourceAuthor: options.author,
                 canvas: options.canvas,
                 label: options.label,
                 metadata: options.metadata,
@@ -53,6 +55,7 @@ module.exports = {
                 let post = new Passage({
                     content: options.content,
                     author: options.author,
+                    sourceAuthor: options.author,
                     metadata: options.metadata,
                     canvas: options.canvas
                 }).save()
@@ -136,5 +139,13 @@ module.exports = {
             }
             callback();
         });
+    },
+    duplicatePassage: function(req, res, callback){
+        //make a copy of the passage
+        //but change the author
+        var passage = new Passage(req.body.passage);
+        passage.author = session.user;
+        passage.chapter = req.body.chapter.
+        passage.save();
     }
 }

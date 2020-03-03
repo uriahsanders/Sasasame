@@ -100,7 +100,7 @@
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
             if(passage.author){
-                ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.name+`</a></div>`;
+                ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.username+`</a>`;
             }else{
                 ret += `<div><a class="basic_link" href="#">Anonymous</a>`;
             }
@@ -112,13 +112,13 @@
                     //date.toDateString() in future
                     ret += `<p>Created: `+passage.date+`</p>`;
                     if(passage.author){
-                        ret += `<p>By: `+passage.author.name+` </p>`;
+                        ret += `<p>By: `+passage.author.username+` </p>`;
                     }else{
                         ret += `<p>By: Anonymous</p>`;
                     }
                     ret += `<p>`+(passage.stars || 0 )+` Stars </p>`;
                     var chapterID = '';
-                    if(passage.chapter){
+                    if(passage.chapter && passage.chapter.title){
                       chapterID = passage.chapter._id;
                       ret += `<p>Chapter:<a class="link" href="/${passage.chapter.title}/${passage.chapter._id}">`+passage.chapter.title+`</a></p>`;
                     }
