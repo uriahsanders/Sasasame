@@ -84,6 +84,8 @@
         <option>Task</option>
         <option>Hide Tools</option>
         <option>Category</option>
+        <option>Align</option>
+        <option>Mutate</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">
@@ -143,7 +145,7 @@
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
              <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon>
              <ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag.svg"></ion-icon>
-             <ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
+             <ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
              <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
@@ -225,6 +227,82 @@
     ret += `
     <canvas data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
     return ret;
+  };
+  exports.mutate = function(data, indice, iterations=0){
+    //what we want to do is convert ANY type of data into a chromosomal form,
+    //where independent data chunks serve as genes,
+    //and can thus be mutated and recombinated accordingly.
+
+    //All data can be represented as a string, conveniently!
+    //We just convert it back after handling it.
+
+    //so, whatever data we get will be split up into chunks.
+    //These chunks might be words in the case of sentences,
+    //characters in the case of words
+    //perhaps lines in a document, functions in code, shapes in a drawing, etc.
+
+    //in order for them to be chunks, they must be separated by indices.
+    //These indices might be spaces, punctuation marks, new lines, whatever.
+    //The indice being used depends on the data and will be passed along with it.
+
+    var chunks = data.split(indice);
+
+    //Okay, so now that we have our chunks,
+    //we can treat them like genes.
+    //That means we can mutate the chunks
+    //or pass the entire array of chunks into a recombination function
+    //where it technically mates with another chunk to form a chunky baby,
+    //haha!!
+
+    //so, how should we mutate a chunk in a way that's useful?
+    //well, we can insert, delete, or, well, mutate any given chunk.
+    //which one we choose should be random!
+    var options = ['insert', 'delete', 'mutate'];
+    for(var i = 0; i < chunks.length; ++i){
+      //random num between 1 and 3
+      var random = Math.floor(Math.random() * options.length) + 1;
+      switch(options[random]){
+        case 'insert':
+        //perform an insertion by duplicating a chunk!
+        var nextChunk = chunks[i + 1];
+        chunks[i + 1] = chunks[i];
+        //then carry down the changes to the end of the array
+        for(var j = i + 1; j < chunks.length; ++j){
+          chunks[j + 1] = chunks[j];
+        }
+        break;
+        case 'delete':
+        //delete a chunk by making it equal the next chunk!
+        chunks[i] = chunks[i + 1];
+        //then make each following chunk equal the next chunk,
+        //removing the last chunk (technically just a left shift)
+        for(var j = i + 1; j < chunks.length; ++j){
+          if(j + 1 < chunks.length){
+            chunks[j] = chunks[j + 1];
+          }
+          else{
+            chunks.pop();
+          }
+        }
+        break;
+        case 'mutate':
+        //We want to shift the value of a single point within the chunk,
+        //if you are familiar with biology, this is an SNP!
+        var points = chunks[i].split('');
+        //get random point
+        //and make it equal some other random point!
+        //random num between 1 and points.length
+        var ran = Math.floor(Math.random() * points.length) + 1;
+        var ran2 = Math.floor(Math.random() * points.length) + 1;
+        //we're using a random point from within the same chunk
+        //this decreases the level of strangeness we might get
+        points[ran] = points[ran2];
+        //then bring the points back together again, with one now different!
+        chunks[i] = points.join('');
+        break;
+      }
+    }
+    return chunks.join(indice);
   };
 
 }(typeof exports === 'undefined' ? this.share = {} : exports));

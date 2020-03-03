@@ -64,7 +64,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     // store: new MongoStore({
-    //     url: process.env.MONGODB_CONNECTION_URL
+    //     db: 'sasame',
+    //     host: '127.0.0.1',
+    //     port: 3000
     // })
 }));
 app.use(function(req, res, next) {

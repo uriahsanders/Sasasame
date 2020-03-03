@@ -21,6 +21,7 @@ const chapterSchema = mongoose.Schema({
     tools: Boolean,
     autoplay: Boolean,
     paginate: Boolean,
+    css: String,
     flagged: Boolean //content warning
 });
 chapterSchema.plugin(mongoosePaginate);

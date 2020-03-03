@@ -5,6 +5,15 @@ const scripts = require('../shared');
 
 module.exports = {
     addPassage: function(options) {
+        //Do Passage Metadata functions
+        //also need to do on update and delete
+        for(let [key, value] of Object.entries(options.metadata)){
+            switch(key){
+                case 'Category':
+                break;
+            }
+        }
+        //
         if(options.chapter != '' && options.chapter != null){
             let post = new Passage({
                 content: options.content,

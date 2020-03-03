@@ -196,6 +196,7 @@ function readPassageMetadata(thiz){
     metadata = JSON.parse(metadata);
     var content = thiz.siblings('.passage_content').text();
     thiz.siblings('.proteins').children('.passage_play').hide();
+    thiz.siblings('.proteins').children('.passage_mutate').hide();
     var autoplay = false;
     function escapeHtml(unsafe) {
     return unsafe
@@ -254,6 +255,10 @@ function readPassageMetadata(thiz){
                 case 'CSS':
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
                 thiz.siblings('.passage_content')[0].style = value;
+                break;
+                case 'Align':
+                // thiz.siblings('.passage_content').css(JSON.parse(value));
+                thiz.siblings('.passage_content').css('text-align', value);
                 break;
                 case 'HTML':
                 var html = thiz.siblings('.passage_content').html();
@@ -380,6 +385,12 @@ function readPassageMetadata(thiz){
                 case 'Autoplay':
                 autoPlay(autoplay, thiz);
                 break;
+                case 'Mutate':
+                thiz.siblings('.proteins').children('.passage_mutate').show();
+                thiz.siblings('.proteins').children('.passage_mutate').on('click', function(){
+                    var newContent = share.mutate(content, value);
+                    thiz.siblings('.passage_content').html(newContent);
+                });
                 default:
                 var html = thiz.siblings('.passage_content').text();
                 thiz.siblings('.passage_content').html(escapeHtml(html));
@@ -697,22 +708,23 @@ $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
 });
 $(document).on('change', '.property_key', function(){
-    var placeholder = '';
-    switch($(this).val()){
-        case 'Color':
-            placeholder = 'Enter a Color';
-            break;
-        case 'Hidden':
-            placeholder = 'True/False';
-            break;
-        case 'Canvas':
-            placeholder = 'shape.color.x.y.l.w or reference.x.y';
-            break;
-        case 'Tone':
-            placeholder = 'frequency.type.seconds';
-            break;
-    }
-    $(this).siblings('.property_value').attr('placeholder',placeholder);
+    //update help modal
+    // var placeholder = '';
+    // switch($(this).val()){
+    //     case 'Color':
+    //         placeholder = 'Enter a Color';
+    //         break;
+    //     case 'Hidden':
+    //         placeholder = 'True/False';
+    //         break;
+    //     case 'Canvas':
+    //         placeholder = 'shape.color.x.y.l.w or reference.x.y';
+    //         break;
+    //     case 'Tone':
+    //         placeholder = 'frequency.type.seconds';
+    //         break;
+    // }
+    // $(this).siblings('.property_value').attr('placeholder',placeholder);
 });
 $('.star_icon').on('click', function(){
     // $(this).toggleClass('gold_color');
@@ -1013,3 +1025,8 @@ $('#play_all').on('click', function(){
         $(this).click();
     });
 });
+
+// console.log('Final output:' + share.mutate(`const User = require('./models/User');
+// const Chapter = require('./models/Chapter');
+// const Passage = require('./models/Passage');
+// // Controllers`, '/'));
