@@ -179,7 +179,7 @@ app.get('/highlight/default.css', function(req, res) {
 });
 
 function requiresLogin(req, res, next) {
-  if (req.session && req.session.userId) {
+  if (req.session && req.session.user) {
     return next();
   } else {
     var err = new Error('You must be logged in to view this page.');
@@ -625,7 +625,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var json = metadata.json;
     var canvas = metadata.canvas;
     var passageCallback = function(data){
-        res.send(scripts.printPassage(data));
+        res.send(scripts.printPassage(data, req.session.user));
     };
     var chapterCallback = function(data){
         res.send(scripts.printChapter(data));
@@ -699,30 +699,48 @@ app.post('/flag_chapter', (req, res) => {
     });
 });
 app.post('/star/', (req, res) => {
-    var _id = req.body._id.trim();
-    Passage.findOne({_id: _id})
-    .populate('chapter author')
-    .exec(function(err, passage){
-        passage.stars += 1;
-        passage.chapter.stars += 1;
-        passage.author.stars += 1;
-        passage.save();
-        passage.chapter.save();
-        passage.author.save();
-        res.send('Done');
-    });
+    if(req.session && req.session.user){
+        User.find({_id: req.session.user._id})
+        .exec(function(err, user){
+            if(user.starsGiven < user.stars * 2){
+                user.starsGiven += 1;
+                var _id = req.body._id.trim();
+                Passage.findOne({_id: _id})
+                .populate('chapter author')
+                .exec(function(err, passage){
+                    passage.stars += 1;
+                    if(passage.chapter != null){
+                        passage.chapter.stars += 1;
+                        passage.chapter.save();
+                    }
+                    if(passage.author != null){
+                        passage.author.stars += 1;
+                        passage.author.save();
+                    }
+                    passage.save();
+                    res.send('Done');
+                });
+                user.save();
+            }
+            else{
+                res.send("You don't have enough stars to give!");
+            }
+        });
+    }
 });
 app.post('/star_chapter/', (req, res) => {
-    var _id = req.body._id.trim();
-    Chapter.findOne({_id: _id})
-    .populate('author')
-    .exec(function(err, chapter){
-        chapter.stars += 1;
-        chapter.author.stars += 1;
-        chapter.save();
-        chapter.author.save();
-        res.send('Done');
-    });
+    if(req.session && req.session.user){
+        var _id = req.body._id.trim();
+        Chapter.findOne({_id: _id})
+        .populate('author')
+        .exec(function(err, chapter){
+            chapter.stars += 1;
+            chapter.author.stars += 1;
+            chapter.save();
+            chapter.author.save();
+            res.send('Done');
+        });
+    }
 });
 app.post('/add_sub_passage/', (req, res) => {
     passageController.addSubPassage(req, res, function(){

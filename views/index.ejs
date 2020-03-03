@@ -200,7 +200,7 @@
                     <%if(book){%>
                         <div id="passages">
                         <% book.forEach(function(f) { %>
-                            <%- scripts.printPassage(f); %>
+                            <%- scripts.printPassage(f, user); %>
                         <% }); %>
                         </div>
                         <%if(parentChapter == null){%>

@@ -387,6 +387,7 @@ function readPassageMetadata(thiz){
                 break;
                 case 'Mutate':
                 thiz.siblings('.proteins').children('.passage_mutate').show();
+                thiz.siblings('.proteins').children('.passage_mutate').css('color', 'red');
                 thiz.siblings('.proteins').children('.passage_mutate').on('click', function(){
                     var newContent = share.mutate(content, value);
                     thiz.siblings('.passage_content').html(newContent);
@@ -518,6 +519,9 @@ $(document).on('click', '[id^=star_]', function(){
         success: function(data){
             flashIcon(thiz);
             $('.star_count_'+_id).text(newCount);
+            if(data == "You don't have enough stars to give!"){
+                alert(data);
+            }
         }
     });
 });

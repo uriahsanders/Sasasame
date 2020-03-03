@@ -77,7 +77,6 @@
         <option>Eval JS</option>
         <option>Custom</option>
         <option>Reference</option>
-        <option>Description</option>
         <option>Autoplay</option>
         <option>Loop</option>
         <option>Question</option>
@@ -92,7 +91,7 @@
 </div>
     `;
   };
-  exports.printPassage = function(passage){
+  exports.printPassage = function(passage, user){
        var ret = '';
         ret += `
         <div id="`+passage._id+`" class="passage">`;
@@ -143,8 +142,11 @@
              <div class="proteins">
              <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
-             <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon>
-             <ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag.svg"></ion-icon>
+             `;
+             if(user){
+                ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
+             } 
+             ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag.svg"></ion-icon>
              <ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
@@ -161,7 +163,7 @@
             <div class="sub_passages">`;
                 passage.passages.forEach(function(sub){
                     ret += `<div class="sub_passage">`;
-                     ret += exports.printPassage(sub);
+                     ret += exports.printPassage(sub, user);
                      ret += `</div>`;
                 });
             ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>

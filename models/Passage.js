@@ -36,7 +36,10 @@ const passageSchema = mongoose.Schema({
     //date last updated
     updated: {type: Date, default: Date.now},
     //which users find this passage useful?
-    stars: Number,
+    stars: {
+        type: Number,
+        default: 0
+    },
     //JSON for properties
     metadata: String,
     // What rules are being used to read the metadata?
