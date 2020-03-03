@@ -291,7 +291,7 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
             .then(function(passages){
                 res.render("index", {
                     session: req.session.user,
-                    user: profile_user,
+                    profile: profile_user,
                     isProfile: 'true',
                     chapter: '',
                     chapterTitle: 'Sasame',
