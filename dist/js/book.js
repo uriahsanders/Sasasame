@@ -180,23 +180,34 @@ $('.add_select').on('change', function(){
         $(this).parent().siblings('.properties').show();
     }
 });
-function jqueryToggle(thiz, func1, func2){
-    if(thiz.data('toggle') == 0){
-        thiz.data('toggle', 1);
+function jqueryToggle(thiz, func1, func2, dataType='toggle', dataValue=[0, 1]){
+    if(thiz.data(dataType) == dataValue[0]){
+        thiz.data(dataType, dataValue[1]);
         func2();
     }
     else{
-        thiz.data('toggle', 0);
+        thiz.data(dataType, dataValue[0]);
         func1();
     }
+    return thiz.data(dataType);
 }
+$(document).on('click', '.passage_mutate', function(){
+    flashIcon($(this), 'red');
+    var content = $(this).parent().siblings('.passage_content').text();
+    $(this)
+    .parent()
+    .parent()
+    .append('<input class="reserve"type="hidden"value="'+content+'"/>');
+    var newContent = $(this).parent().siblings('.reserve').val();
+    newContent = share.mutate(newContent, ' ');
+    $(this).parent().siblings('.passage_content').html(newContent);
+});
 function readPassageMetadata(thiz){
     var metadata = thiz.val();
     var _id = thiz.attr('id').split('_')[2];
     metadata = JSON.parse(metadata);
     var content = thiz.siblings('.passage_content').text();
     thiz.siblings('.proteins').children('.passage_play').hide();
-    thiz.siblings('.proteins').children('.passage_mutate').hide();
     var autoplay = false;
     function escapeHtml(unsafe) {
     return unsafe
@@ -322,9 +333,12 @@ function readPassageMetadata(thiz){
                   });
                 break;
                 case 'Canvas':
-                //create a colored polygon
-                //format: color, x,y, x,y x,y ...
+                thiz.siblings('.proteins').children('.passage_play').show();
                 var canvas = thiz.siblings('.passage_canvas');
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    canvas[0].getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                    runCanvasKey(canvas, thiz.siblings('.passage_content').text(), value);
+                });
                 runCanvasKey(canvas, content, value);
                     // else if(length == 3){
                     //     //Get passage content of canvas with same name
@@ -385,13 +399,6 @@ function readPassageMetadata(thiz){
                 case 'Autoplay':
                 autoPlay(autoplay, thiz);
                 break;
-                case 'Mutate':
-                thiz.siblings('.proteins').children('.passage_mutate').show();
-                thiz.siblings('.proteins').children('.passage_mutate').css('color', 'red');
-                thiz.siblings('.proteins').children('.passage_mutate').on('click', function(){
-                    var newContent = share.mutate(content, value);
-                    thiz.siblings('.passage_content').html(newContent);
-                });
                 default:
                 var html = thiz.siblings('.passage_content').text();
                 thiz.siblings('.passage_content').html(escapeHtml(html));
@@ -407,8 +414,8 @@ function runCanvasKey(canvas, content, canvas_size){
     var ctx = canvas[0].getContext('2d');
     //read value line by line
     var lines = content.split("\n");
-    canvas[0].height = canvas_size;
-        canvas[0].width = canvas_size;
+    // canvas[0].height = canvas_size;
+    //     canvas[0].width = canvas_size;
     // numSides.color.size
     // numSides.fill.stroke.size
     // numSides.color.size.x.y
@@ -756,14 +763,16 @@ $('.graphic_mode').on('click', function(){
                 test: 'test'
             },
             success: function(data){
-                $('#ppe_queue').html(data);
+                $('#ppe_queue').append(data);
                 var first = true;
                 $('.ppe_queue_canvas').each(function(){
                     if(first){
                         $(this).addClass('ppe_queue_selected');
                     }
+                    else{
+                        runCanvasKey($(this), $(this).data('canvas'), $(this).data('canvas_size'));
+                    }
                     first = false;
-                    runCanvasKey($(this), $(this).data('canvas'), $(this).data('canvas_size'));
                 });
             }
         });
