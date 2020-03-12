@@ -14,27 +14,16 @@ function ppe(){
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
     function drawImage(image, x, y, delv){
-    delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
-    delv.rotate(masterRotate*(Math.PI/180));
-    delv.drawImage(image, -image.width / 2, -image.height / 2);
-    delv.setTransform(1,0,0,1,0,0);
-} 
+        delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
+        delv.rotate(masterRotate*(Math.PI/180));
+        delv.drawImage(image, -image.width / 2, -image.height / 2);
+        delv.setTransform(1,0,0,1,0,0);
+    } 
     function draw(e) {
         var pos = getMousePos(canvas, e);
         posx = pos.x;
         posy = pos.y;
-        //Cursor
-        cursorctx.fillStyle = "#000000";
-        cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
-        cursorctx.beginPath();
-        cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
-        cursorctx.stroke();
-        //Queue Item
-        var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-        var imageContext = image.getContext('2d');
-        //Also need to star the related passage
-        drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx);
-        // cursorctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
+        drawCursor();
     }
     function select(e) {
         var pos = getMousePos(canvas, e);
@@ -59,7 +48,6 @@ function ppe(){
         if(isNaN(size) || size < 10){
             size = 10;
         }
-        console.log(size);
         var sideNumb = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
         if(isNaN(sideNumb)){
             sideNumb = 0;
@@ -104,7 +92,22 @@ function ppe(){
         mutationctx.lineWidth = lineWidth;
         // mutationctx.stroke();
         mutationctx.fill();
+        drawCursor();
     });
+    function drawCursor(){
+                //Cursor
+        cursorctx.fillStyle = "#000000";
+        cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
+        cursorctx.beginPath();
+        cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
+        cursorctx.stroke();
+        //Queue Item
+        var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+        var imageContext = image.getContext('2d');
+        //Also need to star the related passage
+        drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx);
+
+    }
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
@@ -179,6 +182,30 @@ function ppe(){
                     });
                 }, 'ppe_search');
                 
+            }
+            //m for mutate
+            else if(e.keyCode == 77){
+                $('#ppe_mutate').click();
+            }
+            //s for scale
+            else if(e.keyCode == 83){
+                if(e.shiftKey){
+                    masterScale -= 0.1;
+                }
+                else{
+                    masterScale += 0.1;
+                }
+                drawCursor();
+            }
+            //r for rotate
+            else if(e.keyCode == 82){
+                if(e.shiftKey){
+                    masterRotate -= 10;
+                }
+                else{
+                    masterRotate += 10;
+                }
+                drawCursor();
             }
         }
     });
