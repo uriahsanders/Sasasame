@@ -31,6 +31,8 @@ const passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     }],
+    //categories the passage is labeled with
+    categories: String,
     //date of creation
     date: {type: Date, default: Date.now},
     //date last updated

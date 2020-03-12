@@ -110,8 +110,7 @@
                              <ion-icon class="option_distraction_free"title="Distraction Free Mode"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
                              <ion-icon class="toggle_tools book_option"title="Toggle Tools"src="/images/ionicons/build-sharp.svg"></ion-icon>
                              <!-- PPE Options -->
-                             <ion-icon class="ppe_option"title="Paint"src="/images/ionicons/brush-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_select"class="ppe_option"title="Select"src="/images/ionicons/scan-sharp.svg"></ion-icon>
+                             <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select"src="/images/ionicons/scan-sharp.svg"></ion-icon>
                              <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
                              <ion-icon class="ppe_option"title="Search"src="/images/ionicons/search-sharp.svg"></ion-icon>
 
@@ -123,7 +122,11 @@
             <div id="ppe">
                 <canvas id="ppe_canvas"></canvas>
                 <canvas id="ppe_cursor"></canvas>
-                <div id="ppe_queue"><canvas id="ppe_mutation"class="ppe_queue_canvas" width="100" height="100"></canvas></div>
+                <div id="ppe_queue">
+                    <canvas id="ppe_mutation"class="ppe_queue_canvas" width="100" height="100"></canvas></div>
+                <div id="ppe_search_modal" class="modal">
+                    <input id="ppe_search"class="control_input"type="text" name="">
+                </div>
             </div>
             <div id="control_blocks">
                 <div class="control_block" id="code">

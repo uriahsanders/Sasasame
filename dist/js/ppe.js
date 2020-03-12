@@ -8,10 +8,17 @@ function ppe(){
     cursor.width = window.innerWidth - 10;
     cursor.height = window.innerHeight;
     var queuePos = 0;
+    var masterScale = 1;
+    var masterRotate = 0;
 
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
-
+    function drawImage(image, x, y, delv){
+    delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
+    delv.rotate(masterRotate*(Math.PI/180));
+    delv.drawImage(image, -image.width / 2, -image.height / 2);
+    delv.setTransform(1,0,0,1,0,0);
+} 
     function draw(e) {
         var pos = getMousePos(canvas, e);
         posx = pos.x;
@@ -25,7 +32,9 @@ function ppe(){
         //Queue Item
         var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
         var imageContext = image.getContext('2d');
-        cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
+        //Also need to star the related passage
+        drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx);
+        // cursorctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
     }
     function select(e) {
         var pos = getMousePos(canvas, e);
@@ -100,7 +109,9 @@ function ppe(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
             var imageContext = image.getContext('2d');
-            ctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
+            drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
+            // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
+
         }
         else{
             $('<canvas height="100" width="100"class="ppe_queue_canvas"></canvas>')
@@ -108,39 +119,67 @@ function ppe(){
                 var little = $('#ppe_queue').children().eq(-1)[0];
                 var littlectx = little.getContext('2d');
                 var data = ctx.getImageData(posx, posy, 100, 100);
-                // ctx.clearRect(posx, posy, 100, 100);
                 littlectx.putImageData(data, 0, 0);
         }
     });
     $(document).on('click', '#ppe_select', function(){
+        var thiz = $(this);
         jqueryToggle($(this), function(){
+            thiz.attr('title', 'Draw');
+            thiz.attr('src', '/images/ionicons/brush-sharp.svg');
             cursor.removeEventListener('mousemove', draw, 0);
             cursor.addEventListener('mousemove', select, 0);
         }, function(){
+            thiz.attr('title', 'Select');
+            thiz.attr('src', '/images/ionicons/scan-sharp.svg');
             cursor.removeEventListener('mousemove', select, 0);
             cursor.addEventListener('mousemove', draw, 0);
         }, 'select', ['on', 'off']);
     });
     cursor.addEventListener('mousemove', draw, 0);
     $(document).on('keydown', function(e){
+        if($('#ppe_select').data('select') == 'on'){
+            $('#ppe_select').click();
+        }
         if($('.graphic_mode').attr('title') == 'Book Mode'){
-            if(e.keyCode == 37){
+            if(e.keyCode == 37 || e.keyCode == 39){
+                if(e.keyCode == 37){
                 queuePos = queuePos - 1;
+                }
+                if(e.keyCode == 39){
+                    queuePos = queuePos + 1;
+                }
+                $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
+                $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
+                // Clear and redraw cursor with new item
+                cursorctx.fillStyle = "#000000";
+                cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
+                cursorctx.beginPath();
+                cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
+                cursorctx.stroke();
+                var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+                var imageContext = image.getContext('2d');
+                cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
             }
-            if(e.keyCode == 39){
-                queuePos = queuePos + 1;
+            else if(e.keyCode == 13){
+                jqueryToggle($(this), function(){
+                    $('#ppe_search_modal').show();
+                    $('#ppe_search').focus();
+                }, function(){
+                    $.ajax({
+                        type: 'post',
+                        url: '/ppe',
+                        data: {
+                            search: $('#ppe_search').val()
+                        },
+                        success: function(data){
+                            $('#ppe_queue').append(data);
+                            $('#ppe_search_modal').hide();
+                        }
+                    });
+                }, 'ppe_search');
+                
             }
-            $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
-            $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
-            // Clear and redraw cursor with new item
-            cursorctx.fillStyle = "#000000";
-            cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
-            cursorctx.beginPath();
-            cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
-            cursorctx.stroke();
-            var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-            var imageContext = image.getContext('2d');
-            cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
         }
     });
 

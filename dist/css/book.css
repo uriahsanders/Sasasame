@@ -568,6 +568,6 @@ ion-icon{
 .ppe_option{
     display: none;
 }
-.ppe_queue_canvas, .passage_canvas{
+.passage_canvas{
     border: 1px solid black;
 }

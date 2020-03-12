@@ -225,10 +225,7 @@
   };
   exports.printCanvas = function(passage){
     var metadata = JSON.parse(passage.metadata);
-    var ret = '';
-    ret += `
-    <canvas height="100" width="100"data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
-    return ret;
+    return `<canvas height="100" width="100"data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
   };
   exports.mate = function(arr1, arr2){
     var min = arr1.length;
