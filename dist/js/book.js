@@ -246,8 +246,8 @@ function readPassageMetadata(thiz){
                     }
                 }, time * 1000);
             }
-            function autoPlay(autoplay, thiz){
-                if(autoplay == true && !Sasame){
+            function autoPlay(autoplay, thiz, canvas=false){
+                if((autoplay == true && !Sasame) || (autoplay == true && canvas)){
                     thiz.siblings('.proteins').children('.passage_play').click();
                     autoplay = false;
                 }
@@ -333,25 +333,8 @@ function readPassageMetadata(thiz){
                   });
                 break;
                 case 'Canvas':
-                thiz.siblings('.proteins').children('.passage_play').show();
                 var canvas = thiz.siblings('.passage_canvas');
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
-                    canvas[0].getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-                    runCanvasKey(canvas, thiz.siblings('.passage_content').text(), value);
-                });
-                runCanvasKey(canvas, content, value);
-                    // else if(length == 3){
-                    //     //Get passage content of canvas with same name
-                    //     var x = vars[1];
-                    //     var y = vars[2];
-                    //     var find_name = vars[0];
-                    //     //Find first canvas that has the same name
-                    //     var image = $('#canvas_name_' + find_name).siblings('.passage_canvas')[0];
-                    //     var imageContext = image.getContext('2d');
-                    //     ctx.putImageData(imageContext.getImageData(0, 0, image.width, image.height), x, y);
-                    // }
-                // });
-                break;
+                var ctx = canvas[0].getContext('2d');
                 case 'Eval JS':
                 //store value in DOM
                 var storage = $('#custom_pairs').val();
@@ -363,12 +346,21 @@ function readPassageMetadata(thiz){
                     storage = JSON.parse(storage);
                     storage[value] = content;
                 }
+                if(key == 'Canvas'){
+                    var isCanvasKey = true;
+                }
+                else{
+                    var isCanvasKey = false;
+                }
                 $('#custom_pairs').val(JSON.stringify(storage));
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     eval(content); 
+                    if(key == 'Canvas'){
+                        canvas.css('display', 'inline-block');
+                    }
                 });
-                autoPlay(autoplay, thiz);
+                autoPlay(autoplay, thiz, isCanvasKey);
                 //syntax highlight
                 thiz.siblings('.passage_content').html('<pre><code class="language-js">'+content+'</code></pre>');
                 document.querySelectorAll('pre code').forEach((block) => {
@@ -697,18 +689,20 @@ $(document).on('click', '.fileStreamChapter', function(){
         }
     });
 });
-$('#parent_chapter_title').on('click', function(){
-    var something = $(this).text();
-    if(something == 'Sasame'){
-        doSomethingFileStream();
-    }
-    else{
-        something = "Sasame"
-        doSomethingThoughtStream();
-        $(this).text(something);
-    }
+// FILE STREAM INACTIVE
+$('#parent_chapter_title').css('cursor', 'default');
+// $('#parent_chapter_title').on('click', function(){
+//     var something = $(this).text();
+//     if(something == 'Sasame'){
+//         doSomethingFileStream();
+//     }
+//     else{
+//         something = "Sasame"
+//         doSomethingThoughtStream();
+//         $(this).text(something);
+//     }
 
-});
+// });
 $('.category').on('mouseover', function(){
     $(this).find('.chapter_flag').show();
 });

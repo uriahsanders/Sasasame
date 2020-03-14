@@ -9,7 +9,7 @@
 }
 /* Control Panel */
 #control_panel{
-    color: #000;
+    color: #353535;
 }
 #main_header{
     font-size: 1.5em;
@@ -108,7 +108,16 @@
     word-wrap: break-word;
     cursor: default;
     width: 40%;
+    overflow-x: hidden;
+    color: #353535;
     /* margin: auto; */
+}
+.hidden_upload{
+    display: none;
+}
+.profile_image{
+    font-size: 2em;
+    color: #353535;
 }
 
 .category{

@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
@@ -37,7 +38,7 @@ mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
 
 var app = express();
 app.use(helmet());
-
+app.use(fileUpload());
 // make sure recordings folder exists
 const recordingFolder = './dist/recordings/';
 if (!fs.existsSync(recordingFolder)) {
@@ -624,6 +625,23 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var metadata = generateMetadata(property_key, property_value);
     var json = metadata.json;
     var canvas = metadata.canvas;
+    //express-fileupload
+    if (!req.files || Object.keys(req.files).length === 0) {
+        //no files uploaded
+    }
+    else{
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+      let fileToUpload = req.files.file;
+      let mimetype = req.files.file.mimetype;
+      //first verify that mimetype is image
+      console.log(mimetype);
+      // Use the mv() method to place the file somewhere on your server
+      fileToUpload.mv('./dist/uploads/'+v4(), function(err) {
+        if (err){
+            return res.status(500).send(err);
+        }
+      });
+    }
     var passageCallback = function(data){
         res.send(scripts.printPassage(data, req.session.user));
     };

@@ -31,6 +31,7 @@
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
+                     <input class="hidden_upload"name="file" type="file" value="`+_id+`"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
                         <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Key</div> 
@@ -83,6 +84,7 @@
         <option>Task</option>
         <option>Hide Tools</option>
         <option>Categories</option>
+        <option>TODO</option>
         <option>Align</option>
         <option>Mutate</option>
     </select>
@@ -100,6 +102,7 @@
          ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
+            ret += `<ion-icon class="profile_image"src="/images/ionicons/person-circle-sharp.svg"></ion-icon>`;
             if(passage.author){
                 ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.username+`</a>`;
             }else{
@@ -146,12 +149,12 @@
              if(user){
                 ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
-             ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag.svg"></ion-icon>
-             <ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon>
-             <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle.svg"></ion-icon>
+             ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+             <ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
+             <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
              <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
-             <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle.svg"></ion-icon>
+             <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              </div>
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>

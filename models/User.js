@@ -37,7 +37,8 @@ const userSchema = mongoose.Schema({
     starsGiven: {
         type: Number,
         default: 0
-    }
+    },
+    token: String
 });
 userSchema.pre('save', function (next) {
   var user = this;
