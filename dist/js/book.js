@@ -774,6 +774,7 @@ $('.graphic_mode').on('click', function(){
                     }
                     first = false;
                 });
+                $('#ppe_mutate').click();
             }
         });
     }, function(){

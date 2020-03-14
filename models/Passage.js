@@ -51,7 +51,8 @@ const passageSchema = mongoose.Schema({
     isSchema: Boolean,
     flagged: Boolean, //content warning
     label: String,
-    canvas: Boolean // Has Canvas tag?
+    canvas: Boolean, // Has Canvas tag?
+    filename: String
 });
 var autoPopulateChildren = function(next) {
     this.populate('passages');

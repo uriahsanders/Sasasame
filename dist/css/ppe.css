@@ -13,7 +13,8 @@
 }
 #ppe_queue{
 	z-index: 3;
-	border-bottom: 1px solid black
+	border-bottom: 1px solid black;
+	display: none;
 }
 .ppe_queue_canvas{
 	margin: 0px;

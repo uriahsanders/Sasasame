@@ -12,13 +12,21 @@ const mongoosePaginate = require('mongoose-paginate');
 category Houses
 find all 'houses'
 will give all passages and chapters with the category house
-And we want to order 
+And we want to order by stars of course
+//must do this
 Passage.find({categories: new RegExp('^'+category+'$', "i")});
 Category.find({title: title}, function(cat){
+    //if we do this we can't order by stars
 	cat.passages.foreach(function(){
 	
 	});
 });
+
+You add passages to categories like:
+cat1, cat2, cat3, cat4 is more complex
+then search: "cat4", or "cat3"
+but not: "cat1, cat3"
+In other words, you can only search one category at a time
 */
 const categorySchema = mongoose.Schema({
     title: {

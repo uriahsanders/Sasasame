@@ -82,7 +82,7 @@
         <option>Question</option>
         <option>Task</option>
         <option>Hide Tools</option>
-        <option>Category</option>
+        <option>Categories</option>
         <option>Align</option>
         <option>Mutate</option>
     </select>
