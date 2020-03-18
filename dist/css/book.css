@@ -338,6 +338,12 @@
     display: inline;
     text-align: left;
 }
+#sasame_title{
+    position: absolute;
+    left: 71px;
+    top: 26px;
+    font-size: 0.88em;
+}
 #control_passages{
     color: #353535;
     margin: auto;
@@ -431,6 +437,7 @@
 }
 .passage_canvas{
     display: none;
+    max-width: 100%;
     /*padding-left: 20px;*/
 }
 .category_delete{

@@ -24,6 +24,11 @@ const userSchema = mongoose.Schema({
     name: String,
     thumbnail: String,
     about: String,
+    //Admin, VIP, User 
+    privilege: {
+      type: String,
+      default: 'User'
+    },
     verified: {
       type: Boolean,
       default: false

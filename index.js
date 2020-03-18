@@ -7,6 +7,8 @@ const bodyParser = require("body-parser");
 const helmet = require('helmet');
 const PORT = process.env.PORT || 3000;
 require('dotenv').config();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 // Models
 const User = require('./models/User');
 const Chapter = require('./models/Chapter');
@@ -315,98 +317,101 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
         });
     });
 });
-app.post('/fileStream', function(req, res) {
-    var result = '';
-    var dir = __dirname + '/';
-    fs.readdir(dir, (err, files) => {
-      var ret = '';
-      var stat2;
-      files.forEach(function(file){
-        stat2 = fs.lstatSync(dir + '/' +file);
-        if(stat2.isDirectory()){
-            file += '/';
-        }
-        ret += scripts.printDir(file);
-      });
-      res.send({
-        dirs: ret,
-        type: 'dir',
-        path: dir
-      });
-    });
-});
-app.post('/file', function(req, res) {
-    var file = req.body.fileName;
-    if(req.body.dir[req.body.dir.length - 1] == '/'){
-        var dir = req.body.dir + file;
-    }
-    else{
-        var dir = req.body.dir + '/' + file;
-    }
-    var stat = fs.lstatSync(dir);
-    if(stat.isFile()){
-        fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
-                if (!err) {
-                    res.send({
-                        data: scripts.printFile(data, __dirname + '/' +file),
-                        type: 'file'
-                    });
-                } else {
-                    console.log(err);
-                }
-        });
-    }
-    else if (stat.isDirectory()){
-        fs.readdir(dir, (err, files) => {
-          var ret = '';
-          var stat2;
-          files.forEach(function(file){
-            stat2 = fs.lstatSync(dir + '/' +file);
-            if(stat2.isDirectory()){
-                file += '/';
-            }
-            ret += scripts.printDir(file);
-          });
-          res.send({
-            data: ret,
-            type: 'dir',
-            dir: dir
-          });
-        });
-    }
-});
-app.post('/run_file', function(req, res) {
-    var file = req.body.file;
-    var ext = file.split('.')[file.split('.').length - 1];
-    var bash = 'ls';
-    switch(ext){
-        case 'js':
-        bash = 'node ' + file;
-        break;
-        case 'sh':
-        bash = 'sh ' + file;
-        break;
-    }
-    exec(bash, (err, stdout, stderr) => {
-      if (err) {
-        // node couldn't execute the command
-        res.send(JSON.stringify(err));
-        return;
-      }
-      res.send(stdout);
-      // the *entire* stdout and stderr (buffered)
-      // console.log(`stdout: ${stdout}`);
-      // console.log(`stderr: ${stderr}`);
-    });
-});
-app.post('/update_file', function(req, res) {
-    var file = req.body.file;
-    var content = req.body.content;
-    fs.writeFile(file, content, function(err){
-      if (err) return console.log(err);
-      res.send('Done');
-    });
-});
+/*
+    ROUTERS FOR FILESTREAM
+*/
+// app.post('/fileStream', function(req, res) {
+//     var result = '';
+//     var dir = __dirname + '/';
+//     fs.readdir(dir, (err, files) => {
+//       var ret = '';
+//       var stat2;
+//       files.forEach(function(file){
+//         stat2 = fs.lstatSync(dir + '/' +file);
+//         if(stat2.isDirectory()){
+//             file += '/';
+//         }
+//         ret += scripts.printDir(file);
+//       });
+//       res.send({
+//         dirs: ret,
+//         type: 'dir',
+//         path: dir
+//       });
+//     });
+// });
+// app.post('/file', function(req, res) {
+//     var file = req.body.fileName;
+//     if(req.body.dir[req.body.dir.length - 1] == '/'){
+//         var dir = req.body.dir + file;
+//     }
+//     else{
+//         var dir = req.body.dir + '/' + file;
+//     }
+//     var stat = fs.lstatSync(dir);
+//     if(stat.isFile()){
+//         fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
+//                 if (!err) {
+//                     res.send({
+//                         data: scripts.printFile(data, __dirname + '/' +file),
+//                         type: 'file'
+//                     });
+//                 } else {
+//                     console.log(err);
+//                 }
+//         });
+//     }
+//     else if (stat.isDirectory()){
+//         fs.readdir(dir, (err, files) => {
+//           var ret = '';
+//           var stat2;
+//           files.forEach(function(file){
+//             stat2 = fs.lstatSync(dir + '/' +file);
+//             if(stat2.isDirectory()){
+//                 file += '/';
+//             }
+//             ret += scripts.printDir(file);
+//           });
+//           res.send({
+//             data: ret,
+//             type: 'dir',
+//             dir: dir
+//           });
+//         });
+//     }
+// });
+// app.post('/run_file', function(req, res) {
+//     var file = req.body.file;
+//     var ext = file.split('.')[file.split('.').length - 1];
+//     var bash = 'ls';
+//     switch(ext){
+//         case 'js':
+//         bash = 'node ' + file;
+//         break;
+//         case 'sh':
+//         bash = 'sh ' + file;
+//         break;
+//     }
+//     exec(bash, (err, stdout, stderr) => {
+//       if (err) {
+//         // node couldn't execute the command
+//         res.send(JSON.stringify(err));
+//         return;
+//       }
+//       res.send(stdout);
+//       // the *entire* stdout and stderr (buffered)
+//       // console.log(`stdout: ${stdout}`);
+//       // console.log(`stderr: ${stderr}`);
+//     });
+// });
+// app.post('/update_file', function(req, res) {
+//     var file = req.body.file;
+//     var content = req.body.content;
+//     fs.writeFile(file, content, function(err){
+//       if (err) return console.log(err);
+//       res.send('Done');
+//     });
+// });
 app.post('/ppe', function(req, res) {
     Passage.find({canvas: true})
     .select('metadata')

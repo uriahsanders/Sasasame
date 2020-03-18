@@ -56,12 +56,13 @@ const recordAudio = () =>
 
     resolve({ start, stop });
   });
-const handleAction = async () => {
-    var recorder = await recordAudio();
-    var audio;
-    $('.mic_record_icon').on('click', async function(){
+  var recorder;
+  var audio;
+  $(document).on('click', '.mic_record_icon', async function(){
         switch($(this).data('status')){
             case 'empty':
+            recorder = await recordAudio();
+            audio;
             $(this).data('status', 'recording');
             $(this).css('color', 'red');
             recorder.start();
@@ -91,8 +92,6 @@ const handleAction = async () => {
             break;
         }
     });
-};
-handleAction();
 
 $('.codeform_add').on('submit', function(e){
     e.preventDefault();

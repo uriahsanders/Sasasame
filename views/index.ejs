@@ -66,6 +66,8 @@
             <div id="login">
                 <br/>
                 <br/>
+                <ion-icon class="notifications_icon"title="Notifications"src="/images/ionicons/notifications-sharp.svg"></ion-icon>
+                <ion-icon class="messages_icon"title="Messages"src="/images/ionicons/mail-sharp.svg"></ion-icon>
                 <a class="link white" href="/user/<%=user._id%>">Profile</a> |
                 <a class="link white" href="/logout">Logout</a>
             </div>
@@ -95,15 +97,19 @@
             <div id="control_nav">
                     <div id="main_header">
                         <a href="/">
-                            <img id="little_seed" alt="" src="/images/test.png"/>
-                        </a><!-- 
+                            <img id="little_seed" title="Sasame"alt="" src="/images/test.png"/>
+                        </a>
+                       <!--  <div id="sasame_title">
+                          <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span>
+                        </div> -->
+                        <!-- 
                         <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">Sasame</a></div> -->
                         <div id="options">
                             <!-- Book Options -->
                             <a id="mobile_book_menu"class="basic_link white" rel="modal:open"href="#mobile_modal"><ion-icon title="Mobile Menu"src="/images/ionicons/menu-sharp.svg"></ion-icon></a>
                             <div id="help_modal" class="modal">
                               <p>Welcome!</p>
-                              <p>Sasame is an accessible, modular, and merit-based system for worldwide collaboration and education. Let's make our dreams a reality!</p>
+                              <p>Sasame is an accessible, modular, and merit-based Social Network for worldwide collaboration and education. Let's make our dreams a reality!</p>
                               <p>Sasame is under live development. Keep checking back for more updates!</p>
                             </div>
                              <div id="help_modal_graphic" class="modal">
@@ -143,6 +149,7 @@
                     </div>
                 <div  class="control_block" id="book_of_sasame">
                     <input type="hidden" id="add_position" value="top">
+                    <%if(parentChapter != null || locals.isProfile){%>
                     <div class="header">
                         <%if(parentChapter != null){%>
                             <div>
@@ -195,16 +202,15 @@
                             <input type="hidden" value="true", id="is_profile"/>
                             <a class="basic_link" href="#profile_modal" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
                             <span id="parent_chapter_title"><%=profile.username%></span>
-                            <%}else{%>
-                                <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span>
-                                <input id="fileStreamPath" type="hidden"></input>
-                                
-
-                                <input id="parent_chapter_id"type="hidden" value="Sasame"/>
-                                <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <%}%>
                         <%}%>
                     </div>
+                    <%}else{%>
+                        <!-- <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span> -->
+                        <input id="fileStreamPath" type="hidden"></input>
+                        <input id="parent_chapter_id"type="hidden" value="Sasame"/>
+                        <input id="page" type="hidden" value="2" autocomplete="off"/>
+                    <%}%>
                     <!-- Add upon scroll -->
                     <%if(book){%>
                         <div id="passages">
