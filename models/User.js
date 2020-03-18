@@ -24,7 +24,10 @@ const userSchema = mongoose.Schema({
     name: String,
     thumbnail: String,
     about: String,
-    verified: Boolean,
+    verified: {
+      type: Boolean,
+      default: false
+    },
     queue: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'

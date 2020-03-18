@@ -189,19 +189,19 @@ function requiresLogin(req, res, next) {
   }
 }
 
-app.get('/verify/:permalink/:token', function (req, res) {
-    var permalink = req.params.permalink;
+app.get('/verify/:user_id/:token', function (req, res) {
+    var user_id = req.params.user_id;
     var token = req.params.token;
 
-    User.findOne({'permalink': permalink}, function (err, user) {
-        if (user.verify_token == token) {
+    User.findOne({'_id': user_id.trim()}, function (err, user) {
+        if (user.token == token) {
             console.log('that token is correct! Verify the user');
 
-            User.findOneAndUpdate({'permalink': permalink}, {'verified': true}, function (err, resp) {
+            User.findOneAndUpdate({'_id': user_id.trim()}, {'verified': true}, function (err, resp) {
                 console.log('The user has been verified!');
             });
 
-            res.redirect('/login');
+            res.redirect('/login/');
         } else {
             console.log('The token is wrong! Reject the user. token should be: ' + user.verify_token);
         }
@@ -246,6 +246,7 @@ app.post('/register/', function(req, res) {
         email: req.body.email,
         username: req.body.username,
         password: req.body.password,
+        token: v4()
       }  //use schema.create to insert data into the db
       User.create(userData, function (err, user) {
         req.session.user = user;
@@ -625,18 +626,21 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var metadata = generateMetadata(property_key, property_value);
     var json = metadata.json;
     var canvas = metadata.canvas;
+    var uploadTitle = '';
     //express-fileupload
     if (!req.files || Object.keys(req.files).length === 0) {
         //no files uploaded
+        console.log("No files uploaded.");
     }
     else{
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
       let fileToUpload = req.files.file;
       let mimetype = req.files.file.mimetype;
+      uploadTitle = v4();
       //first verify that mimetype is image
       console.log(mimetype);
       // Use the mv() method to place the file somewhere on your server
-      fileToUpload.mv('./dist/uploads/'+v4(), function(err) {
+      fileToUpload.mv('./dist/uploads/'+uploadTitle, function(err) {
         if (err){
             return res.status(500).send(err);
         }
@@ -656,7 +660,8 @@ app.post(/\/add_passage\/?/, (req, res) => {
             'canvas': canvas,
             'metadata': JSON.stringify(json),
             'callback': passageCallback,
-            'parentPassage': parentPassage
+            'parentPassage': parentPassage,
+            'filename': uploadTitle
         });
     }
     else if(type == 'chapter' && content != ''){

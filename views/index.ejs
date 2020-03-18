@@ -106,14 +106,19 @@
                               <p>Sasame is an accessible, modular, and merit-based system for worldwide collaboration and education. Let's make our dreams a reality!</p>
                               <p>Sasame is under live development. Keep checking back for more updates!</p>
                             </div>
+                             <div id="help_modal_graphic" class="modal">
+                              <p>Welcome!</p>
+                              <p>Sasame is an accessible, modular, and merit-based system for worldwide collaboration and education. Let's make our dreams a reality!</p>
+                              <p>Sasame is under live development. Keep checking back for more updates!</p>
+                            </div>
                             <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
                              <ion-icon class="option_distraction_free"title="Distraction Free Mode"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
                              <ion-icon class="toggle_tools book_option"title="Toggle Tools"src="/images/ionicons/build-sharp.svg"></ion-icon>
                              <!-- PPE Options -->
-                             <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select"src="/images/ionicons/scan-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
-                             <ion-icon class="ppe_option"title="Search"src="/images/ionicons/search-sharp.svg"></ion-icon>
+                             <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
+                             <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
+                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
+                             <ion-icon class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-sharp.svg"></ion-icon>
 
                              <ion-icon class="graphic_mode"title="Graphic Mode"src="/images/ionicons/brush-sharp.svg"></ion-icon>
                         </div>
@@ -156,7 +161,7 @@
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <div id="chapter_settings" class="modal">
-                              <p>CHAPTER OPTIONS</p>
+                              <p class="modal_title">Chapter Options</p>
                               <p><%=(parentChapter.stars || 0 )%> Stars </p>
                               <form id="update_chapter_form">
                                   Title:
@@ -167,7 +172,7 @@
                                       <option value="public">Public (Everyone can add and edit/delete everything)</option>
                                       <option value="protected">Protected (Users can add and edit/delete their own work)</option>
                                       <option value="private">Private (Only Author can add/edit/delete)</option>
-                                      <option value="local">Local (Only Author can see Chapter)</option>
+                                      <option value="exclusive">Exclusive (Only Author can see Chapter)</option>
                                   </select>
                                   <br><br>
                                   <input id="is_distraction_free"type="checkbox" name="distraction_free" <%=(parentChapter.distraction_free == true ? 'checked' : '')%> autocomplete="off"> Distraction Free Mode

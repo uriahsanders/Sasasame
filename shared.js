@@ -10,7 +10,7 @@
     var _id = (update == false) ? '' : update._id;
     var ret = '';
     ret += `
-    <form class="codeform_`+which+` add_form"action="/`+which+`_passage/" method="POST">`;
+    <form class="codeform_`+which+` add_form"action="/`+which+`_passage/"enctype="multipart/form-data" method="POST">`;
                     if(!update){
                       ret += `<div class="header no_cursive"><select name="type" class="add_select" autocomplete="off">
                         <option value="passage">Passage</option>
@@ -23,15 +23,15 @@
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
                         <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                        <ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>
-                        <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>
-                        <ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-sharp.svg"></ion-icon>
+                        <!--<ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>-->
+                        <!--<a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>-->
+                        <!--<ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-sharp.svg"></ion-icon>-->
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="Details" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
-                     <input class="hidden_upload"name="file" type="file" value="`+_id+`"/>
+                     <input class="hidden_upload"name="file" type="file"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     <div class="properties">
                         <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Key</div> 
@@ -67,8 +67,6 @@
         <option>File</option>
         <!-- Point to another passage -->
         <option>Pointer</option>
-        <option>Free Polygon</option>
-        <option>Regular Polygon</option>
         <option>Key Schema</option>
         <option>Is Key Schema?</option>
         <option>Impress JS</option>
@@ -79,6 +77,7 @@
         <option>Custom</option>
         <option>Reference</option>
         <option>Autoplay</option>
+        <option>Dropdown</option>
         <option>Loop</option>
         <option>Question</option>
         <option>Task</option>
@@ -111,7 +110,7 @@
             ret += '<span class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'<span>';
             ret += '</div>';
             ret += `<div id="modal_`+passage._id+`" class="modal">
-                <p>PASSAGE OPTIONS</p>
+                <p class="modal_title">Passage Options</p>
                 <div class="passage_details">`;
                     //date.toDateString() in future
                     ret += `<p>Created: `+passage.date+`</p>`;
@@ -150,7 +149,7 @@
                 ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
              ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
-             <ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
+             <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
              <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
@@ -160,8 +159,11 @@
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
             <div class="passage_content" contenteditable="true">`+ passage.content+`</div>
-            <canvas class="passage_canvas"></canvas>
-            <audio class="passage_audio"controls="true"></audio>
+            <canvas class="passage_canvas"></canvas>`;
+            if(passage.filename){
+              ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;
+            }
+            ret += `<audio class="passage_audio"controls="true"></audio>
             <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
             <div class="sub_passages">`;
                 passage.passages.forEach(function(sub){

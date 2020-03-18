@@ -96,12 +96,16 @@ handleAction();
 
 $('.codeform_add').on('submit', function(e){
     e.preventDefault();
+    var formdata = new FormData(this);
     var info = $(this).serializeObject();
     var thiz = $(this);
     $.ajax({
         type: 'post',
         url: '/passage/add_passage/',
-        data: info,
+        data: formdata,
+       contentType: false,
+       enctype: 'multipart/form-data',
+       processData: false,
         success: function(data){
             if(info.type == 'passage'){
                 thiz.children('.control_textarea').val('');
@@ -201,6 +205,10 @@ $(document).on('click', '.passage_mutate', function(){
     var newContent = $(this).parent().siblings('.reserve').val();
     newContent = share.mutate(newContent, ' ');
     $(this).parent().siblings('.passage_content').html(newContent);
+});
+$(document).on('click', '.image_upload_icon', function(){
+    $(this).css('color', 'red');
+    $(this).parent().siblings('.hidden_upload').click();
 });
 function readPassageMetadata(thiz){
     var metadata = thiz.val();

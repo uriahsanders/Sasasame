@@ -4,6 +4,14 @@
     float: left;
 
 }
+.modal{
+    font-family: 'Patua One';
+}
+.modal_title{
+    font-weight: bold;
+    border-bottom: 1px solid #353535;
+    padding-bottom: 15px;
+}
 #sasame{
     font-size: 1em;
 }
@@ -439,12 +447,14 @@
     border: 0px;
     border-bottom: 1px solid #ccc;
 }
+.passage_image{
+    max-width: 100%;
+}
 select {
   width: 150px;
   padding: 5px 35px 5px 5px;
   font-size: 16px;
-  border: 0px;
-  border-bottom: 0px solid #CCC;
+  border: 1px solid #CCC;
   height: 34px;
   -webkit-appearance: none;
   -moz-appearance: none;

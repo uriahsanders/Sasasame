@@ -24,6 +24,7 @@ module.exports = {
                 canvas: options.canvas,
                 label: options.label,
                 metadata: options.metadata,
+                filename: options.filename
             }).save().then(data => {
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                     if(chap.passages){
@@ -45,7 +46,8 @@ module.exports = {
                     author: options.author,
                     metadata: options.metadata,
                     canvas: options.canvas,
-                    parent: options.parentPassage
+                    parent: options.parentPassage,
+                    filename: options.filename
                 }).save()
                 .then(data => {
                     Passage.findOne({_id:options.parentPassage}).exec(function(err, passage){
@@ -66,7 +68,8 @@ module.exports = {
                     author: options.author,
                     sourceAuthor: options.author,
                     metadata: options.metadata,
-                    canvas: options.canvas
+                    canvas: options.canvas,
+                    filename: options.filename
                 }).save()
                 .then(data => {
                     options.callback(data);
