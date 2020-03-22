@@ -24,10 +24,10 @@ const userSchema = mongoose.Schema({
     name: String,
     thumbnail: String,
     about: String,
-    //Admin, VIP, User 
+    //Admin, VIP, '' 
     privilege: {
       type: String,
-      default: 'User'
+      default: ''
     },
     verified: {
       type: Boolean,

@@ -15,7 +15,8 @@ will give all passages and chapters with the category house
 And we want to order by stars of course
 //must do this
 Passage.find({categories: new RegExp('^'+category+'$', "i")});
-Category.find({title: title}, function(cat){
+//if we use regex you can search for one or more cats
+Category.find({title: new RegExp('^'+category+'$', "i")}, function(cat){
     //if we do this we can't order by stars
 	cat.passages.foreach(function(){
 	
@@ -40,6 +41,7 @@ const categorySchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chapter'
     }],
+    stars: Number
 });
 categorySchema.plugin(mongoosePaginate);
 

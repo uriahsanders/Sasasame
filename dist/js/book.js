@@ -270,6 +270,33 @@ function readPassageMetadata(thiz){
                 case 'Color':
                 thiz.siblings('.passage_content').css('color', value);
                 break;
+                case 'Code Mirror':
+                thiz.siblings('.passage_content').replaceWith('<textarea class="passage_content">'+content+'</textarea>');
+                var scriptURL = '/mode/'+value+'/'+value+'.js';
+                var editor;
+                if(scriptLoaded(scriptURL)){
+                    editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0]);
+                }
+                else{
+                    $.getScript(scriptURL)
+                    .done(function( script, textStatus ) {
+                       editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0]);
+                      })
+                      .fail(function( jqxhr, settings, exception ) {
+                        $( "div.log" ).text( "Triggered ajaxError handler." );
+                    });
+                }
+                thiz.siblings('.proteins').children('.passage_play').show();
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    eval(content); 
+                    if(key == 'Canvas'){
+                        canvas.css('display', 'inline-block');
+                        //now we need to update the passage on the server
+                        //with the image generated from the canvas
+                    }
+                });
+                
+                break;
                 case 'CSS':
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
                 thiz.siblings('.passage_content')[0].style = value;
@@ -342,6 +369,10 @@ function readPassageMetadata(thiz){
                 case 'Canvas':
                 var canvas = thiz.siblings('.passage_canvas');
                 var ctx = canvas[0].getContext('2d');
+                //not generated from JS
+                if(value == 'image'){
+                    break;
+                }
                 case 'Eval JS':
                 //store value in DOM
                 var storage = $('#custom_pairs').val();
@@ -365,6 +396,8 @@ function readPassageMetadata(thiz){
                     eval(content); 
                     if(key == 'Canvas'){
                         canvas.css('display', 'inline-block');
+                        //now we need to update the passage on the server
+                        //with the image generated from the canvas
                     }
                 });
                 autoPlay(autoplay, thiz, isCanvasKey);
@@ -407,6 +440,13 @@ function readPassageMetadata(thiz){
             var html = thiz.siblings('.passage_content').text();
             thiz.siblings('.passage_content').html(escapeHtml(html));
         }
+}
+function scriptLoaded(url) {
+    var scripts = document.getElementsByTagName('script');
+    for (var i = scripts.length; i--;) {
+        if (scripts[i].src == url) return true;
+    }
+    return false;
 }
 function runCanvasKey(canvas, content, canvas_size){
     canvas.css('display', 'inline-block');
@@ -523,10 +563,12 @@ $(document).on('click', '[id^=star_]', function(){
             _id: _id
         },
         success: function(data){
-            flashIcon(thiz);
-            $('.star_count_'+_id).text(newCount);
             if(data == "You don't have enough stars to give!"){
                 alert(data);
+            }
+            else{
+                flashIcon(thiz);
+                $('.star_count_'+_id).text(newCount);
             }
         }
     });
@@ -771,6 +813,7 @@ $('.graphic_mode').on('click', function(){
                         $(this).addClass('ppe_queue_selected');
                     }
                     else{
+                        //we need to print the image to canvas per the filename
                         runCanvasKey($(this), $(this).data('canvas'), $(this).data('canvas_size'));
                     }
                     first = false;
@@ -855,6 +898,7 @@ $('#right_side_select').on('change', function(){
             $('#right_passages').remove();
             $('#chapter_search').show();
             $('.category').show();
+            $('#right_select_help').show();
             break;
         case 'brief':
             $('#queue').hide();
@@ -868,6 +912,7 @@ $('#right_side_select').on('change', function(){
                 'padding': '0px',
                 'line-height': '10px'
             });
+            $('#right_select_help').hide();
             // $('#right_passages').sortable();
             break;
         case 'queue':
@@ -875,7 +920,22 @@ $('#right_side_select').on('change', function(){
             $('#categories').hide();
             $('#right_passages').remove();
             $('#queue').show();
+            $('#right_select_help').hide();
             // $('#queue_items').sortable();
+            break;
+        case 'categories':
+            $('#chapter_load').hide();
+            $('#categories').hide();
+            $('#right_passages').remove();
+            $('#queue').hide();
+            $('#right_select_help').show();
+            break;
+        case 'users':
+            $('#chapter_load').hide();
+            $('#categories').hide();
+            $('#right_passages').remove();
+            $('#queue').hide();
+            $('#right_select_help').show();
             break;
     }
 });

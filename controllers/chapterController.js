@@ -8,7 +8,8 @@ module.exports = {
                 chapter: options.chap,
                 author: options.author,
                 tools: true,
-                distraction_free: false
+                distraction_free: false,
+                categories: options.categories
             }).save().then(data => {
                 options.callback(data);
             });
@@ -19,7 +20,8 @@ module.exports = {
                 title: options.title,
                 author: options.author,
                 tools: true,
-                distraction_free: false
+                distraction_free: false,
+                categories: options.categories
             }).save()
             .then(data => {
                 options.callback(data);

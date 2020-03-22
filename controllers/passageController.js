@@ -5,17 +5,9 @@ const scripts = require('../shared');
 
 module.exports = {
     addPassage: function(options) {
-        //Do Passage Metadata functions
-        //also need to do on update and delete
-        for(let [key, value] of Object.entries(options.metadata)){
-            switch(key){
-                case 'Category':
-                break;
-            }
-        }
-        //
+        var post;
         if(options.chapter != '' && options.chapter != null){
-            let post = new Passage({
+            post = new Passage({
                 content: options.content,
                 chapter: options.chapter,
                 sourceChapter: options.chapter,
@@ -24,7 +16,8 @@ module.exports = {
                 canvas: options.canvas,
                 label: options.label,
                 metadata: options.metadata,
-                filename: options.filename
+                filename: options.filename,
+                categories: options.categories
             }).save().then(data => {
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                     if(chap.passages){
@@ -41,13 +34,14 @@ module.exports = {
         else{
             //level 1 sub passage
             if(options.parentPassage != '' && options.parentPassage != null){
-                let post = new Passage({
+                post = new Passage({
                     content: options.content,
                     author: options.author,
                     metadata: options.metadata,
                     canvas: options.canvas,
                     parent: options.parentPassage,
-                    filename: options.filename
+                    filename: options.filename,
+                    categories: options.categories
                 }).save()
                 .then(data => {
                     Passage.findOne({_id:options.parentPassage}).exec(function(err, passage){
@@ -63,19 +57,47 @@ module.exports = {
                 });
             }else{
                 //level 1 passage
-                let post = new Passage({
+                post = new Passage({
                     content: options.content,
                     author: options.author,
                     sourceAuthor: options.author,
                     metadata: options.metadata,
                     canvas: options.canvas,
-                    filename: options.filename
+                    filename: options.filename,
+                    categories: options.categories
                 }).save()
                 .then(data => {
                     options.callback(data);
                 });
             }
             
+        }
+        //Do Passage Metadata functions
+        //also need to do on update and delete
+        for(let [key, value] of Object.entries(options.metadata)){
+            switch(key){
+                case 'Categories':
+                //We need to create the category if it does not exist
+                Category.find({title: new RegExp('^'+value+'$', "i")})
+                .exec(function(cats){
+                    //we need to create the Category
+                    if(!cats){
+                        Category.create({
+                            title: value
+                        }, function(err, cat){
+                            cat.passages.push(post);
+                            cat.save();
+                        });
+                    }
+                    else{
+                        cats.forEach(function(cat){
+                            cat.passages.push(post);
+                            cat.save();
+                        });
+                    }
+                });
+                break;
+            }
         }
     },
     addPassageToCategory: function(passageID, chapterID, callback) {

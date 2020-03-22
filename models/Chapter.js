@@ -21,6 +21,7 @@ const chapterSchema = mongoose.Schema({
     tools: Boolean,
     autoplay: Boolean,
     paginate: Boolean,
+    categories: String,
     css: String,
     flagged: Boolean //content warning
 });

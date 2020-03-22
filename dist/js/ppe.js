@@ -138,6 +138,23 @@ function ppe(){
                 queuePos = $('#ppe_queue').children().length - 1;
                 $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
                 $('#ppe_select').click();
+                var dataURL = little.toDataURL();
+                $('#ppe_add_form').show();
+                //Now add the passage to database
+                $.ajax({
+                    type: 'post',
+                    url: '/passage/add_passage/',
+                    data: {
+                        type: 'passage',
+                        passage: '',
+                        property_key: 'Canvas',
+                        property_value: 'image',
+                        dataURL: dataURL
+                    },
+                    success: function(data){
+                        console.log(data);
+                    }
+                });
             }
         }
     });

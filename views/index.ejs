@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="/highlight/default.css">
         <script src="/js/highlight.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/ppe.css">
+        <link rel="stylesheet" href="/codemirror.css">
     </head>
     <body>
         <div id="login_modal" class="modal">
@@ -24,15 +25,15 @@
           <form id="login_form" action="/login/" method="POST">
             <div>
                 <label>Username:</label>
-                <input class="control_input"type="text" name="username"autocomplete="off"/>
+                <input id="login_username"class="control_input"type="text" name="username"autocomplete="off"/>
             </div>
             <div>
                 <label>Email:</label>
-                <input class="control_input"type="text" name="email"autocomplete="off"/>
+                <input id="login_email"class="control_input"type="text" name="email"autocomplete="off"/>
             </div>
             <div>
                 <label>Password:</label>
-                <input class="control_input"type="password" name="password"autocomplete="off"/>
+                <input id="login_password"class="control_input"type="password" name="password"autocomplete="off"/>
             </div>
             <div>
                 <input class="control_button"type="submit" value="Login"autocomplete="off"/>
@@ -227,10 +228,11 @@
                 </div>
                 <div class="control_block" id="toc">
                     <div class="header">
+                        <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
-                            <!-- <option value="categories">Categories</option>
-                            <option value="users">Users</option> -->
+                            <option value="categories">Categories</option>
+                            <option value="users">Users</option>
                             <option value="queue">Queue</option>
                             <option value="brief">Brief</option>
                         </select>
@@ -253,10 +255,10 @@
                     <!-- Queue -->
                     <div id="queue">
                         <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
-                        <form id="queue_form">
+                        <!-- <form id="queue_form">
                             <input id="queue_title"class="control_input"placeholder="Chapter Title" type="" name="chapter_title">
                             <button class="control_button">Create!</button>
-                        </form>
+                        </form> -->
                         <div id="queue_items"></div>
                     </div>
 
@@ -265,6 +267,7 @@
         </div>
         <input type="hidden"id="custom_pairs" name="">
         <script src="/marked.min.js"></script>
+        <script src="/codemirror.js"></script>
         <script src="/shared.js"></script>
         <script src="/js/app.js"></script>
         <script src="/js/book.js"></script>

@@ -62,6 +62,8 @@
         <option>Hidden</option>
         <option>Audio</option>
         <option>Graph</option>
+        <!-- Labels show up even on hidden passages -->
+        <option>Label</option>
         <option>Directory</option>
         <option>Webpage</option>
         <option>File</option>
@@ -86,11 +88,15 @@
         <option>TODO</option>
         <option>Align</option>
         <option>Mutate</option>
+        <option>Help</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">
 </div>
     `;
+  };
+  exports.printQueuePassage = function(passage, user){
+    
   };
   exports.printPassage = function(passage, user){
        var ret = '';
@@ -158,7 +164,7 @@
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
-            <div class="passage_content" contenteditable="true">`+ passage.content+`</div>
+            <div class="passage_content">`+ passage.content+`</div>
             <canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;

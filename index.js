@@ -60,6 +60,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 // User Session Setup Logic
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const nodemailer = require('nodemailer');
 var MongoStore  = require('connect-mongo');
 app.use(cookieParser());
 app.use(session({
@@ -109,7 +110,30 @@ securedRoutes.use((req, res, next) => {
 
 });
 
+function sendEmail(to, subject, body){
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
 
+    var mailOptions = {
+      from: 'youremail@gmail.com',
+      to: to,
+      subject: subject,
+      text: body
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+}
 //recordings
 app.get('/recordings', (req, res) => {
   readdir(recordingFolder)
@@ -179,6 +203,15 @@ app.get('/highlight/javascript.js', function(req, res) {
 });
 app.get('/highlight/default.css', function(req, res) {
     res.sendFile(__dirname + '/node_modules/highlight.js/styles/tomorrow.css');
+});
+app.get('/codemirror.css', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/codemirror/lib/codemirror.css');
+});
+app.get('/codemirror.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/codemirror/lib/codemirror.js');
+});
+app.get('/mode/:mode/:mode.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/codemirror/mode/'+req.params.mode+'/'+req.params.mode+'.js');
 });
 
 function requiresLogin(req, res, next) {
@@ -253,6 +286,10 @@ app.post('/register/', function(req, res) {
       User.create(userData, function (err, user) {
         req.session.user = user;
         //send verification email
+        sendEmail(user.email, 'Verify Email for Sasame', 
+            `
+                https://sasame.xyz/verify/`+user.id+`/`+user.token+`
+            `);
         if (err) {
           console.log(err);
         } else {
@@ -419,6 +456,7 @@ app.post('/ppe', function(req, res) {
     .limit(20)
     .exec()
     .then(function(passages){
+        console.log(passages);
         var ret = '';
         passages.forEach(passage => {
             ret += scripts.printCanvas(passage);
@@ -627,15 +665,24 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var parentPassage = req.body.parentPassage || '';
     var property_key = req.body['property_key[]'] || req.body.property_key;
     var property_value = req.body['property_value[]'] || req.body.property_value;
+    var dataURL = req.body.dataURL || false;
     //build metadata from separate arrays
     var metadata = generateMetadata(property_key, property_value);
     var json = metadata.json;
     var canvas = metadata.canvas;
+    var categories = metadata.categories;
     var uploadTitle = '';
+    //image from Canvas
+    if(dataURL){
+        uploadTitle = v4();
+        var data = dataURL.replace(/^data:image\/\w+;base64,/, "");
+        var buf = new Buffer(data, 'base64');
+        fs.writeFile('./dist/uploads/'+uploadTitle, buf);
+    }
     //express-fileupload
     if (!req.files || Object.keys(req.files).length === 0) {
         //no files uploaded
-        console.log("No files uploaded.");
+        // console.log("No files uploaded.");
     }
     else{
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
@@ -666,14 +713,16 @@ app.post(/\/add_passage\/?/, (req, res) => {
             'metadata': JSON.stringify(json),
             'callback': passageCallback,
             'parentPassage': parentPassage,
-            'filename': uploadTitle
+            'filename': uploadTitle,
+            'categories': categories
         });
     }
     else if(type == 'chapter' && content != ''){
         chapterController.addChapter({
             'title': content,
             'author': user,
-            'callback': chapterCallback
+            'callback': chapterCallback,
+            'categories': categories
         });
     }
 });
@@ -712,6 +761,27 @@ app.post(/search/, (req, res) => {
         res.send(html);
     });
 });
+app.post(/search_category/, (req, res) => {
+    let title = req.body.title;
+    category.find({title: new RegExp('^'+title+'$', "i")})
+    .select('title')
+    .sort('stars')
+    .limit(DOCS_PER_PAGE)
+    .exec(function(err, categories){
+        let html = '';
+        if(categories){
+            categories.forEach(function(f){
+                f.passages.forEach(function(p){
+                    html += scripts.printPassage(p);
+                });
+                f.chapters.forEach(function(c){
+                    html += scripts.printChapter(c);
+                });
+            });
+        }
+        res.send(html);
+    });
+});
 app.post('/flag_passage', (req, res) => {
     var _id = req.body._id.trim();
     Passage.findOne({_id: _id}, function(err, passage){
@@ -726,16 +796,28 @@ app.post('/flag_chapter', (req, res) => {
         chapter.save();
     });
 });
+function starCategories(categories){
+    if(categories != ''){
+        Category.find({title: new RegExp('^'+categories+'$', "i")})
+        .exec(function(cats){
+            cats.foreach(function(cat){
+                cat.stars += 1;
+                cat.save();
+            });
+        });
+    }
+}
 app.post('/star/', (req, res) => {
     if(req.session && req.session.user){
-        User.find({_id: req.session.user._id})
-        .exec(function(err, user){
-            if(user.starsGiven < user.stars * 2){
-                user.starsGiven += 1;
-                var _id = req.body._id.trim();
-                Passage.findOne({_id: _id})
-                .populate('chapter author')
-                .exec(function(err, passage){
+        var user = req.session.user;
+       if(user.starsGiven < user.stars * 2){
+            user.starsGiven += 1;
+            var _id = req.body._id.trim();
+            Passage.findOne({_id: _id})
+            .populate('chapter author')
+            .exec(function(err, passage){
+                //can't star your own passages
+                if(passage.author._id != user._id){
                     passage.stars += 1;
                     if(passage.chapter != null){
                         passage.chapter.stars += 1;
@@ -746,27 +828,35 @@ app.post('/star/', (req, res) => {
                         passage.author.save();
                     }
                     passage.save();
+                    user.save();
                     res.send('Done');
-                });
-                user.save();
-            }
-            else{
-                res.send("You don't have enough stars to give!");
-            }
-        });
+                }
+            });
+        }
+        else{
+            res.send("You don't have enough stars to give!");
+        }
     }
 });
 app.post('/star_chapter/', (req, res) => {
     if(req.session && req.session.user){
         var _id = req.body._id.trim();
+        var user = req.session.user;
         Chapter.findOne({_id: _id})
         .populate('author')
         .exec(function(err, chapter){
-            chapter.stars += 1;
-            chapter.author.stars += 1;
-            chapter.save();
-            chapter.author.save();
-            res.send('Done');
+            if(user.starsGiven < user.stars * 2 && chapter.author._id != user._id){
+                user.starsGiven += 1;
+                chapter.stars += 1;
+                chapter.author.stars += 1;
+                chapter.save();
+                chapter.author.save();
+                user.save();
+                res.send('Done');
+            }
+            else{
+                res.send("You don't have enough stars to give!");
+            }
         });
     }
 });

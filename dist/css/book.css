@@ -338,6 +338,17 @@
     display: inline;
     text-align: left;
 }
+.CodeMirror { 
+    z-index: 0;
+    font-size: 0.7em;
+    height: auto !important;
+}
+#right_select_help{
+    float: left;
+    margin-top: 8px;
+    margin-left: 15px;
+    font-size: 0.8em;
+}
 #sasame_title{
     position: absolute;
     left: 71px;
