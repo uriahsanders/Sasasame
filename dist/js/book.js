@@ -109,8 +109,9 @@ $('.codeform_add').on('submit', function(e){
        enctype: 'multipart/form-data',
        processData: false,
         success: function(data){
+            thiz.children('.control_textarea').val('');
+            $('.blocker').click();
             if(info.type == 'passage'){
-                thiz.children('.control_textarea').val('');
                 $('.property_select:visible').remove();
                 if($('#add_position').val() == 'bottom'){
                     $('#passages').append(data);
@@ -180,10 +181,13 @@ $('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
         $(this).parent().siblings('.add_passage_icons').hide();
         $(this).parent().siblings('.properties').hide();
+        $(this).parent().siblings('.control_textarea').replaceWith('<input class="control_textarea"type="text" name="passage"/>');
+
     }
     else{
         $(this).parent().siblings('.add_passage_icons').show();
         $(this).parent().siblings('.properties').show();
+        $(this).parent().siblings('.control_textarea').replaceWith('<textarea class="control_textarea" cols="30" placeholder="" name="passage" rows="6" autocomplete="off"></textarea>');
     }
 });
 function jqueryToggle(thiz, func1, func2, dataType='toggle', dataValue=[0, 1]){
@@ -356,8 +360,10 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     jqueryToggle(thiz, function(){
                         thiz.siblings('.passage_content').html(marked(thiz.siblings('.passage_content').text()));
+                        thiz.siblings('.passage_content').css('white-space', 'initial');
                     }, function(){
                         thiz.siblings('.passage_content').html(content);
+                        thiz.siblings('.passage_content').css('white-space', 'pre-line');
                     });
                 });
                 autoPlay(autoplay, thiz);
@@ -552,7 +558,7 @@ $('[id^=passage_metadata_]').each(function(){
 function flashIcon(thiz, color='gold'){
     thiz.css('color', color);
     setTimeout(function(){
-        thiz.css('color', 'black');
+        thiz.css('color', 'inherit');
     }, 250);
 }
 $(document).on('click', '[id^=star_]', function(){
@@ -1074,30 +1080,36 @@ $(document).on('click', '.file_update', function(){
 $('.option_distraction_free').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $('#toc').show();
-        $('#code').show();
+        // $('#code').show();
         $('#passage_load').show();
-        $('.header').show();
-        $('#book_of_sasame').css('width', '40%');
+        // $('.header').show();
+        // $('#book_of_sasame').css('width', '40%');
         $(this).data('hidden', 'false')
     }
     else{
         $('#toc').hide();
-        $('#code').hide();
-        $('.header').hide();
+        // $('#code').hide();
+        // $('.header').hide();
         $('#passage_load').hide();
-        $('#book_of_sasame').css('width', '100%');
+        // $('#book_of_sasame').css('width', '100%');
         $(this).data('hidden', 'true')
     }
 });
 $('.toggle_tools').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $('.proteins').show();
+        $('.header').show();
+        $('.chapter_tools').show();
         $('.passage_author').show();
+        $('.passage').css('padding-bottom', '32px');
         $(this).data('hidden', 'false')
     }
     else{
         $('.proteins').hide();
+        $('.header').hide();
+        $('.chapter_tools').hide();
         $('.passage_author').hide();
+        $('.passage').css('padding-bottom', '0px');
         $(this).data('hidden', 'true')
     }
 });
@@ -1112,6 +1124,46 @@ $('#play_all').on('click', function(){
     $('.passage_play').each(function(){
         $(this).click();
     });
+});
+
+$(document).on('keydown', function(e){
+    var thiz = $(this);
+    if($('.graphic_mode').attr('title') == 'Graphic Mode'){
+        //hotkeys not for editable elements
+        var el = document.activeElement;
+        try {
+            if (el && el.selectionStart !== undefined || el.isContentEditable) {
+                return; // active element has caret, do not proceed
+            }
+        } catch (ex) {}
+        //d for distraction free mode
+        if(e.keyCode == 68){
+            // $('.option_distraction_free').click();
+            jqueryToggle(thiz, function(){
+                flashIcon($('.passage_adder'), 'gold');
+                $('#toc').modal();
+            }, function(){
+                $('.blocker').click();
+            }, 'add_form_modal')
+        }
+        //t for toggle tools
+        else if(e.keyCode == 84){
+            $('.toggle_tools').click();
+        }
+        //a for add passage
+        else if(e.keyCode == 65){
+            jqueryToggle(thiz, function(){
+                flashIcon($('.passage_adder'), 'gold');
+                $('#code').modal();
+            }, function(){
+                $('.blocker').click();
+            }, 'add_form_modal');
+        }
+        //h for home
+        else if(e.keyCode == 72){
+            window.location = '/';
+        }
+    }
 });
 
 // console.log('Final output:' + share.mutate(`const User = require('./models/User');

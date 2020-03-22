@@ -237,8 +237,8 @@ body {
 #login{
     position: absolute;
     right: 50px;
-    font-size: 0.8em;
-    font-weight: 200;
+    top: -20px;
+    font-size: 1em;
 }
 #login_desc{
     color: #353535;
@@ -247,13 +247,6 @@ body {
     text-align: center;
     margin-bottom: 5px;
     line-height: 28px;
-}
-#login_password{
-    border: 1px solid black;
-    padding: 20px;
-    margin-top: 20px;
-    font-size: 1.5em;
-    text-align: center;
 }
 #login_submit{
     border: 1px solid black;

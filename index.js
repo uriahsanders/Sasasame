@@ -168,6 +168,9 @@ app.get('/jquery.min.js', function(req, res) {
 app.get('/jquery-ui.min.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery-ui-dist/jquery-ui.min.js');
 });
+app.get('/jquery-ui.css', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/jquery-ui-dist/jquery-ui.css');
+});
 app.get('/jquery.modal.min.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery-modal/jquery.modal.min.js');
 });

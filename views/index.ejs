@@ -11,14 +11,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="/jquery.modal.min.js"></script>
         <link rel="stylesheet" href="/jquery.modal.min.css" />
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/jquery-ui.css">
         <script type="module" src="/ionicons.esm.js"></script>
         <script nomodule="" src="/ionicons.js"></script>
         <link rel="stylesheet" href="/highlight/default.css">
         <script src="/js/highlight.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/ppe.css">
         <link rel="stylesheet" href="/codemirror.css">
-        <link href="https://fonts.googleapis.com/css?family=Baloo+Chettan+2&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/css/fonts.css">
     </head>
     <body>
         <div id="login_modal" class="modal">
@@ -99,8 +99,9 @@
             <div id="control_nav">
                     <div id="main_header">
                         <a href="/">
-                            <img id="little_seed" title="Sasame"alt="" src="/images/test.png"/>
+                            <img id="little_seed" title="Sasame (h)"alt="" src="/images/test.png"/>
                         </a>
+                        <a href="/" class="basic_link">
                         <%if(parentChapter != null){%>
                           <div id="perm_chapter"><%=parentChapter.title%></div>
                         <%}else if(locals.isProfile){%>
@@ -108,6 +109,7 @@
                         <%}else{%>
                           <div id="perm_chapter">Sasame</div>
                         <%}%>
+                        </a>
                        <!--  <div id="sasame_title">
                           <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span>
                         </div> -->
@@ -127,8 +129,9 @@
                               <p>Sasame is under live development. Keep checking back for more updates!</p>
                             </div>
                             <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
-                             <ion-icon class="option_distraction_free"title="Distraction Free Mode"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
-                             <ion-icon class="toggle_tools book_option"title="Toggle Tools"src="/images/ionicons/build-sharp.svg"></ion-icon>
+                            <a class="basic_link white" rel="modal:open"href="#code"><ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a>
+                             <ion-icon class="option_distraction_free"title="Distraction Free Mode (d)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
+                             <ion-icon class="toggle_tools book_option"title="Toggle Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
                              <!-- PPE Options -->
                              <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
                              <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
@@ -150,7 +153,7 @@
                 </div>
             </div>
             <div id="control_blocks">
-                <div class="control_block" id="code">
+                <div class="modal" id="code">
                     <%-scripts.printAddForm(chapter)%>
                 </div>
                 <div id="property_select">
@@ -161,7 +164,7 @@
                     <%if(parentChapter != null || locals.isProfile){%>
                     <div class="header">
                         <%if(parentChapter != null){%>
-                            <div>
+                            <div class="chapter_tools">
                                   <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
                                  <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-sharp.svg"></ion-icon>
@@ -173,7 +176,7 @@
                                  <ion-icon title="Update Order" id="update_order_<%=parentChapter._id%>"src="/images/ionicons/documents-sharp.svg"></ion-icon>
                             </div>
                             <br>
-                            <span id="parent_chapter_title"><%=parentChapter.title%></span>
+                            <span  class="chapter_tools"id="parent_chapter_title"><%=parentChapter.title%></span>
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <div id="chapter_settings" class="modal">
@@ -234,9 +237,9 @@
                         <%}%>
                     <%}%>
                 </div>
-                <div class="control_block" id="toc">
+                <div class="modal" id="toc">
                     <div class="header">
-                        <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
+                      <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
                             <option value="categories">Categories</option>

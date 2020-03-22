@@ -42,7 +42,7 @@
     /* border: 1px solid black; */
     /* margin: 20px; */
     margin-top: 0px;
-    width: 30%;
+    /*width: 30%;*/
     padding: 20px;
     padding-top: 0px;
 }
@@ -55,20 +55,21 @@
 .control_button{
     padding: 10px;
     font-size: 1em;
-    border: 1px solid #CCC;
+    border: 1px solid #353535;
     margin-bottom: 20px;
     width: 100%;
     cursor: pointer;
     -webkit-appearance: none;
-    background: transparent;
+    background: #353535;
+    color: #fff;
 }
 .control_button:hover{
     /* background: #353535; */
     /* color: #fff; */
-    color: grey;
+    color: #ccc;
 }
-.control_input{
-    border: 1px solid #CCC;
+.control_input, .property_value{
+    border: 1px solid #353535;
     padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
@@ -78,19 +79,21 @@
     background: transparent;
 }
 .control_textarea{
-    border: 1px solid #CCC;
+    border: 1px solid #353535;
     padding: 10px;
     font-size: 1em;
     width: 100%;
     margin-bottom: 10px;
-    resize: none;
+    /*resize: none;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
     background: transparent;
+    color: #000;
 }
 #code{
     text-align: center;
     word-wrap: break-word;
+    display: none;
 }
 .header{
     padding: 10px;
@@ -119,8 +122,8 @@
 #book_of_sasame{
     word-wrap: break-word;
     cursor: default;
-    width: 40%;
-    overflow-x: hidden;
+    width: 63%;
+    overflow: hidden;
     color: #353535;
     /* margin: auto; */
 }
@@ -151,8 +154,8 @@
 }
 .passage{
     /* border-bottom: 1px dotted grey; */
-    padding-top: 12px;
-    padding-bottom: 12px;
+    /*padding-top: 12px;*/
+    padding-bottom: 32px;
     margin: 0;
     text-align: left;
     line-height: 30px;
@@ -203,7 +206,7 @@
     white-space: pre-line;
     overflow-x: auto;
     /*padding-left: 20px;*/
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     min-height: 30px;
     /*width:55%;*/
     margin:auto;
@@ -239,10 +242,7 @@
 
 #toc{
     /* border: 1px solid #fff; */
-    max-width: 25%; 
     word-wrap: break-word;
-}
-.control_block{
 }
 #light_counter{
     color: #000;
@@ -358,9 +358,6 @@
    /* font-family: 'Montserrat', sans-serif;*/
 }
 #right_select_help{
-    float: left;
-    margin-top: 8px;
-    margin-left: 15px;
     font-size: 0.8em;
 }
 #sasame_title{
@@ -368,6 +365,9 @@
     left: 71px;
     top: 26px;
     font-size: 0.88em;
+}
+#passages{
+    padding-top: 12px;
 }
 #control_passages{
     color: #353535;
@@ -477,7 +477,7 @@
 }
 #chapter_search{
     border: 0px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #353535;
 }
 .passage_image{
     max-width: 100%;
@@ -486,7 +486,7 @@ select {
   width: 150px;
   padding: 5px 35px 5px 5px;
   font-size: 16px;
-  border: 1px solid #CCC;
+  border: 1px solid #353535;
   height: 34px;
   -webkit-appearance: none;
   -moz-appearance: none;
