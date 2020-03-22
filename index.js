@@ -357,6 +357,11 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
 /*
     ROUTERS FOR FILESTREAM
 */
+if(process.env.DOMAIN == 'localhost'){
+    app.post('/server_eval', function(req, res) {
+        eval(req.code);
+    });
+}
 // app.post('/fileStream', function(req, res) {
 //     var result = '';
 //     var dir = __dirname + '/';

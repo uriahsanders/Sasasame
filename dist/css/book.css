@@ -5,7 +5,8 @@
 
 }
 .modal{
-    font-family: 'Patua One';
+    /*font-family: 'Patua One';
+    font-family: 'Montserrat', sans-serif;*/
 }
 .modal_title{
     font-weight: bold;
@@ -72,7 +73,8 @@
     font-size: 1em;
     margin-bottom: 10px;
     width: 100%;
-    font-family: 'Patua One';
+   /* font-family: 'Patua One';
+    font-family: 'Montserrat', sans-serif;*/
     background: transparent;
 }
 .control_textarea{
@@ -82,7 +84,8 @@
     width: 100%;
     margin-bottom: 10px;
     resize: none;
-    font-family: 'Patua One';
+    /*font-family: 'Patua One';
+    font-family: 'Montserrat', sans-serif;*/
     background: transparent;
 }
 #code{
@@ -95,7 +98,8 @@
     font-weight: bold;
     text-align: center;
     font-size: 1.2em;
-    font-family: 'Nanum Brush Script', cursive;
+    /*font-family: 'Nanum Brush Script', cursive;
+    font-family: 'Montserrat', sans-serif;*/
 }
 .help_header{
     padding: 10px;
@@ -129,7 +133,8 @@
 }
 
 .category{
-    font-family: 'Nanum Brush Script', cursive;
+    /*font-family: 'Nanum Brush Script', cursive;
+    font-family: 'Montserrat', sans-serif;*/
 }
 .category{
     /* border-bottom: 1px dotted grey; */
@@ -152,7 +157,8 @@
     text-align: left;
     line-height: 30px;
     font-size: 1.2em;
-    font-family: 'Patua One';
+    /*font-family: 'Patua One';
+    font-family: 'Montserrat', sans-serif;*/
 }
 .passage_id{
     display: none;
@@ -295,7 +301,8 @@
 }
 
 .no_cursive{
-    font-family: 'Patua One';
+   /* font-family: 'Patua One';
+    font-family: 'Montserrat', sans-serif;*/
 }
 #control_panel_header{
     color: #353535;
@@ -342,6 +349,13 @@
     z-index: 0;
     font-size: 0.7em;
     height: auto !important;
+}
+#perm_chapter{
+    position: absolute;
+    left: 78px;
+    top: 25px;
+    /*font-family: 'Montserrat';*/
+   /* font-family: 'Montserrat', sans-serif;*/
 }
 #right_select_help{
     float: left;

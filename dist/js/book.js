@@ -1,15 +1,18 @@
 var Sasame = true;
 if($('#parent_chapter_id').val() != 'Sasame'){
     Sasame = false;
-    $('#passages').sortable();
-    $(document).on('focus', '.passage_content', function(){
-        $('#passages').sortable('disable');
+    $('#passages').sortable({
+        handle: '.passage_author'
     });
-    $(document).on('focusout', '.passage_content', function(){
-        $('#passages').sortable({
-            disabled: false
-        });
-    });
+    // $(document).on('focus', '.passage_content', function(){
+    //     $('#passages').sortable('disable');
+    // });
+    // $(document).on('focusout', '.passage_content', function(){
+    //     $('#passages').sortable({
+    //         disabled: false,
+    //         handle: '.passage_author'
+    //     });
+    // });
 }
 //For forms
 $.fn.serializeObject = function() {
@@ -683,14 +686,22 @@ $(document).on('click', '[id^=passage_delete_]', function(){
 });
 $(document).on('click', '[id^=passage_update_]', function(){
     var _id = $(this).attr('id').split('_')[2];
-    var content = $(this).parent().siblings('.passage_content').text();
+    var content = $(this).parent().siblings('.passage_content');
+    var text;
+    if(content.prop('tagName') == 'TEXTAREA'){
+        editor = content.next('.CodeMirror').get(0).CodeMirror;
+        text = editor.getValue();
+    }
+    else{
+        text = content.text();
+    }
     var thiz = $(this);
     $.ajax({
         type: 'post',
         url: '/update_passage_content',
         data: {
             _id: _id,
-            content: content
+            content: text
         },
         success: function(data){
             flashIcon(thiz, 'gold');
@@ -962,7 +973,9 @@ $(document).on('click', '.load_more', function(){
                         html += share.printPassage(passage);
                     });
                     $('#passages').append(html);
-                    $('#passages').sortable();
+                    $('#passages').sortable({
+                        handle: '.passage_author'
+                    });
                     $('[id^=passage_metadata_]').each(function(){
                         readPassageMetadata($(this));
                     });

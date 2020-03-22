@@ -129,7 +129,7 @@
                     var chapterID = '';
                     if(passage.chapter && passage.chapter.title){
                       chapterID = passage.chapter._id;
-                      ret += `<p>Chapter:<a class="link" href="/${passage.chapter.title}/${passage.chapter._id}">`+passage.chapter.title+`</a></p>`;
+                      ret += `<p>Chapter: <a class="link" href="/${passage.chapter.title}/${passage.chapter._id}">`+passage.chapter.title+`</a></p>`;
                     }
                 ret += `</div>`;
               var i = 0;
@@ -164,7 +164,7 @@
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
-            <div class="passage_content">`+ passage.content+`</div>
+            <div class="passage_content" contenteditable="true">`+ passage.content+`</div>
             <canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;

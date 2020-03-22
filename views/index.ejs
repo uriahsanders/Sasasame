@@ -18,6 +18,7 @@
         <script src="/js/highlight.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/ppe.css">
         <link rel="stylesheet" href="/codemirror.css">
+        <link href="https://fonts.googleapis.com/css?family=Baloo+Chettan+2&display=swap" rel="stylesheet">
     </head>
     <body>
         <div id="login_modal" class="modal">
@@ -100,6 +101,13 @@
                         <a href="/">
                             <img id="little_seed" title="Sasame"alt="" src="/images/test.png"/>
                         </a>
+                        <%if(parentChapter != null){%>
+                          <div id="perm_chapter"><%=parentChapter.title%></div>
+                        <%}else if(locals.isProfile){%>
+                          <div id="perm_chapter"><%=profile.username%></div>
+                        <%}else{%>
+                          <div id="perm_chapter">Sasame</div>
+                        <%}%>
                        <!--  <div id="sasame_title">
                           <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span>
                         </div> -->
