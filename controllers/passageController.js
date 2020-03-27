@@ -2,6 +2,7 @@ const Passage = require('../models/Passage');
 const Chapter = require('../models/Chapter');
 //Call in Scripts
 const scripts = require('../shared');
+var fs = require('fs'); 
 
 module.exports = {
     addPassage: function(options) {
@@ -135,9 +136,12 @@ module.exports = {
     },
     deletePassage: function(req, res, callback) {
         let passageID = req.body._id;
-        Passage.deleteOne({ _id: passageID.trim() }, function(err) {
-            if(err){
-                console.log(err);
+        Passage.findOneAndDelete({_id: passageID.trim()}, function(err, passage){
+            if(passage.filename){
+                fs.unlink('./dist/uploads/'+passage.filename, (err) => {
+                    if (err) throw err;
+                    console.log('./dist/uploads/'+passage.filename+' was deleted');
+                });
             }
             callback();
         });
