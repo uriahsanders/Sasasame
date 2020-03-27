@@ -29,14 +29,15 @@
                     </div>
                     <textarea class="control_textarea" cols="30" placeholder="" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
+                    <input class="dataURL"name="dataURL" type="hidden" value=""/>
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
                      <input class="hidden_upload"name="file" type="file"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
-                    <div class="properties">
+                    `+after+`
+                    <div id="properties"class="properties">
                         <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Key</div> 
                     </div>
-                    `+after+`
                     </form>
     `;
     return ret;
@@ -236,7 +237,12 @@
   };
   exports.printCanvas = function(passage){
     var metadata = JSON.parse(passage.metadata);
-    return `<canvas height="100" width="100"data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
+    if(passage.filename){
+      return `<img class="ppe_queue_canvas"src="/uploads/`+passage.filename+`"/>`;
+    }
+    return `
+    <canvas height="${metadata['Canvas']}" width="${metadata['Canvas']}"data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>
+    `;
   };
   exports.mate = function(arr1, arr2){
     var min = arr1.length;

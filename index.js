@@ -467,6 +467,7 @@ app.post('/ppe', function(req, res) {
     Passage.find({canvas: true})
     .select('metadata')
     .select('content')
+    .select('filename')
     .limit(20)
     .exec()
     .then(function(passages){

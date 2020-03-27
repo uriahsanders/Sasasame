@@ -205,6 +205,12 @@
 .ql-container{
     height: 300px;
 }
+.add_property{
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid #353535;
+}
 .passage_content{
     white-space: pre-line;
     overflow-x: auto;

@@ -101,7 +101,7 @@ function ppe(){
     function drawCursor(){
         //Queue Item
         var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-        var imageContext = image.getContext('2d');
+        // var imageContext = image.getContext('2d');
         //Cursor
         cursorctx.fillStyle = "#000000";
         cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
@@ -115,7 +115,7 @@ function ppe(){
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-            var imageContext = image.getContext('2d');
+            // var imageContext = image.getContext('2d');
             drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
             // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
             masterScale = 1;
@@ -139,22 +139,26 @@ function ppe(){
                 $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
                 $('#ppe_select').click();
                 var dataURL = little.toDataURL();
-                $('#ppe_add_form').show();
+                $('#code').modal();
+                $('.properties').prepend($('#property_select').html());
+                $('.property_key').val('Canvas');
+                $('.property_value').val('Image');
+                $('.dataURL').val(dataURL);
                 //Now add the passage to database
-                $.ajax({
-                    type: 'post',
-                    url: '/passage/add_passage/',
-                    data: {
-                        type: 'passage',
-                        passage: '',
-                        property_key: 'Canvas',
-                        property_value: 'image',
-                        dataURL: dataURL
-                    },
-                    success: function(data){
-                        console.log(data);
-                    }
-                });
+                // $.ajax({
+                //     type: 'post',
+                //     url: '/passage/add_passage/',
+                //     data: {
+                //         type: 'passage',
+                //         passage: '',
+                //         property_key: 'Canvas',
+                //         property_value: 'image',
+                //         dataURL: dataURL
+                //     },
+                //     success: function(data){
+                //         console.log(data);
+                //     }
+                // });
             }
         }
     });
@@ -229,9 +233,10 @@ function ppe(){
                 // cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
             }
             //Search on space
-            else if(e.keyCode == 13){
+            else if(e.keyCode == 32){
                 jqueryToggle($(this), function(){
                     $('#ppe_search_modal').show();
+                    $('#ppe_queue').show();
                     $('#ppe_search').focus();
                     $('#ppe_search').select();
                 }, function(){
@@ -250,26 +255,26 @@ function ppe(){
                 
             }
             //Create passage on space
-            else if(e.keyCode == 32){
-                jqueryToggle($(this), function(){
-                    $('#ppe_create_modal').show();
-                    $('#ppe_create').focus();
-                    $('#ppe_create').select();
-                }, function(){
-                    $.ajax({
-                        type: 'post',
-                        url: '/ppe_create',
-                        data: {
-                            title: $('#ppe_search').val()
-                        },
-                        success: function(data){
-                            $('#ppe_queue').append(data);
-                            $('#ppe_search_modal').hide();
-                        }
-                    });
-                }, 'ppe_search');
+            // else if(e.keyCode == 32){
+            //     jqueryToggle($(this), function(){
+            //         $('#ppe_create_modal').show();
+            //         $('#ppe_create').focus();
+            //         $('#ppe_create').select();
+            //     }, function(){
+            //         $.ajax({
+            //             type: 'post',
+            //             url: '/ppe_create',
+            //             data: {
+            //                 title: $('#ppe_search').val()
+            //             },
+            //             success: function(data){
+            //                 $('#ppe_queue').append(data);
+            //                 $('#ppe_search_modal').hide();
+            //             }
+            //         });
+            //     }, 'ppe_search');
                 
-            }
+            // }
             //m for mutate
             else if(e.keyCode == 77){
                 masterScale = 1;

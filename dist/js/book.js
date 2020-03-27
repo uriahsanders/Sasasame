@@ -133,6 +133,7 @@ $('.codeform_update').on('submit', function(e){
     var formdata = new FormData(this);
     var info = $(this).serializeObject();
     var thiz = $(this);
+    // alert(JSON.stringify(info));
     $.ajax({
         type: 'post',
         url: '/update_passage/',
@@ -142,7 +143,7 @@ $('.codeform_update').on('submit', function(e){
        processData: false,
         success: function(data){
             alert('Updated!');
-            $('.blocker').click();
+            window.location.reload();
         }
     });
 });
@@ -515,99 +516,9 @@ function scriptLoaded(url) {
     return false;
 }
 function runCanvasKey(canvas, content, canvas_size){
-    canvas.css('display', 'inline-block');
+    var canvas = canvas;
     var ctx = canvas[0].getContext('2d');
-    //read value line by line
-    var lines = content.split("\n");
-    // canvas[0].height = canvas_size;
-    //     canvas[0].width = canvas_size;
-    // numSides.color.size
-    // numSides.fill.stroke.size
-    // numSides.color.size.x.y
-    // numSides.color.size.x.y.r
-    // numSides.fill.stroke.size.x.y
-    // numSides.fill.stroke.size.x.y.r
-    lines.forEach(function(line){
-        var parts = line.split('.');
-        var numParts = parts.length;
-        var numSides = parts[0];
-        //init
-        var fill = parts[1];
-        var color = parts[1];
-        var stroke = parts[1];
-        var size;
-        var x = false;
-        var y = false;
-        var r = 0;
-        //
-        switch(numParts){
-            case 3:
-            color = parts[1];
-            size = parts[2];
-            break;
-            case 4:
-            fill = parts[1];
-            stroke = parts[2];
-            size = parts[3];
-            break;
-            case 5:
-            color = parts[1];
-            size = parts[2];
-            x = parseInt(parts[3], 10);
-            y = parseInt(parts[4], 10);
-            break;
-            case 6:
-            //is it defining strokeStyle or size?
-            if(parseInt(parts[2])){
-                //size
-                color = parts[1];
-                size = parts[2];
-                x = parseInt(parts[3], 10);
-                y = parseInt(parts[4], 10);
-
-            }
-            else{
-                fill = parts[1];
-                stroke = parts[2];
-                size = parts[3];
-                x = parseInt(parts[4], 10);
-                y = parseInt(parts[5], 10);
-            }
-            break;
-            case 7:
-            fill = parts[1];
-            stroke = parts[2];
-            size = parts[3];
-            x = parseInt(parts[4], 10);
-            y = parseInt(parts[5], 10);
-            r = parseInt(parts[6], 10);
-            break;
-        }
-        var height = size,
-        width = size,
-        sideLen = size/2,
-        sideNumb = numSides,
-        rotation = r;
-        rotation *= Math.PI/180;
-        var xCenter = x || width/2;
-        var yCenter = y || height/2;
-        ctx.beginPath();
-        if(sideNumb == 0){
-            ctx.arc(xCenter, yCenter, sideLen, 0, 2 * Math.PI);
-        }
-        else{
-            ctx.moveTo (xCenter +  sideLen * Math.cos(rotation), yCenter +  sideLen *  Math.sin(rotation));           
-
-        }
-        for (var i = 1; i <= sideNumb; i += 1) {
-            ctx.lineTo (xCenter +  sideLen * Math.cos(rotation + (i * 2 * Math.PI / sideNumb)), yCenter +  sideLen *  Math.sin(rotation + (i * 2 * Math.PI / sideNumb)));
-        }
-        ctx.strokeStyle = stroke;
-        ctx.fillStyle = fill;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.fill();
-    });
+    eval(content); 
 }
 $('[id^=passage_metadata_]').each(function(){
     readPassageMetadata($(this));
@@ -668,13 +579,13 @@ $('[id^=update_order_]').on('click', function(){
     });
 });
 $(document).on('click', '.add_property', function(){
-    $(this).parent().prepend($('#property_select').html());
+    $(this).parent().append($('#property_select').html());
 });
 $(document).on('click', '.remove_property', function(){
     $(this).parent().remove();
 });
 $('#add_sub_property').on('click', function(){
-    $('#sub_properties').prepend($('#sub_property_select').html());
+    $('#sub_properties').append($('#sub_property_select').html());
 });
 $(document).on('click', '.remove_property', function(){
     $(this).parent().remove();
@@ -889,8 +800,8 @@ $('.graphic_mode').on('click', function(){
                     if(first){
                         $(this).addClass('ppe_queue_selected');
                     }
-                    else{
-                        //we need to print the image to canvas per the filename
+                    else if($(this).is('canvas')){
+                        //we need to ru
                         runCanvasKey($(this), $(this).data('canvas'), $(this).data('canvas_size'));
                     }
                     first = false;

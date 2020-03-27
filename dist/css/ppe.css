@@ -15,17 +15,21 @@
 	z-index: 3;
 	border-bottom: 1px solid black;
 	display: none;
+	width: 100%;
+	height: 300px;
+	overflow: scroll;
+	max-width: initial;
 }
 .ppe_queue_canvas{
 	margin: 0px;
-	padding: 5px;
 	z-index: 4;
-	border-right: 1px solid black;
-	border-left: 1px solid black;
 }
 .ppe_queue_selected{
 	border: 1px solid gold;
 }
 #ppe_search_modal{
 	margin: auto;
+}
+#ppe_search{
+	margin-top: 10px;
 }
