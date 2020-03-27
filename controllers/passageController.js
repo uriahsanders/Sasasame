@@ -108,49 +108,17 @@ module.exports = {
             });
         });
     },
-    updatePassage: function(req, res, callback) {
-        var passageID = req.body._id;
-        var chapterID = req.body.chapterID;
-        var type = req.body.type;
-        var user = req.session.user_id || null;
-        var content = req.body.passage || '';
-        var property_key = req.body['property_key[]'] || req.body.property_key;
-        var property_value = req.body['property_value[]'] || req.body.property_value;
-        //build metadata from separate arrays
-        var metadata = {};
-        var canvas = false;
-        var label = '';
-        var i = 0;
-        if(Array.isArray(property_key)){
-            property_key.forEach(function(key){
-                if(key == 'Canvas'){
-                    canvas = true;
-                }
-                if(key == 'Label'){
-                    label = property_value[i];
-                }
-                metadata[key] = property_value[i++];
-            });
-        }
-        else{
-            if(property_key == 'Canvas'){
-            canvas = true;
-            }
-            if(property_key == 'Label'){
-                label = property_value;
-            }
-            metadata[property_key] = property_value;
-        }
-        Passage.updateOne({_id: passageID.trim()}, {
-            content: content,
-            canvas: canvas,
-            label: label,
-            metadata: JSON.stringify(metadata)
+    updatePassage: function(options) {
+        Passage.updateOne({_id: options.id.trim()}, {
+            content: options.content,
+            canvas: options.canvas,
+            label: options.label,
+            metadata: options.metadata
         }, function(err, affected, resp){
             if(err){
                 console.log(err);
             }
-            callback();
+            options.callback();
         });
     },
     updatePassageContent: function(req, res, callback) {

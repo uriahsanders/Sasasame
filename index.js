@@ -216,6 +216,12 @@ app.get('/codemirror.js', function(req, res) {
 app.get('/mode/:mode/:mode.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/codemirror/mode/'+req.params.mode+'/'+req.params.mode+'.js');
 });
+app.get('/quill.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/quill/dist/quill.min.js');
+});
+app.get('/quill.snow.css', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/quill/dist/quill.snow.css');
+});
 
 function requiresLogin(req, res, next) {
   if (req.session && req.session.user) {
@@ -595,6 +601,32 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
+//When we add a passage to the queue
+//it is the original passage and can not be edited
+//When you move the passage from the queue into a chapter,
+//you duplicate it. 
+//Duplications keeps everything the same and stores a reference to the original
+//Duplicating a passage should also give it a free star, but it adds to users 'stars given'
+function duplicatePassage(passage, location, parent=null){
+    var newParent = Passage.create({
+        author: session.user,
+        chapter: location,
+        originalPassage: passage,
+        metadata: passage.metadata,
+        content: passage.content,
+        flagged: passage.flagged,
+        canvas: passage.canvas,
+        filename: passage.filename,
+        categories: passage.categories,
+        parent: parent
+    });
+    //then we need to duplicate each sub passage all the way down
+    passage.passages.forEach(function(p){
+        newParent.passages.push(duplicatePassage(p, location, newParent));
+    });
+    star(passage);
+    return newParent();
+}
 function generateMetadata(property_keys, property_values){
     var metadata = {};
     var canvas = false;
@@ -875,9 +907,27 @@ app.post('/add_sub_passage/', (req, res) => {
     });
 });
 app.post('/update_passage/', (req, res) => {
-    passageController.updatePassage(req, res, function(){
-        var backURL=req.header('Referer') || '/';
-        res.redirect(backURL);
+    var chapterID = req.body.chapterID;
+    var type = req.body.type;
+    var user = req.session.user || null;
+    var content = req.body.passage || '';
+    var parentPassage = req.body.parentPassage || '';
+    var property_key = req.body['property_key[]'] || req.body.property_key;
+    var property_value = req.body['property_value[]'] || req.body.property_value;
+    var dataURL = req.body.dataURL || false;
+    //build metadata from separate arrays
+    var metadata = generateMetadata(property_key, property_value);
+    var json = metadata.json;
+    var canvas = metadata.canvas;
+    var categories = metadata.categories;
+    passageController.updatePassage({
+        'id': req.body._id,
+        'content': content,
+        'canvas': canvas,
+        'metadata': JSON.stringify(json),
+        'callback': function(){
+            res.send('Updated');
+        }
     });
 });
 app.post('/update_chapter/', (req, res) => {

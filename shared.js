@@ -73,7 +73,7 @@
         <option>Is Key Schema?</option>
         <option>Impress JS</option>
         <option>Auto Expand</option>
-        <option>Quill</option>
+        <option>Quill JS</option>
         <option>Code Mirror</option>
         <option>Eval JS</option>
         <option>Custom</option>
@@ -164,7 +164,7 @@
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
                 <div class="passage_chapter">Sasame</div>
-            <div class="passage_content">`+ passage.content+`</div>
+            <div id="passage_content_`+passage._id+`"class="passage_content">`+ passage.content+`</div>
             <canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;

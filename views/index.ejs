@@ -68,9 +68,9 @@
             <div id="login">
                 <br/>
                 <br/>
-                <ion-icon class="notifications_icon"title="Notifications"src="/images/ionicons/notifications-sharp.svg"></ion-icon>
-                <ion-icon class="messages_icon"title="Messages"src="/images/ionicons/mail-sharp.svg"></ion-icon>
-                <a class="link white" href="/user/<%=user._id%>">Profile</a> |
+                <ion-icon class="notifications_icon"title="Notifications"src="/images/ionicons/notifications-sharp.svg"></ion-icon>&nbsp;&nbsp;
+                <ion-icon class="messages_icon"title="Messages"src="/images/ionicons/mail-sharp.svg"></ion-icon>&emsp;
+                <a class="link white" href="/user/<%=user._id%>">Profile</a>&emsp;
                 <a class="link white" href="/logout">Logout</a>
             </div>
         <%} else{ %>
@@ -130,15 +130,15 @@
                             </div>
                             <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
                             <a class="basic_link white" rel="modal:open"href="#code"><ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a>
-                             <ion-icon class="option_distraction_free"title="Distraction Free Mode (d)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
-                             <ion-icon class="toggle_tools book_option"title="Toggle Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
+                             <a class="basic_link white" rel="modal:open"href="#toc"><ion-icon class="option_distraction_free"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon></a>
+                             <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
                              <!-- PPE Options -->
                              <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
                              <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
                              <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
                              <ion-icon class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-sharp.svg"></ion-icon>
 
-                             <ion-icon class="graphic_mode"title="Graphic Mode"src="/images/ionicons/brush-sharp.svg"></ion-icon>
+                             <ion-icon class="graphic_mode"title="Graphic Mode (g)"src="/images/ionicons/brush-sharp.svg"></ion-icon>
                         </div>
             
                     </div>
@@ -162,7 +162,7 @@
                 <div  class="control_block" id="book_of_sasame">
                     <input type="hidden" id="add_position" value="top">
                     <%if(parentChapter != null || locals.isProfile){%>
-                    <div class="header">
+                    <div class="tool_header">
                         <%if(parentChapter != null){%>
                             <div class="chapter_tools">
                                   <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>

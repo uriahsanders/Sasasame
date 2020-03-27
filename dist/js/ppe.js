@@ -197,7 +197,7 @@ function ppe(){
     }
     cursor.addEventListener('mousemove', draw, 0);
     $(document).on('keydown', function(e){
-        if($('.graphic_mode').attr('title') == 'Book Mode'){
+        if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
             if(e.keyCode == 80 || e.keyCode == 78){
                 //p for previous
                 if(e.keyCode == 80){
@@ -293,10 +293,10 @@ function ppe(){
             //s for scale
             else if(e.keyCode == 83){
                 if(e.shiftKey){
-                    masterScale -= 0.1;
+                    masterScale -= 0.01;
                 }
                 else{
-                    masterScale += 0.1;
+                    masterScale += 0.01;
                 }
                 if(cursorSelect() == 'off'){
                     drawCursor();
@@ -308,10 +308,10 @@ function ppe(){
             //r for rotate
             else if(e.keyCode == 82){
                 if(e.shiftKey){
-                    masterRotate -= 10;
+                    masterRotate -= 1;
                 }
                 else{
-                    masterRotate += 10;
+                    masterRotate += 1;
                 }
                 drawCursor();
             }
@@ -324,6 +324,10 @@ function ppe(){
                 masterRotate = 0;
                 masterScale = 1;
                 drawCursor();
+            }
+            //b for book mode
+            else if(e.keyCode == 66){
+                $('.graphic_mode').click()
             }
         }
     });

@@ -7,17 +7,14 @@ const passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    sourceAuthor: {
+    //source passage reference
+    originalPassage: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Passage'
     },
     content: String,
     //chapter the passage belongs to
     chapter: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Chapter'
-    },
-    sourceChapter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chapter'
     },

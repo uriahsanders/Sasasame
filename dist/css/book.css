@@ -95,7 +95,7 @@
     word-wrap: break-word;
     display: none;
 }
-.header{
+.header, .tool_header{
     padding: 10px;
     margin-bottom: 10px;
     font-weight: bold;
@@ -202,12 +202,16 @@
 .flagged{
     color: red;
 }
+.ql-container{
+    height: 300px;
+}
 .passage_content{
     white-space: pre-line;
     overflow-x: auto;
     /*padding-left: 20px;*/
     /*padding-bottom: 10px;*/
     min-height: 30px;
+    max-height: 300px;
     /*width:55%;*/
     margin:auto;
     text-align: left;
@@ -348,7 +352,7 @@
 .CodeMirror { 
     z-index: 0;
     font-size: 0.7em;
-    height: auto !important;
+    height: 300px !important;
 }
 #perm_chapter{
     position: absolute;

@@ -128,6 +128,24 @@ $('.codeform_add').on('submit', function(e){
         }
     });
 });
+$('.codeform_update').on('submit', function(e){
+    e.preventDefault();
+    var formdata = new FormData(this);
+    var info = $(this).serializeObject();
+    var thiz = $(this);
+    $.ajax({
+        type: 'post',
+        url: '/update_passage/',
+        data: formdata,
+       contentType: false,
+       enctype: 'multipart/form-data',
+       processData: false,
+        success: function(data){
+            alert('Updated!');
+            $('.blocker').click();
+        }
+    });
+});
 $('#update_chapter_form').on('submit', function(e){
     e.preventDefault();
     var info = $(this).serializeObject();
@@ -293,16 +311,60 @@ function readPassageMetadata(thiz){
                         $( "div.log" ).text( "Triggered ajaxError handler." );
                     });
                 }
+                break;
+                case 'Quill JS':
+                $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
+                var toolbarOptions = [
+                  // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                  ['blockquote', 'code-block'],
+
+                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+
+                  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                  // [{ 'font': [] }],
+                  [{ 'align': [] }],
+
+                  ['clean']                                         // remove formatting button
+                ];
+                if(scriptLoaded('/quill.js')){
+                    var quill = new Quill('#passage_content_'+thiz.parent().attr('id'), {
+                        modules: {
+                            toolbar: toolbarOptions
+                        },
+                        theme: 'snow'
+                      });
+                }
+                else{
+                    $.getScript('/quill.js')
+                    .done(function( script, textStatus ) {
+                       var quill = new Quill('#passage_content_'+thiz.parent().attr('id'), {
+                            modules: {
+                                toolbar: toolbarOptions
+                            },
+                            theme: 'snow'
+                          });
+                      })
+                      .fail(function( jqxhr, settings, exception ) {
+                        $( "div.log" ).text( "Triggered ajaxError handler." );
+                    });
+                }
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
-                    eval(content); 
-                    if(key == 'Canvas'){
-                        canvas.css('display', 'inline-block');
-                        //now we need to update the passage on the server
-                        //with the image generated from the canvas
-                    }
+                    jqueryToggle(thiz, function(){
+                        thiz.siblings('.passage_content').hide();
+                        thiz.siblings('.ql-toolbar').hide();
+                        var html = '<div id="passage_content_'+thiz.parent().attr('id')+'_temp">'+$('#passage_content_'+thiz.parent().attr('id')).children('.ql-editor').html()+'</div>';
+                        thiz.parent().append(html)
+                    }, function(){
+                        thiz.siblings('.passage_content').show();
+                        thiz.siblings('.ql-toolbar').show();
+                        $('#passage_content_'+thiz.parent().attr('id')+'_temp').remove();
+                    })
                 });
-                
+                autoPlay(autoplay, thiz);
                 break;
                 case 'CSS':
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
@@ -368,7 +430,7 @@ function readPassageMetadata(thiz){
                 });
                 autoPlay(autoplay, thiz);
                 break;
-                case 'Code':
+                case 'Syntax Highlight':
                 //syntax highlight
                 thiz.siblings('.passage_content').html('<pre><code class="language-'+value+'">'+content+'</code></pre>');
                 document.querySelectorAll('pre code').forEach((block) => {
@@ -410,11 +472,6 @@ function readPassageMetadata(thiz){
                     }
                 });
                 autoPlay(autoplay, thiz, isCanvasKey);
-                //syntax highlight
-                thiz.siblings('.passage_content').html('<pre><code class="language-js">'+content+'</code></pre>');
-                document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightBlock(block);
-                  });
                 break;
                 case 'Custom':
                 thiz.siblings('.proteins').children('.passage_play').show();
@@ -698,6 +755,9 @@ $(document).on('click', '[id^=passage_update_]', function(){
         editor = content.next('.CodeMirror').get(0).CodeMirror;
         text = editor.getValue();
     }
+    else if(content.children('.ql-editor').length){
+        text = content.children('.ql-editor').html();
+    }
     else{
         text = content.text();
     }
@@ -810,7 +870,7 @@ $('.graphic_mode').on('click', function(){
     var thiz = $(this);
     jqueryToggle($(this), function(){
         thiz.attr('src', '/images/ionicons/book-sharp.svg');
-        thiz.attr('title', 'Book Mode');
+        thiz.attr('title', 'Book Mode (b)');
         $('#control_blocks').hide();
         $('#ppe').show();
         $('.ppe_option').css('display', 'inline-block');
@@ -840,7 +900,7 @@ $('.graphic_mode').on('click', function(){
         });
     }, function(){
         thiz.attr('src', '/images/ionicons/brush-sharp.svg');
-        thiz.attr('title', 'Graphic Mode');
+        thiz.attr('title', 'Graphic Mode (g)');
         $('#control_blocks').show();
         $('#ppe').hide();
         $('.ppe_option').hide();
@@ -1098,7 +1158,7 @@ $('.option_distraction_free').on('click', function(){
 $('.toggle_tools').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $('.proteins').show();
-        $('.header').show();
+        $('.tool_header').show();
         $('.chapter_tools').show();
         $('.passage_author').show();
         $('.passage').css('padding-bottom', '32px');
@@ -1106,7 +1166,7 @@ $('.toggle_tools').on('click', function(){
     }
     else{
         $('.proteins').hide();
-        $('.header').hide();
+        $('.tool_header').hide();
         $('.chapter_tools').hide();
         $('.passage_author').hide();
         $('.passage').css('padding-bottom', '0px');
@@ -1128,7 +1188,7 @@ $('#play_all').on('click', function(){
 
 $(document).on('keydown', function(e){
     var thiz = $(this);
-    if($('.graphic_mode').attr('title') == 'Graphic Mode'){
+    if($('.graphic_mode').attr('title') == 'Graphic Mode (g)'){
         //hotkeys not for editable elements
         var el = document.activeElement;
         try {
@@ -1136,12 +1196,24 @@ $(document).on('keydown', function(e){
                 return; // active element has caret, do not proceed
             }
         } catch (ex) {}
-        //d for distraction free mode
-        if(e.keyCode == 68){
+        //m for menu
+        if(e.keyCode == 77){
             // $('.option_distraction_free').click();
             jqueryToggle(thiz, function(){
                 flashIcon($('.passage_adder'), 'gold');
                 $('#toc').modal();
+                $('#right_side_select').val('chapters').change();
+            }, function(){
+                $('.blocker').click();
+            }, 'add_form_modal')
+        }
+        //q for queue
+        if(e.keyCode == 81){
+            // $('.option_distraction_free').click();
+            jqueryToggle(thiz, function(){
+                flashIcon($('.passage_adder'), 'gold');
+                $('#toc').modal();
+                $('#right_side_select').val('queue').change();
             }, function(){
                 $('.blocker').click();
             }, 'add_form_modal')
@@ -1162,6 +1234,10 @@ $(document).on('keydown', function(e){
         //h for home
         else if(e.keyCode == 72){
             window.location = '/';
+        }
+        //g for graphic mode
+        else if(e.keyCode == 71){
+            $('.graphic_mode').click();
         }
     }
 });
