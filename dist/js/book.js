@@ -1,6 +1,7 @@
 var Sasame = true;
-//force height of passages only on home page
+
 if($('#parent_chapter_id').val() != 'Sasame'){
+    //so only in chapters
     Sasame = false;
     $('#passages').sortable({
         handle: '.passage_author'
@@ -14,6 +15,10 @@ if($('#parent_chapter_id').val() != 'Sasame'){
     //         handle: '.passage_author'
     //     });
     // });
+}
+else{
+    //force height of passages only on home page
+    document.styleSheets[0].insertRule('.passage_content{max-height:300px}');
 }
 //For forms
 $.fn.serializeObject = function() {
@@ -567,10 +572,24 @@ function readPassageMetadata(thiz){
                 break;
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');
+                thiz.siblings('.passage_image').css('display', 'none');
+                var codemirror = false;
+                if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
+                    codemirror = true;
+                    setTimeout(function(){
+                            thiz.siblings('.passage_content').next('.CodeMirror').hide();
+                        }, 1000);
+                }
                 thiz.siblings('.passage_author').css('cursor', 'pointer');
-                thiz.siblings().not('.passage_canvas, .passage_content').css('opacity', '0.6');
+                thiz.siblings().not('.passage_canvas, .passage_content, .passage_image, .passage_html_disp').css('opacity', '0.6');
                 thiz.siblings('.passage_author').on('click', function(){
-                    thiz.siblings('.passage_content').fadeToggle();
+                    if(codemirror){
+                        thiz.siblings('.passage_content').next('.CodeMirror').fadeToggle();
+                    }
+                    else{
+                        thiz.siblings('.passage_content').fadeToggle();
+                        thiz.siblings('.passage_image').fadeToggle();
+                    }
                 });
                 break;
                 case 'Hide Tools':
@@ -1248,9 +1267,11 @@ $('.toggle_tools').on('click', function(){
         $('.chapter_tools').show();
         $('.passage_author').show();
         $('.passage').css('padding-bottom', '32px');
+        $('#book_of_sasame').css('width', '63%');
         $(this).data('hidden', 'false')
     }
     else{
+        $('#book_of_sasame').css('width', '100%');
         $('.proteins').hide();
         $('.tool_header').hide();
         $('.chapter_tools').hide();

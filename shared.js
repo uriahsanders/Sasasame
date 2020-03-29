@@ -43,7 +43,7 @@
                     <input class="flagged"name="flagged" type="hidden" value="false"/>
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
-                     <input class="hidden_upload"name="file" type="file"/>
+                     <input class="hidden_upload"name="file" type="file" autocomplete="off"/>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     `+after+`
                     <div id="properties"class="properties">
