@@ -573,12 +573,16 @@ function readPassageMetadata(thiz){
                 var scriptURL = '/mode/'+value+'/'+value+'.js';
                 var editor;
                 if(scriptLoaded(scriptURL)){
-                    editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0]);
+                    editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0], {
+                        mode: value
+                    });
                 }
                 else{
                     $.getScript(scriptURL)
                     .done(function( script, textStatus ) {
-                       editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0]);
+                       editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0], {
+                        mode: value
+                       });
                       })
                       .fail(function( jqxhr, settings, exception ) {
                         $( "div.log" ).text( "Triggered ajaxError handler." );
