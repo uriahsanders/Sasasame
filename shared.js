@@ -63,43 +63,45 @@
     <!-- For Passages -->
     <select name="property_key"class="property_key" autocomplete="off">
         <option selected="selected">`+key+`</option>
+        <!-- Currently Active -->
         <option>Hyperlink</option>
+        <option>Markdown</option>
         <option>CSS</option>
         <option>HTML</option>
+        <option>Eval JS</option>
         <option>Syntax Highlight</option>
-        <option>Markdown</option>
         <option>Canvas</option>
+        <option>Label</option>
+        <option>Audio</option>
+        <option>Hidden</option>
+        <option>Quill JS</option>
+        <option>Code Mirror</option>
+        <option>Autoplay</option>
+        <option>Loop</option>
+        <option>Hide Tools</option>
+        <option>Align</option>
+        <option>Help</option>
+        <option>Music</option>
+
+        <!-- Currently Inactive -->
         <option>Animation</option>
         <option>Tone</option>
-        <option>Hidden</option>
-        <option>Audio</option>
         <option>Graph</option>
-        <!-- Labels show up even on hidden passages -->
-        <option>Label</option>
         <option>Directory</option>
         <option>Webpage</option>
         <option>File</option>
-        <!-- Point to another passage -->
         <option>Pointer</option>
         <option>Key Schema</option>
         <option>Is Key Schema?</option>
         <option>Impress JS</option>
         <option>Auto Expand</option>
-        <option>Quill JS</option>
-        <option>Code Mirror</option>
-        <option>Eval JS</option>
         <option>Custom</option>
         <option>Reference</option>
-        <option>Autoplay</option>
         <option>Dropdown</option>
-        <option>Loop</option>
         <option>Question</option>
         <option>Task</option>
-        <option>Hide Tools</option>
         <option>TODO</option>
-        <option>Align</option>
         <option>Mutate</option>
-        <option>Help</option>
     </select>
     <br><br>
     <input value="`+value+`"name="property_value"class="property_value"type="" name="">
