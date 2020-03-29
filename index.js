@@ -637,9 +637,6 @@ function generateMetadata(property_keys, property_values){
             if(key == 'Canvas'){
                 canvas = true;
             }
-            if(key == 'Label'){
-                label = property_values[i];
-            }
             metadata[key] = property_values[i++];
         });
     }
@@ -648,18 +645,12 @@ function generateMetadata(property_keys, property_values){
             if(key == 'Canvas'){
                 canvas = true;
             }
-            if(key == 'Label'){
-                label = '';
-            }
             metadata[key] = '';
         });
     }
     else{
         if(property_keys == 'Canvas'){
             canvas = true;
-        }
-        if(property_keys == 'Label'){
-            label = property_values;
         }
         metadata[property_keys] = property_values;
     }
@@ -711,7 +702,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
     var metadata = generateMetadata(property_key, property_value);
     var json = metadata.json;
     var canvas = metadata.canvas;
-    var categories = metadata.categories;
+    var categories = req.body.tags;
     var uploadTitle = '';
     //image from Canvas
     if(dataURL){
@@ -786,7 +777,7 @@ app.post(/\/delete_category\/?/, (req, res) => {
 });
 
 app.use('/passage', passageRoutes);
-app.post(/search/, (req, res) => {
+app.post('/search/', (req, res) => {
     let title = req.body.title;
     Chapter.find({title: new RegExp(''+title+'', "i")})
     .select('title')
@@ -802,22 +793,16 @@ app.post(/search/, (req, res) => {
         res.send(html);
     });
 });
-app.post(/search_category/, (req, res) => {
+app.post('/search_category/', (req, res) => {
     let title = req.body.title;
-    category.find({title: new RegExp('^'+title+'$', "i")})
-    .select('title')
+    Passage.find({categories: new RegExp(''+title+'', "i") })
     .sort('stars')
     .limit(DOCS_PER_PAGE)
-    .exec(function(err, categories){
+    .exec(function(err, passages){
         let html = '';
-        if(categories){
-            categories.forEach(function(f){
-                f.passages.forEach(function(p){
-                    html += scripts.printPassage(p);
-                });
-                f.chapters.forEach(function(c){
-                    html += scripts.printChapter(c);
-                });
+        if(passages){
+            passages.forEach(function(p){
+                html += scripts.printPassage(p);
             });
         }
         res.send(html);
@@ -920,11 +905,12 @@ app.post('/update_passage/', (req, res) => {
     var metadata = generateMetadata(property_key, property_value);
     var json = metadata.json;
     var canvas = metadata.canvas;
-    var categories = metadata.categories;
+    var categories = req.body.tags;
     passageController.updatePassage({
         'id': req.body._id,
         'content': content,
         'canvas': canvas,
+        'categories': categories,
         'metadata': JSON.stringify(json),
         'callback': function(){
             res.send('Updated');

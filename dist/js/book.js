@@ -1,4 +1,5 @@
 var Sasame = true;
+//force height of passages only on home page
 if($('#parent_chapter_id').val() != 'Sasame'){
     Sasame = false;
     $('#passages').sortable({
@@ -98,6 +99,18 @@ const recordAudio = () =>
 
 $('.codeform_add').on('submit', function(e){
     e.preventDefault();
+    //first we need to change the textarea value,
+    //depending on the editor
+    // if(content.prop('tagName') == 'TEXTAREA'){
+    //     editor = content.next('.CodeMirror').get(0).CodeMirror;
+    //     text = editor.getValue();
+    // }
+    // else if(content.children('.ql-editor').length){
+    //     text = content.children('.ql-editor').html();
+    // }
+    // else{
+    //     text = content.text();
+    // }
     var formdata = new FormData(this);
     var info = $(this).serializeObject();
     var thiz = $(this);
@@ -142,7 +155,7 @@ $('.codeform_update').on('submit', function(e){
        enctype: 'multipart/form-data',
        processData: false,
         success: function(data){
-            alert('Updated!');
+            // alert('Updated!');
             window.location.reload();
         }
     });
@@ -195,6 +208,23 @@ $('#chapter_search').on('keypress', function(e){
 
     }
 });
+$('#category_search_input').on('keypress', function(e){
+    $('#search_val').val($(this).val());
+    if(e.which == 13){
+        $.ajax({
+            type: 'post',
+            url: '/search_category/',
+            data: {
+                title: $(this).val()
+            },
+            success: function(data){
+                $('.category').not('#chapter_load').not('#chapter_load_mobile').remove();
+                $('#cats').html(data);
+            }
+        });
+
+    }
+});
 
 $('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
@@ -235,6 +265,95 @@ $(document).on('click', '.image_upload_icon', function(){
     $(this).css('color', 'red');
     $(this).parent().siblings('.hidden_upload').click();
 });
+$(document).on('click', '.add_flag', function(){
+    jqueryToggle($(this), function(){
+        $(this).css('color', 'red');
+        $(this).parent().siblings('.flagged').val('true');
+    }, function(){
+        $(this).css('color', '#000');
+        $(this).parent().siblings('.flagged').val('false');
+    });
+});
+$(document).on('click', '.editor_choose', function(){
+    $('#add_passage_editor').modal({
+        closeExisting: false
+    });
+});
+$(document).on('click', '.editor_option', function(){
+    var value = $(this).text();
+    var thiz = $(this);
+    $('.blocker').click(); 
+    var textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');                   
+    switch(value){
+        case 'Plain':
+        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+textarea.text()+'</textarea>');
+        break;
+        case 'Rich':
+        textarea.replaceWith('<div class="add_passage_textarea">'+textarea.html()+'</div>');
+        textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
+        var toolbarOptions = [
+          // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+          ['blockquote', 'code-block'],
+
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+          [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+          // [{ 'font': [] }],
+          [{ 'align': [] }],
+
+          ['clean']                                         // remove formatting button
+        ];
+        if(scriptLoaded('/quill.js')){
+            var quill = new Quill(textarea[0], {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+              });
+        }
+        else{
+            $.getScript('/quill.js')
+            .done(function( script, textStatus ) {
+               var quill = new Quill(textarea[0], {
+                    modules: {
+                        toolbar: toolbarOptions
+                    },
+                    theme: 'snow'
+                  });
+              })
+              .fail(function( jqxhr, settings, exception ) {
+                $( "div.log" ).text( "Triggered ajaxError handler." );
+            });
+        }
+        break;
+        case 'Code':
+        // textarea.replaceWith('<textarea name="passage"class="add_passage_textarea"></textarea>');
+        // textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
+        var scriptURL = '/mode/'+value+'/'+value+'.js';
+        var editor;
+        editor = CodeMirror.fromTextArea(textarea[0]);
+        if(scriptLoaded(scriptURL)){
+            editor = CodeMirror.fromTextArea(textarea[0]);
+        }
+        else{
+            $.getScript(scriptURL)
+            .done(function( script, textStatus ) {
+               editor = CodeMirror.fromTextArea(textarea[0]);
+              })
+              .fail(function( jqxhr, settings, exception ) {
+                $( "div.log" ).text( "Triggered ajaxError handler." );
+            });
+        }
+        break;
+    }
+});
+$(document).on('click', '.tag_add', function(){
+    $(this).parent().siblings('.tag_input').slideToggle();
+});
 function readPassageMetadata(thiz){
     var metadata = thiz.val();
     var _id = thiz.attr('id').split('_')[2];
@@ -243,12 +362,12 @@ function readPassageMetadata(thiz){
     thiz.siblings('.proteins').children('.passage_play').hide();
     var autoplay = false;
     function escapeHtml(unsafe) {
-    return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
+        return unsafe
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
     }
       for (let [key, value] of Object.entries(metadata)) {
             if(key == 'Autoplay'){
@@ -298,6 +417,9 @@ function readPassageMetadata(thiz){
                 break;
                 case 'Code Mirror':
                 thiz.siblings('.passage_content').replaceWith('<textarea class="passage_content">'+content+'</textarea>');
+                if(value == 'html'){
+                    value = 'xml';
+                }
                 var scriptURL = '/mode/'+value+'/'+value+'.js';
                 var editor;
                 if(scriptLoaded(scriptURL)){
@@ -363,40 +485,93 @@ function readPassageMetadata(thiz){
                         thiz.siblings('.passage_content').show();
                         thiz.siblings('.ql-toolbar').show();
                         $('#passage_content_'+thiz.parent().attr('id')+'_temp').remove();
-                    })
+                    });
                 });
                 autoPlay(autoplay, thiz);
                 break;
                 case 'CSS':
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
-                thiz.siblings('.passage_content')[0].style = value;
+                if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
+                    codemirror = true;
+                }
+                else{
+                    thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-css">'+content+'</code></pre>');
+                    hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                }
+                thiz.siblings('.proteins').children('.passage_play').show();
+                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    jqueryToggle(thiz, function(){
+                        if(codemirror){
+                            try{
+                                editor = thiz.siblings('.passage_content').next('.CodeMirror').get(0).CodeMirror;
+                                content = editor.getValue();
+                            }
+                            catch(e){}
+                        }
+                        var style = document.createElement('style');
+                        style.type = 'text/css';
+                        style.id = value == '' ? 'custom_css' : value;
+                        style.innerHTML = content;
+                        document.getElementsByTagName('head')[0].appendChild(style);
+                    }, function(){
+                        $('#'+value).remove();
+                    });
+                });
+                autoPlay(autoplay, thiz);
                 break;
                 case 'Align':
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
                 thiz.siblings('.passage_content').css('text-align', value);
                 break;
                 case 'HTML':
-                var html = thiz.siblings('.passage_content').html();
+                var cont = thiz.siblings('.passage_content');
+                var text = cont.text();
+                var codemirror = false
+                if(cont.prop('tagName') == 'TEXTAREA'){
+                    codemirror = true;
+                }
+                else{
+                    thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(text)+'</code></pre>');
+                    hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                }
+                var html = text;
                 // thiz.siblings('.passage_content').text(html);
                 //syntax highlight
-                thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(html)+'</code></pre>');
-                hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
                     jqueryToggle(thiz, function(){
+                        if(codemirror){
+                            try{
+                                editor = thiz.siblings('.passage_content').next('.CodeMirror').get(0).CodeMirror;
+                                content = editor.getValue();
+                            }
+                            catch(e){}
+                            finally{
+                                thiz.siblings('.passage_content').parent().append('<div class="passage_html_disp">'+content+'</div>');
+                            }
+                        }
                         thiz.siblings('.passage_content').html(html);
                     }, function(){
                         // thiz.siblings('.passage_content').text(html);
-                        //syntax highlight
-                        thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(html)+'</code></pre>');
-                        hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
-                    })
+                        if(codemirror){
+                            thiz.siblings('.passage_content').hide();
+                            thiz.siblings('.passage_html_disp').remove();
+                        }
+                        else{
+                            thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(content)+'</code></pre>');
+                            hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                        }
+                    });
                 });
                 autoPlay(autoplay, thiz);
                 break;
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');
-                thiz.siblings().not('.passage_canvas').css('opacity', '0.6');
+                thiz.siblings('.passage_author').css('cursor', 'pointer');
+                thiz.siblings().not('.passage_canvas, .passage_content').css('opacity', '0.6');
+                thiz.siblings('.passage_author').on('click', function(){
+                    thiz.siblings('.passage_content').fadeToggle();
+                });
                 break;
                 case 'Hide Tools':
                 thiz.siblings('.proteins').hide();
@@ -856,7 +1031,7 @@ $(document).on('click', '.square_icon', function(){
             //add passage to queue
             $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
             $('#clone_'+id).children('.sub_passages').remove();
-            $('#clone_'+id).children('.proteins').hide();
+            // $('#clone_'+id).children('.proteins').hide();
             $('#queue_items')
             passages[id] = {
                 content: content,
@@ -1140,6 +1315,7 @@ $(document).on('keydown', function(e){
                 $('#code').modal();
             }, function(){
                 $('.blocker').click();
+                $('.ui-tooltip').hide();
             }, 'add_form_modal');
         }
         //h for home

@@ -114,7 +114,8 @@ module.exports = {
             content: options.content,
             canvas: options.canvas,
             label: options.label,
-            metadata: options.metadata
+            metadata: options.metadata,
+            categories: options.categories
         }, function(err, affected, resp){
             if(err){
                 console.log(err);

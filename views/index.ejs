@@ -16,13 +16,14 @@
         <script nomodule="" src="/ionicons.js"></script>
         <link rel="stylesheet" href="/highlight/default.css">
         <script src="/js/highlight.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.37/Tone.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/ppe.css">
         <link rel="stylesheet" href="/codemirror.css">
         <link rel="stylesheet" type="text/css" href="/css/fonts.css">
     </head>
     <body>
         <div id="login_modal" class="modal">
-          <p>Login</p>
+          <p class="header">Login</p>
           <form id="login_form" action="/login/" method="POST">
             <div>
                 <label>Username:</label>
@@ -40,8 +41,7 @@
                 <input class="control_button"type="submit" value="Login"autocomplete="off"/>
             </div>
           </form>
-          <hr>
-          <p>Register</p>
+          <p class="header">Register</p>
           <form id="register_form" action="/register/" method="POST">
             <div>
                 <label>Username:</label>
@@ -78,7 +78,7 @@
                 <br/>
                 <br/>
                 <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
-                <a class="link white" rel="modal:open"href="#login_modal">Login</a> 
+                <a class="link white" rel="modal:open"href="#login_modal">Enter</a> 
 
             </div>
         <%} %>
@@ -120,12 +120,12 @@
                             <a id="mobile_book_menu"class="basic_link white" rel="modal:open"href="#mobile_modal"><ion-icon title="Mobile Menu"src="/images/ionicons/menu-sharp.svg"></ion-icon></a>
                             <div id="help_modal" class="modal">
                               <p>Welcome!</p>
-                              <p>Sasame is an accessible, modular, and merit-based Social Network for worldwide collaboration and education. Let's make our dreams a reality!</p>
+                              <p>Sasame is a versatile, modular, and merit-based Social Network for worldwide collaboration and education. Let's make our dreams a reality!</p>
                               <p>Sasame is under live development. Keep checking back for more updates!</p>
                             </div>
                              <div id="help_modal_graphic" class="modal">
                               <p>Welcome!</p>
-                              <p>Sasame is an accessible, modular, and merit-based system for worldwide collaboration and education. Let's make our dreams a reality!</p>
+                              <p>Sasame is a versatile, modular, and merit-based system for worldwide collaboration and education. Let's make our dreams a reality!</p>
                               <p>Sasame is under live development. Keep checking back for more updates!</p>
                             </div>
                             <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
@@ -243,7 +243,7 @@
                       <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
-                            <option value="categories">Categories</option>
+                            <option value="categories">Passages</option>
                             <option value="users">Users</option>
                             <option value="queue">Queue</option>
                             <option value="brief">Brief</option>
@@ -273,7 +273,14 @@
                         </form> -->
                         <div id="queue_items"></div>
                     </div>
-
+                    <!-- Category Search -->
+                    <div id="category_search">
+                        <div>
+                            <input class="control_input"id="category_search_input"placeholder="Search by Tag" type="" name="" autocomplete="off">
+                        </div>
+                        <div id="cats">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

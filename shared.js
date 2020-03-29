@@ -7,6 +7,7 @@
     var which = (update == false) ? 'add' : 'update';
     var bt_which = (update == false) ? 'Add' : 'Update';
     var content = (update == false) ? '' : update.content;
+    var categories = (update == false) ? '' : update.categories;
     var _id = (update == false) ? '' : update._id;
     var ret = '';
     ret += `
@@ -18,18 +19,28 @@
                     </select></div>`;
                     }
                     ret += `
+                    <div id="add_passage_editor"class="modal">
+                      <div class="header">Choose Editor</div>
+                      <div class="editor_option"id="editor_plain">Plain</div>
+                      <div class="editor_option"id="editor_rich">Rich</div>
+                      <div class="editor_option"id="editor_code">Code</div>
+                    </div>
                     <div class="add_passage_icons"style="text-align:left">
                         <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
                         <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
+                        <ion-icon title="Choose Editor" class="editor_choose" src="/images/ionicons/newspaper-sharp.svg"></ion-icon>
+                        <ion-icon title="Add Tags" name="tags"class="tag_add" src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                        <!--<ion-icon title="Content Warning" class="flag_icon" src="/images/ionicons/flag-sharp.svg"></ion-icon>-->
+                        <ion-icon title="Content Warning" class="flag_icon add_flag" src="/images/ionicons/flag-sharp.svg"></ion-icon>
                         <!--<a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>-->
                         <!--<ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-sharp.svg"></ion-icon>-->
                     </div>
-                    <textarea class="control_textarea" cols="30" placeholder="" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
+                    <input class="control_input tag_input" value="`+categories+`"placeholder="Tag1, tag2, tag3, ..."name="tags" autocomplete="off"/>
+                    <textarea class="control_textarea add_passage_textarea" cols="30" placeholder="" name="passage" rows="6" autocomplete="off">`+content+`</textarea>
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <input class="dataURL"name="dataURL" type="hidden" value=""/>
+                    <input class="flagged"name="flagged" type="hidden" value="false"/>
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
                      <input class="hidden_upload"name="file" type="file"/>
@@ -85,7 +96,6 @@
         <option>Question</option>
         <option>Task</option>
         <option>Hide Tools</option>
-        <option>Categories</option>
         <option>TODO</option>
         <option>Align</option>
         <option>Mutate</option>
@@ -100,6 +110,7 @@
     
   };
   exports.printPassage = function(passage, user){
+       var metadata = JSON.parse(passage.metadata);
        var ret = '';
         ret += `
         <div id="`+passage._id+`" class="passage">`;
@@ -108,11 +119,15 @@
          ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
+
             ret += `<ion-icon class="profile_image"src="/images/ionicons/person-circle-sharp.svg"></ion-icon>`;
             if(passage.author){
                 ret += `<div><a class="basic_link" href="/user/`+passage.author._id+`">`+passage.author.username+`</a>`;
             }else{
                 ret += `<div><a class="basic_link" href="#">Anonymous</a>`;
+            }
+            if(metadata['Label']){
+              ret += `<div class="passage_label">`+metadata['Label']+`</div>`;
             }
             ret += '<span class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'<span>';
             ret += '</div>';
@@ -135,14 +150,14 @@
                 ret += `</div>`;
               var i = 0;
               var after = '<br>';
-              var metadata = JSON.parse(passage.metadata);
               for (let [key, value] of Object.entries(metadata)) {
                     after += exports.printPropertySelect(key, value);
                 }
               ret += exports.printAddForm(chapterID, {
                 content: passage.content,
                 flagged: passage.flagged,
-                _id: passage._id
+                _id: passage._id,
+                categories: passage.categories
               }, after);
               ret += `
               <div class="passage_id">`+passage._id+`</div>
@@ -163,9 +178,9 @@
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              </div>
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
-            <input type="hidden" class="original_passage_content" value="`+passage.content+`"/>
+            <input type="hidden" class="original_passage_content" value="`+escapeHTML(passage.content)+`"/>
                 <div class="passage_chapter">Sasame</div>
-            <div id="passage_content_`+passage._id+`"class="passage_content">`+ passage.content+`</div>
+            <div id="passage_content_`+passage._id+`"class="passage_content">`+ escapeHTML(passage.content)+`</div>
             <canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;
