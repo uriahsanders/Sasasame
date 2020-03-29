@@ -222,6 +222,9 @@ app.get('/quill.js', function(req, res) {
 app.get('/quill.snow.css', function(req, res) {
     res.sendFile(__dirname + '/node_modules/quill/dist/quill.snow.css');
 });
+app.get('/tone.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/tone/build/Tone.js');
+});
 
 function requiresLogin(req, res, next) {
   if (req.session && req.session.user) {
