@@ -30,7 +30,6 @@ function ppe(){
             // var imageContext = image.getContext('2d');
             drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
             // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
-            masterScale = 1;
             drawCursor();
         }
     }

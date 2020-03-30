@@ -602,6 +602,10 @@ function readPassageMetadata(thiz){
                     autoplay = false;
                 }
             }
+            var codemirror = false;
+            if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
+                codemirror = true;
+            }
             switch(key){
                 case 'Hyperlink':
                 thiz.siblings('.passage_content').attr('title', value);
@@ -704,11 +708,7 @@ function readPassageMetadata(thiz){
                 autoPlay(autoplay, thiz);
                 break;
                 case 'CSS':
-                // thiz.siblings('.passage_content').css(JSON.parse(value));
-                if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
-                    codemirror = true;
-                }
-                else{
+                if(!codemirror){
                     thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-css">'+content+'</code></pre>');
                     hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
                 }
@@ -740,9 +740,8 @@ function readPassageMetadata(thiz){
                 case 'HTML':
                 var cont = thiz.siblings('.passage_content');
                 var text = cont.text();
-                var codemirror = false
-                if(cont.prop('tagName') == 'TEXTAREA'){
-                    codemirror = true;
+                if(codemirror){
+                   //
                 }
                 else{
                     thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(text)+'</code></pre>');
@@ -772,6 +771,7 @@ function readPassageMetadata(thiz){
                             thiz.siblings('.passage_html_disp').remove();
                         }
                         else{
+                            thiz.siblings('.passage_html_disp').remove();
                             thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-html">'+escapeHtml(content)+'</code></pre>');
                             hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
                         }
@@ -782,15 +782,25 @@ function readPassageMetadata(thiz){
                 case 'Hidden':
                 thiz.siblings('.passage_content').css('display', 'none');
                 thiz.siblings('.passage_image').css('display', 'none');
-                var codemirror = false;
-                if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
-                    codemirror = true;
+                if(codemirror){
                     setTimeout(function(){
                             thiz.siblings('.passage_content').next('.CodeMirror').hide();
                         }, 1000);
                 }
                 thiz.siblings('.passage_author').css('cursor', 'pointer');
                 thiz.siblings().not('.passage_canvas, .passage_content, .passage_image, .passage_html_disp').css('opacity', '0.6');
+                thiz.siblings('.passage_author').on('click', function(){
+                    if(codemirror){
+                        thiz.siblings('.passage_content').next('.CodeMirror').fadeToggle();
+                    }
+                    else{
+                        thiz.siblings('.passage_content').fadeToggle();
+                        thiz.siblings('.passage_image').fadeToggle();
+                    }
+                });
+                break;
+                case 'Label':
+                thiz.siblings('.passage_author').css('cursor', 'pointer');
                 thiz.siblings('.passage_author').on('click', function(){
                     if(codemirror){
                         thiz.siblings('.passage_content').next('.CodeMirror').fadeToggle();
@@ -902,6 +912,13 @@ function readPassageMetadata(thiz){
                 $('#custom_pairs').val(JSON.stringify(storage));
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                    if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
+                        try{
+                            editor = thiz.siblings('.passage_content').next('.CodeMirror').get(0).CodeMirror;
+                            content = editor.getValue();
+                        }
+                        catch(e){}
+                    }
                     eval(content); 
                     if(key == 'Canvas'){
                         canvas.css('display', 'inline-block');
@@ -1503,6 +1520,28 @@ $('.option_distraction_free').on('click', function(){
         $(this).data('hidden', 'true')
     }
 });
+$('.toggle_resize').on('click', function(){
+    if($(this).data('hidden') == 'true'){
+        $('.passage').css({
+            'display': 'block',
+            'resize': 'none',
+            'overflow': 'auto',
+            'width': 'auto',
+            'height': 'auto',
+        });
+        $(this).data('hidden', 'false')
+    }
+    else{
+        $('.passage').css({
+            'display': 'inline-block',
+            'resize': 'both',
+            'overflow': 'auto',
+            'width': '160px',
+            'height': '200px',
+        });
+        $(this).data('hidden', 'true')
+    }
+});
 $('.toggle_tools').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $('.proteins').show();
@@ -1510,11 +1549,16 @@ $('.toggle_tools').on('click', function(){
         $('.chapter_tools').show();
         $('.passage_author').show();
         $('.passage').css('padding-bottom', '32px');
-        $('#book_of_sasame').css('width', '63%');
+        $('.passage').css('background', '#353535');
+        $('.passage').css('color', '#ccc');
+        $('.passage_content').css('padding', '10px');
+
         $(this).data('hidden', 'false')
     }
     else{
-        $('#book_of_sasame').css('width', '100%');
+        $('.passage_content').css('padding', '0px');
+        $('.passage').css('background', '#fff');
+        $('.passage').css('color', '#353535');
         $('.proteins').hide();
         $('.tool_header').hide();
         $('.chapter_tools').hide();
@@ -1582,6 +1626,10 @@ $(document).on('keydown', function(e){
         //t for toggle tools
         else if(e.keyCode == 84){
             $('.toggle_tools').click();
+        }
+        //r for toggle resize
+        else if(e.keyCode == 82){
+            $('.toggle_resize').click();
         }
         //a for add passage
         else if(e.keyCode == 65){
