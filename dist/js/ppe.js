@@ -10,6 +10,7 @@ function ppe(){
     var queuePos = 0;
     var masterScale = 1;
     var masterRotate = 0;
+    var isDrawing = false
 
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
@@ -24,6 +25,14 @@ function ppe(){
         posx = pos.x;
         posy = pos.y;
         drawCursor();
+        if($('#ppe_select').data('select') == 'off' && isDrawing){
+            var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+            // var imageContext = image.getContext('2d');
+            drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
+            // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
+            masterScale = 1;
+            drawCursor();
+        }
     }
     function select(e) {
         var pos = getMousePos(canvas, e);
@@ -200,6 +209,12 @@ function ppe(){
         return $('#ppe_select').data('select');
     }
     cursor.addEventListener('mousemove', draw, 0);
+    cursor.addEventListener('mousedown', function(){
+        isDrawing = true;
+    }, 0);
+    cursor.addEventListener('mouseup', function(){
+        isDrawing = false;
+    }, 0);
     $(document).on('keydown', function(e){
         if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
             if(e.keyCode == 80 || e.keyCode == 78){

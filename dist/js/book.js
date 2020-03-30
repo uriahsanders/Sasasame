@@ -1,4 +1,52 @@
 //classes
+// var audioCtx = new AudioContext();
+
+// var analyser = audioCtx.createAnalyser();
+// var analyser = audioCtx.createAnalyser();
+//   analyser.minDecibels = -90;
+//   analyser.maxDecibels = -10;
+//   analyser.smoothingTimeConstant = 0.85;
+
+//   var distortion = audioCtx.createWaveShaper();
+//   var gainNode = audioCtx.createGain();
+//   var biquadFilter = audioCtx.createBiquadFilter();
+//   var convolver = audioCtx.createConvolver();
+
+// var dataArray = new Uint8Array(analyser.frequencyBinCount); // Uint8Array should be the same length as the frequencyBinCount 
+
+// void analyser.getByteFrequencyData(dataArray); // fill the Uint8Array with data returned from getByteFrequencyData() 
+// var constraints = {audio: true};
+// navigator.mediaDevices.getUserMedia (constraints)
+//         .then(
+//           function(stream) {
+//             source = audioCtx.createMediaStreamSource(stream);
+//              source.connect(distortion);
+//              distortion.connect(biquadFilter);
+//              biquadFilter.connect(gainNode);
+//              convolver.connect(gainNode);
+//              gainNode.connect(analyser);
+//              analyser.connect(audioCtx.destination);
+
+//         })
+//         .catch( function(err) { console.log('The following gUM error occured: ' + err);});
+//         analyser.fftSize = 2048;
+//       var bufferLengthAlt = analyser.frequencyBinCount;
+//       var dataArrayAlt = new Uint8Array(bufferLengthAlt);
+
+//       var i = 0;
+//       var drawAlt = function() {
+
+//         analyser.getByteFrequencyData(dataArrayAlt);
+
+//         console.log(dataArrayAlt);
+//         ++i;
+//         // if(i < 100){
+//             drawVisual = requestAnimationFrame(drawAlt);
+//         // }
+
+//       };
+
+      // drawAlt();
 //https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/
 //Simple Player, Parser, thanks to Nicolo Andronio
 var musicLooper;
@@ -572,17 +620,29 @@ function readPassageMetadata(thiz){
                 }
                 var scriptURL = '/mode/'+value+'/'+value+'.js';
                 var editor;
+                var viewportMargin = 10;
+                // if(!Sasame){
+                //     viewportMargin = Infinity;
+                // }
                 if(scriptLoaded(scriptURL)){
                     editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0], {
-                        mode: value
+                        mode: value,
+                        viewportMargin: viewportMargin
                     });
+                    // if(!Sasame){
+                    //     $('.CodeMirror').css('height', 'auto');
+                    // }
                 }
                 else{
                     $.getScript(scriptURL)
                     .done(function( script, textStatus ) {
                        editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0], {
-                        mode: value
+                        mode: value,
+                        viewportMargin: viewportMargin
                        });
+                       // if(!Sasame){
+                       //      $('.CodeMirror').css('height', 'auto');
+                       //  }
                       })
                       .fail(function( jqxhr, settings, exception ) {
                         $( "div.log" ).text( "Triggered ajaxError handler." );
@@ -743,6 +803,7 @@ function readPassageMetadata(thiz){
                 break;
                 case 'Hide Tools':
                 thiz.siblings('.proteins').hide();
+                thiz.siblings('.passage_author').hide();
                 break;
                 case 'Audio':
                 thiz.siblings('.proteins').children('.passage_play').show();
@@ -1478,7 +1539,14 @@ $('#play_all').on('click', function(){
 $(document).on('keydown', function(e){
     var thiz = $(this);
     if($('.graphic_mode').attr('title') == 'Graphic Mode (g)'){
-        //hotkeys not for editable elements
+        //ESC
+        if(e.keyCode == 27){
+            // Remove focus from any focused element
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+        }
+        //most hotkeys not for editable elements
         var el = document.activeElement;
         try {
             if (el && el.selectionStart !== undefined || el.isContentEditable) {
@@ -1495,6 +1563,10 @@ $(document).on('keydown', function(e){
             }, function(){
                 $('.blocker').click();
             }, 'add_form_modal')
+        }
+        //p for play all
+        if(e.keyCode == 80){
+            $('#play_all').click();
         }
         //q for queue
         if(e.keyCode == 81){

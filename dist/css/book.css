@@ -373,11 +373,13 @@
     display: inline;
     text-align: left;
 }
+
 .CodeMirror { 
     z-index: 0;
     font-size: 0.7em;
     /*height: auto !important;*/
     border: 1px solid #353535;
+    resize: vertical;
 }
 #perm_chapter{
     position: absolute;
