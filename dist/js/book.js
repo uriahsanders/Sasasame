@@ -655,6 +655,7 @@ function readPassageMetadata(thiz){
                 break;
                 case 'Quill JS':
                 $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
+                $('#passage_content_'+thiz.parent().attr('id')).text('');
                 var toolbarOptions = [
                   // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
                   ['blockquote', 'code-block'],
@@ -677,6 +678,7 @@ function readPassageMetadata(thiz){
                         },
                         theme: 'snow'
                       });
+                    quill.clipboard.dangerouslyPasteHTML(0, content);
                 }
                 else{
                     $.getScript('/quill.js')
@@ -687,9 +689,12 @@ function readPassageMetadata(thiz){
                             },
                             theme: 'snow'
                           });
+                       quill.clipboard.dangerouslyPasteHTML(0, content);
                       })
                       .fail(function( jqxhr, settings, exception ) {
                         $( "div.log" ).text( "Triggered ajaxError handler." );
+                    
+
                     });
                 }
                 thiz.siblings('.proteins').children('.passage_play').show();
