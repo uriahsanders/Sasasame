@@ -704,7 +704,7 @@ function readPassageMetadata(thiz){
                     jqueryToggle(thiz, function(){
                         thiz.siblings('.passage_content').hide();
                         thiz.siblings('.ql-toolbar').hide();
-                        var html = '<div id="passage_content_'+thiz.parent().attr('id')+'_temp">'+$('#passage_content_'+thiz.parent().attr('id')).children('.ql-editor').html()+'</div>';
+                        var html = '<div class="passage_content"id="passage_content_'+thiz.parent().attr('id')+'_temp">'+$('#passage_content_'+thiz.parent().attr('id')).children('.ql-editor').html()+'</div>';
                         thiz.parent().append(html)
                     }, function(){
                         thiz.siblings('.passage_content').show();
@@ -1531,20 +1531,12 @@ $('.toggle_resize').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $('.passage').css({
             'display': 'block',
-            'resize': 'none',
-            'overflow': 'auto',
-            'width': 'auto',
-            'height': 'auto',
         });
         $(this).data('hidden', 'false')
     }
     else{
         $('.passage').css({
             'display': 'inline-block',
-            'resize': 'both',
-            'overflow': 'auto',
-            'width': '160px',
-            'height': '200px',
         });
         $(this).data('hidden', 'true')
     }

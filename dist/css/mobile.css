@@ -18,6 +18,9 @@
     .option_distraction_free{
         display: none;
     }
+    .toggle_resize{
+        display: none;
+    }
     .sasame_button, .eat_fruit {
         border: 3px solid #353535;
         background: #353535;
@@ -95,5 +98,8 @@
         padding: 15px;
         font-size: 0.9em;
         margin: auto;
+    }
+    .passsage{
+        display: block;
     }
 }

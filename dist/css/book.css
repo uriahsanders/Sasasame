@@ -165,13 +165,16 @@
     margin: 10px;
     padding: 20px;
     /*not for mobile*/
-    /*display: inline-block;
+    display: inline-block;
     resize: both;
     overflow: auto;
-    width: 160px;
+    /*width: 160px;
     height: 200px;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
+}
+.passage_html_disp{
+    position: relative;
 }
 .passage_id{
     display: none;
