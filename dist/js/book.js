@@ -553,6 +553,8 @@ $(document).on('click', '.tag_add', function(){
     $(this).parent().siblings('.tag_input').slideToggle();
 });
 function readPassageMetadata(thiz){
+    //so we don't double up
+    thiz.addClass('metadata_read');
     var metadata = thiz.val();
     var _id = thiz.attr('id').split('_')[2];
     metadata = JSON.parse(metadata);
@@ -1412,7 +1414,7 @@ $(document).on('click', '.load_more', function(){
                     $('#passages').sortable({
                         handle: '.passage_author'
                     });
-                    $('[id^=passage_metadata_]').each(function(){
+                    $('[id^=passage_metadata_]').not('.metadata_read').each(function(){
                         readPassageMetadata($(this));
                     });
                 }
