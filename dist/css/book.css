@@ -166,14 +166,14 @@
     margin-bottom: 10px;
     padding: 20px;
     /*not for mobile*/
-    display: inline-block;
+    display: block;
     resize: both;
     overflow: auto;
     /*width: 160px;
     height: 200px;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
-    /*max-width: 90%;*/
+    max-width: 96%;
 }
 .passage_html_disp{
     position: relative;

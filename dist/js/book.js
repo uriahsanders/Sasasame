@@ -1489,14 +1489,16 @@ $('.option_distraction_free').on('click', function(){
 });
 $('.toggle_resize').on('click', function(){
     if($(this).data('hidden') == 'true'){
+        $(this).css('color', 'white');
         $('.passage').css({
-            'display': 'inline-block',
+            'display': 'block',
         });
         $(this).data('hidden', 'false')
     }
     else{
+        $(this).css('color', 'gold');
         $('.passage').css({
-            'display': 'block',
+            'display': 'inline-block',
         });
         $(this).data('hidden', 'true')
     }
