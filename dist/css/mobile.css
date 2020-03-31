@@ -105,4 +105,7 @@
     .passage{
         display: block;
     }
+    .passage_content{
+        /*min-width: 90%;*/
+    }
 }

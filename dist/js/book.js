@@ -1,52 +1,3 @@
-//classes
-// var audioCtx = new AudioContext();
-
-// var analyser = audioCtx.createAnalyser();
-// var analyser = audioCtx.createAnalyser();
-//   analyser.minDecibels = -90;
-//   analyser.maxDecibels = -10;
-//   analyser.smoothingTimeConstant = 0.85;
-
-//   var distortion = audioCtx.createWaveShaper();
-//   var gainNode = audioCtx.createGain();
-//   var biquadFilter = audioCtx.createBiquadFilter();
-//   var convolver = audioCtx.createConvolver();
-
-// var dataArray = new Uint8Array(analyser.frequencyBinCount); // Uint8Array should be the same length as the frequencyBinCount 
-
-// void analyser.getByteFrequencyData(dataArray); // fill the Uint8Array with data returned from getByteFrequencyData() 
-// var constraints = {audio: true};
-// navigator.mediaDevices.getUserMedia (constraints)
-//         .then(
-//           function(stream) {
-//             source = audioCtx.createMediaStreamSource(stream);
-//              source.connect(distortion);
-//              distortion.connect(biquadFilter);
-//              biquadFilter.connect(gainNode);
-//              convolver.connect(gainNode);
-//              gainNode.connect(analyser);
-//              analyser.connect(audioCtx.destination);
-
-//         })
-//         .catch( function(err) { console.log('The following gUM error occured: ' + err);});
-//         analyser.fftSize = 2048;
-//       var bufferLengthAlt = analyser.frequencyBinCount;
-//       var dataArrayAlt = new Uint8Array(bufferLengthAlt);
-
-//       var i = 0;
-//       var drawAlt = function() {
-
-//         analyser.getByteFrequencyData(dataArrayAlt);
-
-//         console.log(dataArrayAlt);
-//         ++i;
-//         // if(i < 100){
-//             drawVisual = requestAnimationFrame(drawAlt);
-//         // }
-
-//       };
-
-      // drawAlt();
 //https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/
 //Simple Player, Parser, thanks to Nicolo Andronio
 var musicLooper;
@@ -814,17 +765,8 @@ function readPassageMetadata(thiz){
                 });
                 break;
                 case 'Label':
-                thiz.siblings('.passage_author').find('.passage_label').text(value).show();
-                thiz.siblings('.passage_author').css('cursor', 'pointer');
-                thiz.siblings('.passage_author').on('click', function(){
-                    if(codemirror){
-                        thiz.siblings('.passage_content').next('.CodeMirror').fadeToggle();
-                    }
-                    else{
-                        thiz.siblings('.passage_content').fadeToggle();
-                        thiz.siblings('.passage_image').fadeToggle();
-                    }
-                });
+                var label = thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text();
+                thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text(label + value);
                 break;
                 case 'Hide Tools':
                 thiz.siblings('.proteins').hide();
@@ -1018,6 +960,16 @@ $(document).on('click', '[id^=star_]', function(){
             }
         }
     });
+});
+$(document).on('click', '.passage_author:not(.passage_label)', function(){
+    if($(this).siblings('.passage_content').next('.CodeMirror').length){
+        $(this).siblings('.passage_content').next('.CodeMirror').fadeToggle();
+    }
+    else{
+        $(this).siblings('.passage_content').fadeToggle();
+        $(this).siblings('.ql-toolbar').fadeToggle();
+        $(this).siblings('.passage_image').fadeToggle();
+    }
 });
 $(document).on('click', '[id^=chapter_star_]', function(){
     var _id = $(this).attr('id').split('_')[2];
@@ -1538,13 +1490,13 @@ $('.option_distraction_free').on('click', function(){
 $('.toggle_resize').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $('.passage').css({
-            'display': 'block',
+            'display': 'inline-block',
         });
         $(this).data('hidden', 'false')
     }
     else{
         $('.passage').css({
-            'display': 'inline-block',
+            'display': 'block',
         });
         $(this).data('hidden', 'true')
     }
@@ -1635,7 +1587,7 @@ $(document).on('keydown', function(e){
             $('.toggle_tools').click();
         }
         //r for toggle resize
-        else if(e.keyCode == 82){
+        else if(e.keyCode == 82 && !e.ctrlKey){
             $('.toggle_resize').click();
         }
         //a for add passage

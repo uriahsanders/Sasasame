@@ -43,7 +43,7 @@
     /* margin: 20px; */
     margin-top: 0px;
     /*width: 30%;*/
-    padding: 20px;
+    /*padding: 20px;*/
     padding-top: 0px;
 }
 #control_nav{
@@ -125,6 +125,8 @@
     width: 100%;
     overflow: hidden;
     color: #353535;
+    padding-left: 10px;
+    padding-right: 10px;
     /* margin: auto; */
 }
 .hidden_upload{
@@ -156,13 +158,12 @@
     /* border-bottom: 1px dotted grey; */
     /*padding-top: 12px;*/
     padding-bottom: 32px;
-    margin: 0;
     text-align: left;
     line-height: 30px;
     font-size: 1.2em;
     background: #353535;
     color: #ccc;
-    margin: 10px;
+    margin-bottom: 10px;
     padding: 20px;
     /*not for mobile*/
     display: inline-block;
@@ -172,6 +173,7 @@
     height: 200px;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
+    /*max-width: 90%;*/
 }
 .passage_html_disp{
     position: relative;
@@ -205,6 +207,7 @@
     /*padding-left: 18px;*/
     /*width: 100px;*/
     text-align: left;
+    cursor: pointer;
 }
 .star_container{
     float: right;
@@ -217,6 +220,9 @@
 }
 .ql-container{
     height: 300px !important;
+}
+.ql-toolbar{
+    background: #fff;
 }
 .add_property{
     margin-bottom: 15px;
@@ -241,7 +247,7 @@
 .passage_label{
     text-align: center;
     font-weight: bold;
-    display: none;
+    /*display: none;*/
 }
 .passage_content{
     background: #fff;
@@ -256,6 +262,7 @@
     /*width:55%;*/
     margin:auto;
     text-align: left;
+    min-width: 90%;
 }
 .view_sub, .update_file, .file_play{
     cursor: pointer;

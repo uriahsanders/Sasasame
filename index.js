@@ -503,7 +503,7 @@ app.post('/paginate', function(req, res){
         };
     }
     if(which == 'passage_load'){
-        Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, sort: [['_id', -1]]})
+        Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, populate: 'chapter', sort: [['_id', -1]]})
         .then(function(passages){
             res.send(JSON.stringify(passages));
         }).then(function(err){
