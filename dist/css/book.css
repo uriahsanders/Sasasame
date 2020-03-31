@@ -216,7 +216,7 @@
     color: red;
 }
 .ql-container{
-    height: 300px;
+    height: 300px !important;
 }
 .add_property{
     margin-bottom: 15px;
@@ -241,6 +241,7 @@
 .passage_label{
     text-align: center;
     font-weight: bold;
+    display: none;
 }
 .passage_content{
     background: #fff;

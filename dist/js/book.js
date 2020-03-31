@@ -616,6 +616,9 @@ function readPassageMetadata(thiz){
                     window.open(value, '_blank');
                 });
                 break;
+                case 'Head':
+                $('head').append(content);
+                break;
                 case 'Color':
                 thiz.siblings('.passage_content').css('color', value);
                 break;
@@ -678,9 +681,11 @@ function readPassageMetadata(thiz){
                         modules: {
                             toolbar: toolbarOptions
                         },
-                        theme: 'snow'
+                        theme: 'snow',
+                        readOnly: true
                       });
-                    quill.clipboard.dangerouslyPasteHTML(0, content);
+                     quill.clipboard.dangerouslyPasteHTML(0, content);
+                    quill.enable();
                 }
                 else{
                     $.getScript('/quill.js')
@@ -689,9 +694,11 @@ function readPassageMetadata(thiz){
                             modules: {
                                 toolbar: toolbarOptions
                             },
-                            theme: 'snow'
+                            theme: 'snow',
+                            readOnly: true
                           });
                        quill.clipboard.dangerouslyPasteHTML(0, content);
+                        quill.enable();
                       })
                       .fail(function( jqxhr, settings, exception ) {
                         $( "div.log" ).text( "Triggered ajaxError handler." );
@@ -807,6 +814,7 @@ function readPassageMetadata(thiz){
                 });
                 break;
                 case 'Label':
+                thiz.siblings('.passage_author').find('.passage_label').text(value).show();
                 thiz.siblings('.passage_author').css('cursor', 'pointer');
                 thiz.siblings('.passage_author').on('click', function(){
                     if(codemirror){

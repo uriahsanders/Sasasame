@@ -82,6 +82,7 @@
         <option>Align</option>
         <option>Help</option>
         <option>Music</option>
+        <option>Head</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>
@@ -128,9 +129,7 @@
             }else{
                 ret += `<div><a class="basic_link" href="#">Anonymous</a>`;
             }
-            if(metadata['Label']){
-              ret += `<div class="passage_label">`+metadata['Label']+`</div>`;
-            }
+              ret += `<div class="passage_label"></div>`;
             ret += '<span class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'<span>';
             ret += '</div>';
             ret += `<div id="modal_`+passage._id+`" class="modal">
