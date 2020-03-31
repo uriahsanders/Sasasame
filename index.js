@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const helmet = require('helmet');
-const PORT = process.env.PORT || 3000;
 require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 // Models
@@ -120,7 +120,7 @@ function sendEmail(to, subject, body){
     });
 
     var mailOptions = {
-      from: 'youremail@gmail.com',
+      from: 'uriahrsanders@gmail.com',
       to: to,
       subject: subject,
       text: body

@@ -28,6 +28,7 @@
     "jquery-ui-dist": "^1.12.1",
     "marked": "^0.8.0",
     "mongodb-backup": "^1.6.9",
+    "mongodb-restore": "^1.6.2",
     "mongoose": "^5.7.1",
     "mongoose-paginate": "^5.0.3",
     "nodemailer": "^6.4.5",
