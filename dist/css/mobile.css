@@ -12,11 +12,14 @@
         margin: 10px;
     }
     #options{
-        font-size: 0.7em;
+        font-size: 0.9em;
         /*width: 90%;*/
     }
-    .option_distraction_free{
+    #perm_chapter{
         display: none;
+    }
+    .option_distraction_free{
+        /*display: none;*/
     }
     .toggle_resize{
         display: none;
@@ -99,7 +102,7 @@
         font-size: 0.9em;
         margin: auto;
     }
-    .passsage{
+    .passage{
         display: block;
     }
 }

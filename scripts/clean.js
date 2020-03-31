@@ -1,33 +1,14 @@
-// This file is for removing junk data in development
+// This script is for clearing the database
 'use strict';
-const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require("body-parser");
-const helmet = require('helmet');
-const PORT = process.env.PORT || 3000;
-require('dotenv').config();
-const Chapter = require('../models/Chapter');
-const Passage = require('../models/Passage');
-const User = require('../models/User');
 mongoose.connect('mongodb://localhost/sasame', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
+}, function(){
+	//clear database
+	mongoose.connection.db.dropDatabase();
+	console.log('Done');
+	process.exit();
 });
-// Chapter.deleteMany({}, function(err, chapters){
-//     if (err) console.log(err);
-//     console.log(chapters);
-// });
-// User.dropIndex("password_1");
-// User.find({}, function(err, users){
-//     if (err) console.log(err);
-//     console.log(users);
-//     process.exit(1);
-// });
-// Passage.deleteMany({}, function(err, passages){
-//     if (err) console.log(err);
-//     console.log(passages);
-// });
-console.log('Done');
-process.exit();
