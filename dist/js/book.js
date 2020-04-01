@@ -866,6 +866,13 @@ function readPassageMetadata(thiz){
                 else{
                     var isCanvasKey = false;
                 }
+                if(codemirror){
+                   //
+                }
+                else{
+                    thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-js">'+escapeHtml(content)+'</code></pre>');
+                    hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                }
                 $('#custom_pairs').val(JSON.stringify(storage));
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
@@ -876,7 +883,9 @@ function readPassageMetadata(thiz){
                         }
                         catch(e){}
                     }
-                    eval(content); 
+                    $('#script_'+_id).remove();
+                    var script = '<script id="script_'+_id+'"type="text/javascript">'+content+'</script>';
+                    $('head').append(script);
                     if(key == 'Canvas'){
                         canvas.css('display', 'inline-block');
                         //now we need to update the passage on the server
@@ -1498,14 +1507,19 @@ $('.toggle_resize').on('click', function(){
         $('.passage').css({
             'display': 'block',
         });
-        $(this).data('hidden', 'false')
+        $(this).data('hidden', 'false');
+        $('.passage').draggable('disabled');
     }
     else{
         $(this).css('color', 'gold');
         $('.passage').css({
             'display': 'inline-block',
         });
-        $(this).data('hidden', 'true')
+        $(this).data('hidden', 'true');
+        $('.passage').draggable({ 
+            handle: '.passage_author'
+            // connectToSortable: "#passages",
+        });
     }
 });
 $('.toggle_tools').on('click', function(){

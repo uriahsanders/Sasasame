@@ -16,6 +16,7 @@ const chapterSchema = mongoose.Schema({
     date: {type: Date, default: Date.now},
     //which users find this chapter useful?
     stars: Number,
+    deleted: Boolean,
     access: String,
     distraction_free: Boolean,
     tools: Boolean,
