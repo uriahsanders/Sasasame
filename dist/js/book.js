@@ -1276,6 +1276,7 @@ $(document).on('click', '.square_icon', function(){
         if(attr == '/images/ionicons/square-sharp.svg'){
             //add passage to queue
             $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
+            $('#clone_'+id).addClass('queue_item');
             $('#clone_'+id).children('.sub_passages').remove();
             // $('#clone_'+id).children('.proteins').hide();
             $('#queue_items')
@@ -1347,6 +1348,10 @@ $('#right_side_select').on('change', function(){
             $('#right_select_help').show();
             break;
     }
+});
+$(document).on('click', '.queue_item', function(e){
+    e.preventDefault();
+    e.stopPropagation();
 });
 $(document).on('click', '.load_more', function(){
     var chapter = $('#parent_chapter_id').val();

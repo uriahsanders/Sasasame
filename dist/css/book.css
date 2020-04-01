@@ -585,6 +585,10 @@ select::-ms-expand {
 #queue{
     display: none;
 }
+.queue_item:hover{
+    color: gold;
+    cursor: pointer;
+}
 #properties, #sub_properties{
     padding: 5px;
     text-align: left;
