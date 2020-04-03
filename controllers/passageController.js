@@ -137,15 +137,22 @@ module.exports = {
     },
     deletePassage: function(req, res, callback) {
         let passageID = req.body._id;
-        Passage.findOneAndDelete({_id: passageID.trim()}, function(err, passage){
-            if(passage.filename){
-                fs.unlink('./dist/uploads/'+passage.filename, (err) => {
-                    if (err) throw err;
-                    console.log('./dist/uploads/'+passage.filename+' was deleted');
-                });
-            }
+        //False deletion
+        Passage.findOne({_id: passageID.trim()}, function(err, passage){
+            passage.deleted = true;
+            passage.save();
             callback();
         });
+        //Real deletion
+        // Passage.findOneAndDelete({_id: passageID.trim()}, function(err, passage){
+        //     if(passage.filename){
+        //         fs.unlink('./dist/uploads/'+passage.filename, (err) => {
+        //             if (err) throw err;
+        //             console.log('./dist/uploads/'+passage.filename+' was deleted');
+        //         });
+        //     }
+        //     callback();
+        // });
     },
     duplicatePassage: function(req, res, callback){
         //make a copy of the passage

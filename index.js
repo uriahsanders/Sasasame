@@ -519,6 +519,9 @@ app.post('/paginate', function(req, res){
         });
     }
 });
+app.get('/friend', function(req, res){
+  res.render('friend');
+});
 app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;

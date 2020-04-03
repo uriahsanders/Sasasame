@@ -83,6 +83,7 @@
         <option>Help</option>
         <option>Music</option>
         <option>Head</option>
+        <option>Class</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>

@@ -679,7 +679,7 @@ function readPassageMetadata(thiz){
                 }
                 thiz.siblings('.proteins').children('.passage_play').show();
                 thiz.siblings('.proteins').children('.passage_play').on('click', function(){
-                    jqueryToggle(thiz, function(){
+                    // jqueryToggle(thiz, function(){
                         if(codemirror){
                             try{
                                 editor = thiz.siblings('.passage_content').next('.CodeMirror').get(0).CodeMirror;
@@ -692,9 +692,9 @@ function readPassageMetadata(thiz){
                         style.id = value == '' ? 'custom_css' : value;
                         style.innerHTML = content;
                         document.getElementsByTagName('head')[0].appendChild(style);
-                    }, function(){
-                        $('#'+value).remove();
-                    });
+                    // }, function(){
+                    //     $('#'+value).remove();
+                    // });
                 });
                 autoPlay(autoplay, thiz);
                 break;
@@ -767,6 +767,9 @@ function readPassageMetadata(thiz){
                 case 'Label':
                 var label = thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text();
                 thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text(label + value);
+                break;
+                case 'Class':
+                thiz.parent().addClass(value);
                 break;
                 case 'Hide Tools':
                 thiz.siblings('.proteins').hide();
