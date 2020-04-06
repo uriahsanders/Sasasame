@@ -207,7 +207,7 @@
                 });
             ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
             </div>
-
+            <div class="add_from_queue">Add</div>
         </div>`;
         return ret;
   };

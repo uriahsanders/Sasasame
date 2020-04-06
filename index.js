@@ -522,6 +522,7 @@ app.post('/paginate', function(req, res){
 app.get('/friend', function(req, res){
   res.render('friend');
 });
+//for viewing chapters
 app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -608,6 +609,66 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         });
     }
 });
+function getPermissions(doc, user, type="passage"){
+  //check if the user is the author
+  var isAuthor = false;
+  var isChapterAdmin = false;
+  var isChapterUser = false;
+  var isChapterAuthor = false;
+  //Public, Protected, Private, Exclusive
+  //All, Self, None, None
+  //can add/edit/delete all, can add/edit/delete own, can do nothing
+  var permissions = 'None'; //start at most restrictive
+  //we want to center on the chapter
+  var main;
+  if(type == "passage"){
+    main = doc.chapter;
+    if(doc.author == user){
+      isAuthor = true;
+      permissions = 'Self';
+    }
+  }
+  //this should actually never happen.
+  //editing/deleting chapters is only for the chapter author
+  else if (type == 'chapter'){
+    main = doc;
+  }
+  if(main.author == user){
+    isChapterAuthor = true;
+    permissions = 'All';
+    return permissions;
+  }
+  //check if the user is a user of the chapter
+  Chapter.findOne({users: user}, function(err, obj2){
+    if(obj2){
+      isUser = true;
+      permissions = 'Self';
+    }
+    //check if the user is an admin of the chapter
+    Chapter.findOne({admins: user}, function(err, obj){
+        if(obj){
+          isAdmin = true;
+          permissions = 'All';
+        }
+        if(!isAdmin && !isUser){
+          //if they don't have special permissions and aren't the author,
+          //we need to check the permissions for the chapter
+          switch(main.access){
+            case 'Public':
+            permissions = 'All';
+            break;
+            case 'Protected':
+            permissions = 'Self';
+            break;
+            case 'Private':
+            case 'Exclusive':
+            permissions = 'None'; //ik this is doubling up
+          }
+        }
+        return permissions;
+    });
+  });
+}
 //When we add a passage to the queue
 //it is the original passage and can not be edited
 //When you move the passage from the queue into a chapter,

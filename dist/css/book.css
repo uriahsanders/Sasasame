@@ -8,6 +8,12 @@
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
 }
+.add_from_queue{
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+    display: none;
+}
 .modal_title{
     font-weight: bold;
     border-bottom: 1px solid #353535;
@@ -587,7 +593,6 @@ select::-ms-expand {
 }
 .queue_item:hover{
     color: gold;
-    cursor: pointer;
 }
 #properties, #sub_properties{
     padding: 5px;

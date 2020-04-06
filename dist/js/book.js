@@ -1290,6 +1290,7 @@ $(document).on('click', '.square_icon', function(){
             $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
             $('#clone_'+id).addClass('queue_item');
             $('#clone_'+id).children('.sub_passages').remove();
+            $('#clone_'+id).children('.add_from_queue').show();
             // $('#clone_'+id).children('.proteins').hide();
             $('#queue_items')
             passages[id] = {
@@ -1310,7 +1311,14 @@ $(document).on('click', '.square_icon', function(){
         }
     });
 });
-
+$(document).on('click', '.add_from_queue', function(){
+    var passage = $(this).parent();
+    var id = passage.attr('id');
+    $('#passages').append(passage.clone().attr('id', id));
+    $(this).parent().remove();
+    $('#' + id).removeClass('queue_item');
+    $('#'+id).children('.add_from_queue').hide();
+});
 $('#right_side_select').on('change', function(){
     switch($(this).val()){
         case 'chapters':

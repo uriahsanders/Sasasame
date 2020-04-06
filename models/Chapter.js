@@ -18,6 +18,17 @@ const chapterSchema = mongoose.Schema({
     stars: Number,
     deleted: Boolean,
     access: String,
+    exclusive: Boolean,
+    //have public access
+    admins: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    //have protected access
+    users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     distraction_free: Boolean,
     tools: Boolean,
     autoplay: Boolean,
