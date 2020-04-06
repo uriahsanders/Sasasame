@@ -44,6 +44,17 @@
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
                      <input class="hidden_upload"name="file" type="file" autocomplete="off"/>
+                    <div class="chapter_properties">
+                      <select class="modal_select" name="access" autocomplete="off">
+                          <option value="public">Public (Everyone can add and edit/delete everything)</option>
+                          <option value="protected">Protected (Users can add and edit/delete their own work)</option>
+                          <option value="private">Private (Only Author can add/edit/delete)</option>
+                          <option value="exclusive">Exclusive (Only Author can see Chapter)</option>
+                      </select>
+                      <br><br>
+                      <input id="is_tools_active"type="checkbox" name="tools" autocomplete="off" checked> Tools
+                      <br><br>
+                    </div>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     `+after+`
                     <div id="properties"class="properties">
@@ -112,6 +123,15 @@
   };
   exports.printQueuePassage = function(passage, user){
     
+  };
+  exports.printPassages = function(passages, user){
+    var ret = '';
+    passages.forEach(function(passage){
+      if(!passage.deleted){
+        ret += exports.printPassage(passage, user);
+      }
+    });
+    return ret;
   };
   exports.printPassage = function(passage, user){
        var metadata = JSON.parse(passage.metadata);

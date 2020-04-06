@@ -278,7 +278,10 @@
 .view_sub, .update_file, .file_play{
     cursor: pointer;
 }
-
+.chapter_properties{
+    display: none;
+    text-align: left;
+}
 .passage_author{
     font-weight: 200;
     font-size: 0.6em;

@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost/sasame', {
     useUnifiedTopology: true
 }, function(){
 	//clear database
-	mongoose.connection.db.dropDatabase();
+	// mongoose.connection.db.dropDatabase();
 	console.log('Done');
 	process.exit();
 });

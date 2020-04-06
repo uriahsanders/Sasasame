@@ -46,7 +46,11 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
-    token: String
+    token: String,
+    deleted: {
+        type: Boolean,
+        default: false
+    },
 });
 userSchema.pre('save', function (next) {
   var user = this;

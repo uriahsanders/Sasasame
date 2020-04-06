@@ -50,7 +50,14 @@ const passageSchema = mongoose.Schema({
     label: String,
     canvas: Boolean, // Has Canvas tag?
     filename: String,
-    deleted: Boolean
+    deleted: {
+        type: Boolean,
+        default: false
+    },
+    visible: {
+        type: Boolean,
+        default: true
+    }, // Visible in central stream? (!exclusive chapters)
 });
 var autoPopulateChildren = function(next) {
     this.populate('passages');

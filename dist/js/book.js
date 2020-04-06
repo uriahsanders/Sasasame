@@ -379,13 +379,14 @@ $('.add_select').on('change', function(){
     if($(this).val() == 'chapter'){
         $(this).parent().siblings('.add_passage_icons').hide();
         $(this).parent().siblings('.properties').hide();
-        $(this).parent().siblings('.control_textarea').replaceWith('<input class="control_textarea"type="text" name="passage"/>');
-
+        $(this).parent().siblings('.control_textarea').replaceWith('<input class="control_textarea"type="text" placeholder="Title"name="passage"/>');
+        $(this).parent().siblings('.chapter_properties').show();
     }
     else{
         $(this).parent().siblings('.add_passage_icons').show();
         $(this).parent().siblings('.properties').show();
         $(this).parent().siblings('.control_textarea').replaceWith('<textarea class="control_textarea" cols="30" placeholder="" name="passage" rows="6" autocomplete="off"></textarea>');
+        $(this).parent().siblings('.chapter_properties').hide();
     }
 });
 function jqueryToggle(thiz, func1, func2, dataType='toggle', dataValue=[0, 1]){

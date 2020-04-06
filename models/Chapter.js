@@ -34,6 +34,10 @@ const chapterSchema = mongoose.Schema({
     autoplay: Boolean,
     paginate: Boolean,
     categories: String,
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     css: String,
     flagged: Boolean //content warning
 });

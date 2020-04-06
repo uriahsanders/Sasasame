@@ -522,7 +522,7 @@ app.post('/paginate', function(req, res){
 app.get('/friend', function(req, res){
   res.render('friend');
 });
-//for viewing chapters
+//HOME/INDEX
 app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
     let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -539,7 +539,9 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
         .exec()
         .then(function(chapters){
             Passage.find({
-                parent: undefined
+                parent: undefined,
+                deleted: false,
+                visible: true
             })
             .populate('chapter author')
             .sort([['_id', -1]])
