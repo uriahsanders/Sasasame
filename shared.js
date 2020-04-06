@@ -141,7 +141,6 @@
               ret += `<div class="passage_label"><a class="basic_link passage_label_link" href="/">Sasame/</a></div>`;
 
             }
-            ret += '<span class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'<span>';
             ret += '</div>';
             ret += `<div id="modal_`+passage._id+`" class="modal">
                 <p class="modal_title">Passage Options</p>
@@ -188,7 +187,10 @@
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
              <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
-             </div>
+             `;
+            ret += '<div class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'</div>';
+
+             ret += `</div>
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+escapeHTML(passage.content)+`"/>
                 <div class="passage_chapter">Sasame</div>

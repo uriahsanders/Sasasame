@@ -128,8 +128,8 @@
 #book_of_sasame{
     word-wrap: break-word;
     cursor: default;
-    width: 100%;
-    overflow: hidden;
+    width: 65%;
+    overflow: visible;
     color: #353535;
     padding-left: 10px;
     padding-right: 10px;
@@ -214,6 +214,7 @@
     /*width: 100px;*/
     text-align: left;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 .star_container{
     float: right;
@@ -258,17 +259,21 @@
 .passage_content{
     background: #fff;
     color: #353535;
-    padding: 10px;
     white-space: pre-line;
     overflow-x: auto;
-    /*padding-left: 20px;*/
-    /*padding-bottom: 10px;*/
+    padding-bottom: 10px;
     min-height: 30px;
     /*max-height: 300px;*/
     /*width:55%;*/
     margin:auto;
     text-align: left;
-    min-width: 90%;
+    /*width: 100%;*/
+    padding: 10px;
+    display: block;
+    clear: both;
+}
+.passage_content, .ql-toolbar, .CodeMirror{
+    margin-top: 15px;
 }
 .view_sub, .update_file, .file_play{
     cursor: pointer;
