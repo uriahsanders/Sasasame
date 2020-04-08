@@ -1,3 +1,11 @@
+@media screen and (max-width: 715px){
+    #side_panel, #side_panel_inner{
+        width: 100%;
+    }
+    #side_panel_close{
+        display: block;
+    }
+}
 @media screen and (max-width: 550px){
     #nav_ul{
         text-align: center;

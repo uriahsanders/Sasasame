@@ -1576,6 +1576,14 @@ $('#option_menu').on('click', function(){
     $('#right_side_select').val('chapters').change();
     $(this).toggleClass('gold');
 });
+$('#side_panel_close').on('click', function(){
+    $('#option_menu').click();
+});
+$('.passage_adder').on('click', function(){
+    $('#side_panel').hide();
+    $(this).toggleClass('gold');
+    $('#code').modal();
+});
 $(document).on('keydown', function(e){
     var thiz = $(this);
     if($('.graphic_mode').attr('title') == 'Graphic Mode (g)'){
@@ -1614,9 +1622,7 @@ $(document).on('keydown', function(e){
         }
         //q for queue
         if(e.keyCode == 81){
-            // $('.option_distraction_free').click();
             jqueryToggle(thiz, function(){
-                flashIcon($('.passage_adder'), 'gold');
                 $('#toc').modal();
                 $('#right_side_select').val('queue').change();
             }, function(){
@@ -1633,13 +1639,7 @@ $(document).on('keydown', function(e){
         }
         //a for add passage
         else if(e.keyCode == 65){
-            jqueryToggle(thiz, function(){
-                flashIcon($('.passage_adder'), 'gold');
-                $('#code').modal();
-            }, function(){
-                $('.blocker').click();
-                $('.ui-tooltip').hide();
-            }, 'add_form_modal');
+            $('.passage_adder').click();
         }
         //h for home
         else if(e.keyCode == 72){

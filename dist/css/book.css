@@ -4,9 +4,11 @@
     float: left;
 
 }
-.modal{
+.modal>.control_button{
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
+    color: #fff;
+    background: #353535;
 }
 .add_from_queue{
     text-align: center;
@@ -66,8 +68,8 @@
     width: 100%;
     cursor: pointer;
     -webkit-appearance: none;
-    background: #353535;
-    color: #fff;
+    background: #fff;
+    color: #353535;
 }
 .control_button:hover{
     /* background: #353535; */
@@ -82,7 +84,7 @@
     width: 100%;
    /* font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
-    background: transparent;
+    background: #fff;
 }
 .control_textarea{
     border: 1px solid #353535;
@@ -93,7 +95,7 @@
     /*resize: none;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
-    background: transparent;
+    background: #fff;
     color: #000;
 }
 #code{
@@ -152,13 +154,22 @@
 #side_panel{
     display: none;
 }
+#side_panel_close{
+    display: none;
+    font-size: 2em;
+    float: right;
+}
+#right_passages{
+    background: #fff;
+    padding: 10px;
+}
 #side_panel, #side_panel_inner{
     float: right;
     padding: 10px;
-    /*z-index: 3;*/
+    z-index: 2;
     width: 30%;
     background: #353535;
-    color: #ccc;
+    color: #fff;
     /*border: 1px solid #ccc;*/
     height: 100%;
     /*position: fixed;
