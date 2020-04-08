@@ -52,7 +52,7 @@
                           <option value="exclusive">Exclusive (Only Author can see Chapter)</option>
                       </select>
                       <br><br>
-                      <input id="is_tools_active"type="checkbox" name="tools" autocomplete="off" checked> Tools
+                      <input type="checkbox" name="tools" autocomplete="off" checked> Tools
                       <br><br>
                     </div>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>

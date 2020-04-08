@@ -54,8 +54,10 @@ body {
 }
 .link{
     text-decoration: none;
-    color: #353535;
-    opacity: 0.6;
+    color: #ccc;
+}
+.link:hover, .basic_link:hover{
+  opacity: 0.6;
 }
 .basic_link{
     color: inherit;

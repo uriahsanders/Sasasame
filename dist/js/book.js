@@ -1,3 +1,14 @@
+// $(document).ready(function(){
+    CodeMirror.fromTextArea(document.getElementById('console'), {
+        extraKeys: {
+            "Enter": function(cm){
+                eval(cm.getValue());
+                //add passage to queue
+            }
+        }
+    }).setSize('100%', '100');
+
+// });
 //https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/
 //Simple Player, Parser, thanks to Nicolo Andronio
 var musicLooper;
@@ -1495,24 +1506,7 @@ $(document).on('click', '.file_update', function(){
         }
     });
 });
-$('.option_distraction_free').on('click', function(){
-    if($(this).data('hidden') == 'true'){
-        $('#toc').show();
-        // $('#code').show();
-        $('#passage_load').show();
-        // $('.header').show();
-        // $('#book_of_sasame').css('width', '40%');
-        $(this).data('hidden', 'false')
-    }
-    else{
-        $('#toc').hide();
-        // $('#code').hide();
-        // $('.header').hide();
-        $('#passage_load').hide();
-        // $('#book_of_sasame').css('width', '100%');
-        $(this).data('hidden', 'true')
-    }
-});
+
 $('.toggle_resize').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $(this).css('color', 'white');
@@ -1543,25 +1537,31 @@ $('.toggle_tools').on('click', function(){
         $('.passage').css('padding-bottom', '32px');
         $('.passage').css('background', '#353535');
         $('.passage').css('color', '#ccc');
+        $('.passage').css('resize', 'both');
         $('.passage_content').css('padding', '10px');
+        $('.passage').css('padding', '20px');
+        $('.passage').css('margin-bottom', '10px');
+        $('.passage_content').css('margin-top', '15px');
+        $(this).css('color', 'gold');
 
         $(this).data('hidden', 'false')
     }
     else{
+        $(this).css('color', 'white');
+        $('.passage').css('resize', 'none');
+        $('.passage').css('padding', '0px');
         $('.passage_content').css('padding', '0px');
+        $('.passage').css('margin', '0px');
+        $('.passage_content').css('margin', '0px');
         $('.passage').css('background', '#fff');
         $('.passage').css('color', '#353535');
         $('.proteins').hide();
         $('.tool_header').hide();
         $('.chapter_tools').hide();
         $('.passage_author').hide();
-        $('.passage').css('padding-bottom', '0px');
         $(this).data('hidden', 'true')
     }
 });
-if($('#is_distraction_free').is(':checked')){
-    $('.option_distraction_free').click();
-}
 if($('#is_tools_active').length && !$('#is_tools_active').is(':checked') && !Sasame){
     $('.toggle_tools').click();
 }
@@ -1571,7 +1571,11 @@ $('#play_all').on('click', function(){
         $(this).click();
     });
 });
-
+$('#option_menu').on('click', function(){
+    $('#side_panel').toggle();
+    $('#right_side_select').val('chapters').change();
+    $(this).toggleClass('gold');
+});
 $(document).on('keydown', function(e){
     var thiz = $(this);
     if($('.graphic_mode').attr('title') == 'Graphic Mode (g)'){
@@ -1590,19 +1594,23 @@ $(document).on('keydown', function(e){
             }
         } catch (ex) {}
         //m for menu
-        if(e.keyCode == 77){
-            // $('.option_distraction_free').click();
-            jqueryToggle(thiz, function(){
-                flashIcon($('.passage_adder'), 'gold');
-                $('#toc').modal();
-                $('#right_side_select').val('chapters').change();
-            }, function(){
-                $('.blocker').click();
-            }, 'add_form_modal')
-        }
+        // if(e.keyCode == 77){
+        //     // $('.option_distraction_free').click();
+        //     jqueryToggle(thiz, function(){
+        //         flashIcon($('.passage_adder'), 'gold');
+        //         $('#toc').modal();
+        //         $('#right_side_select').val('chapters').change();
+        //     }, function(){
+        //         $('.blocker').click();
+        //     }, 'add_form_modal')
+        // }
         //p for play all
         if(e.keyCode == 80){
             $('#play_all').click();
+        }
+        //m for side panel
+        if(e.keyCode == 77){
+            $('#option_menu').click();
         }
         //q for queue
         if(e.keyCode == 81){

@@ -82,6 +82,55 @@
 
             </div>
         <%} %>
+        <div id="side_panel">
+          <div id="side_panel_inner">
+            <div id="side_panel_body">
+              <div class="header">
+                      <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
+                        <select id="right_side_select" autocomplete="off">
+                            <option value="chapters">Chapters</option>
+                            <option value="categories">Passages</option>
+                            <option value="users">Users</option>
+                            <option value="queue">Queue</option>
+                            <option value="brief">Brief</option>
+                        </select>
+                    </div>
+                    <!-- Chapters -->
+                    <input id="search_val"type="hidden"autocomplete="false">
+                    <div id="categories">
+                        <div>
+                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
+                        </div>
+                        <div id="chapters">
+                            <%if(chapters){%>
+                                <%chapters.forEach(function(f) { %>
+                                    <%- scripts.printChapter(f) %>
+                            <%});} %>
+                        </div>
+                    </div>
+                    <div id="chapter_load"class="load_more category">Load More</div>
+                    <!-- Brief from #passages via JS -->
+                    <!-- Queue -->
+                    <div id="queue">
+                        <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
+                        <!-- <form id="queue_form">
+                            <input id="queue_title"class="control_input"placeholder="Chapter Title" type="" name="chapter_title">
+                            <button class="control_button">Create!</button>
+                        </form> -->
+                        <textarea id="console" class="control_textarea" autocomplete="off"></textarea>
+                        <div id="queue_items"></div>
+                    </div>
+                    <!-- Category Search -->
+                    <div id="category_search">
+                        <div>
+                            <input class="control_input"id="category_search_input"placeholder="Search by Tag" type="" name="" autocomplete="off">
+                        </div>
+                        <div id="cats">
+                        </div>
+                    </div>
+            </div>
+          </div>
+        </div>
         <div id="mobile_modal" class="modal">
             <%-scripts.printAddForm(chapter)%>
             <div class="header">
@@ -129,7 +178,7 @@
                             </div>
                             <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
                             <a class="basic_link white" rel="modal:open"href="#code"><ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a>
-                             <a class="basic_link white" rel="modal:open"href="#toc"><ion-icon class="option_distraction_free"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon></a>
+                             <a class="basic_link white" rel="modal:open"href="#toc"><ion-icon id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon></a>
                              <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
                              <ion-icon class="toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-sharp.svg"></ion-icon>
                              <!-- PPE Options -->
@@ -195,8 +244,6 @@
                                       <option value="exclusive">Exclusive (Only Author can see Chapter)</option>
                                   </select>
                                   <br><br>
-                                  <input id="is_distraction_free"type="checkbox" name="distraction_free" <%=(parentChapter.distraction_free == true ? 'checked' : '')%> autocomplete="off"> Distraction Free Mode
-                                  <br>
                                   <input id="is_tools_active"type="checkbox" name="tools"  <%=(parentChapter.tools == true ? 'checked' : '')%> autocomplete="off"> Tools
                                   <br><br>
                                   </div>
@@ -238,55 +285,15 @@
                         <%}%>
                     <%}%>
                 </div>
-                <div class="modal" id="toc">
-                    <div class="header">
-                      <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
-                        <select id="right_side_select" autocomplete="off">
-                            <option value="chapters">Chapters</option>
-                            <option value="categories">Passages</option>
-                            <option value="users">Users</option>
-                            <option value="queue">Queue</option>
-                            <option value="brief">Brief</option>
-                        </select>
-                    </div>
-                    <!-- Chapters -->
-                    <input id="search_val"type="hidden"autocomplete="false">
-                    <div id="categories">
-                        <div>
-                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
-                        </div>
-                        <div id="chapters">
-                            <%if(chapters){%>
-                                <%chapters.forEach(function(f) { %>
-                                    <%- scripts.printChapter(f) %>
-                            <%});} %>
-                        </div>
-                    </div>
-                    <div id="chapter_load"class="load_more category">Load More</div>
-                    <!-- Brief from #passages via JS -->
-                    <!-- Queue -->
-                    <div id="queue">
-                        <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
-                        <!-- <form id="queue_form">
-                            <input id="queue_title"class="control_input"placeholder="Chapter Title" type="" name="chapter_title">
-                            <button class="control_button">Create!</button>
-                        </form> -->
-                        <div id="queue_items"></div>
-                    </div>
-                    <!-- Category Search -->
-                    <div id="category_search">
-                        <div>
-                            <input class="control_input"id="category_search_input"placeholder="Search by Tag" type="" name="" autocomplete="off">
-                        </div>
-                        <div id="cats">
-                        </div>
-                    </div>
-                </div>
+                <!-- <div class="modal" id="toc">
+                    
+                </div> -->
             </div>
         </div>
         <input type="hidden"id="custom_pairs" name="">
         <script src="/marked.min.js"></script>
         <script src="/codemirror.js"></script>
+        <script type="text/javascript" src="/mode/javascript/javascript.js"></script>
         <script src="/shared.js"></script>
         <script src="/js/book.js"></script>
         <script src="/js/ppe.js"></script>
