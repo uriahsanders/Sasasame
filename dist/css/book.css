@@ -146,7 +146,7 @@
 }
 
 #category_search_input{
-    display: none;
+    /*display: none;*/
 }
 #console{
     height: 100px;
@@ -162,6 +162,11 @@
 #right_passages{
     background: #fff;
     padding: 10px;
+}
+#right_passages .passage{
+    font-size: 0.5em;
+    padding: 0px;
+    line-height: 10px;
 }
 #side_panel, #side_panel_inner{
     float: right;
@@ -587,8 +592,19 @@
     background: #fff;
     width: 90%;
     margin: auto;
-    text-align: center;
     display: block;
+}
+#brief{
+    position: relative;
+}
+#brief_blocker{
+    background: #fff;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
 }
 .passage_image{
     max-width: 100%;

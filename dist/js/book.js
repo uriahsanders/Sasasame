@@ -1331,53 +1331,36 @@ $(document).on('click', '.add_from_queue', function(){
     $('#' + id).removeClass('queue_item');
     $('#'+id).children('.add_from_queue').hide();
 });
+function updateBrief(){
+    $('#right_passages').html($('#passages').html());
+}
 $('#right_side_select').on('change', function(){
+    $('#side_panel_switcher').children().hide();
     switch($(this).val()){
         case 'chapters':
-            $('#chapter_load').show();
-            $('#queue').hide();
             $('#categories').show();
-            $('#right_passages').remove();
-            $('#chapter_search').show();
-            $('.category').show();
-            $('#right_select_help').show();
+            break;
+        case 'add':
+            $('#add_div').show();
             break;
         case 'brief':
-            $('#queue').hide();
-            $('#chapter_load').hide();
-            $('#categories').show();
-            $('.category').hide();
-            $('#chapter_search').hide();
-            $('#categories').append('<div id="right_passages">'+$('#passages').html()+'</div>');
-            $('#right_passages .passage').css({
-                'font-size': '0.5em',
-                'padding': '0px',
-                'line-height': '10px'
-            });
-            $('#right_select_help').hide();
-            // $('#right_passages').sortable();
+            $('#brief').show();
+            updateBrief();
             break;
-        case 'queue':
-            $('#chapter_load').hide();
-            $('#categories').hide();
-            $('#right_passages').remove();
+        case 'passages':
             $('#queue').show();
-            $('#right_select_help').hide();
-            // $('#queue_items').sortable();
             break;
-        case 'categories':
-            $('#chapter_load').hide();
-            $('#categories').hide();
-            $('#right_passages').remove();
-            $('#queue').hide();
-            $('#right_select_help').show();
+        case 'console':
+            $('#console_div').show();
             break;
-        case 'users':
-            $('#chapter_load').hide();
-            $('#categories').hide();
-            $('#right_passages').remove();
-            $('#queue').hide();
-            $('#right_select_help').show();
+        case 'edit':
+            $('#edit_div').show();
+            break;
+        case 'leaderboard':
+            $('#leaderboard_div').show();
+            break;
+        case 'passages':
+            $('#queue').show();
             break;
     }
 });
@@ -1580,9 +1563,9 @@ $('#side_panel_close').on('click', function(){
     $('#option_menu').click();
 });
 $('.passage_adder').on('click', function(){
-    $('#side_panel').hide();
+    $('#side_panel').toggle();
+    $('#right_side_select').val('add').change();
     $(this).toggleClass('gold');
-    $('#code').modal();
 });
 $(document).on('keydown', function(e){
     var thiz = $(this);

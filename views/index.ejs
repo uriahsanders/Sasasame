@@ -92,51 +92,63 @@
                       <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
-                            <option value="categories">Passages</option>
-                            <option value="users">Leader Board</option>
+                            <option value="passages">Passages</option>
+                            <option value="leaderboard">Leaderboard</option>
                             <!-- <option value="queue">Queue</option> -->
                             <option value="brief">Brief</option>
                             <option value="console">Console</option>
                             <option value="add">Add</option>
-                            <option value="add">Edit</option>
+                            <option value="edit">Edit</option>
                         </select>
                     </div>
-                    <!-- Chapters -->
+                    <!-- For Pagination -->
                     <input id="search_val"type="hidden"autocomplete="false">
-                    <div id="categories">
-                        <div>
-                            <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
-                        </div>
-                        <div id="chapters">
-                            <%if(chapters){%>
-                                <%chapters.forEach(function(f) { %>
-                                    <%- scripts.printChapter(f) %>
-                            <%});} %>
-                        </div>
-                    </div>
-                    <div id="chapter_load"class="load_more category">Load More</div>
-                    <!-- Brief from #passages via JS -->
-                    <!-- Queue -->
-                    <div id="queue">
-                        <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
-                        <!-- <form id="queue_form">
-                            <input id="queue_title"class="control_input"placeholder="Chapter Title" type="" name="chapter_title">
-                            <button class="control_button">Create!</button>
-                        </form> -->
-                        <textarea id="console" class="control_textarea" autocomplete="off"></textarea>
-                        <div id="queue_items"></div>
-                    </div>
-                    <!-- Category Search -->
-                    <div id="category_search">
-                        <div>
-                            <input class="control_input"id="category_search_input"placeholder="Search by Tag" type="" name="" autocomplete="off">
-                        </div>
-                        <div id="cats">
-                        </div>
-                    </div>
-                    <!-- Add -->
-                    <div id="add_div">
-                        <%-scripts.printAddForm(chapter)%>
+                    <!-- Shows only one child at a time -->
+                    <div id="side_panel_switcher">
+                      <!-- For Chapters -->
+                      <div id="categories">
+                          <div>
+                              <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
+                          </div>
+                          <div id="chapters">
+                              <%if(chapters){%>
+                                  <%chapters.forEach(function(f) { %>
+                                      <%- scripts.printChapter(f) %>
+                              <%});} %>
+                              <div id="chapter_load"class="load_more category">Load More</div>
+                          </div>
+                      </div>
+                      <!-- Brief -->
+                      <div id="brief">
+                        <div id="brief_blocker"></div>
+                        <div id="right_passages"></div>
+                      </div>
+                      <!-- Queue -->
+                      <div id="queue">
+                          <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
+                          <div>
+                              <input class="control_input"id="category_search_input"placeholder="Search Passages" type="" name="" autocomplete="off">
+                          </div>
+                          <div id="cats">
+                          </div>
+                          <div id="queue_items"></div>
+                      </div>
+                      <!-- Add -->
+                      <div id="add_div">
+                          <%-scripts.printAddForm(chapter)%>
+                      </div>
+                      <!-- Console -->
+                      <div id="console_div">
+                          <textarea id="console" class="control_textarea" autocomplete="off"></textarea>
+                      </div>
+                      <!-- Edit -->
+                      <div id="edit_div">
+                          Editing coming soon
+                      </div>
+                      <!-- Leaderboard -->
+                      <div id="leaderboard_div">
+                          Leaderboard coming soon
+                      </div>
                     </div>
             </div>
           </div>
