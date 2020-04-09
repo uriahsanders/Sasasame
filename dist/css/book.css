@@ -359,7 +359,7 @@
     text-align: center;
 }
 .add_passage_icons{
-    color: #fff;
+    color: inherit;
 }
 
 #toc{
