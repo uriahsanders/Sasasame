@@ -39,7 +39,10 @@ const chapterSchema = mongoose.Schema({
         default: false
     },
     css: String,
-    flagged: Boolean //content warning
+    flagged: {
+        type: Boolean,
+        default: false
+    } //content warning
 });
 chapterSchema.plugin(mongoosePaginate);
 

@@ -1347,8 +1347,11 @@ $('#right_side_select').on('change', function(){
             $('#brief').show();
             updateBrief();
             break;
-        case 'passages':
+        case 'queue':
             $('#queue').show();
+            break;
+        case 'passages':
+            $('#search_passages').show();
             break;
         case 'console':
             $('#console_div').show();

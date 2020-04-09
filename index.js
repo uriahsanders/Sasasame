@@ -533,7 +533,9 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     let addChapterAllowed = true;
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
-        Chapter.find()
+        Chapter.find({
+          flagged: false
+        })
         .sort([['stars', -1]])
         .limit(DOCS_PER_PAGE)
         .exec()
@@ -541,7 +543,8 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
             Passage.find({
                 parent: undefined,
                 deleted: false,
-                visible: true
+                visible: true,
+                flagged: false
             })
             .populate('chapter author')
             .sort([['_id', -1]])
@@ -849,7 +852,7 @@ app.use('/passage', passageRoutes);
 app.post('/search/', (req, res) => {
     let title = req.body.title;
     Chapter.find({title: new RegExp(''+title+'', "i")})
-    .select('title')
+    .select('title flagged')
     .sort('stars')
     .limit(DOCS_PER_PAGE)
     .exec(function(err, chapters){

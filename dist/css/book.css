@@ -657,6 +657,10 @@ select::-ms-expand {
 }
 .modal{
     color: #353535;
+    /*z-index: 4;*/
+}
+.blocker{
+    z-index: 2 !important;
 }
 .modal_select, .modal_input{
     width: 100%;
@@ -708,7 +712,6 @@ select::-ms-expand {
 }
 .chapter_flag{
     position:absolute;
-    display:none;
     color:crimson;
 }
 .crimson_color{

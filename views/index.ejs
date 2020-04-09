@@ -93,12 +93,12 @@
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
                             <option value="passages">Passages</option>
-                            <option value="leaderboard">Leaderboard</option>
-                            <!-- <option value="queue">Queue</option> -->
+                            <option value="queue">Queue</option>
                             <option value="brief">Brief</option>
                             <option value="console">Console</option>
                             <option value="add">Add</option>
                             <option value="edit">Edit</option>
+                            <option value="leaderboard">Leaderboard</option>
                         </select>
                     </div>
                     <!-- For Pagination -->
@@ -123,14 +123,17 @@
                         <div id="brief_blocker"></div>
                         <div id="right_passages"></div>
                       </div>
-                      <!-- Queue -->
-                      <div id="queue">
-                          <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
-                          <div>
+                      <!-- Passages -->
+                      <div id="search_passages">
+                        <div>
                               <input class="control_input"id="category_search_input"placeholder="Search Passages" type="" name="" autocomplete="off">
                           </div>
                           <div id="cats">
                           </div>
+                      </div>
+                      <!-- Queue -->
+                      <div id="queue">
+                          <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
                           <div id="queue_items"></div>
                       </div>
                       <!-- Add -->
@@ -144,7 +147,7 @@
                       </div>
                       <!-- Edit -->
                       <div id="edit_div">
-                          Editing coming soon
+                          
                       </div>
                       <!-- Leaderboard -->
                       <div id="leaderboard_div">

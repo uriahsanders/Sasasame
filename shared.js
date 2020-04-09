@@ -236,13 +236,15 @@
   exports.printChapter = function(chapter){
     var ret = '';
     ret += `
-    <div class="category">
-        <!-- For Future
+    <div class="category">`;
+    if(chapter.flagged){
+      ret += `
         <div class="chapter_flag">
-            <ion-icon title="Content Warning" name="flag"></ion-icon>
+            <ion-icon title="Content Warning" src="/images/ionicons/flag-sharp.svg"></ion-icon>
         </div>
-         -->
-        <div>
+      `;
+    }
+    ret +=    `<div>
             <a class="link" href="/`+chapter.title+`/`+chapter._id+`">`+chapter.title+`</a>
         </div>
         <div class="category_id">`+chapter._id+`</div>

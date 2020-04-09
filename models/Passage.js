@@ -46,7 +46,10 @@ const passageSchema = mongoose.Schema({
     keySchema: String,
     //is this passage a key schema?
     isSchema: Boolean,
-    flagged: Boolean, //content warning
+    flagged: {
+        type: Boolean,
+        default: false
+    }, //content warning
     label: String,
     canvas: Boolean, // Has Canvas tag?
     filename: String,
