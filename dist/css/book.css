@@ -202,6 +202,9 @@
 /*.category:hover{
     border-bottom: 1px solid #353535;
 }*/
+#side_panel_switcher > div:not(#categories){
+    display: none;
+}
 .passage{
     /* border-bottom: 1px dotted grey; */
     /*padding-top: 12px;*/
