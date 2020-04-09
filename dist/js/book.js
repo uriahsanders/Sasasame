@@ -380,6 +380,7 @@ $('#category_search_input').on('keypress', function(e){
             success: function(data){
                 $('.category').not('#chapter_load').not('#chapter_load_mobile').remove();
                 $('#cats').html(data);
+                readUnreadMetadata();
             }
         });
 
@@ -444,14 +445,33 @@ $(document).on('click', '.editor_option', function(){
     var value = $(this).text();
     var thiz = $(this);
     $('.blocker').click(); 
-    var textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');                   
+    var textarea;
+    //modal
+    var textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');  
+    //side panel
+    if(textarea.length == 0){
+        textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
+    }                 
+    var toolbar = textarea.prev('.ql-toolbar');
+    toolbar.remove();
+    var info = textarea.html();
+    // alert(textarea.html());
+    // alert(textarea.text());
     switch(value){
         case 'Plain':
-        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+textarea.text()+'</textarea>');
+        textarea.siblings('.CodeMirror').remove();
+        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+info+'</textarea>');
         break;
         case 'Rich':
-        textarea.replaceWith('<div class="add_passage_textarea">'+textarea.html()+'</div>');
+        textarea.replaceWith('<div class="add_passage_textarea">'+info+'</div>');
         textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
+        if(textarea.length == 0){
+            textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
+            textarea.css({
+                background: 'white',
+                color: 'black'
+            });
+        }  
         $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
         var toolbarOptions = [
           // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -492,8 +512,12 @@ $(document).on('click', '.editor_option', function(){
         }
         break;
         case 'Code':
-        // textarea.replaceWith('<textarea name="passage"class="add_passage_textarea"></textarea>');
-        // textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
+        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea"></textarea>');
+        textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
+        //side panel
+        if(textarea.length == 0){
+            textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
+        } 
         var scriptURL = '/mode/'+value+'/'+value+'.js';
         var editor;
         editor = CodeMirror.fromTextArea(textarea[0]);
@@ -509,6 +533,7 @@ $(document).on('click', '.editor_option', function(){
                 $( "div.log" ).text( "Triggered ajaxError handler." );
             });
         }
+        editor.getDoc().setValue(info);
         break;
     }
 });
@@ -1289,6 +1314,7 @@ $(document).on('click', '.square_icon', function(){
     var metadata = passage.children('.metadata').val();
     var parentPassage = passage.children('.parentPassage').val();
     var passagesJSON = $('#queue_passages').val();
+    var chapter = $('#parent_chapter_id').val();
     var passages;
     if(passagesJSON != ''){
         passages = JSON.parse(passagesJSON);
@@ -1296,40 +1322,76 @@ $(document).on('click', '.square_icon', function(){
     else{
         passages = {};
     }
-    $(this).attr('src', function(index, attr){
-        if(attr == '/images/ionicons/square-sharp.svg'){
-            //add passage to queue
-            $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
-            $('#clone_'+id).addClass('queue_item');
-            $('#clone_'+id).children('.sub_passages').remove();
-            $('#clone_'+id).children('.add_from_queue').show();
-            // $('#clone_'+id).children('.proteins').hide();
-            $('#queue_items')
-            passages[id] = {
-                content: content,
-                metadata: metadata,
-                parentPassage: parentPassage,
-                // originalAuthor: passage.author,
-            };
-            $('#queue_passages').val(JSON.stringify(passages));
-            return '/images/ionicons/checkbox-sharp.svg';
-        }
-        else{
-            //remove passage from queue
-            $('#queue_items #clone_'+id).remove();
-            delete passages[id];
-            $('#queue_passages').val(JSON.stringify(passages));
-            return '/images/ionicons/square-sharp.svg';
+    //Send ajax request to make new passage,
+    //and then add it to queue
+    $.ajax({
+        type: 'post',
+        url: '/add_to_queue',
+        data: {
+            passage: id,
+            chapter: chapter,
+        },
+        success: function(data){
+            $('#queue_items').append(data);
         }
     });
+    readUnreadMetadata();
+    flashIcon($(this));
+    // $(this).attr('src', function(index, attr){
+    //     if(attr == '/images/ionicons/square-sharp.svg'){
+    //         //Send ajax request to make new passage,
+    //         //and then add it to queue
+    //         $.ajax({
+    //             type: 'post',
+    //             url: '/add_to_queue',
+    //             data: {
+    //                 passage: id,
+    //                 chapter: chapter,
+    //             },
+    //             success: function(data){
+    //                 $('#queue_items').append(data);
+    //             }
+    //         });
+    //         //add passage to queue
+    //         // $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
+    //         // $('#clone_'+id).addClass('queue_item');
+    //         // $('#clone_'+id).children('.sub_passages').remove();
+    //         // $('#clone_'+id).children('.add_from_queue').show();
+    //         // // $('#clone_'+id).children('.proteins').hide();
+    //         // $('#queue_items')
+    //         // passages[id] = {
+    //         //     content: content,
+    //         //     metadata: metadata,
+    //         //     parentPassage: parentPassage,
+    //         //     // originalAuthor: passage.author,
+    //         // };
+    //         // $('#queue_passages').val(JSON.stringify(passages));
+    //         readUnreadMetadata();
+    //         return '/images/ionicons/checkbox-sharp.svg';
+    //     }
+    //     else{
+    //         //remove passage from queue
+    //         $('#queue_items #clone_'+id).remove();
+    //         delete passages[id];
+    //         $('#queue_passages').val(JSON.stringify(passages));
+    //         return '/images/ionicons/square-sharp.svg';
+    //     }
+    // });
 });
+function readUnreadMetadata(){
+    $('[id^=passage_metadata_]').not('.metadata_read').each(function(){
+        readPassageMetadata($(this));
+    });
+}
 $(document).on('click', '.add_from_queue', function(){
     var passage = $(this).parent();
     var id = passage.attr('id');
-    $('#passages').append(passage.clone().attr('id', id));
+    $('#passages').prepend(passage.clone().attr('id', id)).fadeIn('slow');
     $(this).parent().remove();
     $('#' + id).removeClass('queue_item');
     $('#'+id).children('.add_from_queue').hide();
+    readUnreadMetadata();
+    //send ajax request to change the location of the passage in the queue
 });
 function updateBrief(){
     $('#right_passages').html($('#passages').html());
@@ -1397,9 +1459,7 @@ $(document).on('click', '.load_more', function(){
                     $('#passages').sortable({
                         handle: '.passage_author'
                     });
-                    $('[id^=passage_metadata_]').not('.metadata_read').each(function(){
-                        readPassageMetadata($(this));
-                    });
+                    readUnreadMetadata();
                 }
                 else if(which == 'chapter_load' || which == 'chapter_load_mobile'){
                     var chapters = JSON.parse(data);

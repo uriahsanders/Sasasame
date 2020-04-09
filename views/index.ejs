@@ -134,7 +134,15 @@
                       <!-- Queue -->
                       <div id="queue">
                           <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
-                          <div id="queue_items"></div>
+                          <div id="queue_items">
+                            <%if(queue){%>
+                                  <%queue.forEach(function(q) { %>
+                                      <%- scripts.printPassage(q) %>
+                              <%});} %>
+                              <%if(user == null){%>
+                                Must be logged in
+                              <%}%>
+                          </div>
                       </div>
                       <!-- Add -->
                       <div id="add_div">
@@ -243,7 +251,7 @@
                             <div class="chapter_tools">
                                   <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
-                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/square-sharp.svg"></ion-icon>
+                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
                                  <ion-icon id="chapter_star_<%=parentChapter._id%>"title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
                                  <ion-icon id="chapter_flag_<%=parentChapter._id%>"title="Content Warning" class="flag_icon<%=(parentChapter.flagged == true ? ' flagged' : '')%>" src="/images/ionicons/flag.svg"></ion-icon>
                                  <ion-icon id="play_all"title="Play All" src="/images/ionicons/play-circle.svg"></ion-icon>
@@ -301,7 +309,9 @@
                     <%if(book){%>
                         <div id="passages">
                         <% book.forEach(function(f) { %>
-                            <%- scripts.printPassage(f, user); %>
+                            <%if(!f.deleted && !f.queue){%>
+                              <%- scripts.printPassage(f, user); %>
+                            <%}%>
                         <% }); %>
                         </div>
                         <%if(parentChapter == null){%>

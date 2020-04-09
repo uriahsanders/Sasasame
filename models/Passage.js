@@ -7,8 +7,13 @@ const passageSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    //source passage reference
+    //original source passage reference
     originalPassage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Passage'
+    },
+    //previous source passage reference
+    previousPassage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Passage'
     },
@@ -61,6 +66,11 @@ const passageSchema = mongoose.Schema({
         type: Boolean,
         default: true
     }, // Visible in central stream? (!exclusive chapters)
+    //is the passage in a queue? (invisible everywhere but to user queue)
+    queue: {
+        type: Boolean,
+        default: true
+    },
 });
 var autoPopulateChildren = function(next) {
     this.populate('passages');

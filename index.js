@@ -330,6 +330,13 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
     let golden = '';
     let addPassageAllowed = true;
     let addChapterAllowed = true;
+    var user = req.session.user || null;
+    if(user != null){
+      var queue = user.queue;
+    }
+    else{
+      var queue = [];
+    }
     //home page
     //get all level 1 chapters (explicit)
     User.findOne({_id: user_id.trim()})
@@ -338,7 +345,10 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
         Chapter.find({author:mongoose.Types.ObjectId(user_id)})
         .exec()
         .then(function(chapters){
-            Passage.find({author: mongoose.Types.ObjectId(user_id)})
+            Passage.find({
+              author: mongoose.Types.ObjectId(user_id),
+              deleted: false
+            })
             .populate('author')
             .sort([['_id', -1]])
             .limit(DOCS_PER_PAGE)
@@ -355,7 +365,8 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
                     chapters: chapters,
                     paginate: 'profile',
                     addChapterAllowed: false,
-                    scripts: scripts
+                    scripts: scripts,
+                    queue: queue
                 });
             })
             .then(function(err){
@@ -531,10 +542,17 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     let golden = '';
     let addPassageAllowed = true;
     let addChapterAllowed = true;
+    var user = req.session.user || null;
+    if(user != null){
+      var queue = user.queue;
+    }
+    else{
+      var queue = [];
+    }
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
         Chapter.find({
-          flagged: false
+          flagged: false,
         })
         .sort([['stars', -1]])
         .limit(DOCS_PER_PAGE)
@@ -544,7 +562,8 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
                 parent: undefined,
                 deleted: false,
                 visible: true,
-                flagged: false
+                flagged: false,
+                queue: false
             })
             .populate('chapter author')
             .sort([['_id', -1]])
@@ -560,7 +579,8 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
                     chapters: chapters,
                     addPassageAllowed: true,
                     addChapterAllowed: false,
-                    scripts: scripts
+                    scripts: scripts,
+                    queue: queue
                 });
             })
             .then(function(err){
@@ -603,7 +623,8 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
                     chapters: chaps,
                     addPassageAllowed: addPassageAllowed,
                     addChapterAllowed: addChapterAllowed,
-                    scripts: scripts
+                    scripts: scripts,
+                    queue: queue
                 });
             })
         })
@@ -674,31 +695,49 @@ function getPermissions(doc, user, type="passage"){
     });
   });
 }
-//When we add a passage to the queue
-//it is the original passage and can not be edited
-//When you move the passage from the queue into a chapter,
-//you duplicate it. 
+app.post('/add_to_queue', (req, res) =>{
+  var _id = req.body.passage.trim();
+  Passage.findOne({_id: _id}, function(err, passage){
+    //and add to queue
+    duplicatePassage(req, passage, req.body.chapter);
+    // console.log(ret.content);
+    // res.send(scripts.printPassage(ret)); //send the passage back
+  });
+});
+//when they add a passage to queue, duplicate it and add the duplication
+function addToQueue(passage, user){
+  User.findOne({_id: user}, function(err, theUser){
+    theUser.queue.push(passage);
+    theUser.starsGiven += 1;
+    theUser.save();
+  });
+}
 //Duplications keeps everything the same and stores a reference to the original
-//Duplicating a passage should also give it a free star, but it adds to users 'stars given'
-function duplicatePassage(passage, location, parent=null){
-    var newParent = Passage.create({
-        author: session.user,
-        chapter: location,
-        originalPassage: passage,
-        metadata: passage.metadata,
-        content: passage.content,
-        flagged: passage.flagged,
-        canvas: passage.canvas,
-        filename: passage.filename,
-        categories: passage.categories,
-        parent: parent
-    });
+//Duplicating a passage should also give it a free star, but it also adds to users 'stars given'
+function duplicatePassage(req, passage, location, parent=null){
+  Passage.create({
+      author: req.session.user,
+      chapter: location,
+      originalPassage: passage.originalPassage,
+      previousPassage: passage,
+      metadata: passage.metadata,
+      content: passage.content,
+      flagged: passage.flagged,
+      canvas: passage.canvas,
+      filename: passage.filename,
+      categories: passage.categories,
+      parent: parent
+  }).then(function(newParent){
     //then we need to duplicate each sub passage all the way down
     passage.passages.forEach(function(p){
-        newParent.passages.push(duplicatePassage(p, location, newParent));
+        newParent.passages.push(duplicatePassage(req, p, location, newParent));
     });
-    star(passage);
-    return newParent();
+    passage.stars += 1;
+    // session.user.starsGiven += 1;
+    passage.save();
+    // session.user.save();
+    addToQueue(newParent, req.session.user._id);
+  });
 }
 function generateMetadata(property_keys, property_values){
     var metadata = {};

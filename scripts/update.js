@@ -24,8 +24,8 @@ mongoose.connect('mongodb://localhost/sasame', {
 //     console.log(users);
 //     process.exit(1);
 // });
-Chapter.updateMany({}, {
-	flagged: false,
+User.updateMany({}, {
+	queue: [],
 }, function(err, passages){
     if (err) console.log(err);
     console.log(passages);

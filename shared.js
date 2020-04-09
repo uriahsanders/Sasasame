@@ -95,9 +95,12 @@
         <option>Music</option>
         <option>Head</option>
         <option>Class</option>
+        <option>Donate</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>
+        <!-- Displays chapter contents as sub passages -->
+        <option>Chapter</option>
         <option>Tone</option>
         <option>Graph</option>
         <option>Directory</option>
@@ -133,7 +136,7 @@
     });
     return ret;
   };
-  exports.printPassage = function(passage, user){
+  exports.printPassage = function(passage, user, queueItem=false){
        var metadata = JSON.parse(passage.metadata);
        var ret = '';
         ret += `
@@ -196,10 +199,10 @@
             </div>
              <div class="proteins">
              <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
-             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
              `;
              if(user){
-                ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
+                ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
+                <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
              ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
              <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->
@@ -265,7 +268,7 @@
         <div class="passage">
              <div class="proteins">
              <input type="hidden" value="`+fileName+`" id="file_name"/>
-             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/square-sharp.svg"></ion-icon>
+             <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
              <ion-icon title="Split" src="/images/ionicons/cut-sharp.svg"></ion-icon>
              <ion-icon title="Move line from above"src="/images/ionicons/add-sharp.svg"></ion-icon>
              <ion-icon title="Move line to above"src="/images/ionicons/remove-sharp.svg"></ion-icon>
