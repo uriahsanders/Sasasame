@@ -74,7 +74,8 @@
 .control_button:hover{
     /* background: #353535; */
     /* color: #fff; */
-    color: #ccc;
+    /*color: #ccc;*/
+    font-weight: bold;
 }
 .control_input, .property_value{
     border: 1px solid #353535;
@@ -152,10 +153,11 @@
     /*display: none;*/
 }
 #console{
-    height: 100px;
+    /*height: 100px;*/
 }
 #side_panel{
     display: none;
+    border-left: 1px solid black;
 }
 #side_panel_close{
     display: none;
@@ -168,7 +170,7 @@
 }
 #right_passages .passage{
     font-size: 0.5em;
-    padding: 0px;
+    padding: 5px;
     line-height: 10px;
 }
 #side_panel, #side_panel_inner{
@@ -204,6 +206,9 @@
 }*/
 #side_panel_switcher > div:not(#categories){
     display: none;
+}
+#side_panel_switcher{
+    padding-bottom: 20px;
 }
 .passage{
     /* border-bottom: 1px dotted grey; */
