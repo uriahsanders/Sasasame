@@ -28,7 +28,7 @@
                     <div class="add_passage_icons"style="text-align:left">
                         <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                        <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-sharp.svg"></ion-icon>
+                        <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-circle-sharp.svg"></ion-icon>
                         <ion-icon title="Choose Editor" class="editor_choose" src="/images/ionicons/newspaper-sharp.svg"></ion-icon>
                         <ion-icon title="Add Tags" name="tags"class="tag_add" src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->

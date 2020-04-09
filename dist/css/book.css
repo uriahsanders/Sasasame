@@ -144,7 +144,10 @@
     font-size: 2em;
     /*color: #353535;*/
 }
-
+#side_panel_body{
+    width: 90%;
+    margin: auto;
+}
 #category_search_input{
     /*display: none;*/
 }
@@ -212,7 +215,7 @@
     padding: 20px;
     /*not for mobile*/
     display: block;
-    resize: both;
+    /*resize: both;*/
     overflow: auto;
     /*width: 160px;
     height: 200px;*/
@@ -346,6 +349,9 @@
     font-size: 1.2em;
     cursor: pointer;
     text-align: center;
+}
+.add_passage_icons{
+    color: #fff;
 }
 
 #toc{
@@ -590,7 +596,6 @@
     /*border: 0px;*/
     /*border-bottom: 1px solid #353535;*/
     background: #fff;
-    width: 90%;
     margin: auto;
     display: block;
 }

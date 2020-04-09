@@ -233,7 +233,7 @@ const recordAudio = () =>
             break;
             case 'recording':
             $(this).data('status', 'empty');
-            $(this).css('color', 'black');
+            $(this).css('color', '#fff');
             var thiz = $(this);
             audio = await recorder.stop();
             audio.play();
@@ -1495,6 +1495,9 @@ $('.toggle_resize').on('click', function(){
         $(this).css('color', 'white');
         $('.passage').css({
             'display': 'block',
+            'resize': 'none',
+            'width': '96%',
+            'height': 'auto'
         });
         $(this).data('hidden', 'false');
         $('.passage').draggable('disabled');
@@ -1503,6 +1506,9 @@ $('.toggle_resize').on('click', function(){
         $(this).css('color', 'gold');
         $('.passage').css({
             'display': 'inline-block',
+            'resize': 'both',
+            'width': 'initial',
+            'height': 'initial'
         });
         $(this).data('hidden', 'true');
         $('.passage').draggable({ 
@@ -1556,7 +1562,6 @@ $('#play_all').on('click', function(){
 });
 $('#option_menu').on('click', function(){
     $('#side_panel').toggle();
-    $('#right_side_select').val('chapters').change();
     $(this).toggleClass('gold');
 });
 $('#side_panel_close').on('click', function(){
