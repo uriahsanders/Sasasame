@@ -209,6 +209,7 @@
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
              <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
              <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
+             <ion-icon title="Donate to Author" class="passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              `;
             ret += '<div class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'</div>';

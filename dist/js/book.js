@@ -708,6 +708,12 @@ function readPassageMetadata(thiz){
                 // thiz.siblings('.passage_content').css(JSON.parse(value));
                 thiz.siblings('.passage_content').css('text-align', value);
                 break;
+                case 'Donate':
+                thiz.siblings('.proteins').children('.passage_donate').show();
+                thiz.siblings('.proteins').children('.passage_donate').on('click', function(){
+                    window.open(value, '_blank');
+                });
+                break;
                 case 'HTML':
                 var cont = thiz.siblings('.passage_content');
                 var text = cont.text();
@@ -900,6 +906,24 @@ function readPassageMetadata(thiz){
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightBlock(block);
                   });
+                break;
+                case 'Animation':
+                //the passage image will be a spritesheet.
+                //width of each sprite will be in the value
+                //simply cycle through displaying part of the image
+                //this can later be adapted for canvas
+                var position = value;
+                //might need to get this from value too
+                var length = thiz.siblings('.passage_image')[0].width;
+                setInterval(function(){
+                    thiz.siblings('.passage_image').css('background-position', '-'+position+'px 0px');
+                    if (position < length){ 
+                        position += value;
+                    }
+                    else{ 
+                        position = value; 
+                    }
+                }, 100);
                 break;
                 case 'Canvas':
                 var canvas = thiz.siblings('.passage_canvas');

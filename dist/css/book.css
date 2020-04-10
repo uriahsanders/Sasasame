@@ -252,6 +252,9 @@
     font-family: 'Montserrat', sans-serif;*/
     width: 96%;
 }
+.passage_donate{
+    display: none;
+}
 .passage_html_disp{
     position: relative;
 }

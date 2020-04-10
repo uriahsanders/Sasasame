@@ -17,15 +17,13 @@ function ppe(){
     var increasingOpacity = false;
     var decreasingOpacity = true;
     var opacity = 1;
+    var elements = [];
     function fadeOut(){
-        // if(++fadeCounter % 10 == 0){
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // }
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    // var image = $('#ppe_queue').find(">:first-child")[0];
-    // var imageContext = image.getContext('2d');
-    function drawImage(image, x, y, delv, realImage=false){
+    //properties come from the source passage
+    function drawImage(image, x, y, delv, realImage=false, properties={}){
         delv.globalAlpha = opacity;
         delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
         delv.rotate(masterRotate*(Math.PI/180));
@@ -37,7 +35,43 @@ function ppe(){
             delv.drawImage(image, -image.width / 2, -image.height / 2);
         }
         delv.setTransform(1,0,0,1,0,0);
-    } 
+        //Every time we draw an image we are adding an 'element' to the canvas
+        //this element may have properties associated with it
+        //i.e, passage info/metadata
+        //we also might want to undo or redraw to change the z-index,
+        //or select the area
+        //so we want to keep track of all this
+        //later do the same for erase
+        elements.push(properties); //and then send to db
+        //now we have options, since properties can contain methods such as
+        //animation, event handlers, etc.
+        //We can execute data for all elements of a portion of them every animation frame
+        //or by some other standard, depending on the properties
+        //We also want to store elements in the database associated with any saved image,
+        //so that it can remain dynamic
+        //this also allows us to use db features to constrain element searches according to
+        //purpose
+    }
+    //very similar to reading passage metadata
+    function scanElements(search, action){
+        //get elements by searching db then
+        switch(action){
+            case 'runMethods':
+            //ex. animation, key handlers, game stuff
+            elements.forEach(function(element){
+                element.methods.forEach(function(method){
+                    method(); //must be able to access element.properties
+                });
+            });
+            break;
+            case 'zDown':
+            break;
+            case 'zUp':
+            break;
+            case 'erase':
+            break;
+        }
+    }
     function draw(e) {
         var pos = getMousePos(canvas, e);
         posx = pos.x;
