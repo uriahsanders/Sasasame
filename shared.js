@@ -158,7 +158,7 @@
             }
             else if (passage.chapter && passage.chapter.title){
               ret += `<div class="passage_label"><a href="/`+passage.chapter.title+`/`+passage.chapter._id+`" class="basic_link passage_label_link">`+passage.chapter.title+`/</a></div>`;
-
+              ret += '<input class="passage_chapter_id"type="hidden"value="'+passage.chapter._id+'">';
             }
             else{
               ret += `<div class="passage_label"><a class="basic_link passage_label_link" href="/">Sasame/</a></div>`;

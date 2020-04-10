@@ -1314,7 +1314,7 @@ $(document).on('click', '.square_icon', function(){
     var metadata = passage.children('.metadata').val();
     var parentPassage = passage.children('.parentPassage').val();
     var passagesJSON = $('#queue_passages').val();
-    var chapter = $('#parent_chapter_id').val();
+    var chapter = passage.children('.passage_author').find('.passage_chapter_id');
     var passages;
     if(passagesJSON != ''){
         passages = JSON.parse(passagesJSON);
@@ -1329,54 +1329,14 @@ $(document).on('click', '.square_icon', function(){
         url: '/add_to_queue',
         data: {
             passage: id,
-            chapter: chapter,
+            chapter: chapter.val(),
         },
         success: function(data){
-            $('#queue_items').append(data);
+            updateQueue();
         }
     });
     readUnreadMetadata();
     flashIcon($(this));
-    // $(this).attr('src', function(index, attr){
-    //     if(attr == '/images/ionicons/square-sharp.svg'){
-    //         //Send ajax request to make new passage,
-    //         //and then add it to queue
-    //         $.ajax({
-    //             type: 'post',
-    //             url: '/add_to_queue',
-    //             data: {
-    //                 passage: id,
-    //                 chapter: chapter,
-    //             },
-    //             success: function(data){
-    //                 $('#queue_items').append(data);
-    //             }
-    //         });
-    //         //add passage to queue
-    //         // $('#queue_items').append(passage.clone().attr('id', 'clone_'+id));
-    //         // $('#clone_'+id).addClass('queue_item');
-    //         // $('#clone_'+id).children('.sub_passages').remove();
-    //         // $('#clone_'+id).children('.add_from_queue').show();
-    //         // // $('#clone_'+id).children('.proteins').hide();
-    //         // $('#queue_items')
-    //         // passages[id] = {
-    //         //     content: content,
-    //         //     metadata: metadata,
-    //         //     parentPassage: parentPassage,
-    //         //     // originalAuthor: passage.author,
-    //         // };
-    //         // $('#queue_passages').val(JSON.stringify(passages));
-    //         readUnreadMetadata();
-    //         return '/images/ionicons/checkbox-sharp.svg';
-    //     }
-    //     else{
-    //         //remove passage from queue
-    //         $('#queue_items #clone_'+id).remove();
-    //         delete passages[id];
-    //         $('#queue_passages').val(JSON.stringify(passages));
-    //         return '/images/ionicons/square-sharp.svg';
-    //     }
-    // });
 });
 function readUnreadMetadata(){
     $('[id^=passage_metadata_]').not('.metadata_read').each(function(){
@@ -1396,6 +1356,22 @@ $(document).on('click', '.add_from_queue', function(){
 function updateBrief(){
     $('#right_passages').html($('#passages').html());
 }
+function updateQueue(){
+    $.ajax({
+        type: 'post',
+        url: '/get_queue',
+        data: {},
+        success: function(data){
+            $('#queue_items').html(data);
+            readUnreadMetadata();
+            $('#queue_items').children().each(function(item){
+                $(this).addClass('queue_item');
+                $(this).children('.sub_passages').remove();
+                $(this).children('.add_from_queue').show();
+            });
+        }
+    });
+}
 $('#right_side_select').on('change', function(){
     $('#side_panel_switcher').children().hide();
     switch($(this).val()){
@@ -1410,6 +1386,7 @@ $('#right_side_select').on('change', function(){
             updateBrief();
             break;
         case 'queue':
+            updateQueue();
             $('#queue').show();
             break;
         case 'passages':

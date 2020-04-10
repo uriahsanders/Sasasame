@@ -296,15 +296,23 @@ app.post('/register/', function(req, res) {
         token: v4()
       }  //use schema.create to insert data into the db
       User.create(userData, function (err, user) {
-        req.session.user = user;
-        //send verification email
-        sendEmail(user.email, 'Verify Email for Sasame', 
-            `
-                https://sasame.xyz/verify/`+user.id+`/`+user.token+`
-            `);
         if (err) {
           console.log(err);
         } else {
+          req.session.user = user;
+          //hash password
+          bcrypt.hash(user.password, 10, function (err, hash){
+            if (err) {
+              console.log(err);
+            }
+            user.password = hash;
+            user.save();
+          });
+          //send verification email
+          // sendEmail(user.email, 'Verify Email for Sasame', 
+          //     `
+          //         https://sasame.xyz/verify/`+user.id+`/`+user.token+`
+          //     `);
           res.redirect('/user/' + user._id);
         }
       });
@@ -699,10 +707,28 @@ app.post('/add_to_queue', (req, res) =>{
   var _id = req.body.passage.trim();
   Passage.findOne({_id: _id}, function(err, passage){
     //and add to queue
-    duplicatePassage(req, passage, req.body.chapter);
+    duplicatePassage(req, passage, req.body.chapter.trim());
     // console.log(ret.content);
     // res.send(scripts.printPassage(ret)); //send the passage back
   });
+});
+app.post('/get_queue', (req, res) =>{
+  if(req.session.user){
+    var ret = '';
+    User.findOne({_id: req.session.user})
+    .select('queue')
+    .populate('queue')
+    .exec()
+    .then(function(user){
+      user.queue.forEach(function(q){
+        ret += scripts.printPassage(q);
+      });
+      res.send(ret);
+    });
+  }
+  else{
+    res.send('Must be logged in.');
+  }
 });
 //when they add a passage to queue, duplicate it and add the duplication
 function addToQueue(passage, user){
@@ -717,7 +743,7 @@ function addToQueue(passage, user){
 function duplicatePassage(req, passage, location, parent=null){
   Passage.create({
       author: req.session.user,
-      chapter: location,
+      chapter: location == '' ? null : location,
       originalPassage: passage.originalPassage,
       previousPassage: passage,
       metadata: passage.metadata,
