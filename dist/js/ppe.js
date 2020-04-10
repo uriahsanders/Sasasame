@@ -14,6 +14,8 @@ function ppe(){
     var isErasing = false;
     var fadeCounter = 0;
     var hardOpacity = false;
+    var increasingOpacity = false;
+    var decreasingOpacity = true;
     var opacity = 1;
     function fadeOut(){
         // if(++fadeCounter % 10 == 0){
@@ -23,7 +25,10 @@ function ppe(){
     }
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
-    function drawImage(image, x, y, delv){
+    function drawImage(image, x, y, delv, setOpacity){
+        if(opacity > 0){
+            delv.globalAlpha = setOpacity || opacity;
+        }
         delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
         delv.rotate(masterRotate*(Math.PI/180));
         delv.drawImage(image, -image.width / 2, -image.height / 2);
@@ -49,14 +54,15 @@ function ppe(){
         posy = pos.y;
         drawSelect();
         if(isErasing){
-            ctx.clearRect(posx, posy, 100*masterScale, 100*masterScale);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(posx, posy, 50*masterScale, 50*masterScale);
         }
     }
     function drawSelect(){
         cursorctx.fillStyle = "#000000";
         cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
         cursorctx.beginPath();
-        cursorctx.rect(posx, posy, 100*masterScale, 100*masterScale);
+        cursorctx.rect(posx, posy, 50*masterScale, 50*masterScale);
         cursorctx.stroke();
     }
     // Returns an random integer, positive or negative
@@ -142,12 +148,12 @@ function ppe(){
         var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
         // var imageContext = image.getContext('2d');
         //Cursor
+        cursorctx.globalAlpha = 1;
         cursorctx.fillStyle = "#000000";
         cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
         cursorctx.beginPath();
         cursorctx.arc(posx, posy, image.width/2*masterScale, 0, 2 * Math.PI);
         cursorctx.stroke();
-        cursorctx.globalAlpha = opacity;
         //Also need to star the related passage
         drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx);
 
@@ -155,7 +161,6 @@ function ppe(){
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-            ctx.globalAlpha = opacity;
             // var imageContext = image.getContext('2d');
             drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
             // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
@@ -163,15 +168,16 @@ function ppe(){
         }
         else{
             if($('#ppe_erase').data('on') == 'true'){
-                ctx.clearRect(posx, posy, 100*masterScale, 100*masterScale);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.fillRect(posx, posy, 50*masterScale, 50*masterScale);
             }
             else{
                 //select is active; add item to queue
-                $('<canvas height="'+100*masterScale+'" width="'+100*masterScale+'"class="ppe_queue_canvas"></canvas>')
+                $('<canvas height="'+50*masterScale+'" width="'+50*masterScale+'"class="ppe_queue_canvas"></canvas>')
                     .appendTo('#ppe_queue');
                     var little = $('#ppe_queue').children().eq(-1)[0];
                     var littlectx = little.getContext('2d');
-                    var data = ctx.getImageData(posx, posy, 100*masterScale, 100*masterScale);
+                    var data = ctx.getImageData(posx, posy, 50*masterScale, 50*masterScale);
                     littlectx.putImageData(data, 0, 0);
                 masterScale = 1;
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
@@ -325,7 +331,6 @@ function ppe(){
             // }
             //m for mutate
             else if(e.keyCode == 77){
-                masterScale = 1;
                 if($('#ppe_select').data('select') == 'on'){
                     $('#ppe_select').click();
                 }
@@ -336,13 +341,29 @@ function ppe(){
             }
             //o for toggle opacity
             else if(e.keyCode == 79){
-                if(e.shiftKey && opacity > 0){
-                    opacity -= 0.1;
+                if(opacity > 1){
+                    opacity = 1;
                 }
-                else{
-                    if(opacity < 1){
-                        opacity += 0.1;
-                    }
+                if(opacity < 0.02){
+                    opacity = 0.02;
+                }
+                if(opacity == 1){
+                    decreasingOpacity = true;
+                    increasingOpacity = false;
+                }
+                if(opacity == 0.02){
+                    increasingOpacity = true;
+                    decreasingOpacity = false;
+                }
+                if(increasingOpacity){
+                    opacity += 0.02;
+                }
+                if(decreasingOpacity){
+                    opacity -= 0.02;
+                }
+                if(e.shiftKey){
+                    increasingOpacity = !increasingOpacity;
+                    decreasingOpacity = !decreasingOpacity;
                 }
                 drawCursor();
             }
