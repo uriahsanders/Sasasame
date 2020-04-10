@@ -258,7 +258,21 @@ $('.codeform_add').on('submit', function(e){
 });
 $('.codeform_update').on('submit', function(e){
     e.preventDefault();
+    //first we need to change the textarea value,
+    //depending on the editor
+    var content = $(this).children('.add_passage_textarea');
+    if(content.prop('tagName') == 'TEXTAREA' && content.next('.CodeMirror').length){
+        editor = content.next('.CodeMirror').get(0).CodeMirror;
+        text = editor.getValue();
+    }
+    else if(content.children('.ql-editor').length){
+        text = content.children('.ql-editor').html();
+    }
+    else{
+        text = content.val();
+    }
     var formdata = new FormData(this);
+    formdata.set('passage', text);
     var info = $(this).serializeObject();
     var thiz = $(this);
     // alert(JSON.stringify(info));
