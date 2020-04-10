@@ -414,6 +414,7 @@ function ppe(){
                 }
                 masterRotate = 0;
                 masterScale = 1;
+                opacity = 1;
                 drawCursor();
             }
             //f for fade

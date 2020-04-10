@@ -774,6 +774,56 @@ function readPassageMetadata(thiz){
                 var label = thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text();
                 thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text(label + value);
                 break;
+                case 'File':
+                thiz.parent().append('<input id="file_input_'+_id+'"type="text"class="control_input file_input" value="'+value+'">');
+                $(document).on('keyup', '#file_input_'+_id+'', function(){
+                    //get filecontents from database
+                    thiz.parent().children('.passage_file').remove();
+                    $.ajax({
+                        type: 'post',
+                        url: '/file',
+                        data: {
+                            fileName: $(this).val(),
+                            dir: ''
+                        },
+                        success: function(data){
+                            thiz.parent().children('.directory_list').remove();
+                            thiz.parent().append(data.data);
+                            var lang = value.split('.')[value.split('.').length - 1];
+                            lang = (lang == 'ejs') ? 'html' : lang;
+                            switch(lang){
+                                case 'ejs':
+                                lang = 'html';
+                                break;
+                                case 'js':
+                                lang = 'javascript';
+                                break;
+                                case 'py':
+                                lang = 'python';
+                                break;
+                            }
+                            var scriptURL = '/mode/'+lang+'/'+lang+'.js';
+                            var editor;
+                            if(scriptLoaded(scriptURL)){
+                                editor = CodeMirror.fromTextArea(thiz.parent().children('.passage_file').children('.passage_content')[0], {
+                                    mode: lang,
+                                });
+                            }
+                            else{
+                                $.getScript(scriptURL)
+                                .done(function( script, textStatus ) {
+                                   editor = CodeMirror.fromTextArea(thiz.parent().children('.passage_file').children('.passage_content')[0], {
+                                    mode: lang,
+                                   });
+                                  })
+                                  .fail(function( jqxhr, settings, exception ) {
+                                    $( "div.log" ).text( "Triggered ajaxError handler." );
+                                });
+                            }
+                        }
+                    });
+                });
+                break;
                 case 'Class':
                 thiz.parent().addClass(value);
                 break;
@@ -1123,47 +1173,6 @@ $(document).on('click', '[id^=passage_update_]', function(){
         },
         success: function(data){
             flashIcon(thiz, 'gold');
-        }
-    });
-});
-$(document).on('click', '.fileStreamChapter', function(){
-    var title = $(this).text();
-    var fileStreamPath = $('#fileStreamPath').val();
-    if(title == '../'){
-        fileStreamPath = fileStreamPath.split('/');
-         fileStreamPath.pop();
-         fileStreamPath.pop();
-        fileStreamPath = fileStreamPath.join('/');
-        title = '';
-    }
-    $.ajax({
-        type: 'post',
-        url: '/file',
-        data: {
-            dir: fileStreamPath || '',
-            fileName: title
-        },
-        success: function(data){
-            if(data.type == 'file'){
-                $('#passages').html(data.data);
-                $('#parent_chapter_title').text(fileStreamPath + title);
-                document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightBlock(block);
-                  });
-            }
-            else if(data.type == 'dir'){
-                var categories = `
-                <div class="category">
-                    <div>
-                        <a class="link fileStreamChapter">../</a>
-                    </div>
-                </div>` + data.data;
-                $('#categories').html(categories);
-                $('#fileStreamPath').val(data.dir);
-                $('#passages').html('');
-            }
-            $('#parent_chapter_title').text(data.dir);
-            
         }
     });
 });

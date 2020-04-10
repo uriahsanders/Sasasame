@@ -761,46 +761,50 @@ if(process.env.DOMAIN == 'localhost'){
 //       });
 //     });
 // });
-// app.post('/file', function(req, res) {
-//     var file = req.body.fileName;
-//     if(req.body.dir[req.body.dir.length - 1] == '/'){
-//         var dir = req.body.dir + file;
-//     }
-//     else{
-//         var dir = req.body.dir + '/' + file;
-//     }
-//     var stat = fs.lstatSync(dir);
-//     if(stat.isFile()){
-//         fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
-//                 if (!err) {
-//                     res.send({
-//                         data: scripts.printFile(data, __dirname + '/' +file),
-//                         type: 'file'
-//                     });
-//                 } else {
-//                     console.log(err);
-//                 }
-//         });
-//     }
-//     else if (stat.isDirectory()){
-//         fs.readdir(dir, (err, files) => {
-//           var ret = '';
-//           var stat2;
-//           files.forEach(function(file){
-//             stat2 = fs.lstatSync(dir + '/' +file);
-//             if(stat2.isDirectory()){
-//                 file += '/';
-//             }
-//             ret += scripts.printDir(file);
-//           });
-//           res.send({
-//             data: ret,
-//             type: 'dir',
-//             dir: dir
-//           });
-//         });
-//     }
-// });
+app.post('/file', function(req, res) {
+    var file = req.body.fileName;
+    if(req.body.dir[req.body.dir.length - 1] == '/'){
+        var dir = req.body.dir + file;
+    }
+    else{
+        var dir = req.body.dir + '/' + file;
+    }
+    var stat = fs.lstatSync(dir);
+    if(stat.isFile()){
+        fs.readFile(dir, {encoding: 'utf-8'}, function(err,data){
+                if (!err) {
+                    res.send({
+                        data: scripts.printFile(data, __dirname + '/' +file),
+                        type: 'file'
+                    });
+                } else {
+                    console.log(err);
+                }
+        });
+    }
+    else if (stat.isDirectory()){
+        fs.readdir(dir, (err, files) => {
+          var ret = '<div class="directory_list">';
+          ret += `<div>
+            <a class="link fileStreamChapter fileStreamCreate">Create</a>
+          </div>`;
+          var stat2;
+          files.forEach(function(file){
+            stat2 = fs.lstatSync(dir + '/' +file);
+            if(stat2.isDirectory()){
+                file += '/';
+            }
+            ret += scripts.printDir(file);
+          });
+          ret += '</div>';
+          res.send({
+            data: ret,
+            type: 'dir',
+            dir: dir
+          });
+        });
+    }
+});
 // app.post('/run_file', function(req, res) {
 //     var file = req.body.file;
 //     var ext = file.split('.')[file.split('.').length - 1];

@@ -96,6 +96,7 @@
         <option>Head</option>
         <option>Class</option>
         <option>Donate</option>
+        <option>File</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>
@@ -105,7 +106,6 @@
         <option>Graph</option>
         <option>Directory</option>
         <option>Webpage</option>
-        <option>File</option>
         <option>Pointer</option>
         <option>Key Schema</option>
         <option>Is Key Schema?</option>
@@ -217,9 +217,11 @@
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+escapeHTML(passage.content)+`"/>
                 <div class="passage_chapter">Sasame</div>`;
-            if(passage.content.length > 0){
-              ret += `<div id="passage_content_`+passage._id+`"class="passage_content">`+ escapeHTML(passage.content)+`</div>`;
+            var none = '';
+            if(passage.content.length <= 0){
+              none = ' none';
             }
+            ret += `<div id="passage_content_`+passage._id+`"class="passage_content`+none+`">`+ escapeHTML(passage.content)+`</div>`;
             ret += `<canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;
@@ -267,28 +269,25 @@
     lang = (lang == 'ejs') ? 'html' : lang;
     var ret = '';
         ret += `
-        <div class="passage">
+        <div class="passage passage_file">
+          <input type="hidden" value="`+fileName+`" id="file_name"/>
              <div class="proteins">
-             <input type="hidden" value="`+fileName+`" id="file_name"/>
              <ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
              <ion-icon title="Split" src="/images/ionicons/cut-sharp.svg"></ion-icon>
-             <ion-icon title="Move line from above"src="/images/ionicons/add-sharp.svg"></ion-icon>
-             <ion-icon title="Move line to above"src="/images/ionicons/remove-sharp.svg"></ion-icon>
+             <ion-icon title="Move line from above"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
+             <ion-icon title="Move line to above"src="/images/ionicons/remove-circle-sharp.svg"></ion-icon>
              <ion-icon class="file_play"title="Run File" src="/images/ionicons/play-circle.svg"></ion-icon>
              <ion-icon class="file_update"title="Update File" src="/images/ionicons/share-sharp.svg"></ion-icon>
              </div>
-            <div class="passage_content" contenteditable="true"><pre><code class="lang-`+lang+`">`+ escapeHTML(content)+`</code></pre></div>
+            <textarea class="passage_content">`+ escapeHTML(content)+`</textarea>
         </div>`;
         return ret;
   };
   exports.printDir = function(dirname){
     var ret = '';
-    ret += `
-    <div class="category">
-        <div>
-            <a class="link fileStreamChapter">`+dirname+`</a>
-        </div>
-    </div>`;
+    ret += `<div>
+            <span class="fileStreamChapter">`+dirname+`</span>
+        </div>`;
     return ret;
   };
   exports.printCanvas = function(passage){

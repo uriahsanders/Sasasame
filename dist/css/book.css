@@ -173,6 +173,27 @@
     padding: 5px;
     line-height: 10px;
 }
+.none{
+    display: none !important;
+}
+.fileStreamCreate{
+    font-weight: bold;
+    cursor: pointer;
+}
+.directory_list{
+    max-height: 300px;
+    overflow: scroll;
+    font-size: 0.8em;
+    text-align: center;
+}
+.passage_file{
+    border: 1px solid #000;
+    margin-top: 10px;
+}
+
+#right_passages .passage > .passage_image{
+    max-height: 100px;
+}
 #side_panel, #side_panel_inner{
     float: right;
     padding: 10px;
@@ -229,7 +250,7 @@
     height: 200px;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
-    max-width: 96%;
+    width: 96%;
 }
 .passage_html_disp{
     position: relative;
@@ -749,9 +770,7 @@ select::-ms-expand {
 #parent_chapter_title{
     cursor: pointer;
 }
-.fileStreamChapter{
-    cursor: pointer;
-}
+
 .passage_audio{
     display: none;
 }
