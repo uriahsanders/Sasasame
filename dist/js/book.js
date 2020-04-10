@@ -782,10 +782,11 @@ function readPassageMetadata(thiz){
                 break;
                 case 'File':
                 thiz.parent().append('<input id="file_input_'+_id+'"type="text"class="control_input file_input" value="'+value+'">');
-                $(document).on('keyup', '#file_input_'+_id+'', function(){
+                $(document).on('keyup', '#file_input_'+_id+'', function(e){
                     //get filecontents from database
                     thiz.parent().children('.passage_file').remove();
-                    $.ajax({
+                    if(e.keyCode == 13){
+                        $.ajax({
                         type: 'post',
                         url: '/file',
                         data: {
@@ -807,6 +808,8 @@ function readPassageMetadata(thiz){
                                 case 'py':
                                 lang = 'python';
                                 break;
+                                default:
+                                lang = 'javascript';
                             }
                             var scriptURL = '/mode/'+lang+'/'+lang+'.js';
                             var editor;
@@ -823,11 +826,12 @@ function readPassageMetadata(thiz){
                                    });
                                   })
                                   .fail(function( jqxhr, settings, exception ) {
-                                    $( "div.log" ).text( "Triggered ajaxError handler." );
+                                    console.log( "Triggered ajaxError handler."+jqxhr.status+settings+exception );
                                 });
                             }
                         }
                     });
+                    }
                 });
                 break;
                 case 'Class':
@@ -1108,32 +1112,11 @@ $(document).on('click', '.remove_property', function(){
 $(document).on('click', '.view_sub', function(){
     $(this).parent().parent().children('.sub_passages').slideToggle();
 });
-var doSomethingThoughtStream = function(){
-    window.location.reload();
-};
-var doSomethingFileStream = function(){
-    $('#categories').html('');
-    $('#passage_load').hide();
-    $('#chapter_load').hide();
-    $('#alpha').hide();
-    $.ajax({
-        type: 'post',
-        url: '/fileStream',
-        data: 1,
-        success: function(data){
-            var categories = `
-                <div class="category">
-                    <div>
-                        <a class="link fileStreamChapter">../</a>
-                    </div>
-                </div>` + data.dirs;
-            $('#fileStreamPath').val(data.path);
-            $('#categories').html(categories);
-            $('#passages').html('');
-            $('#parent_chapter_title').text(data.path);
-        }
-    });
-};
+$(document).on('click', '.fileStreamChapter', function(){
+    var inputVal = $(this).parent().parent().prev('.file_input').val();
+    $(this).parent().parent().prev('.file_input').val(inputVal + $(this).text());
+    $(this).parent().parent().prev('.file_input').keyup();
+});
 $(document).on('click', '[id^=passage_flag_]', function(){
     var _id = $(this).attr('id').split('_')[2];
     $.ajax({
@@ -1200,20 +1183,8 @@ $(document).on('click', '[id^=passage_update_]', function(){
         }
     });
 });
-// FILE STREAM INACTIVE
 $('#parent_chapter_title').css('cursor', 'default');
-// $('#parent_chapter_title').on('click', function(){
-//     var something = $(this).text();
-//     if(something == 'Sasame'){
-//         doSomethingFileStream();
-//     }
-//     else{
-//         something = "Sasame"
-//         doSomethingThoughtStream();
-//         $(this).text(something);
-//     }
 
-// });
 $('.category').on('mouseover', function(){
     $(this).find('.chapter_flag').show();
 });
