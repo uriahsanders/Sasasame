@@ -20,6 +20,7 @@ module.exports = {
                 filename: options.filename,
                 categories: options.categories
             }).save().then(data => {
+                console.log(data);
                 Chapter.findOne({_id:options.chapter}).exec(function(err, chap){
                     if(chap.passages){
                         chap.passages.push(data);

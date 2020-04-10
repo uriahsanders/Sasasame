@@ -62,6 +62,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer');
 var MongoStore  = require('connect-mongo');
+const scripts = require('./shared');
 app.use(cookieParser());
 app.use(session({
     secret: "Sasame; just a cute little seed with a Really Big HEART!",
@@ -77,91 +78,7 @@ app.use(function(req, res, next) {
   res.locals.user = req.session.user;
   next();
 });
-
-//Call in Scripts
-const scripts = require('./shared');
-// Password Protection for When Upgrading
-var securedRoutes = require('express').Router();
-securedRoutes.use((req, res, next) => {
-
-  // -----------------------------------------------------------------------
-  // authentication middleware
-
-  const auth = {
-        login: 'developer',
-        password: 'sasame'
-    } // change this
-
-  // parse login and password from headers
-  const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
-  const [login, password] = new Buffer(b64auth, 'base64').toString().split(':')
-
-  // Verify login and password are set and correct
-  if (login && password && login === auth.login && password === auth.password) {
-    // Access granted...
-    return next()
-  }
-
-  // Access denied...
-  res.set('WWW-Authenticate', 'Basic realm="401"') // change this
-  res.status(401).send('Authentication required.') // custom message
-
-  // -----------------------------------------------------------------------
-
-});
-
-function sendEmail(to, subject, body){
-    var transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      }
-    });
-
-    var mailOptions = {
-      from: 'uriahrsanders@gmail.com',
-      to: to,
-      subject: subject,
-      text: body
-    };
-
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
-}
-//recordings
-app.get('/recordings', (req, res) => {
-  readdir(recordingFolder)
-    .then(messageFilenames => {
-      res.status(200).json({ messageFilenames });
-    })
-    .catch(err => {
-      console.log('Error reading message directory', err);
-      res.sendStatus(500);
-    });
-});
-
-app.post('/recordings', (req, res) => {
-  if (!req.body.recording) {
-    return res.status(400).json({ error: 'No req.body.message' });
-  }
-  const messageId = v4();
-  writeFile(recordingFolder + messageId, req.body.recording, 'base64')
-    .then(() => {
-        res.send(messageId);
-    })
-    .catch(err => {
-      console.log('Error writing message to file', err);
-      res.sendStatus(500);
-    });
-});
-
-
+//Serving Files
 app.get('/jquery.min.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery/dist/jquery.min.js');
 });
@@ -225,55 +142,170 @@ app.get('/quill.snow.css', function(req, res) {
 app.get('/tone.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/tone/build/Tone.js');
 });
-
-function requiresLogin(req, res, next) {
-  if (req.session && req.session.user) {
-    return next();
-  } else {
-    var err = new Error('You must be logged in to view this page.');
-    err.status = 401;
-    return next(err);
-  }
-}
-
-app.get('/verify/:user_id/:token', function (req, res) {
-    var user_id = req.params.user_id;
-    var token = req.params.token;
-
-    User.findOne({'_id': user_id.trim()}, function (err, user) {
-        if (user.token == token) {
-            console.log('that token is correct! Verify the user');
-
-            User.findOneAndUpdate({'_id': user_id.trim()}, {'verified': true}, function (err, resp) {
-                console.log('The user has been verified!');
+//ROUTES
+//GET (or show view)
+app.get(/\/user\/?(:user_id)?/, function(req, res) {
+    //scripts.renderBookPage(req, res);
+    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let user_id = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let golden = '';
+    let addPassageAllowed = true;
+    let addChapterAllowed = true;
+    var user = req.session.user || null;
+    if(user != null){
+      var queue = user.queue;
+    }
+    else{
+      var queue = [];
+    }
+    //home page
+    //get all level 1 chapters (explicit)
+    User.findOne({_id: user_id.trim()})
+    .exec()
+    .then(function(profile_user){
+        Chapter.find({author:mongoose.Types.ObjectId(user_id)})
+        .exec()
+        .then(function(chapters){
+            Passage.find({
+              author: mongoose.Types.ObjectId(user_id),
+              deleted: false
+            })
+            .populate('author')
+            .sort([['_id', -1]])
+            .limit(DOCS_PER_PAGE)
+            .exec()
+            .then(function(passages){
+                res.render("index", {
+                    session: req.session.user,
+                    profile: profile_user,
+                    isProfile: 'true',
+                    chapter: '',
+                    chapterTitle: 'Sasame',
+                    parentChapter: null,
+                    book: passages,
+                    chapters: chapters,
+                    paginate: 'profile',
+                    addChapterAllowed: false,
+                    scripts: scripts,
+                    queue: queue
+                });
+            })
+            .then(function(err){
+                if(err){
+                    console.log(err);
+                }
             });
-
-            res.redirect('/login/');
-        } else {
-            console.log('The token is wrong! Reject the user. token should be: ' + user.verify_token);
-        }
+        });
     });
 });
-//authenticate input against database
-var authenticateUser = function (email, password, callback) {
-  User.findOne({ email: email })
-    .exec(function (err, user) {
-      if (err) {
-        return callback(err)
-      } else if (!user) {
-        var err = new Error('User not found.');
-        err.status = 401;
-        return callback(err);
-      }
-      bcrypt.compare(password, user.password, function (err, result) {
-        if (result === true) {
-          return callback(err, user);
-        } else {
-          return callback(err);
-        }
-      })
-    });
-}
+app.get('/friend', function(req, res){
+  res.render('friend');
+});
+//HOME/INDEX
+app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
+    //scripts.renderBookPage(req, res);
+    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
+    let chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
+    let golden = '';
+    let addPassageAllowed = true;
+    let addChapterAllowed = true;
+    var user = req.session.user || null;
+    if(user != null){
+      var queue = user.queue;
+    }
+    else{
+      var queue = [];
+    }
+    //home page
+    if(urlEnd == '' || urlEnd.length < 15){
+        Chapter.find({
+          flagged: false,
+        })
+        .sort([['stars', -1]])
+        .limit(DOCS_PER_PAGE)
+        .exec()
+        .then(function(chapters){
+            Passage.find({
+                parent: undefined,
+                deleted: false,
+                visible: true,
+                flagged: false,
+                queue: false
+            })
+            .populate('chapter author')
+            .sort([['_id', -1]])
+            .limit(DOCS_PER_PAGE)
+            .exec()
+            .then(function(passages){
+                res.render("index", {
+                    session: req.session,
+                    chapter: '',
+                    chapterTitle: 'Sasame',
+                    parentChapter: null,
+                    book: passages,
+                    chapters: chapters,
+                    addPassageAllowed: true,
+                    addChapterAllowed: false,
+                    scripts: scripts,
+                    queue: queue
+                });
+            })
+            .then(function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+        })
+        .then(function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+    }
+    //category ID
+    else{
+        Chapter.findOne({_id:urlEnd})
+        .populate({
+            path: 'passages',
+            model: 'Passage',
+            populate: {
+                path: 'author',
+                model: 'User',
+            },
+            
+        })
+        .exec()
+        .then(function(chapter){
+            Chapter.find()
+            .select('title')
+            .sort([['stars', -1]])
+            .limit(DOCS_PER_PAGE)
+            .exec()
+            .then(function(chaps){
+                res.render("index", {
+                    session: req.session,
+                    parentChapter: chapter,
+                    chapter: urlEnd,
+                    book: chapter.passages,
+                    chapters: chaps,
+                    addPassageAllowed: addPassageAllowed,
+                    addChapterAllowed: addChapterAllowed,
+                    scripts: scripts,
+                    queue: queue
+                });
+            })
+        })
+        .then(function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+    }
+});
+
+//POST
 app.post('/login/', function(req, res) {
     //check if email has been verified
     authenticateUser(req.body.email, req.body.password, function(err, user){
@@ -330,61 +362,377 @@ app.get('/logout', function(req, res) {
       }
     res.redirect('/');
 });
-app.get(/\/user\/?(:user_id)?/, function(req, res) {
-    //scripts.renderBookPage(req, res);
-    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    let user_id = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    let golden = '';
-    let addPassageAllowed = true;
-    let addChapterAllowed = true;
-    var user = req.session.user || null;
-    if(user != null){
-      var queue = user.queue;
+//simply return new object list for client to add into html
+app.post('/paginate', function(req, res){
+    let page = req.body.page;
+    let which = req.body.which; //chap or passage
+    let search = req.body.search;
+    //what category is the user looking at?
+    let chapter = req.body.chapter;
+    let find = {chapter: chapter.trim()};
+    if(chapter.trim() == 'Sasame'){
+        find = {};
+    }
+    if(search == ''){
+        var chapterFind = {};
     }
     else{
-      var queue = [];
+        var chapterFind = {
+            title: new RegExp(''+search+'', "i")
+        };
     }
-    //home page
-    //get all level 1 chapters (explicit)
-    User.findOne({_id: user_id.trim()})
-    .exec()
-    .then(function(profile_user){
-        Chapter.find({author:mongoose.Types.ObjectId(user_id)})
-        .exec()
-        .then(function(chapters){
-            Passage.find({
-              author: mongoose.Types.ObjectId(user_id),
-              deleted: false
-            })
-            .populate('author')
-            .sort([['_id', -1]])
-            .limit(DOCS_PER_PAGE)
-            .exec()
-            .then(function(passages){
-                res.render("index", {
-                    session: req.session.user,
-                    profile: profile_user,
-                    isProfile: 'true',
-                    chapter: '',
-                    chapterTitle: 'Sasame',
-                    parentChapter: null,
-                    book: passages,
-                    chapters: chapters,
-                    paginate: 'profile',
-                    addChapterAllowed: false,
-                    scripts: scripts,
-                    queue: queue
-                });
-            })
-            .then(function(err){
-                if(err){
-                    console.log(err);
-                }
-            });
+    if(which == 'passage_load'){
+        Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, populate: 'chapter', sort: [['_id', -1]]})
+        .then(function(passages){
+            res.send(JSON.stringify(passages));
+        }).then(function(err){
+            if(err) console.log(err);
         });
+    }
+    else if(which == 'chapter_load' || which == 'chapter_load_mobile'){
+        Chapter.paginate(chapterFind, {page: page, limit: DOCS_PER_PAGE, sort: 'stars', select: 'title'})
+        .then(function(chapters){
+            res.send(JSON.stringify(chapters));
+        }).then(function(err){
+            if(err) console.log(err);
+        });
+    }
+});
+app.post('/add_to_queue', (req, res) =>{
+  var _id = req.body.passage.trim();
+  Passage.findOne({_id: _id}, function(err, passage){
+    //and add to queue
+    duplicatePassage(req, passage, req.body.chapter.trim());
+    // console.log(ret.content);
+    // res.send(scripts.printPassage(ret)); //send the passage back
+  });
+});
+app.post('/get_queue', (req, res) =>{
+  if(req.session.user){
+    var ret = '';
+    User.findOne({_id: req.session.user})
+    .select('queue')
+    .populate('queue')
+    .exec()
+    .then(function(user){
+      user.queue.forEach(function(q){
+        ret += scripts.printPassage(q);
+      });
+      res.send(ret);
+    });
+  }
+  else{
+    res.send('Must be logged in.');
+  }
+});
+app.post(/\/create_queue_chapter\/?/, (req, res) => {
+    var user = req.session.user_id || null;
+    var passages = JSON.parse(req.body.passages);
+    chapterController.addChapter({
+        'title': req.body.title,
+        'author': user,
+        'callback': function(chapter){
+            for(var key in passages){
+                var parentPassage = passages[key].parentPassage || '';
+                //build metadata from separate arrays
+                var json = passages[key].metadata;
+                var canvas = json.canvas || false;
+                passageController.addPassage({
+                    'chapter': chapter._id,
+                    'content': passages[key].content,
+                    'author': user,
+                    // 'sourceAuthor': passage.user,
+                    // 'sourceChapter': passages[key].chapter,
+                    'canvas': canvas,
+                    'metadata': JSON.stringify(json),
+                    'callback': function(psg){
+                        // console.log(psg);
+                    },
+                    'parentPassage': parentPassage
+                });
+            }
+            res.send(scripts.printChapter(chapter));
+        }
     });
 });
+app.post(/\/add_passage\/?/, (req, res) => {
+    var chapterID = req.body.chapterID;
+    var type = req.body.type;
+    var user = req.session.user || null;
+    var content = req.body.passage || '';
+    var parentPassage = req.body.parentPassage || '';
+    var property_key = req.body['property_key[]'] || req.body.property_key;
+    var property_value = req.body['property_value[]'] || req.body.property_value;
+    var dataURL = req.body.dataURL || false;
+    //build metadata from separate arrays
+    var metadata = generateMetadata(property_key, property_value);
+    var json = metadata.json;
+    var canvas = metadata.canvas;
+    var categories = req.body.tags;
+    var uploadTitle = '';
+    //image from Canvas
+    if(dataURL){
+        uploadTitle = v4();
+        var data = dataURL.replace(/^data:image\/\w+;base64,/, "");
+        var buf = new Buffer(data, 'base64');
+        fs.writeFile('./dist/uploads/'+uploadTitle, buf);
+    }
+    //express-fileupload
+    if (!req.files || Object.keys(req.files).length === 0) {
+        //no files uploaded
+        // console.log("No files uploaded.");
+    }
+    else{
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+      let fileToUpload = req.files.file;
+      let mimetype = req.files.file.mimetype;
+      uploadTitle = v4();
+      //first verify that mimetype is image
+      console.log(mimetype);
+      // Use the mv() method to place the file somewhere on your server
+      fileToUpload.mv('./dist/uploads/'+uploadTitle, function(err) {
+        if (err){
+            return res.status(500).send(err);
+        }
+      });
+    }
+    var passageCallback = function(data){
+        res.send(scripts.printPassage(data, req.session.user));
+    };
+    var chapterCallback = function(data){
+        res.send(scripts.printChapter(data));
+    };
+    if(type == 'passage'){
+        passageController.addPassage({
+            'chapter': chapterID,
+            'content': content,
+            'author': user,
+            'canvas': canvas,
+            'metadata': JSON.stringify(json),
+            'callback': passageCallback,
+            'parentPassage': parentPassage,
+            'filename': uploadTitle,
+            'categories': categories
+        });
+    }
+    else if(type == 'chapter' && content != ''){
+        chapterController.addChapter({
+            'title': content,
+            'author': user,
+            'callback': chapterCallback,
+            'categories': categories
+        });
+    }
+});
+
+app.post(/\/delete_passage\/?/, (req, res) => {
+    var backURL=req.header('Referer') || '/';
+    passageController.deletePassage(req, res, function(){
+        res.send(backURL);
+    });
+});
+app.post(/\/delete_category\/?/, (req, res) => {
+    var chapterID = req.body._id;
+    //delete chapter
+    //in the future consider also deleting all passages within this chapter
+    Chapter.deleteOne({_id: chapterID.trim()}, function(err){
+        if(err){
+            console.log(err);
+        }
+        res.send('Deleted.');
+    });
+});
+
+app.use('/passage', passageRoutes);
+app.post('/search/', (req, res) => {
+    let title = req.body.title;
+    Chapter.find({title: new RegExp(''+title+'', "i")})
+    .select('title flagged')
+    .sort('stars')
+    .limit(DOCS_PER_PAGE)
+    .exec(function(err, chapters){
+        let html = '';
+        if(chapters){
+            chapters.forEach(function(f){
+                html += scripts.printChapter(f);
+            });
+        }
+        res.send(html);
+    });
+});
+app.post('/search_category/', (req, res) => {
+    let title = req.body.title;
+    Passage.find({categories: new RegExp(''+title+'', "i") })
+    .sort('stars')
+    .limit(DOCS_PER_PAGE)
+    .exec(function(err, passages){
+        let html = '';
+        if(passages){
+            passages.forEach(function(p){
+                html += scripts.printPassage(p);
+            });
+        }
+        res.send(html);
+    });
+});
+app.post('/flag_passage', (req, res) => {
+    var _id = req.body._id.trim();
+    Passage.findOne({_id: _id}, function(err, passage){
+        passage.flagged = !passage.flagged;
+        passage.save();
+    });
+});
+app.post('/flag_chapter', (req, res) => {
+    var _id = req.body._id.trim();
+    Chapter.findOne({_id: _id}, function(err, chapter){
+        chapter.flagged = !chapter.flagged;
+        chapter.save();
+    });
+});
+app.post('/star/', (req, res) => {
+    if(req.session && req.session.user){
+        var user = req.session.user;
+       if(user.starsGiven < user.stars * 2){
+            user.starsGiven += 1;
+            var _id = req.body._id.trim();
+            Passage.findOne({_id: _id})
+            .populate('chapter author')
+            .exec(function(err, passage){
+                //can't star your own passages
+                if(passage.author._id != user._id){
+                    passage.stars += 1;
+                    if(passage.chapter != null){
+                        passage.chapter.stars += 1;
+                        passage.chapter.save();
+                    }
+                    if(passage.author != null){
+                        passage.author.stars += 1;
+                        passage.author.save();
+                    }
+                    passage.save();
+                    user.save();
+                    res.send('Done');
+                }
+            });
+        }
+        else{
+            res.send("You don't have enough stars to give!");
+        }
+    }
+});
+app.post('/star_chapter/', (req, res) => {
+    if(req.session && req.session.user){
+        var _id = req.body._id.trim();
+        var user = req.session.user;
+        Chapter.findOne({_id: _id})
+        .populate('author')
+        .exec(function(err, chapter){
+            if(user.starsGiven < user.stars * 2 && chapter.author._id != user._id){
+                user.starsGiven += 1;
+                chapter.stars += 1;
+                chapter.author.stars += 1;
+                chapter.save();
+                chapter.author.save();
+                user.save();
+                res.send('Done');
+            }
+            else{
+                res.send("You don't have enough stars to give!");
+            }
+        });
+    }
+});
+app.post('/update_chapter/', (req, res) => {
+    chapterController.updateChapter(req, res, function(){
+        res.send('Updated');
+    });
+});
+app.post('/update_chapter_order/', (req, res) => {
+    chapterController.updateChapterOrder(req, res, function(){
+        res.send('Updated');
+    });
+});
+app.post('/update_passage_content', (req, res) => {
+    passageController.updatePassageContent(req, res, function(){
+        res.send('Updated');
+    });
+});
+app.post('/add_sub_passage/', (req, res) => {
+    passageController.addSubPassage(req, res, function(){
+        var backURL=req.header('Referer') || '/';
+        res.redirect(backURL);
+    });
+});
+app.post('/update_passage/', (req, res) => {
+    var chapterID = req.body.chapterID;
+    var type = req.body.type;
+    var user = req.session.user || null;
+    var content = req.body.passage || '';
+    var parentPassage = req.body.parentPassage || '';
+    var property_key = req.body['property_key[]'] || req.body.property_key;
+    var property_value = req.body['property_value[]'] || req.body.property_value;
+    var dataURL = req.body.dataURL || false;
+    //build metadata from separate arrays
+    var metadata = generateMetadata(property_key, property_value);
+    var json = metadata.json;
+    var canvas = metadata.canvas;
+    var categories = req.body.tags;
+    passageController.updatePassage({
+        'id': req.body._id,
+        'content': content,
+        'canvas': canvas,
+        'categories': categories,
+        'metadata': JSON.stringify(json),
+        'callback': function(){
+            res.send('Updated');
+        }
+    });
+});
+app.get('/verify/:user_id/:token', function (req, res) {
+    var user_id = req.params.user_id;
+    var token = req.params.token;
+
+    User.findOne({'_id': user_id.trim()}, function (err, user) {
+        if (user.token == token) {
+            console.log('that token is correct! Verify the user');
+
+            User.findOneAndUpdate({'_id': user_id.trim()}, {'verified': true}, function (err, resp) {
+                console.log('The user has been verified!');
+            });
+
+            res.redirect('/login/');
+        } else {
+            console.log('The token is wrong! Reject the user. token should be: ' + user.verify_token);
+        }
+    });
+});
+//recordings
+app.get('/recordings', (req, res) => {
+  readdir(recordingFolder)
+    .then(messageFilenames => {
+      res.status(200).json({ messageFilenames });
+    })
+    .catch(err => {
+      console.log('Error reading message directory', err);
+      res.sendStatus(500);
+    });
+});
+
+app.post('/recordings', (req, res) => {
+  if (!req.body.recording) {
+    return res.status(400).json({ error: 'No req.body.message' });
+  }
+  const messageId = v4();
+  writeFile(recordingFolder + messageId, req.body.recording, 'base64')
+    .then(() => {
+        res.send(messageId);
+    })
+    .catch(err => {
+      console.log('Error writing message to file', err);
+      res.sendStatus(500);
+    });
+});
+
 /*
     ROUTERS FOR FILESTREAM
 */
@@ -501,148 +849,27 @@ app.post('/ppe', function(req, res) {
         res.send(ret);
     });
 });
-
-//simply return new object list for client to add into html
-app.post('/paginate', function(req, res){
-    let page = req.body.page;
-    let which = req.body.which; //chap or passage
-    let search = req.body.search;
-    //what category is the user looking at?
-    let chapter = req.body.chapter;
-    let find = {chapter: chapter.trim()};
-    if(chapter.trim() == 'Sasame'){
-        find = {};
-    }
-    if(search == ''){
-        var chapterFind = {};
-    }
-    else{
-        var chapterFind = {
-            title: new RegExp(''+search+'', "i")
-        };
-    }
-    if(which == 'passage_load'){
-        Passage.paginate(find, {page: page, limit: DOCS_PER_PAGE, populate: 'chapter', sort: [['_id', -1]]})
-        .then(function(passages){
-            res.send(JSON.stringify(passages));
-        }).then(function(err){
-            if(err) console.log(err);
-        });
-    }
-    else if(which == 'chapter_load' || which == 'chapter_load_mobile'){
-        Chapter.paginate(chapterFind, {page: page, limit: DOCS_PER_PAGE, sort: 'stars', select: 'title'})
-        .then(function(chapters){
-            res.send(JSON.stringify(chapters));
-        }).then(function(err){
-            if(err) console.log(err);
-        });
-    }
-});
-app.get('/friend', function(req, res){
-  res.render('friend');
-});
-//HOME/INDEX
-app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
-    //scripts.renderBookPage(req, res);
-    let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    let urlEnd = fullUrl.split('/')[fullUrl.split('/').length - 1];
-    let chapterTitle = fullUrl.split('/')[fullUrl.split('/').length - 2];
-    let golden = '';
-    let addPassageAllowed = true;
-    let addChapterAllowed = true;
-    var user = req.session.user || null;
-    if(user != null){
-      var queue = user.queue;
-    }
-    else{
-      var queue = [];
-    }
-    //home page
-    if(urlEnd == '' || urlEnd.length < 15){
-        Chapter.find({
-          flagged: false,
-        })
-        .sort([['stars', -1]])
-        .limit(DOCS_PER_PAGE)
-        .exec()
-        .then(function(chapters){
-            Passage.find({
-                parent: undefined,
-                deleted: false,
-                visible: true,
-                flagged: false,
-                queue: false
-            })
-            .populate('chapter author')
-            .sort([['_id', -1]])
-            .limit(DOCS_PER_PAGE)
-            .exec()
-            .then(function(passages){
-                res.render("index", {
-                    session: req.session,
-                    chapter: '',
-                    chapterTitle: 'Sasame',
-                    parentChapter: null,
-                    book: passages,
-                    chapters: chapters,
-                    addPassageAllowed: true,
-                    addChapterAllowed: false,
-                    scripts: scripts,
-                    queue: queue
-                });
-            })
-            .then(function(err){
-                if(err){
-                    console.log(err);
-                }
-            });
-        })
-        .then(function(err){
-            if(err){
-                console.log(err);
-            }
-        });
-    }
-    //category ID
-    else{
-        Chapter.findOne({_id:urlEnd})
-        .populate({
-            path: 'passages',
-            model: 'Passage',
-            populate: {
-                path: 'author',
-                model: 'User',
-            },
-            
-        })
-        .exec()
-        .then(function(chapter){
-            Chapter.find()
-            .select('title')
-            .sort([['stars', -1]])
-            .limit(DOCS_PER_PAGE)
-            .exec()
-            .then(function(chaps){
-                res.render("index", {
-                    session: req.session,
-                    parentChapter: chapter,
-                    chapter: urlEnd,
-                    book: chapter.passages,
-                    chapters: chaps,
-                    addPassageAllowed: addPassageAllowed,
-                    addChapterAllowed: addChapterAllowed,
-                    scripts: scripts,
-                    queue: queue
-                });
-            })
-        })
-        .then(function(err){
-            if(err){
-                console.log(err);
-            }
-        });
-    }
-});
+//FUNCTIONS
+//authenticate input against database
+function authenticateUser(email, password, callback) {
+  User.findOne({ email: email })
+    .exec(function (err, user) {
+      if (err) {
+        return callback(err)
+      } else if (!user) {
+        var err = new Error('User not found.');
+        err.status = 401;
+        return callback(err);
+      }
+      bcrypt.compare(password, user.password, function (err, result) {
+        if (result === true) {
+          return callback(err, user);
+        } else {
+          return callback(err);
+        }
+      })
+    });
+}
 function getPermissions(doc, user, type="passage"){
   //check if the user is the author
   var isAuthor = false;
@@ -703,33 +930,6 @@ function getPermissions(doc, user, type="passage"){
     });
   });
 }
-app.post('/add_to_queue', (req, res) =>{
-  var _id = req.body.passage.trim();
-  Passage.findOne({_id: _id}, function(err, passage){
-    //and add to queue
-    duplicatePassage(req, passage, req.body.chapter.trim());
-    // console.log(ret.content);
-    // res.send(scripts.printPassage(ret)); //send the passage back
-  });
-});
-app.post('/get_queue', (req, res) =>{
-  if(req.session.user){
-    var ret = '';
-    User.findOne({_id: req.session.user})
-    .select('queue')
-    .populate('queue')
-    .exec()
-    .then(function(user){
-      user.queue.forEach(function(q){
-        ret += scripts.printPassage(q);
-      });
-      res.send(ret);
-    });
-  }
-  else{
-    res.send('Must be logged in.');
-  }
-});
 //when they add a passage to queue, duplicate it and add the duplication
 function addToQueue(passage, user){
   User.findOne({_id: user}, function(err, theUser){
@@ -796,169 +996,6 @@ function generateMetadata(property_keys, property_values){
         json: metadata
     };
 }
-app.post(/\/create_queue_chapter\/?/, (req, res) => {
-    var user = req.session.user_id || null;
-    var passages = JSON.parse(req.body.passages);
-    chapterController.addChapter({
-        'title': req.body.title,
-        'author': user,
-        'callback': function(chapter){
-            for(var key in passages){
-                var parentPassage = passages[key].parentPassage || '';
-                //build metadata from separate arrays
-                var json = passages[key].metadata;
-                var canvas = json.canvas || false;
-                passageController.addPassage({
-                    'chapter': chapter._id,
-                    'content': passages[key].content,
-                    'author': user,
-                    // 'sourceAuthor': passage.user,
-                    // 'sourceChapter': passages[key].chapter,
-                    'canvas': canvas,
-                    'metadata': JSON.stringify(json),
-                    'callback': function(psg){
-                        // console.log(psg);
-                    },
-                    'parentPassage': parentPassage
-                });
-            }
-            res.send(scripts.printChapter(chapter));
-        }
-    });
-});
-app.post(/\/add_passage\/?/, (req, res) => {
-    var chapterID = req.body.chapterID;
-    var type = req.body.type;
-    var user = req.session.user || null;
-    var content = req.body.passage || '';
-    var parentPassage = req.body.parentPassage || '';
-    var property_key = req.body['property_key[]'] || req.body.property_key;
-    var property_value = req.body['property_value[]'] || req.body.property_value;
-    var dataURL = req.body.dataURL || false;
-    //build metadata from separate arrays
-    var metadata = generateMetadata(property_key, property_value);
-    var json = metadata.json;
-    var canvas = metadata.canvas;
-    var categories = req.body.tags;
-    var uploadTitle = '';
-    //image from Canvas
-    if(dataURL){
-        uploadTitle = v4();
-        var data = dataURL.replace(/^data:image\/\w+;base64,/, "");
-        var buf = new Buffer(data, 'base64');
-        fs.writeFile('./dist/uploads/'+uploadTitle, buf);
-    }
-    //express-fileupload
-    if (!req.files || Object.keys(req.files).length === 0) {
-        //no files uploaded
-        // console.log("No files uploaded.");
-    }
-    else{
-    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-      let fileToUpload = req.files.file;
-      let mimetype = req.files.file.mimetype;
-      uploadTitle = v4();
-      //first verify that mimetype is image
-      console.log(mimetype);
-      // Use the mv() method to place the file somewhere on your server
-      fileToUpload.mv('./dist/uploads/'+uploadTitle, function(err) {
-        if (err){
-            return res.status(500).send(err);
-        }
-      });
-    }
-    var passageCallback = function(data){
-        res.send(scripts.printPassage(data, req.session.user));
-    };
-    var chapterCallback = function(data){
-        res.send(scripts.printChapter(data));
-    };
-    if(type == 'passage'){
-        passageController.addPassage({
-            'chapter': chapterID,
-            'content': content,
-            'author': user,
-            'canvas': canvas,
-            'metadata': JSON.stringify(json),
-            'callback': passageCallback,
-            'parentPassage': parentPassage,
-            'filename': uploadTitle,
-            'categories': categories
-        });
-    }
-    else if(type == 'chapter' && content != ''){
-        chapterController.addChapter({
-            'title': content,
-            'author': user,
-            'callback': chapterCallback,
-            'categories': categories
-        });
-    }
-});
-app.post(/\/delete_passage\/?/, (req, res) => {
-    var backURL=req.header('Referer') || '/';
-    passageController.deletePassage(req, res, function(){
-        res.send(backURL);
-    });
-});
-app.post(/\/delete_category\/?/, (req, res) => {
-    var chapterID = req.body._id;
-    //delete chapter
-    //in the future consider also deleting all passages within this chapter
-    Chapter.deleteOne({_id: chapterID.trim()}, function(err){
-        if(err){
-            console.log(err);
-        }
-        res.send('Deleted.');
-    });
-});
-
-app.use('/passage', passageRoutes);
-app.post('/search/', (req, res) => {
-    let title = req.body.title;
-    Chapter.find({title: new RegExp(''+title+'', "i")})
-    .select('title flagged')
-    .sort('stars')
-    .limit(DOCS_PER_PAGE)
-    .exec(function(err, chapters){
-        let html = '';
-        if(chapters){
-            chapters.forEach(function(f){
-                html += scripts.printChapter(f);
-            });
-        }
-        res.send(html);
-    });
-});
-app.post('/search_category/', (req, res) => {
-    let title = req.body.title;
-    Passage.find({categories: new RegExp(''+title+'', "i") })
-    .sort('stars')
-    .limit(DOCS_PER_PAGE)
-    .exec(function(err, passages){
-        let html = '';
-        if(passages){
-            passages.forEach(function(p){
-                html += scripts.printPassage(p);
-            });
-        }
-        res.send(html);
-    });
-});
-app.post('/flag_passage', (req, res) => {
-    var _id = req.body._id.trim();
-    Passage.findOne({_id: _id}, function(err, passage){
-        passage.flagged = !passage.flagged;
-        passage.save();
-    });
-});
-app.post('/flag_chapter', (req, res) => {
-    var _id = req.body._id.trim();
-    Chapter.findOne({_id: _id}, function(err, chapter){
-        chapter.flagged = !chapter.flagged;
-        chapter.save();
-    });
-});
 function starCategories(categories){
     if(categories != ''){
         Category.find({title: new RegExp('^'+categories+'$', "i")})
@@ -970,106 +1007,43 @@ function starCategories(categories){
         });
     }
 }
-app.post('/star/', (req, res) => {
-    if(req.session && req.session.user){
-        var user = req.session.user;
-       if(user.starsGiven < user.stars * 2){
-            user.starsGiven += 1;
-            var _id = req.body._id.trim();
-            Passage.findOne({_id: _id})
-            .populate('chapter author')
-            .exec(function(err, passage){
-                //can't star your own passages
-                if(passage.author._id != user._id){
-                    passage.stars += 1;
-                    if(passage.chapter != null){
-                        passage.chapter.stars += 1;
-                        passage.chapter.save();
-                    }
-                    if(passage.author != null){
-                        passage.author.stars += 1;
-                        passage.author.save();
-                    }
-                    passage.save();
-                    user.save();
-                    res.send('Done');
-                }
-            });
-        }
-        else{
-            res.send("You don't have enough stars to give!");
-        }
-    }
-});
-app.post('/star_chapter/', (req, res) => {
-    if(req.session && req.session.user){
-        var _id = req.body._id.trim();
-        var user = req.session.user;
-        Chapter.findOne({_id: _id})
-        .populate('author')
-        .exec(function(err, chapter){
-            if(user.starsGiven < user.stars * 2 && chapter.author._id != user._id){
-                user.starsGiven += 1;
-                chapter.stars += 1;
-                chapter.author.stars += 1;
-                chapter.save();
-                chapter.author.save();
-                user.save();
-                res.send('Done');
-            }
-            else{
-                res.send("You don't have enough stars to give!");
-            }
-        });
-    }
-});
-app.post('/add_sub_passage/', (req, res) => {
-    passageController.addSubPassage(req, res, function(){
-        var backURL=req.header('Referer') || '/';
-        res.redirect(backURL);
+function sendEmail(to, subject, body){
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+      }
     });
-});
-app.post('/update_passage/', (req, res) => {
-    var chapterID = req.body.chapterID;
-    var type = req.body.type;
-    var user = req.session.user || null;
-    var content = req.body.passage || '';
-    var parentPassage = req.body.parentPassage || '';
-    var property_key = req.body['property_key[]'] || req.body.property_key;
-    var property_value = req.body['property_value[]'] || req.body.property_value;
-    var dataURL = req.body.dataURL || false;
-    //build metadata from separate arrays
-    var metadata = generateMetadata(property_key, property_value);
-    var json = metadata.json;
-    var canvas = metadata.canvas;
-    var categories = req.body.tags;
-    passageController.updatePassage({
-        'id': req.body._id,
-        'content': content,
-        'canvas': canvas,
-        'categories': categories,
-        'metadata': JSON.stringify(json),
-        'callback': function(){
-            res.send('Updated');
-        }
-    });
-});
-app.post('/update_chapter/', (req, res) => {
-    chapterController.updateChapter(req, res, function(){
-        res.send('Updated');
-    });
-});
-app.post('/update_chapter_order/', (req, res) => {
-    chapterController.updateChapterOrder(req, res, function(){
-        res.send('Updated');
-    });
-});
-app.post('/update_passage_content', (req, res) => {
-    passageController.updatePassageContent(req, res, function(){
-        res.send('Updated');
-    });
-});
 
+    var mailOptions = {
+      from: 'uriahrsanders@gmail.com',
+      to: to,
+      subject: subject,
+      text: body
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+}
+function requiresLogin(req, res, next) {
+  if (req.session && req.session.user) {
+    return next();
+  } else {
+    var err = new Error('You must be logged in to view this page.');
+    err.status = 401;
+    return next(err);
+  }
+}
+
+
+
+// CLOSING LOGIC
 var server = app.listen(PORT, () => {
     console.log(`Sasame started on Port ${PORT}`);
 });

@@ -361,6 +361,10 @@
 .add_passage_icons{
     color: inherit;
 }
+.queue_item > .CodeMirror{
+    height: 100px;
+}
+
 
 #toc{
     /* border: 1px solid #fff; */

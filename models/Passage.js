@@ -69,7 +69,7 @@ const passageSchema = mongoose.Schema({
     //is the passage in a queue? (invisible everywhere but to user queue)
     queue: {
         type: Boolean,
-        default: true
+        default: false
     },
 });
 var autoPopulateChildren = function(next) {
