@@ -59,14 +59,12 @@ function ppe(){
             case 'runMethods':
             //ex. animation, key handlers, game stuff
             elements.forEach(function(element){
-                element.methods.forEach(function(method){
-                    method(); //must be able to access element.properties
-                });
+                element.runMethods();
             });
             break;
-            case 'zDown':
+            case 'layerDown':
             break;
-            case 'zUp':
+            case 'layerUp':
             break;
             case 'erase':
             break;
@@ -460,6 +458,16 @@ function ppe(){
                 $('.graphic_mode').click()
             }
         }
+        //now that we've modified the element let's create an object for it,
+        //and string it together with all other elements until mouseup
+        //read passage from queue to determine properties and methods
+        // var element_properties = {};
+        // var element_methods = [];
+        // var passageInfo = {};
+        // switch(passageInfo.type){
+        //     //...
+        // }
+        // var element = new Element(element_properties, element_methods);
     });
 
     function getMousePos(canvas, evt) {
@@ -468,6 +476,27 @@ function ppe(){
             x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
             y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
         };
+    }
+    class Element{
+        constructor(properties, methods){
+            this.properties = properties;
+            //E.G.
+            // this.x;
+            // this.y;
+            // this.vx;
+            // this.vy;
+            // this.z;
+            // this.vz;
+            // this.text;
+            // this.color;
+            // this.font;
+            this.methods = methods;
+        }
+        runMethods(){
+            this.methods.forEach(function(method){
+                method(this);
+            });
+        }
     }
 }
 ppe();

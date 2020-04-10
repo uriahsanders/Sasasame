@@ -785,8 +785,7 @@ function readPassageMetadata(thiz){
                 $(document).on('keyup', '#file_input_'+_id+'', function(e){
                     //get filecontents from database
                     thiz.parent().children('.passage_file').remove();
-                    if(e.keyCode == 13){
-                        $.ajax({
+                    $.ajax({
                         type: 'post',
                         url: '/file',
                         data: {
@@ -831,7 +830,6 @@ function readPassageMetadata(thiz){
                             }
                         }
                     });
-                    }
                 });
                 break;
                 case 'Class':
