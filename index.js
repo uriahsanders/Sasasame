@@ -153,12 +153,6 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
     let addPassageAllowed = true;
     let addChapterAllowed = true;
     var user = req.session.user || null;
-    if(user != null){
-      var queue = user.queue;
-    }
-    else{
-      var queue = [];
-    }
     //home page
     //get all level 1 chapters (explicit)
     User.findOne({_id: user_id.trim()})
@@ -169,7 +163,8 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
         .then(function(chapters){
             Passage.find({
               author: mongoose.Types.ObjectId(user_id),
-              deleted: false
+              deleted: false,
+              queue: false
             })
             .populate('author')
             .sort([['_id', -1]])
@@ -188,7 +183,6 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
                     paginate: 'profile',
                     addChapterAllowed: false,
                     scripts: scripts,
-                    queue: queue
                 });
             })
             .then(function(err){
@@ -212,12 +206,6 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     let addPassageAllowed = true;
     let addChapterAllowed = true;
     var user = req.session.user || null;
-    if(user != null){
-      var queue = user.queue;
-    }
-    else{
-      var queue = [];
-    }
     //home page
     if(urlEnd == '' || urlEnd.length < 15){
         Chapter.find({
@@ -249,7 +237,6 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
                     addPassageAllowed: true,
                     addChapterAllowed: false,
                     scripts: scripts,
-                    queue: queue
                 });
             })
             .then(function(err){
@@ -293,7 +280,6 @@ app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
                     addPassageAllowed: addPassageAllowed,
                     addChapterAllowed: addChapterAllowed,
                     scripts: scripts,
-                    queue: queue
                 });
             })
         })
@@ -402,9 +388,36 @@ app.post('/add_to_queue', (req, res) =>{
   var _id = req.body.passage.trim();
   Passage.findOne({_id: _id}, function(err, passage){
     //and add to queue
-    duplicatePassage(req, passage, req.body.chapter.trim());
+    duplicatePassage(req, passage);
     // console.log(ret.content);
     // res.send(scripts.printPassage(ret)); //send the passage back
+  });
+});
+app.post('/add_from_queue', (req, res) =>{
+  var _id = req.body.passageID.trim();
+  var chapterID = req.body.chapterID.trim();
+  Chapter.findOne({_id: chapterID}, function(err, chapter){
+    Passage.findOne({_id: _id})
+    .populate('author')
+    .exec()
+    .then(function(passage){
+      //remove from authors queue
+      passage.author.queue = passage.author.queue.filter(e => e !== passage._id);
+      //no longer in queue
+      passage.queue = false;
+      //remove from old chapter (shouldn't be an old chapter)
+      // passage.chapter.passages = passage.chapter.passages.filter(e => e !== passage._id);
+      // passage.chapter.save();
+      //add to new chapter
+      chapter.passages.push(passage);
+      //change chapter location
+      passage.chapter = chapter;
+      //then save all
+      passage.author.save();
+      passage.save();
+      chapter.save();
+      res.send('Done');
+    });
   });
 });
 app.post('/get_queue', (req, res) =>{
@@ -416,7 +429,9 @@ app.post('/get_queue', (req, res) =>{
     .exec()
     .then(function(user){
       user.queue.forEach(function(q){
-        ret += scripts.printPassage(q);
+        if(!q.deleted){
+          ret += scripts.printPassage(q);
+        }
       });
       res.send(ret);
     });
@@ -944,7 +959,7 @@ function addToQueue(passage, user){
 }
 //Duplications keeps everything the same and stores a reference to the original
 //Duplicating a passage should also give it a free star, but it also adds to users 'stars given'
-function duplicatePassage(req, passage, location, parent=null){
+function duplicatePassage(req, passage, location=null, parent=null){
   Passage.create({
       author: req.session.user,
       chapter: location == '' ? null : location,

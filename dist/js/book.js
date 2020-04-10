@@ -1325,6 +1325,17 @@ $(document).on('click', '.add_from_queue', function(){
     $('#'+id).children('.add_from_queue').hide();
     readUnreadMetadata();
     //send ajax request to change the location of the passage in the queue
+    $.ajax({
+        type: 'post',
+        url: '/add_from_queue',
+        data: {
+            chapterID: $('#parent_chapter_id').val(),
+            passageID: id
+        },
+        success: function(data){
+            alert(data);
+        }
+    });
 });
 function updateBrief(){
     $('#right_passages').html($('#passages').html());
