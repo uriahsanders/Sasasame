@@ -284,7 +284,6 @@ $('.codeform_update').on('submit', function(e){
        enctype: 'multipart/form-data',
        processData: false,
         success: function(data){
-            // alert('Updated!');
             window.location.reload();
         }
     });

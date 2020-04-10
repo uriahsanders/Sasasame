@@ -10,8 +10,17 @@ function ppe(){
     var queuePos = 0;
     var masterScale = 1;
     var masterRotate = 0;
-    var isDrawing = false
-
+    var isDrawing = false;
+    var isErasing = false;
+    var fadeCounter = 0;
+    var hardOpacity = false;
+    var opacity = 1;
+    function fadeOut(){
+        // if(++fadeCounter % 10 == 0){
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // }
+    }
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
     function drawImage(image, x, y, delv){
@@ -28,6 +37,7 @@ function ppe(){
         if($('#ppe_select').data('select') == 'off' && isDrawing){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
             // var imageContext = image.getContext('2d');
+            // fadeOut();
             drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
             // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
             drawCursor();
@@ -38,6 +48,9 @@ function ppe(){
         posx = pos.x;
         posy = pos.y;
         drawSelect();
+        if(isErasing){
+            ctx.clearRect(posx, posy, 100*masterScale, 100*masterScale);
+        }
     }
     function drawSelect(){
         cursorctx.fillStyle = "#000000";
@@ -45,6 +58,21 @@ function ppe(){
         cursorctx.beginPath();
         cursorctx.rect(posx, posy, 100*masterScale, 100*masterScale);
         cursorctx.stroke();
+    }
+    // Returns an random integer, positive or negative
+    // between the given value
+    function randInt(min, max, positive) {
+
+      let num;
+      if (positive === false) {
+        num = Math.floor(Math.random() * max) - min;
+        num *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
+      } else {
+        num = Math.floor(Math.random() * max) + min;
+      }
+
+      return num;
+
     }
     $(document).on('click', '#ppe_mutate', function(){
         var mutationCanvas = $('#ppe_mutation')[0];
@@ -91,9 +119,12 @@ function ppe(){
         for (var i = 1; i <= sideNumb; i += 1) {
             mutationctx.lineTo (xCenter +  sideLen * Math.cos(rotation + (i * 2 * Math.PI / sideNumb)), yCenter +  sideLen *  Math.sin(rotation + (i * 2 * Math.PI / sideNumb)));
         }
-        var color1 = '#' + share.mutate('0A1B2C3D4E5F6789', '').substring(0,6);
-        var color2 = '#' + share.mutate('0A1B2C3D4E5F6789', '').substring(0,6);
-        mutationctx.strokeStyle = color1;
+        var color2 = 'rgba('+randInt(0,255)+
+        ','+randInt(0,255)+
+        ','+randInt(0,255)+
+        ','+opacity+
+        ')';
+        // mutationctx.strokeStyle = color1;
         mutationctx.fillStyle = color2;
         var lineWidth = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
         if(isNaN(lineWidth)){
@@ -116,6 +147,7 @@ function ppe(){
         cursorctx.beginPath();
         cursorctx.arc(posx, posy, image.width/2*masterScale, 0, 2 * Math.PI);
         cursorctx.stroke();
+        cursorctx.globalAlpha = opacity;
         //Also need to star the related passage
         drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx);
 
@@ -123,10 +155,10 @@ function ppe(){
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+            ctx.globalAlpha = opacity;
             // var imageContext = image.getContext('2d');
             drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
             // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
-            masterScale = 1;
             drawCursor();
         }
         else{
@@ -210,9 +242,11 @@ function ppe(){
     cursor.addEventListener('mousemove', draw, 0);
     cursor.addEventListener('mousedown', function(){
         isDrawing = true;
+        isErasing = true;
     }, 0);
     cursor.addEventListener('mouseup', function(){
         isDrawing = false;
+        isErasing = false;
     }, 0);
     $(document).on('keydown', function(e){
         if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
@@ -247,27 +281,27 @@ function ppe(){
                 // cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
             }
             //Search on space
-            else if(e.keyCode == 32){
-                jqueryToggle($(this), function(){
-                    $('#ppe_search_modal').show();
-                    $('#ppe_queue').show();
-                    $('#ppe_search').focus();
-                    $('#ppe_search').select();
-                }, function(){
-                    $.ajax({
-                        type: 'post',
-                        url: '/ppe_search',
-                        data: {
-                            search: $('#ppe_search').val()
-                        },
-                        success: function(data){
-                            $('#ppe_queue').append(data);
-                            $('#ppe_search_modal').hide();
-                        }
-                    });
-                }, 'ppe_search');
+            // else if(e.keyCode == 32){
+            //     jqueryToggle($(this), function(){
+            //         $('#ppe_search_modal').show();
+            //         $('#ppe_queue').show();
+            //         $('#ppe_search').focus();
+            //         $('#ppe_search').select();
+            //     }, function(){
+            //         $.ajax({
+            //             type: 'post',
+            //             url: '/ppe_search',
+            //             data: {
+            //                 search: $('#ppe_search').val()
+            //             },
+            //             success: function(data){
+            //                 $('#ppe_queue').append(data);
+            //                 $('#ppe_search_modal').hide();
+            //             }
+            //         });
+            //     }, 'ppe_search');
                 
-            }
+            // }
             //Create passage on space
             // else if(e.keyCode == 32){
             //     jqueryToggle($(this), function(){
@@ -298,6 +332,18 @@ function ppe(){
                 $('#ppe_mutate').click();
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
                 $('#ppe_queue').children().eq(0).addClass('ppe_queue_selected');
+                drawCursor();
+            }
+            //o for toggle opacity
+            else if(e.keyCode == 79){
+                if(e.shiftKey && opacity > 0){
+                    opacity -= 0.1;
+                }
+                else{
+                    if(opacity < 1){
+                        opacity += 0.1;
+                    }
+                }
                 drawCursor();
             }
             //e for erase
@@ -343,6 +389,10 @@ function ppe(){
                 masterRotate = 0;
                 masterScale = 1;
                 drawCursor();
+            }
+            //f for fade
+            else if(e.keyCode == 70){
+                fadeOut();
             }
             //b for book mode
             else if(e.keyCode == 66){
