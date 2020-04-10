@@ -120,14 +120,7 @@ function ppe(){
         var mutationCanvas = $('#ppe_mutation')[0];
         var mutationctx = mutationCanvas.getContext('2d');
         mutationctx.clearRect(0, 0, mutationCanvas.width, mutationCanvas.height);
-        var size = parseInt(share.mutate(
-            (Math.floor(Math.random() * 9) + 1) + ''
-            +
-            (Math.floor(Math.random() * 9) + 1) + ''
-            , ''), 10);
-        if(isNaN(size) || size < 10){
-            size = 10;
-        }
+        var size = 50;
         var sideNumb = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
         if(isNaN(sideNumb)){
             sideNumb = 0;
