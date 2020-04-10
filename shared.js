@@ -216,9 +216,11 @@
              ret += `</div>
              <input class="parentPassage"name="parentPassage" type="hidden" value="`+(passage.parentPassage || '')+`"/>
             <input type="hidden" class="original_passage_content" value="`+escapeHTML(passage.content)+`"/>
-                <div class="passage_chapter">Sasame</div>
-            <div id="passage_content_`+passage._id+`"class="passage_content">`+ escapeHTML(passage.content)+`</div>
-            <canvas class="passage_canvas"></canvas>`;
+                <div class="passage_chapter">Sasame</div>`;
+            if(passage.content.length > 0){
+              ret += `<div id="passage_content_`+passage._id+`"class="passage_content">`+ escapeHTML(passage.content)+`</div>`;
+            }
+            ret += `<canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;
             }

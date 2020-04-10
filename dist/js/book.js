@@ -879,8 +879,10 @@ function readPassageMetadata(thiz){
                    //
                 }
                 else{
-                    thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-js">'+escapeHtml(content)+'</code></pre>');
-                    hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                    if(content.length > 0){
+                        thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-js">'+escapeHtml(content)+'</code></pre>');
+                        hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
+                    }
                 }
                 $('#custom_pairs').val(JSON.stringify(storage));
                 thiz.siblings('.proteins').children('.passage_play').show();
