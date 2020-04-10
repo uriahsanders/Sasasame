@@ -628,6 +628,9 @@
     margin: auto;
     display: block;
 }
+.ppe_queue_canvas{
+    max-height: 300px;
+}
 select {
   width: 150px;
   padding: 5px 35px 5px 5px;

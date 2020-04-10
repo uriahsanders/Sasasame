@@ -25,13 +25,17 @@ function ppe(){
     }
     // var image = $('#ppe_queue').find(">:first-child")[0];
     // var imageContext = image.getContext('2d');
-    function drawImage(image, x, y, delv, setOpacity){
-        if(opacity > 0){
-            delv.globalAlpha = setOpacity || opacity;
-        }
+    function drawImage(image, x, y, delv, realImage=false){
+        delv.globalAlpha = opacity;
         delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
         delv.rotate(masterRotate*(Math.PI/180));
-        delv.drawImage(image, -image.width / 2, -image.height / 2);
+        if(realImage && image.width > 300){
+            var adjustedHeight = 300 * (image.height/image.width);
+            delv.drawImage(image, -300 / 2, -adjustedHeight / 2, 300, adjustedHeight);
+        }
+        else{
+            delv.drawImage(image, -image.width / 2, -image.height / 2);
+        }
         delv.setTransform(1,0,0,1,0,0);
     } 
     function draw(e) {
@@ -145,7 +149,9 @@ function ppe(){
     });
     function drawCursor(){
         //Queue Item
+        $('#ppe_queue').find(".ppe_queue_selected").show();
         var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+        var isRealImage = image instanceof HTMLImageElement ? true : false;
         // var imageContext = image.getContext('2d');
         //Cursor
         cursorctx.globalAlpha = 1;
@@ -155,15 +161,14 @@ function ppe(){
         cursorctx.arc(posx, posy, image.width/2*masterScale, 0, 2 * Math.PI);
         cursorctx.stroke();
         //Also need to star the related passage
-        drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx);
+        drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx, isRealImage);
 
     }
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
-            // var imageContext = image.getContext('2d');
-            drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
-            // ctx.drawImage(image, (posx - image.width/2*scale), (posy - image.height/2*scale), image.width*scale, image.height*scale);
+            var isRealImage = image instanceof HTMLImageElement ? true : false;
+            drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx, isRealImage);
             drawCursor();
         }
         else{
@@ -274,7 +279,7 @@ function ppe(){
                     queuePos = $('#ppe_queue').children().length;
                 }
                 $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
- 
+
                 // Clear and redraw cursor with new item
                 // cursorctx.fillStyle = "#000000";
                 cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
