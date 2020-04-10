@@ -432,6 +432,7 @@ $(document).on('click', '.editor_option', function(){
         textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+info+'</textarea>');
         break;
         case 'Rich':
+        textarea.siblings('.CodeMirror').remove();
         textarea.replaceWith('<div class="add_passage_textarea">'+info+'</div>');
         textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
         if(textarea.length == 0){
