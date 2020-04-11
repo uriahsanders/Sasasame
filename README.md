@@ -1,6 +1,6 @@
 ## Never do anything twice
 
-Sasame is a versatile, modular, and merit-based Modern Library for worldwide collaboration. 
+Sasame is a versatile, modular, and merit-based Modern Library for worldwide collaboration. Sasame is incomplete and under active development; this README outlines the vision for the final product. 
                           
 
 Sasame is fresh, open-source and always improving. Help out by adding, categorizing, and starring useful information. Sasame keeps track of who did what, so you can use little pieces of everyone's work in your own. Share what you want to share, and gain reputation and rewards everytime someone duplicates your work or finds it useful.
@@ -69,6 +69,11 @@ Furthermore, you can conveniently take advantage of work being done by open orga
 ### Art
 
 Create and share brushes, characters, and more with other artists. The more other artists use your work in their compositions, the higher your reputation and the more flow you get to your original pieces.
+
+### Data Science, Bioinformations, Translation, Modeling
+
+As a library, Sasame is essentially a database that is constantly growing and being categorized. Modules can easily be incorporated into any data analysis project via a robust API. Passages can also have alternates for different languages, essentially building a one-for-one translation database with translations ranked by usefulness.
+
 
 ### Personal
 
