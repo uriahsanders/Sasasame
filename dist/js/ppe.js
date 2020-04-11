@@ -299,6 +299,11 @@ function ppe(){
         isDrawing = false;
         isErasing = false;
     }, 0);
+    $(document).on('click', '#ppe_search_icon', function(){
+        $('#side_panel').toggle();
+        $('#right_side_select').val('passages').change();
+        $(this).toggleClass('gold');
+    });
     $(document).on('keydown', function(e){
         if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
             if(e.keyCode == 80 || e.keyCode == 78){
@@ -356,8 +361,7 @@ function ppe(){
             // Open menu on space
             else if(e.keyCode == 32){
                 e.preventDefault();
-                $('#option_menu').click();
-                $('#right_side_select').val('passages').change();
+                $('#ppe_search_icon').click();
             }
             //m for mutate
             else if(e.keyCode == 77){
