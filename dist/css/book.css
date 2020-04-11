@@ -143,7 +143,13 @@
 }
 .profile_image{
     font-size: 2em;
+    float: left;
+    margin-right: 10px;
     /*color: #353535;*/
+}
+.profile_author{
+    padding-top: 2px;
+    display: block;
 }
 #side_panel_body{
     width: 90%;
@@ -233,15 +239,13 @@
 }
 .passage{
     /* border-bottom: 1px dotted grey; */
-    /*padding-top: 12px;*/
-    padding-bottom: 32px;
     text-align: left;
     /*line-height: 30px;*/
     font-size: 1.2em;
     background: #353535;
     color: #ccc;
     margin-bottom: 10px;
-    padding: 20px;
+    padding: 15px;
     /*not for mobile*/
     display: block;
     /*resize: both;*/
@@ -328,6 +332,7 @@
 .passage_label{
     text-align: center;
     font-weight: bold;
+    margin-top: 10px;
     /*display: none;*/
 }
 .passage_content{
@@ -778,7 +783,7 @@ select::-ms-expand {
     margin-top: 5px;
 }
 .proteins{
-    font-size: 0.6em;
+    font-size: 0.8em;
     text-align: left;
 }
 .canvas_proteins{
