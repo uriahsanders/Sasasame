@@ -1,7 +1,7 @@
-// if(!sessionStorage.alerted){
+if(!sessionStorage.alerted){
     $('#dev_modal').modal();
-    // sessionStorage.alerted = true;
-// }
+    sessionStorage.alerted = true;
+}
 
 //setup the Console
 CodeMirror.fromTextArea(document.getElementById('console'), {
