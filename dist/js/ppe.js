@@ -214,7 +214,6 @@ function ppe(){
                     var littlectx = little.getContext('2d');
                     var data = ctx.getImageData(posx, posy, baseSize*masterScale, baseSize*masterScale);
                     littlectx.putImageData(data, 0, 0);
-                masterScale = 1;
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
                 queuePos = $('#ppe_queue').children().length - 1;
                 $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
@@ -290,6 +289,7 @@ function ppe(){
         isErasing = false;
     }, 0);
     $(document).on('keydown', function(e){
+        e.preventDefault();
         if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
             if(e.keyCode == 80 || e.keyCode == 78){
                 //p for previous
@@ -343,27 +343,10 @@ function ppe(){
             //     }, 'ppe_search');
                 
             // }
-            //Create passage on space
-            // else if(e.keyCode == 32){
-            //     jqueryToggle($(this), function(){
-            //         $('#ppe_create_modal').show();
-            //         $('#ppe_create').focus();
-            //         $('#ppe_create').select();
-            //     }, function(){
-            //         $.ajax({
-            //             type: 'post',
-            //             url: '/ppe_create',
-            //             data: {
-            //                 title: $('#ppe_search').val()
-            //             },
-            //             success: function(data){
-            //                 $('#ppe_queue').append(data);
-            //                 $('#ppe_search_modal').hide();
-            //             }
-            //         });
-            //     }, 'ppe_search');
-                
-            // }
+            // Open menu on space
+            else if(e.keyCode == 32){
+                $('#option_menu').click();
+            }
             //m for mutate
             else if(e.keyCode == 77){
                 if($('#ppe_select').data('select') == 'on'){
@@ -408,7 +391,6 @@ function ppe(){
             }
             //q for select
             else if(e.keyCode == 81){
-                masterScale = 1;
                 $('#ppe_select').click();
             }
             //s for scale
