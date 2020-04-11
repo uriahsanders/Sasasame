@@ -219,7 +219,7 @@ function ppe(){
                     littlectx.putImageData(data, 0, 0);
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
                 queuePos = $('#ppe_queue').children().length - 1;
-                $('#ppe_queue').children().eq(queuePos).children('.ppe_queue_canvas').addClass('ppe_queue_selected');
+                $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
                 $('#ppe_select').click();
                 var dataURL = little.toDataURL();
                 $('#code').modal();
@@ -227,6 +227,8 @@ function ppe(){
                 $('.property_key').val('Canvas');
                 $('.property_value').val('Image');
                 $('.dataURL').val(dataURL);
+                cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
+                drawCursor();
                 //Now add the passage to database
                 // $.ajax({
                 //     type: 'post',

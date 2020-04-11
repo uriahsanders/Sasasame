@@ -1221,6 +1221,14 @@ $('.sun_icon').on('click', function(){
 $('.flag_icon').on('click', function(){
     $(this).toggleClass('flagged');
 });
+$(document).on('click', '.passage_details_icon', function(){
+    $('#edit_div').html($('#modal_'+$(this).attr('id').split('_')[2]).html());
+    $('#right_side_select').val('edit').change();
+    $('#side_panel').show();
+});
+$(document).on('click', '.view_details', function(){
+    $(this).next().slideToggle();
+});
 $('.graphic_mode').on('click', function(){
     var thiz = $(this);
     jqueryToggle($(this), function(){
@@ -1387,8 +1395,9 @@ $('#right_side_select').on('change', function(){
         case 'leaderboard':
             $('#leaderboard_div').show();
             break;
-        case 'passages':
-            $('#queue').show();
+            break;
+        case 'help':
+            $('#help_div').show();
             break;
     }
 });

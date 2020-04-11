@@ -757,9 +757,20 @@ select::-ms-expand {
     margin-top: 25px;
     opacity: 0.6;
 }
+.view_details{
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #ccc;
+}
+.view_details:hover{
+    opacity: 1;
+    color: #fff;
+}
 .passage_details{
     margin-bottom: 10px;
     padding: 5px;
+    display: none;
+    border: 1px solid #000;
 }
 .passage_details p{
     font-size: 0.8em;

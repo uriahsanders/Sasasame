@@ -98,6 +98,9 @@
         <option>ID</option>
         <option>Donate</option>
         <option>File</option>
+        <!--Link to source else reference
+        If there is also a passage source it will display alongside-->
+        <option>Source</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>
@@ -167,16 +170,17 @@
             }
             ret += '</div>';
             ret += `<div id="modal_`+passage._id+`" class="modal">
-                <p class="modal_title">Passage Options</p>
+                <div class="view_details">View Details</div>
                 <div class="passage_details">`;
                     //date.toDateString() in future
-                    ret += `<p>Created: `+passage.date+`</p>`;
+                    ret += `<p>Created: `+passage.date.toString().split(' ').splice(0,4).join(' ')+`</p>`;
                     if(passage.author){
                         ret += `<p>By: `+passage.author.username+` </p>`;
                     }else{
                         ret += `<p>By: Anonymous</p>`;
                     }
-                    ret += `<p>`+(passage.stars || 0 )+` Stars </p>`;
+                    var stars = passage.stars || 0;
+                    ret += `<p>`+stars+` Star`+(stars == 1 ? '' : 's')+`</p>`;
                     var chapterID = '';
                     if(passage.chapter && passage.chapter.title){
                       chapterID = passage.chapter._id;
@@ -199,7 +203,7 @@
             </div>
             </div>
              <div class="proteins">
-             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+             <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
              `;
              if(user){
                 ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
@@ -278,7 +282,7 @@
               <div class="passage_id">`+passage._id+`</div>
             </div>
              <div class="canvas_proteins">
-             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+             <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
              `;
              if(user){
                 ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
