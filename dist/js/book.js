@@ -287,6 +287,7 @@ $(document).on('submit', '.codeform_update', function(e){
         success: function(data){
             //replace with updated doc in DOM
             $('#'+formdata.get('_id')).replaceWith(data);
+            readUnreadMetadata();
         }
     });
 });
@@ -518,7 +519,7 @@ function readPassageMetadata(thiz){
     var _id = thiz.attr('id').split('_')[2];
     metadata = JSON.parse(metadata);
     var content = thiz.siblings('.passage_content').text();
-    thiz.siblings('.proteins').children('.passage_play').hide();
+    thiz.siblings('.passage_author').children('.proteins').children('.passage_play').hide();
     var autoplay = false;
     function escapeHtml(unsafe) {
         return unsafe
@@ -559,7 +560,7 @@ function readPassageMetadata(thiz){
             }
             function autoPlay(autoplay, thiz, canvas=false){
                 if((autoplay == true && !Sasame) || (autoplay == true && canvas)){
-                    thiz.siblings('.proteins').children('.passage_play').click();
+                    thiz.siblings('.passage_author').children('.proteins').children('.passage_play').click();
                     autoplay = false;
                 }
             }
@@ -665,8 +666,8 @@ function readPassageMetadata(thiz){
 
                     });
                 }
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     jqueryToggle(thiz, function(){
                         thiz.siblings('.passage_content').hide();
                         thiz.siblings('.ql-toolbar').hide();
@@ -685,8 +686,8 @@ function readPassageMetadata(thiz){
                     thiz.siblings('.passage_content').html('<pre id="hljs_block_'+_id+'"><code class="language-css">'+content+'</code></pre>');
                     hljs.highlightBlock($('#hljs_block_'+_id+ ' code')[0]);
                 }
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     // jqueryToggle(thiz, function(){
                         if(codemirror){
                             try{
@@ -711,8 +712,8 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.passage_content').css('text-align', value);
                 break;
                 case 'Donate':
-                thiz.siblings('.proteins').children('.passage_donate').show();
-                thiz.siblings('.proteins').children('.passage_donate').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_donate').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_donate').on('click', function(){
                     window.open(value, '_blank');
                 });
                 break;
@@ -729,8 +730,8 @@ function readPassageMetadata(thiz){
                 var html = text;
                 // thiz.siblings('.passage_content').text(html);
                 //syntax highlight
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     jqueryToggle(thiz, function(){
                         if(codemirror){
                             try{
@@ -833,8 +834,8 @@ function readPassageMetadata(thiz){
                 thiz.siblings('.passage_author').hide();
                 break;
                 case 'Audio':
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                 $(this).parent().siblings('.passage_audio').attr('src', '/recordings/'+value);
                 $(this).parent().siblings('.passage_audio').show();
                 $(this).parent().siblings('.passage_audio')[0].loop = true;
@@ -848,8 +849,8 @@ function readPassageMetadata(thiz){
                 if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
                     codemirror = true;
                 }
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     jqueryToggle(thiz, function(){
                         if(codemirror){
                         try{
@@ -876,15 +877,16 @@ function readPassageMetadata(thiz){
                 });
                 break;
                 case 'Tone':
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     playTone(content, 0);   
                 });
                 autoPlay(autoplay, thiz);
                 break;
                 case 'Markdown':
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
+                    // alert('test');
                     jqueryToggle(thiz, function(){
                         thiz.siblings('.passage_content').html(marked(thiz.siblings('.passage_content').text()));
                         thiz.siblings('.passage_content').css('white-space', 'initial');
@@ -954,8 +956,8 @@ function readPassageMetadata(thiz){
                     }
                 }
                 $('#custom_pairs').val(JSON.stringify(storage));
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
                         try{
                             editor = thiz.siblings('.passage_content').next('.CodeMirror').get(0).CodeMirror;
@@ -975,8 +977,8 @@ function readPassageMetadata(thiz){
                 autoPlay(autoplay, thiz, isCanvasKey);
                 break;
                 case 'Custom':
-                thiz.siblings('.proteins').children('.passage_play').show();
-                thiz.siblings('.proteins').children('.passage_play').on('click', function(){
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     //read all value/content pairs from DOM as
                     var storage = $('#custom_pairs').val();
                     if(storage !== ''){
@@ -1050,8 +1052,8 @@ $(document).on('click', '[id^=star_]', function(){
         }
     });
 });
-$(document).on('click', '.passage_author', function(){
-    if($(e.target).is('.passage_label') || $(e.target).is('.proteins')){
+$(document).on('click', '.passage_author', function(e){
+    if($(e.target).hasClass('passage_label') || $(e.target).is('ion-icon')){
         return;
     }
     if($(this).siblings('.passage_content').next('.CodeMirror').length){
