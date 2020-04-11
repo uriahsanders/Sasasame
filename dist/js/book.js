@@ -1524,7 +1524,12 @@ $(document).on('click', '.file_update', function(){
         }
     });
 });
-
+$('.help_read_more').on('click', function(){
+    $('#right_side_select').val('help').change();
+    $('#side_panel').show();
+    $('.blocker').click();
+    $('#side_panel').scrollTop(0);
+});
 $('.toggle_resize').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $(this).css('color', 'white');

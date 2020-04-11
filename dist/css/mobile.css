@@ -13,7 +13,10 @@
         padding: 0;
         margin-bottom: 10px;
     }
-
+    .proteins{
+        font-size: 1.2em;
+        padding-top: 10px;
+    }
     .nav_li{
         /* display: block; */
         list-style-type: none;

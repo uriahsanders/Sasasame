@@ -170,7 +170,7 @@
     font-size: 2em;
     float: right;
 }
-#right_passages{
+#right_passages, #cats{
     background: #fff;
     padding: 10px;
 }
@@ -254,7 +254,13 @@
     height: 200px;*/
     /*font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
-    width: 96%;
+    /*width: 96%;*/
+}
+.help_modal{
+    font-size: 1.3em;
+}
+.help_read_more{
+    font-size: 0.8em;
 }
 .passage_donate{
     display: none;
