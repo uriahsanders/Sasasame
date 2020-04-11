@@ -1,3 +1,8 @@
+// if(!sessionStorage.alerted){
+    $('#dev_modal').modal();
+    // sessionStorage.alerted = true;
+// }
+
 //setup the Console
 CodeMirror.fromTextArea(document.getElementById('console'), {
     extraKeys: {

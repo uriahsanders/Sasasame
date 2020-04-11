@@ -44,7 +44,7 @@ Let's make our dreams a reality!
 
 In the future, Sasame can be used to ensure that every bit of scientific data is added to the pool, even if a useful place for it needs to be found later.
 
-Data presentation and formatting can also be automated via modular templates. For example, diagrams can be reused by other scientists while still pointing to the original author and giving them credit.
+Data presentation and formatting can also be automated via modular templates. For example, diagrams and parts of protocols can be reused by other scientists while still pointing to the original author and giving them credit.
 
 Engineers can use Sasame to find and share pieces of code, designs, and descriptions.
 
@@ -69,6 +69,8 @@ Furthermore, you can conveniently take advantage of work being done by open orga
 ### Personal
 
 You can use Sasame to keep track of all your thoughts and ideas, and stitch them together when you find a useful place for them. Take notes and share them, perhaps they can become a small part of someone else's larger project.
+
+In the future, Sasame will be a desktop and phone application that can be used to modularize personal data and share/recieve at will.
 
 Study on Sasame, create on Sasame, debate on Sasame.
 
