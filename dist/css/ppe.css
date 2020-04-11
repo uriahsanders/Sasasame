@@ -19,9 +19,18 @@
 	height: 300px;
 	overflow: scroll;
 	max-width: initial;*/
+	display: none;
 }
 .ppe_queue_canvas{
 	width: 50px;
+	border: 1px solid #000;
+	background: #fff;
+}
+.ppe_canvas_container{
+	width: 50px;
+	display: inline-block;
+	font-size: 0.7em;
+	padding: 5px;
 }
 .ppe_queue_selected{
 	border: 1px solid gold;

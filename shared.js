@@ -242,6 +242,66 @@
         </div>`;
         return ret;
   };
+  exports.printCanvas = function(passage, user=null){
+    var metadata = JSON.parse(passage.metadata);
+    var ret = '<div id="ppe_container_'+passage._id+'"class="ppe_canvas_container">';
+    //same icons as passages
+    ret += `<div id="modal_`+passage._id+`" class="modal">
+                <p class="modal_title">Passage Options</p>
+                <div class="passage_details">`;
+                    //date.toDateString() in future
+                    ret += `<p>Created: `+passage.date+`</p>`;
+                    if(passage.author){
+                        ret += `<p>By: `+passage.author.username+` </p>`;
+                    }else{
+                        ret += `<p>By: Anonymous</p>`;
+                    }
+                    ret += `<p>`+(passage.stars || 0 )+` Stars </p>`;
+                    var chapterID = '';
+                    if(passage.chapter && passage.chapter.title){
+                      chapterID = passage.chapter._id;
+                      ret += `<p>Chapter: <a class="link" href="/${passage.chapter.title}/${passage.chapter._id}">`+passage.chapter.title+`</a></p>`;
+                    }
+                ret += `</div>`;
+              var i = 0;
+              var after = '<br>';
+              for (let [key, value] of Object.entries(metadata)) {
+                    after += exports.printPropertySelect(key, value);
+                }
+              ret += exports.printAddForm(chapterID, {
+                content: passage.content,
+                flagged: passage.flagged,
+                _id: passage._id,
+                categories: passage.categories
+              }, after);
+              ret += `
+              <div class="passage_id">`+passage._id+`</div>
+            </div>
+             <div class="canvas_proteins">
+             <a class="basic_link" href="#modal_`+passage._id+`" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+             `;
+             if(user){
+                ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
+                <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
+             } 
+             ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+             <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->
+             <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
+             <ion-icon title="Donate to Author" class="passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
+             <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
+             `;
+             ret += `</div>`;
+    //END
+
+    if(passage.filename){
+      ret += `<img class="ppe_queue_canvas"src="/uploads/`+passage.filename+`"/></div>`;
+      return ret;
+    }
+    ret += `
+    <canvas height="${metadata['Canvas']}" width="${metadata['Canvas']}"data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>`;
+    ret += '</div>';
+    return ret;
+  };
   exports.printChapter = function(chapter){
     var ret = '';
     ret += `
@@ -291,15 +351,6 @@
             <span class="fileStreamChapter">`+dirname+`</span>
         </div>`;
     return ret;
-  };
-  exports.printCanvas = function(passage){
-    var metadata = JSON.parse(passage.metadata);
-    if(passage.filename){
-      return `<img class="ppe_queue_canvas"src="/uploads/`+passage.filename+`"/>`;
-    }
-    return `
-    <canvas height="${metadata['Canvas']}" width="${metadata['Canvas']}"data-canvas="${passage.content}"data-canvas_size="${metadata['Canvas']}"class="ppe_queue_canvas"></canvas>
-    `;
   };
   exports.mate = function(arr1, arr2){
     var min = arr1.length;

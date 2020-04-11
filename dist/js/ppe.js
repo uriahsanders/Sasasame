@@ -72,13 +72,16 @@ function ppe(){
             break;
         }
     }
+    function getSelectedQueueImage(){
+        return $('#ppe_queue').find(".ppe_queue_selected").children('.ppe_queue_canvas')[0];
+    }
     function draw(e) {
         var pos = getMousePos(canvas, e);
         posx = pos.x;
         posy = pos.y;
         drawCursor();
         if($('#ppe_select').data('select') == 'off' && isDrawing){
-            var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+            var image = getSelectedQueueImage();
             // var imageContext = image.getContext('2d');
             // fadeOut();
             drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx);
@@ -177,7 +180,7 @@ function ppe(){
     function drawCursor(){
         //Queue Item
         $('#ppe_queue').find(".ppe_queue_selected").show();
-        var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+        var image = getSelectedQueueImage();
         var isRealImage = image instanceof HTMLImageElement ? true : false;
         // var imageContext = image.getContext('2d');
         //Cursor
@@ -195,7 +198,7 @@ function ppe(){
     }
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
-            var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+            var image = getSelectedQueueImage();
             var isRealImage = image instanceof HTMLImageElement ? true : false;
             var adjustedHeight = baseSize * (image.height/image.width);
             drawImage(image, (posx - baseSize/2), (posy - adjustedHeight/2), ctx, isRealImage);
@@ -208,15 +211,15 @@ function ppe(){
             }
             else{
                 //select is active; add item to queue
-                $('<canvas height="'+baseSize*masterScale+'" width="'+baseSize*masterScale+'"class="ppe_queue_canvas"></canvas>')
+                $('<div class="ppe_canvas_container"><canvas height="'+baseSize*masterScale+'" width="'+baseSize*masterScale+'"class="ppe_queue_canvas"></canvas></div>')
                     .appendTo('#ppe_queue');
-                    var little = $('#ppe_queue').children().eq(-1)[0];
+                    var little = $('#ppe_queue').children().eq(-1).children('.ppe_queue_canvas')[0];
                     var littlectx = little.getContext('2d');
                     var data = ctx.getImageData(posx, posy, baseSize*masterScale, baseSize*masterScale);
                     littlectx.putImageData(data, 0, 0);
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
                 queuePos = $('#ppe_queue').children().length - 1;
-                $('#ppe_queue').children().eq(queuePos).addClass('ppe_queue_selected');
+                $('#ppe_queue').children().eq(queuePos).children('.ppe_queue_canvas').addClass('ppe_queue_selected');
                 $('#ppe_select').click();
                 var dataURL = little.toDataURL();
                 $('#code').modal();
@@ -276,6 +279,12 @@ function ppe(){
             drawCursor();
         }, 'select', ['on', 'off']);
     });
+    $(document).on('click', '.ppe_canvas_container', function(){
+        $('.ppe_queue_selected').removeClass('ppe_queue_selected');
+        $(this).addClass('ppe_queue_selected');
+        cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
+        drawCursor();
+    });
     function cursorSelect(){
         return $('#ppe_select').data('select');
     }
@@ -289,7 +298,6 @@ function ppe(){
         isErasing = false;
     }, 0);
     $(document).on('keydown', function(e){
-        e.preventDefault();
         if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
             if(e.keyCode == 80 || e.keyCode == 78){
                 //p for previous
@@ -317,7 +325,7 @@ function ppe(){
                 // cursorctx.beginPath();
                 // cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
                 // cursorctx.stroke();
-                // var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
+                // var image = getSelectedQueueImage();
                 // var imageContext = image.getContext('2d');
                 // cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
             }
@@ -345,7 +353,9 @@ function ppe(){
             // }
             // Open menu on space
             else if(e.keyCode == 32){
+                e.preventDefault();
                 $('#option_menu').click();
+                $('#right_side_select').val('passages').change();
             }
             //m for mutate
             else if(e.keyCode == 77){

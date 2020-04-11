@@ -7,6 +7,7 @@ CodeMirror.fromTextArea(document.getElementById('console'), {
         }
     }
 }).setSize('100%', '100');
+$.modal.defaults.showClose = false;
 //https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/
 var musicLooper;
 class SimplePlayer {
@@ -1237,6 +1238,7 @@ $('.graphic_mode').on('click', function(){
                 test: 'test'
             },
             success: function(data){
+                $('#ppe_queue').show();
                 $('#ppe_queue').append(data);
                 var first = true;
                 $('.ppe_queue_canvas').each(function(){

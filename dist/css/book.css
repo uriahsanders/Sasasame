@@ -770,6 +770,10 @@ select::-ms-expand {
     font-size: 0.6em;
     text-align: left;
 }
+.canvas_proteins{
+    font-size: 0.8em;
+    text-align: center;
+}
 #parent_chapter_title{
     cursor: pointer;
 }

@@ -131,7 +131,9 @@
                               <input class="control_input"id="category_search_input"placeholder="Search Passages" type="" name="" autocomplete="off">
                               <div id="ppe_queue">
                                 <!-- <input placeholder="Search..."id="ppe_search"class="control_input"type="text" name=""> -->
-                                <canvas id="ppe_mutation"class="ppe_queue_canvas" width="100" height="100"></canvas>
+                                <div class="ppe_canvas_container ppe_queue_selected">
+                                  <canvas id="ppe_mutation"class="ppe_queue_canvas" width="100" height="100"></canvas>
+                                </div>
                               </div>
                           </div>
                           <div id="cats">
@@ -154,7 +156,7 @@
                       </div>
                       <!-- Edit -->
                       <div id="edit_div">
-                          
+                          Editing coming soon
                       </div>
                       <!-- Leaderboard -->
                       <div id="leaderboard_div">
@@ -217,7 +219,7 @@
                              <!-- PPE Options -->
                              <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
                              <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
+                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/square-sharp.svg"></ion-icon>
                              <ion-icon class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-sharp.svg"></ion-icon>
 
                              <ion-icon class="graphic_mode"title="Graphic Mode (g)"src="/images/ionicons/brush-sharp.svg"></ion-icon>
