@@ -12,17 +12,16 @@
 	/*z-index: 1;*/
 }
 #ppe_queue{
-	z-index: 3;
+	/*z-index: 3;
 	border-bottom: 1px solid black;
 	display: none;
 	width: 100%;
 	height: 300px;
 	overflow: scroll;
-	max-width: initial;
+	max-width: initial;*/
 }
 .ppe_queue_canvas{
-	margin: 0px;
-	z-index: 4;
+	width: 50px;
 }
 .ppe_queue_selected{
 	border: 1px solid gold;

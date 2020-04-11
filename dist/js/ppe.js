@@ -18,6 +18,7 @@ function ppe(){
     var decreasingOpacity = true;
     var opacity = 1;
     var elements = [];
+    const baseSize = 50;
     function fadeOut(){
         ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -27,13 +28,14 @@ function ppe(){
         delv.globalAlpha = opacity;
         delv.setTransform(masterScale, 0, 0, masterScale, posx, posy); // sets scale and origin
         delv.rotate(masterRotate*(Math.PI/180));
-        if(realImage && image.width > 300){
-            var adjustedHeight = 300 * (image.height/image.width);
-            delv.drawImage(image, -300 / 2, -adjustedHeight / 2, 300, adjustedHeight);
-        }
-        else{
-            delv.drawImage(image, -image.width / 2, -image.height / 2);
-        }
+        // if(realImage && image.width > 300){
+            var adjustedHeight = baseSize * (image.height/image.width);
+            //remember: 300 vs baseSize seems to do a z axis rotation
+            delv.drawImage(image, -baseSize / 2, -adjustedHeight / 2, baseSize, adjustedHeight);
+        // }
+        // else{
+        //     delv.drawImage(image, -image.width / 2, -image.height / 2);
+        // }
         delv.setTransform(1,0,0,1,0,0);
         //Every time we draw an image we are adding an 'element' to the canvas
         //this element may have properties associated with it
@@ -90,15 +92,15 @@ function ppe(){
         posy = pos.y;
         drawSelect();
         if(isErasing){
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fillRect(posx, posy, 50*masterScale, 50*masterScale);
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+            ctx.fillRect(posx, posy, baseSize*masterScale, baseSize*masterScale);
         }
     }
     function drawSelect(){
         cursorctx.fillStyle = "#000000";
         cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
         cursorctx.beginPath();
-        cursorctx.rect(posx, posy, 50*masterScale, 50*masterScale);
+        cursorctx.rect(posx, posy, baseSize*masterScale, baseSize*masterScale);
         cursorctx.stroke();
     }
     // Returns an random integer, positive or negative
@@ -120,7 +122,7 @@ function ppe(){
         var mutationCanvas = $('#ppe_mutation')[0];
         var mutationctx = mutationCanvas.getContext('2d');
         mutationctx.clearRect(0, 0, mutationCanvas.width, mutationCanvas.height);
-        var size = 50;
+        var size = baseSize;
         var sideNumb = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
         if(isNaN(sideNumb)){
             sideNumb = 0;
@@ -183,31 +185,34 @@ function ppe(){
         cursorctx.fillStyle = "#000000";
         cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
         cursorctx.beginPath();
-        cursorctx.arc(posx, posy, image.width/2*masterScale, 0, 2 * Math.PI);
+        //cursor should be 10% bigger than image
+        cursorctx.arc(posx, posy, (baseSize*1.1)/2*masterScale, 0, 2 * Math.PI);
         cursorctx.stroke();
+        var adjustedHeight = baseSize * (image.height/image.width);
         //Also need to star the related passage
-        drawImage(image, (posx - image.width/2), (posy - image.height/2), cursorctx, isRealImage);
+        drawImage(image, (posx - baseSize/2), (posy - adjustedHeight/2), cursorctx, isRealImage);
 
     }
     $(document).on('click', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = $('#ppe_queue').find(".ppe_queue_selected")[0];
             var isRealImage = image instanceof HTMLImageElement ? true : false;
-            drawImage(image, (posx - image.width/2), (posy - image.height/2), ctx, isRealImage);
+            var adjustedHeight = baseSize * (image.height/image.width);
+            drawImage(image, (posx - baseSize/2), (posy - adjustedHeight/2), ctx, isRealImage);
             drawCursor();
         }
         else{
             if($('#ppe_erase').data('on') == 'true'){
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-                ctx.fillRect(posx, posy, 50*masterScale, 50*masterScale);
+                ctx.fillRect(posx, posy, baseSize*masterScale, baseSize*masterScale);
             }
             else{
                 //select is active; add item to queue
-                $('<canvas height="'+50*masterScale+'" width="'+50*masterScale+'"class="ppe_queue_canvas"></canvas>')
+                $('<canvas height="'+baseSize*masterScale+'" width="'+baseSize*masterScale+'"class="ppe_queue_canvas"></canvas>')
                     .appendTo('#ppe_queue');
                     var little = $('#ppe_queue').children().eq(-1)[0];
                     var littlectx = little.getContext('2d');
-                    var data = ctx.getImageData(posx, posy, 50*masterScale, 50*masterScale);
+                    var data = ctx.getImageData(posx, posy, baseSize*masterScale, baseSize*masterScale);
                     littlectx.putImageData(data, 0, 0);
                 masterScale = 1;
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
@@ -409,10 +414,10 @@ function ppe(){
             //s for scale
             else if(e.keyCode == 83){
                 if(e.shiftKey){
-                    masterScale -= 0.01;
+                    masterScale -= 0.01*masterScale*3;
                 }
                 else{
-                    masterScale += 0.01;
+                    masterScale += 0.01*masterScale*3;
                 }
                 if(cursorSelect() == 'off'){
                     drawCursor();
