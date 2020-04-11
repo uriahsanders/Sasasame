@@ -3,7 +3,8 @@
         width: 100%;
     }
     #side_panel_close{
-        display: block;
+        font-size: 2em;
+        float: right;
     }
 }
 @media screen and (max-width: 550px){

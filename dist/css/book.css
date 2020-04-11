@@ -166,9 +166,9 @@
     border-left: 1px solid black;
 }
 #side_panel_close{
-    display: none;
-    font-size: 2em;
-    float: right;
+    /*display: none;*/
+    font-size: 1em;
+    float: left;
 }
 #right_passages, #cats{
     background: #fff;

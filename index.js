@@ -698,8 +698,8 @@ app.post('/update_passage/', (req, res) => {
         'canvas': canvas,
         'categories': categories,
         'metadata': JSON.stringify(json),
-        'callback': function(){
-            res.send('Updated');
+        'callback': function(passage){
+            res.send(scripts.printPassage(passage));
         }
     });
 });

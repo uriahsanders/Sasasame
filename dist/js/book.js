@@ -257,7 +257,7 @@ $('.codeform_add').on('submit', function(e){
         }
     });
 });
-$('.codeform_update').on('submit', function(e){
+$(document).on('submit', '.codeform_update', function(e){
     e.preventDefault();
     //first we need to change the textarea value,
     //depending on the editor
@@ -285,7 +285,8 @@ $('.codeform_update').on('submit', function(e){
        enctype: 'multipart/form-data',
        processData: false,
         success: function(data){
-            window.location.reload();
+            //replace with updated doc in DOM
+            $('#'+formdata.get('_id')).replaceWith(data);
         }
     });
 });
@@ -767,15 +768,6 @@ function readPassageMetadata(thiz){
                 }
                 thiz.siblings('.passage_author').css('cursor', 'pointer');
                 thiz.siblings().not('.passage_canvas, .passage_content, .passage_image, .passage_html_disp').css('opacity', '0.6');
-                thiz.siblings('.passage_author').on('click', function(){
-                    if(codemirror){
-                        thiz.siblings('.passage_content').next('.CodeMirror').fadeToggle();
-                    }
-                    else{
-                        thiz.siblings('.passage_content').fadeToggle();
-                        thiz.siblings('.passage_image').fadeToggle();
-                    }
-                });
                 break;
                 case 'Label':
                 var label = thiz.siblings('.passage_author').find('.passage_label').children('.passage_label_link').text();
@@ -1058,7 +1050,10 @@ $(document).on('click', '[id^=star_]', function(){
         }
     });
 });
-$(document).on('click', '.passage_author:not(.passage_label)', function(){
+$(document).on('click', '.passage_author', function(){
+    if($(e.target).is('.passage_label') || $(e.target).is('.proteins')){
+        return;
+    }
     if($(this).siblings('.passage_content').next('.CodeMirror').length){
         $(this).siblings('.passage_content').next('.CodeMirror').fadeToggle();
     }

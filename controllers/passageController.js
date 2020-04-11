@@ -111,17 +111,17 @@ module.exports = {
         });
     },
     updatePassage: function(options) {
-        Passage.updateOne({_id: options.id.trim()}, {
+        Passage.findOneAndUpdate({_id: options.id.trim()}, {
             content: options.content,
             canvas: options.canvas,
             label: options.label,
             metadata: options.metadata,
             categories: options.categories
-        }, function(err, affected, resp){
+        }, {new: true}, function(err, doc){
             if(err){
                 console.log(err);
             }
-            options.callback();
+            options.callback(doc);
         });
     },
     updatePassageContent: function(req, res, callback) {
