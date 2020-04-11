@@ -1597,8 +1597,9 @@ $('#play_all').on('click', function(){
 });
 $('#option_menu').on('click', function(){
     $('#side_panel').toggle();
-    $(this).toggleClass('gold');
-    $('.passage_adder').toggleClass('gold');
+    //$(this).toggleClass('gold');
+    flashIcon($(this));
+    //$('.passage_adder').toggleClass('gold');
 });
 $('#side_panel_close').on('click', function(){
     $('#option_menu').click();
@@ -1606,8 +1607,9 @@ $('#side_panel_close').on('click', function(){
 $('.passage_adder').on('click', function(){
     $('#side_panel').toggle();
     $('#right_side_select').val('add').change();
-    $(this).toggleClass('gold');
-    $('#option_menu').toggleClass('gold');
+    //$(this).toggleClass('gold');
+    flashIcon($(this));
+    //$('#option_menu').toggleClass('gold');
 });
 $(document).on('keydown', function(e){
     var thiz = $(this);
