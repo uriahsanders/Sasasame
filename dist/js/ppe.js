@@ -1,4 +1,8 @@
 function ppe(){
+    if(!sessionStorage.alertedGraphicDev){
+        $('#graphic_dev_modal').modal();
+        sessionStorage.alertedGraphicDev = true;
+    }
     var canvas = document.getElementById('ppe_canvas');
     var cursor = document.getElementById('ppe_cursor');
     var cursorctx = cursor.getContext('2d');
@@ -495,4 +499,3 @@ function ppe(){
         }
     }
 }
-ppe();

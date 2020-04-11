@@ -1,10 +1,13 @@
+*{
+  font-family: 'Baloo Chettan 2', cursive;
+}
 body {
     margin: 0;
     background: #FFF;
     color: #fff;
     width: 100%;
     color: #FBFBFB;
-    font-family: 'Baloo Chettan 2', cursive;
+    /*font-family: 'Baloo Chettan 2', cursive;*/
 }
 #top{
     border: 1px solid black;
@@ -186,14 +189,13 @@ body {
     margin-bottom: 10px;
     /* border: 1px solid black; */
 }
-.header{
+/*.header{
     padding: 10px;
     margin-bottom: 30px;
     font-weight: bold;
     text-align: center;
     font-size: 1.2em;
-    font-family: 'Nanum Brush Script', cursive;
-}
+}*/
 .help_header{
     padding: 10px;
     margin-bottom: 5px;

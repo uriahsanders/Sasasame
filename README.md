@@ -58,13 +58,17 @@ Furthermore, social scientists can use their skillset to provide context and cri
 
 Passages pertaining to real-world crises or important situations can be rapidly starred and rise to the top, causing people of various fields to create modules to help solve the problem.
 
-Additionally, individuals can contribute modules that can be stitched together to form actual draft policies which can later be approved by officials. This keeps everyone a part of the process, and enables ideas from every corner.
+Additionally, the public can contribute modules that can be stitched together to form actual draft policies which can later be approved by officials. This keeps everyone a part of the process, and enables ideas from every corner.
 
 ### Business
 
 Choose what information you want to share, but increase your reputation and rewards by sharing more often. Instead of falling victim to copyright infringement, allowing others to copy your work on Sasame still points the credit to you!
 
 Furthermore, you can conveniently take advantage of work being done by open organizations, categorized by type and usefulness.
+
+### Art
+
+Create and share brushes, characters, and more with other artists. The more other artists use your work in their compositions, the higher your reputation and the more flow you get to your original pieces.
 
 ### Personal
 

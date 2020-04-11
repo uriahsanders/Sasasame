@@ -5,8 +5,6 @@
 
 }
 .modal>.control_button{
-    /*font-family: 'Patua One';
-    font-family: 'Montserrat', sans-serif;*/
     color: #fff;
     background: #353535;
 }
@@ -40,10 +38,7 @@
 #control_blocks{
     display: flex;
     justify-content: center;
-    /*padding: 30px;*/
     padding-top: 15px;
-    /*background: url('/images/parchment8.jpg');*/
-    /* font-family: 'Nanum Brush Script', cursive; */
     font-size: 1.1em;
 }
 .control_block{
@@ -83,8 +78,6 @@
     font-size: 1em;
     margin-bottom: 10px;
     width: 100%;
-   /* font-family: 'Patua One';
-    font-family: 'Montserrat', sans-serif;*/
     background: #fff;
 }
 .control_textarea{
@@ -94,8 +87,6 @@
     width: 100%;
     margin-bottom: 10px;
     /*resize: none;*/
-    /*font-family: 'Patua One';
-    font-family: 'Montserrat', sans-serif;*/
     background: #fff;
     color: #000;
 }
@@ -110,8 +101,9 @@
     font-weight: bold;
     text-align: center;
     font-size: 1.2em;
-    /*font-family: 'Nanum Brush Script', cursive;
-    font-family: 'Montserrat', sans-serif;*/
+}
+.header{
+    font-size: 1.3em;
 }
 .help_header{
     padding: 10px;
@@ -252,8 +244,6 @@
     overflow: auto;
     /*width: 160px;
     height: 200px;*/
-    /*font-family: 'Patua One';
-    font-family: 'Montserrat', sans-serif;*/
     /*width: 96%;*/
 }
 .help_modal{
@@ -518,8 +508,6 @@
     position: absolute;
     left: 78px;
     top: 25px;
-    /*font-family: 'Montserrat';*/
-   /* font-family: 'Montserrat', sans-serif;*/
 }
 #right_select_help{
     font-size: 0.8em;
@@ -813,6 +801,7 @@ ion-icon{
 .alpha{
     font-weight: 200 !important;
     font-style: italic;
+    font-size: 0.8em;
 }
 .passage_play{
     color: red;
