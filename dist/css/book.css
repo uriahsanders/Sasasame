@@ -56,7 +56,7 @@
     height: 60px;
 }
 .control_button{
-    padding: 10px;
+    padding: 5px;
     font-size: 1em;
     border: 1px solid #353535;
     margin-bottom: 20px;
@@ -165,6 +165,9 @@
 #right_passages, #cats{
     background: #fff;
     padding: 10px;
+}
+#cats:empty{
+    display: none;
 }
 #right_passages .passage{
     font-size: 0.5em;
@@ -292,6 +295,7 @@
 }
 .star_container{
     float: right;
+    font-size: 0.8em;
 }
 .passage_author_image{
     width: 50px;
@@ -777,7 +781,7 @@ select::-ms-expand {
     margin-top: 5px;
 }
 .proteins{
-    font-size: 0.8em;
+    font-size: 0.9em;
     text-align: left;
 }
 .canvas_proteins{

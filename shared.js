@@ -145,6 +145,8 @@
        var ret = '';
         ret += `
         <div id="`+passage._id+`" class="passage">`;
+        ret += '<div class="star_container"><span title="Stars"class="star_count_'+passage._id+' gold">'+(passage.stars || 0 )+'</span></div>';
+
             ret += `<div id="modal_add_sub_passage_`+passage._id+`" class="modal">`
           ret += exports.printAddForm('', false, '', passage._id)
          ret +=   `</div>`;
@@ -183,8 +185,6 @@
              <ion-icon title="Donate to Author" class="passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              `;
-            ret += '<div class="star_container"><span class="star_count_'+passage._id+'">'+(passage.stars || 0 )+'</span> '+(passage.stars == 1 ? 'Star' : 'Stars')+'</div>';
-
              ret += `</div>`;
             // ret += '</div>';
             ret += `<div id="modal_`+passage._id+`" class="modal">

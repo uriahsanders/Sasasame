@@ -1,8 +1,10 @@
 function ppe(){
     ppeActive = true;
-    if(!sessionStorage.alertedGraphicDev){
-        $('#graphic_dev_modal').modal();
-        sessionStorage.alertedGraphicDev = true;
+    if(isMobile()){
+        if(!sessionStorage.alertedGraphicDev){
+            $('#graphic_dev_modal').modal();
+            sessionStorage.alertedGraphicDev = true;
+        }
     }
     $('html, body').css({
         overflow: 'hidden'

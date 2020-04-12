@@ -18,6 +18,14 @@ const passageSchema = mongoose.Schema({
         ref: 'Passage'
     },
     content: String,
+    //forces content to be a unique value unless null
+    // content: {
+    //     type: String,
+    //     index: {
+    //         unique: true,
+    //         partialFilterExpression: {content: {$type: "string"}}
+    //     }
+    // },
     //chapter the passage belongs to
     chapter: {
         type: mongoose.Schema.Types.ObjectId,
