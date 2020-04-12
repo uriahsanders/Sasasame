@@ -323,8 +323,13 @@ $('#queue_form').on('submit', function(e){
         }
     });
 });
+function isMobile(){
+    return window.matchMedia("(max-width: 550px)").matches;
+}
   $( function() {
-    $( document ).tooltip();
+    if(!isMobile()){
+        $(document).tooltip();
+    }
   } );
 //search
 $('#chapter_search').on('keypress', function(e){
