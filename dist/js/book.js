@@ -3,7 +3,6 @@ if(!sessionStorage.alertedDev){
     sessionStorage.alertedDev = true;
 }
 
-
 //setup the Console
 CodeMirror.fromTextArea(document.getElementById('console'), {
     extraKeys: {
@@ -1233,6 +1232,9 @@ $(document).on('click', '.view_details', function(){
     $(this).next().slideToggle();
 });
 $('.graphic_mode').on('click', function(){
+    $('html, body').css({
+        overflow: 'auto'
+    });
     var thiz = $(this);
     jqueryToggle($(this), function(){
         thiz.attr('src', '/images/ionicons/book-sharp.svg');

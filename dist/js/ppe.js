@@ -3,6 +3,9 @@ function ppe(){
         $('#graphic_dev_modal').modal();
         sessionStorage.alertedGraphicDev = true;
     }
+    $('html, body').css({
+        overflow: 'hidden'
+    });
     var canvas = document.getElementById('ppe_canvas');
     var cursor = document.getElementById('ppe_cursor');
     var cursorctx = cursor.getContext('2d');
@@ -200,7 +203,7 @@ function ppe(){
         drawImage(image, (posx - baseSize/2), (posy - adjustedHeight/2), cursorctx, isRealImage);
 
     }
-    $(document).on('click', '#ppe_cursor', function(){
+    $(document).on('click touch', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = getSelectedQueueImage();
             var isRealImage = image instanceof HTMLImageElement ? true : false;
@@ -257,14 +260,14 @@ function ppe(){
             thiz.data('on', 'true');
             thiz.css('color', 'gold');
             $('#ppe_select').data('select', 'on');
-            cursor.removeEventListener('mousemove', draw, 0);
-            cursor.addEventListener('mousemove', select, 0);
+            $('#ppe_cursor').off('mousemove touchmove', draw);
+            $('#ppe_cursor').on('mousemove touchmove', select);
             drawSelect();
         }, function(){
             thiz.css('color', '#fff');
             thiz.data('on', 'false');
-            cursor.removeEventListener('mousemove', select, 0);
-            cursor.addEventListener('mousemove', draw, 0);
+            $('#ppe_cursor').off('mousemove touchmove', select);
+            $('#ppe_cursor').on('mousemove touchmove', draw);
             drawCursor();
         });
     });
@@ -274,14 +277,14 @@ function ppe(){
         jqueryToggle($(this), function(){
             thiz.attr('title', 'Draw');
             thiz.attr('src', '/images/ionicons/brush-sharp.svg');
-            cursor.removeEventListener('mousemove', draw, 0);
-            cursor.addEventListener('mousemove', select, 0);
+            $('#ppe_cursor').off('mousemove touchmove', draw);
+            $('#ppe_cursor').on('mousemove touchmove', select);
             drawSelect();
         }, function(){
             thiz.attr('title', 'Select');
             thiz.attr('src', '/images/ionicons/scan-sharp.svg');
-            cursor.removeEventListener('mousemove', select, 0);
-            cursor.addEventListener('mousemove', draw, 0);
+            $('#ppe_cursor').off('mousemove touchmove', select);
+            $('#ppe_cursor').on('mousemove touchmove', draw);
             drawCursor();
         }, 'select', ['on', 'off']);
     });
@@ -294,15 +297,15 @@ function ppe(){
     function cursorSelect(){
         return $('#ppe_select').data('select');
     }
-    cursor.addEventListener('mousemove', draw, 0);
-    cursor.addEventListener('mousedown', function(){
+    $('#ppe_cursor').on('mousemove touchmove', draw);
+    $('#ppe_cursor').on('mousedown touchstart', function(){
         isDrawing = true;
         isErasing = true;
-    }, 0);
-    cursor.addEventListener('mouseup', function(){
+    });
+    $('#ppe_cursor').on('mouseup touchend', function(){
         isDrawing = false;
         isErasing = false;
-    }, 0);
+    });
     $(document).on('click', '#ppe_search_icon', function(){
         $('#side_panel').toggle();
         $('#right_side_select').val('passages').change();
@@ -333,35 +336,7 @@ function ppe(){
                 // cursorctx.fillStyle = "#000000";
                 cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
                 drawCursor();
-                // cursorctx.beginPath();
-                // cursorctx.arc(posx, posy, 50, 0, 2 * Math.PI);
-                // cursorctx.stroke();
-                // var image = getSelectedQueueImage();
-                // var imageContext = image.getContext('2d');
-                // cursorctx.drawImage(image, (posx - image.width/2), (posy - image.height/2), image.width, image.height);
             }
-            //Search on space
-            // else if(e.keyCode == 32){
-            //     jqueryToggle($(this), function(){
-            //         $('#ppe_search_modal').show();
-            //         $('#ppe_queue').show();
-            //         $('#ppe_search').focus();
-            //         $('#ppe_search').select();
-            //     }, function(){
-            //         $.ajax({
-            //             type: 'post',
-            //             url: '/ppe_search',
-            //             data: {
-            //                 search: $('#ppe_search').val()
-            //             },
-            //             success: function(data){
-            //                 $('#ppe_queue').append(data);
-            //                 $('#ppe_search_modal').hide();
-            //             }
-            //         });
-            //     }, 'ppe_search');
-                
-            // }
             // Open menu on space
             else if(e.keyCode == 32){
                 e.preventDefault();
@@ -472,6 +447,13 @@ function ppe(){
 
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
+        //use pageX and pageY for touch events
+        if(window.matchMedia("(max-width: 550px)").matches){
+            return {
+                x: (evt.pageX - rect.left) / (rect.right - rect.left) * canvas.width,
+                y: (evt.pageY - rect.top) / (rect.bottom - rect.top) * canvas.height
+            };
+        } 
         return {
             x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
             y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
