@@ -2,7 +2,7 @@ if(!sessionStorage.alertedDev){
     $('#dev_modal').modal();
     sessionStorage.alertedDev = true;
 }
-
+var ppeActive = false;
 //setup the Console
 CodeMirror.fromTextArea(document.getElementById('console'), {
     extraKeys: {
@@ -1256,7 +1256,9 @@ $('.graphic_mode').on('click', function(){
                 test: 'test'
             },
             success: function(data){
-                ppe();
+                if(!ppeActive){
+                    ppe();
+                }
                 $('#ppe_queue').show();
                 $('#ppe_queue').append(data);
                 var first = true;

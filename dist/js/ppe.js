@@ -1,4 +1,5 @@
 function ppe(){
+    ppeActive = true;
     if(!sessionStorage.alertedGraphicDev){
         $('#graphic_dev_modal').modal();
         sessionStorage.alertedGraphicDev = true;
