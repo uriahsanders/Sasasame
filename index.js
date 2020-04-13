@@ -437,7 +437,7 @@ app.post('/get_queue', (req, res) =>{
     });
   }
   else{
-    res.send('Must be logged in.');
+    res.send('<span style="color:#000;">Must be logged in.</span>');
   }
 });
 app.post(/\/create_queue_chapter\/?/, (req, res) => {
@@ -512,7 +512,12 @@ app.post(/\/add_passage\/?/, (req, res) => {
       });
     }
     var passageCallback = function(data){
-        res.send(scripts.printPassage(data, req.session.user));
+        if(req.body.special && req.body.special == 'ppe_queue'){
+            res.send(scripts.printCanvas(data));
+        }
+        else{
+            res.send(scripts.printPassage(data, req.session.user));
+        }
     };
     var chapterCallback = function(data){
         res.send(scripts.printChapter(data));

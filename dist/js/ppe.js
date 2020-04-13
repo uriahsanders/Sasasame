@@ -206,6 +206,7 @@ function ppe(){
         drawImage(image, (posx - baseSize/2), (posy - adjustedHeight/2), cursorctx, isRealImage);
 
     }
+    var newPPEQueueCounter = 0;
     $(document).on('click touch', '#ppe_cursor', function(){
         if($('#ppe_select').data('select') == 'off'){
             var image = getSelectedQueueImage();
@@ -221,7 +222,12 @@ function ppe(){
             }
             else{
                 //select is active; add item to queue
-                $('<div class="ppe_canvas_container"><canvas height="'+baseSize*masterScale+'" width="'+baseSize*masterScale+'"class="ppe_queue_canvas"></canvas></div>')
+                $(`
+                    <div class="ppe_canvas_container">
+                    <ion-icon id="ppe_little_`+(++newPPEQueueCounter)+`"class="ppe_little_create"title="Create Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
+                    <canvas height="`+baseSize*masterScale+
+                    `" width="`+baseSize*masterScale+
+                    `"class="ppe_queue_canvas"></canvas></div>`)
                     .appendTo('#ppe_queue');
                     var little = $('#ppe_queue').children().eq(-1).children('.ppe_queue_canvas')[0];
                     var littlectx = little.getContext('2d');
@@ -239,21 +245,25 @@ function ppe(){
                 $('.dataURL').val(dataURL);
                 cursorctx.clearRect(0, 0, canvas.width, canvas.height); 
                 drawCursor();
-                //Now add the passage to database
-                // $.ajax({
-                //     type: 'post',
-                //     url: '/passage/add_passage/',
-                //     data: {
-                //         type: 'passage',
-                //         passage: '',
-                //         property_key: 'Canvas',
-                //         property_value: 'image',
-                //         dataURL: dataURL
-                //     },
-                //     success: function(data){
-                //         console.log(data);
-                //     }
-                // });
+                $(document).on('click touch', '#ppe_little_'+newPPEQueueCounter, function(){
+                    //Now add the passage to database
+                    $.ajax({
+                        type: 'post',
+                        url: '/passage/add_passage/',
+                        data: {
+                            type: 'passage',
+                            passage: '',
+                            property_key: 'Canvas',
+                            property_value: 'image',
+                            dataURL: dataURL,
+                            special: 'ppe_queue'
+                        },
+                        success: function(data){
+                            //and now replace it with the database version
+                            $('#ppe_little_'+newPPEQueueCounter).parent().replaceWith(data);
+                        }
+                    });
+                });
             }
         }
     });

@@ -101,6 +101,10 @@
         <!--Link to source else reference
         If there is also a passage source it will display alongside-->
         <option>Source</option>
+        <!--Enables mutations and hides @sasame tags-->
+        <option>Sasame</option>
+        <!--Link to an alternate passage with the same purpose-->
+        <option>Alternate</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>
@@ -173,9 +177,10 @@
             ret += `<div class="proteins">
              <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
              `;
+            ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon> `;
+
              if(user){
-                ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
-                <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
+                ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
              ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
              <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->

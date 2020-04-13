@@ -84,6 +84,7 @@
                 <ion-icon class="messages_icon"title="Messages"src="/images/ionicons/mail-sharp.svg"></ion-icon>&emsp;
                 <a class="link white" href="/user/<%=user._id%>">Profile</a>&emsp;
                 <a class="link white" href="/logout">Logout</a>
+                <input id="logged_in"value="true"type="hidden" name="">
             </div>
         <%} else{ %>
             <div id="login">
@@ -91,7 +92,7 @@
                 <br/>
                 <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
                 <a class="link white" rel="modal:open"href="#login_modal">Enter</a> 
-
+                <input id="logged_in"value="false"type="hidden" name="">
             </div>
         <%} %>
         <div id="side_panel">
@@ -152,8 +153,7 @@
                       <!-- Queue -->
                       <div id="queue">
                           <input value="{}"id="queue_passages"type="hidden" name="" autocomplete="off">
-                          <div id="queue_items">
-                          </div>
+                          <div id="queue_items"></div>
                       </div>
                       <!-- Add -->
                       <div id="add_div">

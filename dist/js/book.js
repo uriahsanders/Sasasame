@@ -12,7 +12,14 @@ CodeMirror.fromTextArea(document.getElementById('console'), {
         }
     }
 }).setSize('100%', '100');
-$.modal.defaults.showClose = false;
+var sessionStorageQueue = false;
+//use Session Storage for queue if not logged in
+// if($('#logged_in').val() == 'false'){
+//     sessionStorageQueue = true;
+//     if(!sessionStorage.queue){
+//         sessionStorage.queue = ''; //will simply contain passage html
+//     }
+// }
 //https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/
 var musicLooper;
 class SimplePlayer {
@@ -216,7 +223,7 @@ const recordAudio = () =>
         }
     });
 
-$('.codeform_add').on('submit', function(e){
+$(document).on('submit', '.codeform_add', function(e){
     e.preventDefault();
     //first we need to change the textarea value,
     //depending on the editor
@@ -259,6 +266,11 @@ $('.codeform_add').on('submit', function(e){
             else if(info.type == 'chapter'){
                 $('#chapters').prepend(data);
             }
+        },
+        error: function(xhr, textStatus, errorThrown){
+            // alert(errorThrown);
+            // alert(JSON.stringify(xhr));
+            // alert(textStatus);
         }
     });
 });
@@ -1321,21 +1333,28 @@ $(document).on('click', '.square_icon', function(){
     else{
         passages = {};
     }
-    //Send ajax request to make new passage,
-    //and then add it to queue
-    $.ajax({
-        type: 'post',
-        url: '/add_to_queue',
-        data: {
-            passage: id,
-            chapter: chapter.val(),
-        },
-        success: function(data){
-            updateQueue();
-        }
-    });
-    readUnreadMetadata();
+    if(!sessionStorageQueue){
+        //Send ajax request to make new passage,
+        //and then add it to queue
+        $.ajax({
+            type: 'post',
+            url: '/add_to_queue',
+            data: {
+                passage: id,
+                chapter: chapter.val(),
+            },
+            success: function(data){
+                updateQueue();
+                readUnreadMetadata();
+            }
+        });
+    }
+    else{
+        sessionStorage.queue += passage.parent().wrap('<div/>').parent().html();
+    }
     flashIcon($(this));
+    $('#side_panel').show();
+    $('#right_side_select').val('queue').change();
 });
 function readUnreadMetadata(){
     $('[id^=passage_metadata_]').not('.metadata_read').each(function(){
@@ -1346,41 +1365,65 @@ $(document).on('click', '.add_from_queue', function(){
     var passage = $(this).parent();
     var id = passage.attr('id');
     $('#passages').prepend(passage.clone().attr('id', id)).fadeIn('slow');
+    readUnreadMetadata();
+    if(!sessionStorageQueue){
+        //send ajax request to change the location of the passage in the queue
+        $.ajax({
+            type: 'post',
+            url: '/add_from_queue',
+            data: {
+                chapterID: $('#parent_chapter_id').val(),
+                passageID: id
+            },
+            success: function(data){
+                alert(data);
+            }
+        });
+    }
+    else{
+        //just add the passage from the queue
+        //switch the form for updating to adding and submit
+        var form = passage.children('.passage_author').children('.modal').children('.add_form');
+        //but update the chapter
+        form.children('input[name="chapterID"]').val($('#parent_chapter_id').val());
+        form.removeClass('codeform_update');
+        form.addClass('codeform_add');
+        form.attr('action', '/passage/add_passage/');
+        form.submit();
+    }
     $(this).parent().remove();
     $('#' + id).removeClass('queue_item');
     $('#'+id).children('.add_from_queue').hide();
-    readUnreadMetadata();
-    //send ajax request to change the location of the passage in the queue
-    $.ajax({
-        type: 'post',
-        url: '/add_from_queue',
-        data: {
-            chapterID: $('#parent_chapter_id').val(),
-            passageID: id
-        },
-        success: function(data){
-            alert(data);
-        }
-    });
 });
 function updateBrief(){
     $('#right_passages').html($('#passages').html());
 }
 function updateQueue(){
-    $.ajax({
-        type: 'post',
-        url: '/get_queue',
-        data: {},
-        success: function(data){
-            $('#queue_items').html(data);
-            readUnreadMetadata();
-            $('#queue_items').children().each(function(item){
-                $(this).addClass('queue_item');
-                $(this).children('.sub_passages').remove();
-                $(this).children('.add_from_queue').show();
-            });
-        }
-    });
+    if(!sessionStorageQueue){
+        $.ajax({
+            type: 'post',
+            url: '/get_queue',
+            data: {},
+            success: function(data){
+                $('#queue_items').html(data);
+                readUnreadMetadata();
+                $('#queue_items').children().each(function(item){
+                    $(this).addClass('queue_item');
+                    $(this).children('.sub_passages').remove();
+                    $(this).children('.add_from_queue').show();
+                });
+            }
+        });
+    }
+    else{
+        $('#queue_items').html(sessionStorage.queue);
+        readUnreadMetadata();
+        $('#queue_items').children().each(function(item){
+            $(this).addClass('queue_item');
+            $(this).children('.sub_passages').remove();
+            $(this).children('.add_from_queue').show();
+        });
+    }
 }
 $('#right_side_select').on('change', function(){
     $('#side_panel_switcher').children().hide();

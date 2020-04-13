@@ -712,6 +712,14 @@ select::-ms-expand {
 }
 #queue{
     display: none;
+    padding: 10px;
+    background: #fff;
+}
+#queue:empty{
+    display: none;
+}
+.queue_item > .passage_content{
+    max-height: 100px;
 }
 .queue_item:hover{
     color: gold;

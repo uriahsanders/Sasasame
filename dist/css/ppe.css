@@ -31,6 +31,7 @@
 	display: inline-block;
 	font-size: 0.7em;
 	padding: 5px;
+	text-align: center;
 }
 .ppe_queue_selected{
 	border: 1px solid gold;
