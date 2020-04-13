@@ -5,6 +5,7 @@ if(!sessionStorage.alertedDev){
 var ppeActive = false;
 //setup the Console
 CodeMirror.fromTextArea(document.getElementById('console'), {
+    mode: 'javascript',
     extraKeys: {
         "Enter": function(cm){
             eval(cm.getValue());

@@ -432,9 +432,12 @@ function ppe(){
                     //clear entire canvas
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                 }
-                masterRotate = 0;
-                masterScale = 1;
-                opacity = 1;
+                //reset attributes
+                else{
+                    masterRotate = 0;
+                    masterScale = 1;
+                    opacity = 1;
+                }
                 drawCursor();
             }
             //f for fade
