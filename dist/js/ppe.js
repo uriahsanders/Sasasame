@@ -208,7 +208,7 @@ function ppe(){
     }
     var newPPEQueueCounter = 0;
     $(document).on('click touch', '#ppe_cursor', function(){
-        if($('#ppe_select').data('select') == 'off'){
+        if($('#ppe_select').data('select') == 'off' && $('#ppe_erase').data('on') != 'true'){
             var image = getSelectedQueueImage();
             var isRealImage = image instanceof HTMLImageElement ? true : false;
             var adjustedHeight = baseSize * (image.height/image.width);
@@ -272,7 +272,6 @@ function ppe(){
         jqueryToggle($(this), function(){
             thiz.data('on', 'true');
             thiz.css('color', 'gold');
-            $('#ppe_select').data('select', 'on');
             $('#ppe_cursor').off('mousemove touchmove', draw);
             $('#ppe_cursor').on('mousemove touchmove', select);
             drawSelect();
@@ -286,7 +285,6 @@ function ppe(){
     });
     $(document).on('click', '#ppe_select', function(){
         var thiz = $(this);
-        $('#ppe_erase').data('on', 'false');
         jqueryToggle($(this), function(){
             thiz.attr('title', 'Draw');
             thiz.attr('src', '/images/ionicons/brush-sharp.svg');

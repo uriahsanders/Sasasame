@@ -83,7 +83,7 @@
     <!-- For Passages -->
     <select name="property_key"class="property_key" autocomplete="off">
         <option selected="selected">`+key+`</option>
-        <!-- Currently Active -->
+        <!-- Currently Active or Pending -->
         <option>Hyperlink</option>
         <option>Markdown</option>
         <option>CSS</option>
@@ -93,11 +93,14 @@
         <option>Canvas</option>
         <option>Label</option>
         <option>Audio</option>
+        <!--Only show header-->
         <option>Hidden</option>
+        <!--Display as Rich Text-->
         <option>Quill JS</option>
+        <!--Display as code-->
         <option>Code Mirror</option>
+        <!--Click play button on load-->
         <option>Autoplay</option>
-        <option>Loop</option>
         <option>Hide Tools</option>
         <option>Align</option>
         <option>Help</option>
@@ -105,7 +108,9 @@
         <option>Head</option>
         <option>Class</option>
         <option>ID</option>
+        <!--Add donation link-->
         <option>Donate</option>
+        <!--Sync with a file in filesystem-->
         <option>File</option>
         <!--Link to source else reference
         If there is also a passage source it will display alongside-->
@@ -114,18 +119,17 @@
         <option>Sasame</option>
         <!--Link to an alternate passage with the same purpose-->
         <option>Alternate</option>
+        <!--Properties and Methods-->
+        <option>Metadata</option>
+        <!--Include a Passage-->
+        <option>Include</option>
+        <!-- Displays chapter contents as sub passages, puts in the TOC -->
+        <option>Chapter</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>
-        <!-- Displays chapter contents as sub passages, puts in the TOC -->
-        <option>Chapter</option>
         <option>Tone</option>
         <option>Graph</option>
-        <option>Directory</option>
-        <option>Webpage</option>
-        <option>Pointer</option>
-        <option>Key Schema</option>
-        <option>Is Key Schema?</option>
         <option>Impress JS</option>
         <option>Auto Expand</option>
         <option>Custom</option>
