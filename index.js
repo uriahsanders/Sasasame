@@ -357,7 +357,10 @@ app.post('/paginate', function(req, res){
     let chapter = req.body.chapter;
     let find = {chapter: chapter.trim()};
     if(chapter.trim() == 'Sasame'){
-        find = {};
+        find = {
+            deleted: false,
+            queue: false
+        };
     }
     if(search == ''){
         var chapterFind = {};
@@ -890,7 +893,11 @@ function authenticateUser(email, password, callback) {
       })
     });
 }
-function getPermissions(doc, user, type="passage"){
+//we need to check permissions when:
+//Adding a passage
+//Editing/deleting a passage
+//displaying a passage
+function getPermissions(doc, user, type="passage", adding=false, callback){
   //check if the user is the author
   var isAuthor = false;
   var isChapterAdmin = false;
@@ -902,9 +909,11 @@ function getPermissions(doc, user, type="passage"){
   var permissions = 'None'; //start at most restrictive
   //we want to center on the chapter
   var main;
+  //You can always edit/delete your own content
   if(type == "passage"){
     main = doc.chapter;
-    if(doc.author == user){
+    //but you can't add content everywhere!
+    if(doc.author == user && !adding){
       isAuthor = true;
       permissions = 'Self';
     }
@@ -914,40 +923,47 @@ function getPermissions(doc, user, type="passage"){
   else if (type == 'chapter'){
     main = doc;
   }
+  //they have all permissions if chapter author
   if(main.author == user){
     isChapterAuthor = true;
     permissions = 'All';
-    return permissions;
+    //return callback(permissions);
   }
-  //check if the user is a user of the chapter
-  Chapter.findOne({users: user}, function(err, obj2){
+  Chapter.findOne({_id: main._id}, function(err, obj){
+    //check if the user is a user of the chapter
     if(obj2){
       isUser = true;
       permissions = 'Self';
     }
     //check if the user is an admin of the chapter
-    Chapter.findOne({admins: user}, function(err, obj){
-        if(obj){
-          isAdmin = true;
-          permissions = 'All';
+    if(obj){
+      isAdmin = true;
+      permissions = 'All';
+    }
+    if(!isAdmin && !isUser){
+      //if they don't have special permissions and aren't the author,
+      //we need to check the permissions for the chapter
+      switch(main.access){
+        case 'Public':
+        permissions = 'All';
+        break;
+        case 'Protected':
+        permissions = 'Self';
+        break;
+        case 'Private':
+        case 'Exclusive':
+        //not allowed to add no matter what
+        //but can edit or delete if they are the author
+        if(adding){
+            permissions = 'None';
         }
-        if(!isAdmin && !isUser){
-          //if they don't have special permissions and aren't the author,
-          //we need to check the permissions for the chapter
-          switch(main.access){
-            case 'Public':
-            permissions = 'All';
-            break;
-            case 'Protected':
+        //but can edit or delete if they are the passage author
+        if(!adding && isAuthor){
             permissions = 'Self';
-            break;
-            case 'Private':
-            case 'Exclusive':
-            permissions = 'None'; //ik this is doubling up
-          }
         }
-        return permissions;
-    });
+      }
+    }
+    callback(permissions);
   });
 }
 //when they add a passage to queue, duplicate it and add the duplication

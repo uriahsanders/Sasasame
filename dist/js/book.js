@@ -438,13 +438,19 @@ $(document).on('click', '.editor_option', function(){
     var value = $(this).text();
     var thiz = $(this);
     $('.blocker').click(); 
-    var textarea;
-    //modal
-    var textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');  
-    //side panel
-    if(textarea.length == 0){
-        textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
-    }                 
+    var getTextarea = function(){
+        //modal
+        var textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');  
+        //side panel
+        if(textarea.length == 0 && $('#add_div').is(':visible')){
+            textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
+        }  
+        if(textarea.length == 0 && $('#edit_div').is(':visible')){
+            textarea = $('#edit_div').children('.add_form').children('.add_passage_textarea');
+        }  
+        return textarea;    
+    };  
+    var textarea = getTextarea();       
     var toolbar = textarea.prev('.ql-toolbar');
     toolbar.remove();
     var info = textarea.html();
@@ -458,79 +464,103 @@ $(document).on('click', '.editor_option', function(){
         case 'Rich':
         textarea.siblings('.CodeMirror').remove();
         textarea.replaceWith('<div class="add_passage_textarea">'+info+'</div>');
-        textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
-        if(textarea.length == 0){
-            textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
-            textarea.css({
-                background: 'white',
-                color: 'black'
-            });
-        }  
-        $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
-        var toolbarOptions = [
-          // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-          ['blockquote', 'code-block'],
-
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-          [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-          // [{ 'font': [] }],
-          [{ 'align': [] }],
-
-          ['clean']                                         // remove formatting button
-        ];
-        if(scriptLoaded('/quill.js')){
-            var quill = new Quill(textarea[0], {
-                modules: {
-                    toolbar: toolbarOptions
-                },
-                theme: 'snow'
-              });
-        }
-        else{
-            $.getScript('/quill.js')
-            .done(function( script, textStatus ) {
-               var quill = new Quill(textarea[0], {
-                    modules: {
-                        toolbar: toolbarOptions
-                    },
-                    theme: 'snow'
-                  });
-              })
-              .fail(function( jqxhr, settings, exception ) {
-                $( "div.log" ).text( "Triggered ajaxError handler." );
-            });
-        }
+        textarea = getTextarea();
+        textarea.css({
+            background: 'white',
+            color: 'black'
+        });
+        getQuillEditor(textarea[0]);
         break;
         case 'Code':
-        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea"></textarea>');
-        textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');
-        //side panel
-        if(textarea.length == 0){
-            textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
-        } 
-        var scriptURL = '/mode/'+value+'/'+value+'.js';
-        var editor;
-        editor = CodeMirror.fromTextArea(textarea[0]);
-        if(scriptLoaded(scriptURL)){
-            editor = CodeMirror.fromTextArea(textarea[0]);
-        }
-        else{
-            $.getScript(scriptURL)
-            .done(function( script, textStatus ) {
-               editor = CodeMirror.fromTextArea(textarea[0]);
-              })
-              .fail(function( jqxhr, settings, exception ) {
-                $( "div.log" ).text( "Triggered ajaxError handler." );
-            });
-        }
-        editor.getDoc().setValue(info);
+        textarea.siblings('.CodeMirror').remove();
+        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+info+'</textarea>');
+        textarea = getTextarea();
+        var lang = $(this)
+                    .prev('.editor_code_select_container')
+                    .children('.editor_code_select')
+                    .val();
+        getCodeMirror(textarea[0], lang, info);
         break;
     }
 });
+function getQuillEditor(textarea, content=null){
+    $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
+    var toolbarOptions = [
+      // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      // [{ 'font': [] }],
+      [{ 'align': [] }],
+
+      ['clean']                                         // remove formatting button
+    ];
+    if(scriptLoaded('/quill.js')){
+        var quill = new Quill(textarea, {
+            modules: {
+                toolbar: toolbarOptions
+            },
+            theme: 'snow',
+            readOnly: true
+          });
+        if(content != null){
+            quill.clipboard.dangerouslyPasteHTML(0, content);
+        }
+        quill.enable();
+    }
+    else{
+        $.getScript('/quill.js')
+        .done(function( script, textStatus ) {
+           var quill = new Quill(textarea, {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow',
+                readOnly: true
+              });
+           if(content != null){
+            quill.clipboard.dangerouslyPasteHTML(0, content);
+           }
+           quill.enable();
+          })
+          .fail(function( jqxhr, settings, exception ) {
+            $( "div.log" ).text( "Triggered ajaxError handler." );
+        });
+    }
+}
+function getCodeMirror(textarea, lang, content=null){
+    var scriptURL = '/mode/'+lang+'/'+lang+'.js';
+    var editor;
+    if(scriptLoaded(scriptURL)){
+        editor = CodeMirror.fromTextArea(textarea, {
+            mode: lang
+        });
+        if(content != null){
+            editor.getDoc().setValue(content);
+        }
+        return editor;
+    }
+    else{
+        $.getScript(scriptURL)
+        .done(function( script, textStatus ) {
+           editor = CodeMirror.fromTextArea(textarea, {
+            mode: lang
+           });
+           if(content != null){
+            editor.getDoc().setValue(content);
+            }
+           return editor;
+          })
+          .fail(function( jqxhr, settings, exception ) {
+            $( "div.log" ).text( "Triggered ajaxError handler." );
+        });
+    }
+}
 $(document).on('click', '.tag_add', function(){
     $(this).parent().siblings('.tag_input').slideToggle();
 });
@@ -615,79 +645,12 @@ function readPassageMetadata(thiz){
                 // if(!Sasame){
                 //     viewportMargin = Infinity;
                 // }
-                if(scriptLoaded(scriptURL)){
-                    editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0], {
-                        mode: value,
-                        viewportMargin: viewportMargin
-                    });
-                    // if(!Sasame){
-                    //     $('.CodeMirror').css('height', 'auto');
-                    // }
-                }
-                else{
-                    $.getScript(scriptURL)
-                    .done(function( script, textStatus ) {
-                       editor = CodeMirror.fromTextArea(thiz.siblings('.passage_content')[0], {
-                        mode: value,
-                        viewportMargin: viewportMargin
-                       });
-                       // if(!Sasame){
-                       //      $('.CodeMirror').css('height', 'auto');
-                       //  }
-                      })
-                      .fail(function( jqxhr, settings, exception ) {
-                        $( "div.log" ).text( "Triggered ajaxError handler." );
-                    });
-                }
+                getCodeMirror(thiz.siblings('.passage_content')[0], value);
                 break;
                 case 'Quill JS':
                 $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
                 $('#passage_content_'+thiz.parent().attr('id')).text('');
-                var toolbarOptions = [
-                  // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                  ['blockquote', 'code-block'],
-
-                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-
-                  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-                  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-                  // [{ 'font': [] }],
-                  [{ 'align': [] }],
-
-                  ['clean']                                         // remove formatting button
-                ];
-                if(scriptLoaded('/quill.js')){
-                    var quill = new Quill('#passage_content_'+thiz.parent().attr('id'), {
-                        modules: {
-                            toolbar: toolbarOptions
-                        },
-                        theme: 'snow',
-                        readOnly: true
-                      });
-                     quill.clipboard.dangerouslyPasteHTML(0, content);
-                    quill.enable();
-                }
-                else{
-                    $.getScript('/quill.js')
-                    .done(function( script, textStatus ) {
-                       var quill = new Quill('#passage_content_'+thiz.parent().attr('id'), {
-                            modules: {
-                                toolbar: toolbarOptions
-                            },
-                            theme: 'snow',
-                            readOnly: true
-                          });
-                       quill.clipboard.dangerouslyPasteHTML(0, content);
-                        quill.enable();
-                      })
-                      .fail(function( jqxhr, settings, exception ) {
-                        $( "div.log" ).text( "Triggered ajaxError handler." );
-                    
-
-                    });
-                }
+                getQuillEditor('#passage_content_'+thiz.parent().attr('id'), content);
                 thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
                 thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
                     jqueryToggle(thiz, function(){

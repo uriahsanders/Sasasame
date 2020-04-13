@@ -23,6 +23,15 @@
                       <div class="header">Choose Editor</div>
                       <div class="editor_option"id="editor_plain">Plain</div>
                       <div class="editor_option"id="editor_rich">Rich</div>
+                      <div class="editor_code_select_container"style="text-align:center;margin:10px;">
+                        <select class="editor_code_select" autocomplete="off">
+                          <option value="javascript">Javascript</option>
+                          <option value="python">Python</option>
+                          <option value="ruby">Ruby</option>
+                          <option value="html">HTML</option>
+                          <option value="css">CSS</option>
+                        </select>
+                      </div>
                       <div class="editor_option"id="editor_code">Code</div>
                     </div>
                     <div class="add_passage_icons"style="text-align:left">
@@ -108,7 +117,7 @@
 
         <!-- Currently Inactive -->
         <option>Animation</option>
-        <!-- Displays chapter contents as sub passages -->
+        <!-- Displays chapter contents as sub passages, puts in the TOC -->
         <option>Chapter</option>
         <option>Tone</option>
         <option>Graph</option>

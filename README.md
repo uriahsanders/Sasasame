@@ -9,7 +9,7 @@ Sasame is fresh, open-source and always improving. Help out by adding, categoriz
 Create an account to get the most out of Sasame; this allows you to star and duplicate useful passages for your own purposes.
                           
 
-Sasame has both a traditional and a graphic user interface. Instead of books, the Library of Sasame has passages. These passages can be text, music, images, code, animations, etc. They can even modify Sasame itself. And they can all be sorted and resorted like the pieces of a puzzle to accomplish any task.
+Sasame has both a traditional and a graphic user interface. Instead of books, the Library of Sasame has passages. These passages can be text, music, images, code, animations, quizzes/challenges, etc. They can even modify Sasame itself. And they can all be sorted and resorted like the pieces of a puzzle to accomplish any task.
                           
 
 Passages can be labeled with 'keys' to give them certain properties. You can read more about what keys do in the key reference, or learn by checking out the metadata of passages in Sasame. Keys are always being added, and can also be created via passages.
