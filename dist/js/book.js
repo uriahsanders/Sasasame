@@ -1039,7 +1039,7 @@ $(document).on('click', '[id^=star_]', function(){
     });
 });
 $(document).on('click', '.passage_author', function(e){
-    if($(e.target).hasClass('passage_label') || $(e.target).is('ion-icon')){
+    if($(e.target).hasClass('passage_label') || $(e.target).hasClass('special_mark') || $(e.target).is('ion-icon')){
         return;
     }
     if($(this).siblings('.passage_content').next('.CodeMirror').length){
@@ -1048,7 +1048,8 @@ $(document).on('click', '.passage_author', function(e){
     else{
         $(this).siblings('.passage_content').fadeToggle();
         $(this).siblings('.ql-toolbar').fadeToggle();
-        $(this).siblings('.passage_image').fadeToggle();
+        $(this).siblings('.passage_white').fadeToggle();
+        $(this).siblings('.special_view_sub_container').fadeToggle();
     }
 });
 $(document).on('click', '[id^=chapter_star_]', function(){
@@ -1092,7 +1093,10 @@ $(document).on('click', '.remove_property', function(){
     $(this).parent().remove();
 });
 $(document).on('click', '.view_sub', function(){
-    $(this).parent().parent().children('.sub_passages').slideToggle();
+    $(this).parent().parent().parent().children('.sub_passages').slideToggle();
+});
+$(document).on('click', '.special_view_sub', function(){
+    $(this).parent().prev('.sub_passages').slideToggle();
 });
 $(document).on('click', '.fileStreamChapter', function(){
     var inputVal = $(this).parent().parent().prev('.file_input').val();

@@ -134,14 +134,13 @@
     display: none;
 }
 .profile_image{
-    font-size: 2em;
+    font-size: 3em;
     float: left;
     margin-right: 10px;
     /*color: #353535;*/
 }
 .profile_author{
     padding-top: 2px;
-    display: block;
 }
 #side_panel_body{
     width: 90%;
@@ -238,7 +237,7 @@
     /*line-height: 30px;*/
     font-size: 1.2em;
     background: #353535;
-    color: #ccc;
+    color: #fff;
     margin-bottom: 10px;
     padding: 15px;
     /*not for mobile*/
@@ -333,6 +332,7 @@
     text-align: center;
     font-weight: bold;
     margin-top: 10px;
+    clear: both;
     /*display: none;*/
 }
 .passage_content{
@@ -654,6 +654,8 @@
     max-height: 300px;
     margin: auto;
     display: block;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 5px;
 }
 .ppe_queue_canvas{
     max-height: 300px;
@@ -791,6 +793,7 @@ select::-ms-expand {
 .proteins{
     font-size: 0.9em;
     text-align: left;
+    margin-top: 5px;
 }
 .canvas_proteins{
     font-size: 0.8em;
@@ -840,4 +843,26 @@ ion-icon{
 }
 .passage_canvas{
     border: 1px solid black;
+}
+.special_mark{
+    /*position: absolute;*/
+    /*left: 0px;*/
+    /*border: 1px solid #000;*/
+    border-radius: 100%;
+/*    width: 25px;
+    height: 25px;*/
+    text-align: center;
+    font-size: 1.5em;
+    float: left;
+    color: green;
+    background: #fff;
+    padding: 0px;
+    margin-right: 10px;
+    cursor: default;
+}
+.passage_white{
+    background: #fff;
+}
+.special_icon{
+    cursor: default;
 }

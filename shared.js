@@ -169,23 +169,15 @@
          ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
+            ret += `<div title="Useful"class="special_mark">
+        <ion-icon class="special_icon" src="/images/ionicons/checkmark-circle-sharp.svg"></ion-icon>
+        </div>`;
 
             ret += `<ion-icon class="profile_image"src="/images/ionicons/person-circle-sharp.svg"></ion-icon>`;
             if(passage.author){
                 ret += `<a class="profile_author basic_link" href="/user/`+passage.author._id+`">`+passage.author.username+`</a>`;
             }else{
                 ret += `<a class="profile_author basic_link" href="#">Anonymous</a>`;
-            }
-            if(passage.chapter && !passage.chapter.title){
-              ret += `<div class="passage_label"><a class="basic_link passage_label_link"></a></div>`;
-            }
-            else if (passage.chapter && passage.chapter.title){
-              ret += `<div class="passage_label"><a href="/`+passage.chapter.title+`/`+passage.chapter._id+`" class="basic_link passage_label_link">`+passage.chapter.title+`/</a></div>`;
-              ret += '<input class="passage_chapter_id"type="hidden"value="'+passage.chapter._id+'">';
-            }
-            else{
-              ret += `<div class="passage_label"><a class="basic_link passage_label_link" href="/">Sasame/</a></div>`;
-
             }
             ret += `<div class="proteins">
              <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
@@ -204,7 +196,17 @@
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              `;
              ret += `</div>`;
-            // ret += '</div>';
+            if(passage.chapter && !passage.chapter.title){
+              ret += `<div class="passage_label"><a class="basic_link passage_label_link"></a></div>`;
+            }
+            else if (passage.chapter && passage.chapter.title){
+              ret += `<div class="passage_label"><a href="/`+passage.chapter.title+`/`+passage.chapter._id+`" class="basic_link passage_label_link">`+passage.chapter.title+`/</a></div>`;
+              ret += '<input class="passage_chapter_id"type="hidden"value="'+passage.chapter._id+'">';
+            }
+            else{
+              ret += `<div class="passage_label"><a class="basic_link passage_label_link" href="/">Sasame/</a></div>`;
+
+            }
             ret += `<div id="modal_`+passage._id+`" class="modal">
                 <div class="view_details">View Details</div>
                 <div class="passage_details">`;
@@ -248,7 +250,7 @@
             ret += `<div id="passage_content_`+passage._id+`"class="passage_content`+none+`">`+ escapeHTML(passage.content)+`</div>`;
             ret += `<canvas class="passage_canvas"></canvas>`;
             if(passage.filename){
-              ret += `<img class="passage_image"src="/uploads/`+passage.filename+`">`;
+              ret += `<div class="passage_white"><img class="passage_image"src="/uploads/`+passage.filename+`"></div>`;
             }
             ret += `<audio class="passage_audio"controls="true"></audio>
             <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
@@ -259,8 +261,11 @@
                      ret += `</div>`;
                 });
             ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
-            </div>
-            <div class="add_from_queue">Add</div>
+            </div>`;
+            if(passage.passages.length > 0){
+              ret += '<div class="special_view_sub_container"style="text-align: center;margin-top:5px;"><ion-icon class="special_view_sub"title="Sub Passages"src="/images/ionicons/caret-down-sharp.svg"></ion-icon></div>';
+            }
+            ret += `<div class="add_from_queue">Add</div>
         </div>`;
         return ret;
   };

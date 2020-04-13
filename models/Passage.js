@@ -79,6 +79,12 @@ const passageSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    //has the passage been marked useful?
+    //only really applies to passages created by Sasame or Task responses
+    useful: {
+        type: Boolean,
+        default: false
+    }
 });
 var autoPopulateChildren = function(next) {
     this.populate('passages');
