@@ -35,13 +35,13 @@
                       <div class="editor_option"id="editor_code">Code</div>
                     </div>
                     <div class="add_passage_icons"style="text-align:left">
-                        <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
+                        <ion-icon title="Add Image"class="link white image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
-                        <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-circle-sharp.svg"></ion-icon>
-                        <ion-icon title="Choose Editor" class="editor_choose" src="/images/ionicons/newspaper-sharp.svg"></ion-icon>
-                        <ion-icon title="Add Tags" name="tags"class="tag_add" src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
-                        <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
-                        <ion-icon title="Content Warning" class="flag_icon add_flag" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+                        <ion-icon data-status="empty"title="Add Audio Recording"class="link white mic_record_icon"src="/images/ionicons/mic-circle-sharp.svg"></ion-icon>
+                        <ion-icon title="Choose Editor" class="link white editor_choose" src="/images/ionicons/newspaper-sharp.svg"></ion-icon>
+                        <ion-icon title="Add Tags" name="tags"class="link white tag_add" src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
+                        <!-- <ion-icon title="Make Drawing"name="create"class="link white draw_icon"></ion-icon> -->
+                        <ion-icon title="Content Warning" class="link white flag_icon add_flag" src="/images/ionicons/flag-sharp.svg"></ion-icon>
                         <!--<a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>-->
                         <!--<ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-sharp.svg"></ion-icon>-->
                     </div>
@@ -158,7 +158,12 @@
     return ret;
   };
   exports.printPassage = function(passage, user, queueItem=false){
-       var metadata = JSON.parse(passage.metadata);
+      if(passage.metadata != null){
+        var metadata = JSON.parse(passage.metadata);
+      }
+      else{
+        var metadata = {};
+      }
        var ret = '';
         ret += `
         <div id="`+passage._id+`" class="passage">`;
@@ -180,20 +185,21 @@
                 ret += `<a class="profile_author basic_link" href="#">Anonymous</a>`;
             }
             ret += `<div class="proteins">
-             <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
+             <ion-icon id="passage_details_`+passage.id+`"class="link white passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
              `;
-            ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon> `;
+            ret += `<ion-icon class="link white square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon> `;
 
              if(user){
                 ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
-             ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
-             <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->
-             <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
-             <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
-             <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
-             <ion-icon title="Donate to Author" class="passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
-             <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
+             ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="link white flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+             <ion-icon class="link white passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
+             <ion-icon class="link white passage_magnet"title="Magnetize"src="/images/ionicons/magnet-sharp.svg"></ion-icon>
+             <ion-icon class="link white passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
+             <ion-icon class="link white view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
+             <ion-icon title="Update" class="link white"id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
+             <ion-icon title="Donate to Author" class="link white passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
+             <ion-icon title="Delete" class="link white"id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              `;
              ret += `</div>`;
             if(passage.chapter && !passage.chapter.title){
@@ -253,8 +259,12 @@
               ret += `<div class="passage_white"><img class="passage_image"src="/uploads/`+passage.filename+`"></div>`;
             }
             ret += `<audio class="passage_audio"controls="true"></audio>
-            <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>
-            <div class="sub_passages">`;
+            <input type="hidden" id="canvas_name_` + metadata['Canvas']+`"/>`;
+            if(passage.passages.length > 0){
+              ret += '<div class="special_view_sub_container link white"style="text-align: center;margin-top:5px;"><ion-icon class="link white special_view_sub"title="Sub Passages"src="/images/ionicons/caret-down-sharp.svg"></ion-icon></div>';
+            }
+
+            ret += `<div class="sub_passages">`;
                 passage.passages.forEach(function(sub){
                     ret += `<div class="sub_passage">`;
                      ret += exports.printPassage(sub, user);
@@ -262,9 +272,6 @@
                 });
             ret += `<div class="add_sub_passage"><a class="add_sub_passage_modal basic_link"href="#modal_add_sub_passage_${passage._id}" rel="modal:open"><ion-icon title="Add Sub Passage"src="/images/ionicons/add-circle-sharp.svg"></ion-icon></a></div>
             </div>`;
-            if(passage.passages.length > 0){
-              ret += '<div class="special_view_sub_container"style="text-align: center;margin-top:5px;"><ion-icon class="special_view_sub"title="Sub Passages"src="/images/ionicons/caret-down-sharp.svg"></ion-icon></div>';
-            }
             ret += `<div class="add_from_queue">Add</div>
         </div>`;
         return ret;

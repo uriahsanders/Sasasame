@@ -407,15 +407,35 @@ function jqueryToggle(thiz, func1, func2, dataType='toggle', dataValue=[0, 1]){
     return thiz.data(dataType);
 }
 $(document).on('click', '.passage_mutate', function(){
-    flashIcon($(this), 'red');
+    flashIcon($(this), 'gold');
     var content = $(this).parent().siblings('.passage_content').text();
-    $(this)
-    .parent()
-    .parent()
-    .append('<input class="reserve"type="hidden"value="'+content+'"/>');
-    var newContent = $(this).parent().siblings('.reserve').val();
-    newContent = share.mutate(newContent, ' ');
-    $(this).parent().siblings('.passage_content').html(newContent);
+    var thiz = $(this);
+    $.ajax({
+        type: 'post',
+        url: '/mutate',
+        data: {
+            content: content
+        },
+        success: function(data){
+            thiz.parent().parent().siblings('.passage_content').text(data);
+        }
+    });
+});
+$(document).on('click', '.passage_magnet', function(){
+    flashIcon($(this), 'gold');
+    var content = $(this).parent().parent().siblings('.passage_content').text();
+    var thiz = $(this);
+    $.ajax({
+        type: 'post',
+        url: '/stitch',
+        data: {
+            content: content
+        },
+        success: function(data){
+            // alert(data);
+            thiz.parent().parent().siblings('.passage_content').text(data);
+        }
+    });
 });
 $(document).on('click', '.image_upload_icon', function(){
     $(this).css('color', 'red');
@@ -570,7 +590,12 @@ function readPassageMetadata(thiz){
     thiz.addClass('metadata_read');
     var metadata = thiz.val();
     var _id = thiz.attr('id').split('_')[2];
-    metadata = JSON.parse(metadata);
+    try{
+        metadata = JSON.parse(metadata);
+    }
+    catch(e){
+        return;
+    }
     var content = thiz.siblings('.passage_content').text();
     thiz.siblings('.passage_author').children('.proteins').children('.passage_play').hide();
     var autoplay = false;
@@ -1096,7 +1121,7 @@ $(document).on('click', '.view_sub', function(){
     $(this).parent().parent().parent().children('.sub_passages').slideToggle();
 });
 $(document).on('click', '.special_view_sub', function(){
-    $(this).parent().prev('.sub_passages').slideToggle();
+    $(this).parent().next('.sub_passages').slideToggle();
 });
 $(document).on('click', '.fileStreamChapter', function(){
     var inputVal = $(this).parent().parent().prev('.file_input').val();
@@ -1557,6 +1582,51 @@ $('.help_read_more').on('click', function(){
     $('.blocker').click();
     $('#side_panel').scrollTop(0);
 });
+$(document).on('mouseup', '.passage_content', function(e){
+    var thiz = $(this);
+    if(e.ctrlKey && e.shiftKey){
+        console.log('up');
+        $.ajax({
+            type: 'post',
+            url: '/categorize',
+            data: {
+                content: window.getSelection().toString()
+            },
+            success: function(data){
+                alert(data);
+                notifyUser();
+            }
+        });
+    }
+});
+function notifyUser(){
+    alert('Done.');
+}
+$('#stream_right').on('click', function(){
+    $.ajax({
+        type: 'post',
+        url: '/stream',
+        data: {},
+        success: function(data){
+            $('#stream_passage').html(data);
+        }        
+    });
+});
+$('#toggle_stream').on('click', function(){
+    $('.blocker').click();
+    $('#passages').toggle();
+    $('#passage_load').toggle();
+    $('#stream').toggle();
+    $('.toggle_resize').off('click');
+    $.ajax({
+        type: 'post',
+        url: '/stream',
+        data: {},
+        success: function(data){
+            $('#stream_passage').html(data);
+        }        
+    });
+});
 $('.toggle_resize').on('click', function(){
     if($(this).data('hidden') == 'true'){
         $(this).css('color', 'white');
@@ -1567,7 +1637,7 @@ $('.toggle_resize').on('click', function(){
             'height': 'auto'
         });
         $(this).data('hidden', 'false');
-        $('.passage').draggable('disabled');
+        $('.passage').draggable('disable');
     }
     else{
         $(this).css('color', 'gold');

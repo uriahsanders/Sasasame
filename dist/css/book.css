@@ -753,6 +753,15 @@ select::-ms-expand {
 .sub_passages{
     display: none;
 }
+#stream{
+    display: none;
+}
+#stream_right{
+    font-size: 3em;
+    position: absolute;
+    right: 50px;
+    top: 50%;
+}
 .image_upload_icon, .mic_record_icon, .flag_icon, .icon_top_add, .passage_play{
     cursor: pointer;
 }

@@ -147,7 +147,8 @@ var cron = require('node-cron');
 cron.schedule('0 12 * * *', () => {
   console.log('Cron ran at 12pm.');
   //run daily methods
-  //...
+  //Remove deleted passages (maybe every week instead)
+  //Have Sasame create and remove AI created passages
 });
 //ROUTES
 //GET (or show view)
@@ -590,6 +591,92 @@ app.post('/search/', (req, res) => {
         res.send(html);
     });
 });
+app.post('/categorize', (req, res) => {
+    var content = req.body.content;
+    Passage.create({
+        content: content,
+        sasame: true,
+        useful: false,
+        firstLine: content.split('\n')[0]
+    }, function(err, passage){
+        res.send('Done');
+    });
+});
+app.post('/stitch', (req, res) => {
+  //return the given passage content + passage content that stitches well
+  //in order for this to be true,
+  //the last line of the first passage needs to match
+  //the first line of the second passage.
+  var content = req.body.content;
+  var lines = content.split('\n');
+  var lastLine = lines[content.length - 1];
+  lines.pop(); //remove last line
+  Passage.countDocuments().exec(function(err, count){
+    getRandomStitchPassage(res, count, lines, lastLine);
+  });
+});
+function getRandomStitchPassage(res, count, lines, lastLine){
+    var random = Math.floor(Math.random() * count);
+    Passage.findOne({
+        deleted: false,
+        queue: false,
+        parent: null,
+        firstLine: lastLine
+    }).skip(random).exec(function (err, result) {
+        // result is random
+        if(result != null){
+            return res.send(lines.join('\n') + '\n' + result.content);
+        }
+        else{
+            getRandomStitchPassage(res, count, lines, lastLine);
+        }
+    });
+}
+app.post('/mutate', (req, res) => {
+    //return random stitching of sasamatic passage content
+    //sasamatic passages are basically added at random so this works
+    Passage.countDocuments().exec(function(err, count){
+        var random = Math.floor(Math.random() * count);
+        var r2 = random
+        if(r2 > DOCS_PER_PAGE){
+            r2 = DOCS_PER_PAGE;
+        }
+        var ret = '';
+        Passage.find({
+            deleted: false,
+            queue: false,
+            parent: null
+        }).skip(random).limit(r2).exec(function (err, passages) {
+            passages.forEach(function(passage){
+                ret += passage.content;
+            });
+            res.send(ret);
+        });
+    });
+});
+app.post('/stream', (req, res) => {
+    //return a random passage
+    Passage.countDocuments().exec(function(err, count){
+        getRandomStreamPassage(res, count);
+    });
+});
+function getRandomStreamPassage(res, count){
+    var random = Math.floor(Math.random() * count);
+    Passage.findOne({
+        deleted: false,
+        queue: false,
+        parent: null
+    }).skip(random).exec(function (err, result) {
+        // result is random
+        if(result != null){
+            var ret = scripts.printPassage(result);
+            return res.send(ret);
+        }
+        else{
+            getRandomStreamPassage(res, count);
+        }
+    });
+}
 app.post('/search_category/', (req, res) => {
     let title = req.body.title;
     Passage.find({categories: new RegExp(''+title+'', "i") })

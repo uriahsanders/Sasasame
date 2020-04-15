@@ -8,6 +8,16 @@
     }
 }
 @media screen and (max-width: 550px){
+    #login{
+        right: 25px;
+        top: -52px;
+    }
+    #normal_login{
+        display: none;
+    }
+    #mobile_login{
+        display: block;
+    }
     #nav_ul{
         text-align: center;
         margin: 0;

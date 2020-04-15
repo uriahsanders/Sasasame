@@ -91,7 +91,7 @@
                 <br/>
                 <br/>
                 <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
-                <a class="link white" rel="modal:open"href="#login_modal">Enter</a> 
+                <a class="link white" rel="modal:open"href="#login_modal"><ion-icon id="mobile_login" title="Enter"src="/images/ionicons/log-in-sharp.svg"></ion-icon><span id="normal_login">Enter</span></a> 
                 <input id="logged_in"value="false"type="hidden" name="">
             </div>
         <%} %>
@@ -246,17 +246,24 @@
                               <p class="help_read_more"><a class="basic_link" href="#">Read more...</a></p>
                             </div>
                             <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
-                            <ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
-                             <ion-icon class="book_option"id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
-                             <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
-                             <ion-icon class="toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-sharp.svg"></ion-icon>
+                            <div id="extras_modal_book" class="modal">
+                              <p><a href="#"id="toggle_stream"class="basic_link">Stream</a></p>
+                            </div>
+                            <div id="extras_modal_graphic" class="modal">
+                              
+                            </div>
+                            <a href="#extras_modal_book" rel="modal:open"><ion-icon class="link white"title="Extras (E)"src="/images/ionicons/apps-sharp.svg"></ion-icon></a>
+                            <ion-icon class="link white passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
+                             <ion-icon class="link white book_option"id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
+                             <ion-icon class="link white toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
+                             <ion-icon class="link white toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-sharp.svg"></ion-icon>
                              <!-- PPE Options -->
-                             <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/square-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_search_icon"class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-sharp.svg"></ion-icon>
+                             <ion-icon data-select="off"id="ppe_select"class="link white ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
+                             <ion-icon id="ppe_mutate"class="link white ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
+                             <ion-icon id="link white ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/square-sharp.svg"></ion-icon>
+                             <ion-icon id="link white ppe_search_icon"class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-sharp.svg"></ion-icon>
 
-                             <ion-icon class="graphic_mode"title="Graphic Mode (g)"src="/images/ionicons/brush-sharp.svg"></ion-icon>
+                             <ion-icon class="link white graphic_mode"title="Graphic Mode (g)"src="/images/ionicons/brush-sharp.svg"></ion-icon>
                         </div>
             
                     </div>
@@ -354,10 +361,12 @@
                         </div>
                         <%}%>
                     <%}%>
+                  <!-- Stream -->
+                  <div id="stream">
+                    <div id="stream_passage"></div>
+                    <div id="stream_right"><ion-icon src="/images/ionicons/caret-forward-sharp.svg"></ion-icon></div>
+                  </div>
                 </div>
-                <!-- <div class="modal" id="toc">
-                    
-                </div> -->
             </div>
         </div>
         <input type="hidden"id="custom_pairs" name="">

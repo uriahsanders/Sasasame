@@ -84,6 +84,18 @@ const passageSchema = mongoose.Schema({
     useful: {
         type: Boolean,
         default: false
+    },
+    //was this passage created by Sasame?
+    //can be deleted by everyone until marked useful
+    sasame: {
+        type: Boolean,
+        default: false
+    },
+    //keep track of first line of content for passage stitching
+    //sasamatic passages only
+    firstLine: {
+        type: String,
+        default: null
     }
 });
 var autoPopulateChildren = function(next) {
