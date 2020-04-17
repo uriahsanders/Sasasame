@@ -1256,7 +1256,7 @@ $(document).on('click', '.passage_expand', function(){
         $('#'+id).after('<div class="expand_divider"></div>');
         $('.expand_divider').css({
             width: '100%',
-            height:'50%',
+            height:'100%',
             position: 'relative'
         });
         $(window).scrollTop(0);
