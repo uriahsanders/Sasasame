@@ -141,7 +141,7 @@
         <option>Mutate</option>
     </select>
     <br><br>
-    <input value="`+value+`"name="property_value"class="property_value"type="" name="" autocomplete="off">
+    <input value="`+escapeHTML(value)+`"name="property_value"class="property_value"type="" name="" autocomplete="off">
 </div>
     `;
   };
@@ -167,13 +167,14 @@
        var ret = '';
         ret += `
         <div id="`+passage._id+`" class="passage">`;
-        ret += '<div class="star_container"><span title="Stars"class="star_count_'+passage._id+' gold">'+(passage.stars || 0 )+'</span></div>';
 
             ret += `<div id="modal_add_sub_passage_`+passage._id+`" class="modal">`
           ret += exports.printAddForm('', false, '', passage._id)
          ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
+                    ret += '<div class="star_container"><span title="Stars"class="star_count_'+passage._id+' gold">'+(passage.stars || 0 )+'</span></div>';
+
             ret += `<div title="Useful"class="special_mark">
         <ion-icon class="special_icon" src="/images/ionicons/checkmark-circle-sharp.svg"></ion-icon>
         </div>`;
@@ -199,6 +200,7 @@
              <ion-icon class="link white view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
              <ion-icon title="Update" class="link white"id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
              <ion-icon title="Donate to Author" class="link white passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
+             <ion-icon title="Expand" class="passage_expand link white"id="passage_expand_`+passage._id+`"src="/images/ionicons/scan-sharp.svg"></ion-icon>
              <ion-icon title="Delete" class="link white"id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              `;
              ret += `</div>`;
@@ -230,6 +232,7 @@
                       chapterID = passage.chapter._id;
                       ret += `<p>Chapter: <a class="link" href="/${passage.chapter.title}/${passage.chapter._id}">`+passage.chapter.title+`</a></p>`;
                     }
+                    ret += '<p>Identifier: '+ passage._id + '</p>';
                 ret += `</div>`;
               var i = 0;
               var after = '<br>';
@@ -254,7 +257,7 @@
               none = ' none';
             }
             ret += `<div id="passage_content_`+passage._id+`"class="passage_content`+none+`">`+ escapeHTML(passage.content)+`</div>`;
-            ret += `<canvas class="passage_canvas"></canvas>`;
+            ret += `<canvas id="passage_canvas_`+passage._id+`"class="passage_canvas"></canvas>`;
             if(passage.filename){
               ret += `<div class="passage_white"><img class="passage_image"src="/uploads/`+passage.filename+`"></div>`;
             }

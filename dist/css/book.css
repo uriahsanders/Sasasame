@@ -239,7 +239,8 @@
     background: #353535;
     color: #fff;
     margin-bottom: 10px;
-    padding: 15px;
+    padding: 5px;
+    /*border-bottom: 1px solid #353535;*/
     /*not for mobile*/
     display: block;
     /*resize: both;*/
@@ -291,10 +292,11 @@
     text-align: left;
     cursor: pointer;
     margin-bottom: 10px;
+    padding: 5px;
 }
 .star_container{
     float: right;
-    font-size: 0.8em;
+    font-size: 1.2em;
 }
 .passage_author_image{
     width: 50px;
@@ -368,19 +370,7 @@
 .toggle_tools{
     color: gold;
 }
-.passage_expand{
-    /* display: none; */
-    /* float: left; */
-    cursor: pointer;
-    font-weight: 200;
-    /* border: 1px solid #353535; */
-    float: left;
-    width: 20px;
-    padding: 5px;
-    /* border-bottom: 1px solid #353535; */
-    /* border-right: 1px solid #353535; */
-    /* border-top: 1px solid #353535; */
-}
+
 .add_sub_passage{
     margin-top: 10px;
     font-size: 1.2em;
@@ -505,7 +495,7 @@
     z-index: 0;
     font-size: 0.7em;
     /*height: auto !important;*/
-    border: 1px solid #353535;
+    /*border: 1px solid #353535;*/
     resize: vertical;
 }
 #perm_chapter{

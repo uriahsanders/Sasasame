@@ -228,7 +228,7 @@ $(document).on('submit', '.codeform_add', function(e){
     e.preventDefault();
     //first we need to change the textarea value,
     //depending on the editor
-    var content = $(this).children('.add_passage_textarea');
+    var content = $(this).children('[name="passage"]');
     if(content.prop('tagName') == 'TEXTAREA' && content.next('.CodeMirror').length){
         editor = content.next('.CodeMirror').get(0).CodeMirror;
         text = editor.getValue();
@@ -637,7 +637,7 @@ function readPassageMetadata(thiz){
                 }, time * 1000);
             }
             function autoPlay(autoplay, thiz, canvas=false){
-                if((autoplay == true && !Sasame) || (autoplay == true && canvas)){
+                if(autoplay == true && !Sasame){
                     thiz.siblings('.passage_author').children('.proteins').children('.passage_play').click();
                     autoplay = false;
                 }
@@ -646,6 +646,7 @@ function readPassageMetadata(thiz){
             if(thiz.siblings('.passage_content').prop('tagName') == 'TEXTAREA'){
                 codemirror = true;
             }
+            var canvasInfo = '';
             switch(key){
                 case 'Hyperlink':
                 thiz.siblings('.passage_content').attr('title', value);
@@ -655,7 +656,7 @@ function readPassageMetadata(thiz){
                 });
                 break;
                 case 'Head':
-                $('head').append(content);
+                $('head').append(value);
                 break;
                 case 'Color':
                 thiz.siblings('.passage_content').css('color', value);
@@ -934,6 +935,9 @@ function readPassageMetadata(thiz){
                 }, 100);
                 break;
                 case 'Canvas':
+                canvasInfo = 
+                `var canvas = $('#passage_metadata_`+_id+`').siblings('.passage_canvas');
+                var ctx = canvas[0].getContext('2d');`;
                 var canvas = thiz.siblings('.passage_canvas');
                 var ctx = canvas[0].getContext('2d');
                 //not generated from JS
@@ -941,6 +945,7 @@ function readPassageMetadata(thiz){
                     break;
                 }
                 case 'Eval JS':
+                canvasInfo += 'var passage_id = "' + _id + '";';
                 //store value in DOM
                 var storage = $('#custom_pairs').val();
                 if(storage == ''){
@@ -977,13 +982,13 @@ function readPassageMetadata(thiz){
                         catch(e){}
                     }
                     $('#script_'+_id).remove();
-                    var script = '<script id="script_'+_id+'"type="text/javascript">'+content+'</script>';
-                    $('head').append(script);
+                    var script = '<script id="script_'+_id+'"type="text/javascript">'+canvasInfo+content+'</script>';
                     if(key == 'Canvas'){
                         canvas.css('display', 'inline-block');
                         //now we need to update the passage on the server
                         //with the image generated from the canvas
                     }
+                    $('head').append(script);
                 });
                 autoPlay(autoplay, thiz, isCanvasKey);
                 break;
@@ -1169,7 +1174,7 @@ $(document).on('click', '[id^=passage_delete_]', function(){
 });
 $(document).on('click', '[id^=passage_update_]', function(){
     var _id = $(this).attr('id').split('_')[2];
-    var content = $(this).parent().siblings('.passage_content');
+    var content = $(this).parent().parent().siblings('.passage_content');
     var text;
     if(content.prop('tagName') == 'TEXTAREA'){
         editor = content.next('.CodeMirror').get(0).CodeMirror;
@@ -1232,6 +1237,40 @@ $('.sun_icon').on('click', function(){
 });
 $('.flag_icon').on('click', function(){
     $(this).toggleClass('flagged');
+});
+$(document).on('click', '.passage_expand', function(){
+    var id = $(this).attr('id').split('_')[2];
+    $(this).toggleClass('gold');
+    jqueryToggle($(this), function(){
+        //Fullscreen a given passage
+        $('#'+id).css({
+            position: 'absolute',
+            height: '100%',
+            width: '100%',
+            margin: 'auto',
+            left: '0px',
+            top: '0px',
+            padding: '0px',
+            'padding-top': '15px'
+        });
+        $('#'+id).after('<div class="expand_divider"></div>');
+        $('.expand_divider').css({
+            width: '100%',
+            height:'50%',
+            position: 'relative'
+        });
+        $(window).scrollTop(0);
+        $('html, body').css({
+            overflow: 'hidden'
+        });
+    }, function(){
+        $('#'+id).removeAttr('style');
+        $('.expand_divider').remove();
+        $('html, body').css({
+            overflow: 'auto'
+        });
+        $(window).scrollTop($('#'+id).offset().top);
+    });
 });
 $(document).on('click', '.passage_details_icon', function(){
     $('#edit_div').html($('#modal_'+$(this).attr('id').split('_')[2]).html());
@@ -1521,6 +1560,19 @@ function replaceSelectedText(replacementText) {
         range.text = replacementText;
     }
 }
+function refreshPassage(_id){
+    $.ajax({
+        type: 'post',
+        url: '/get_passage',
+        data: {
+            _id: _id
+        },
+        success: function(data){
+            $('#'+_id).replaceWith(data);
+            alert('Done!');
+        }
+    });
+}
 //if in FileStream and Filetype is JS
 $(document).on('keydown', function(e){
     if(e.keyCode == 191 && e.ctrlKey){
@@ -1660,6 +1712,7 @@ $('.toggle_tools').on('click', function(){
         $('.tool_header').show();
         $('.chapter_tools').show();
         $('.passage_author').show();
+        $('.star_container').show();
         $('.passage').css('padding-bottom', '32px');
         $('.passage').css('background', '#353535');
         $('.passage').css('color', '#ccc');
@@ -1682,6 +1735,7 @@ $('.toggle_tools').on('click', function(){
         $('.passage').css('background', '#fff');
         $('.passage').css('color', '#353535');
         $('.proteins').hide();
+        $('.star_container').hide();
         $('.tool_header').hide();
         $('.chapter_tools').hide();
         $('.passage_author').hide();

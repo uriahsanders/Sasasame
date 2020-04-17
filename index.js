@@ -547,6 +547,8 @@ app.post(/\/add_passage\/?/, (req, res) => {
         });
     }
     else if(type == 'chapter' && content != ''){
+        console.log(JSON.stringify(req.body));
+        console.log(content);
         chapterController.addChapter({
             'title': content,
             'author': user,
@@ -658,6 +660,12 @@ app.post('/stream', (req, res) => {
     //return a random passage
     Passage.countDocuments().exec(function(err, count){
         getRandomStreamPassage(res, count);
+    });
+});
+app.post('/get_passage', (req, res) => {
+    //return a random passage
+    Passage.findOne({_id: req.body._id.trim()}, function(err, passage){
+        res.send(scripts.printPassage(passage, req.session.user));
     });
 });
 function getRandomStreamPassage(res, count){
