@@ -15,12 +15,12 @@ CodeMirror.fromTextArea(document.getElementById('console'), {
 }).setSize('100%', '100');
 var sessionStorageQueue = false;
 //use Session Storage for queue if not logged in
-// if($('#logged_in').val() == 'false'){
-//     sessionStorageQueue = true;
-//     if(!sessionStorage.queue){
-//         sessionStorage.queue = ''; //will simply contain passage html
-//     }
-// }
+if($('#logged_in').val() == 'false'){
+    sessionStorageQueue = true;
+    if(!sessionStorage.queue){
+        sessionStorage.queue = ''; //will simply contain passage html
+    }
+}
 //https://www.andronio.me/2019/04/24/easily-play-a-song-track-in-javascript-using-tone-js-transport/
 var musicLooper;
 class SimplePlayer {
@@ -838,6 +838,15 @@ function readPassageMetadata(thiz){
                     });
                 });
                 break;
+                case 'Webpage':
+                thiz.parent().append('<input id="file_input_'+_id+'"type="text"class="control_input file_input" value="'+value+'">');
+                thiz.parent().append('<iframe class="iframe"id="iframe_'+_id+'"></iframe>');
+                $(document).on('keyup', '#file_input_'+_id+'', function(e){
+                    if(e.keyCode == 13)
+                    document.getElementById('iframe_'+_id).src = $(this).val();
+                    // $('#iframe_'+_id).attr('src', $(this).val());
+                });
+                break;
                 case 'Class':
                 thiz.parent().addClass(value);
                 break;
@@ -1257,7 +1266,8 @@ $(document).on('click', '.passage_expand', function(){
         $('.expand_divider').css({
             width: '100%',
             height:'100%',
-            position: 'relative'
+            position: 'relative',
+            'margin-top': '100%'
         });
         $(window).scrollTop(0);
         $('html, body').css({
@@ -1365,23 +1375,21 @@ $(document).on('click', '.square_icon', function(){
     else{
         passages = {};
     }
-    if(!sessionStorageQueue){
-        //Send ajax request to make new passage,
-        //and then add it to queue
-        $.ajax({
-            type: 'post',
-            url: '/add_to_queue',
-            data: {
-                passage: id,
-                chapter: chapter.val(),
-            },
-            success: function(data){
-                updateQueue();
-                readUnreadMetadata();
-            }
-        });
-    }
-    else{
+    //Send ajax request to make new passage,
+    //and then add it to queue
+    $.ajax({
+        type: 'post',
+        url: '/add_to_queue',
+        data: {
+            passage: id,
+            chapter: chapter.val(),
+        },
+        success: function(data){
+            updateQueue();
+            readUnreadMetadata();
+        }
+    });
+    if(sessionStorageQueue){
         sessionStorage.queue += passage.parent().wrap('<div/>').parent().html();
     }
     flashIcon($(this));

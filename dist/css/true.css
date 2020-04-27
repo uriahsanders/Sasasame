@@ -1,0 +1,19 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+#test{
+	display: flex;
+	 flex-flow: row wrap;
+	margin: auto;
+	text-align: center;
+	border: 3px solid white;
+	justify-content: center;
+	align-items: center;
+	/*grid-template-columns: 10px 10px 10px 10px 10px 10px 10px 10px 10px 10px;*/
+}
+.block{
+	border: 0.1px solid black;
+	height: 10px;
+	width: 10px;
+}

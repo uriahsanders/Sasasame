@@ -20,6 +20,11 @@ function ppe(){
     var queuePos = 0;
     var masterScale = 1;
     var masterRotate = 0;
+    var masterColor = $('.masterColor').val();
+    $(document).on('change', '.masterColor', function(){
+        masterColor = $('.masterColor').val();
+    });
+    var mutationRounded = false;
     var isDrawing = false;
     var isErasing = false;
     var fadeCounter = 0;
@@ -28,7 +33,7 @@ function ppe(){
     var decreasingOpacity = true;
     var opacity = 1;
     var elements = [];
-    const baseSize = 50;
+    const baseSize = 100;
     function fadeOut(){
         ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -135,56 +140,103 @@ function ppe(){
         var mutationCanvas = $('#ppe_mutation')[0];
         var mutationctx = mutationCanvas.getContext('2d');
         mutationctx.clearRect(0, 0, mutationCanvas.width, mutationCanvas.height);
-        var size = baseSize;
-        var sideNumb = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
-        if(isNaN(sideNumb)){
-            sideNumb = 0;
-        }
-        var rotation = parseInt(share.mutate(
-            (Math.floor(Math.random() * 9) + 1) + ''
-            +
-            (Math.floor(Math.random() * 9) + 1) + ''
-            +
-            (Math.floor(Math.random() * 9) + 1) + ''
-            , ''), 10);
-        if(isNaN(rotation)){
-            rotation = 0;
-        }
-        var height = size,
-        width = size,
-        sideLen = size/2;
-        // sideNumb = numSides,
-        // rotation = r;
-        rotation *= Math.PI/180;
+        // var size = baseSize;
+        // var sideNumb = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
+        // if(isNaN(sideNumb)){
+        //     sideNumb = 0;
+        // }
+        // var rotation = parseInt(share.mutate(
+        //     (Math.floor(Math.random() * 9) + 1) + ''
+        //     +
+        //     (Math.floor(Math.random() * 9) + 1) + ''
+        //     +
+        //     (Math.floor(Math.random() * 9) + 1) + ''
+        //     , ''), 10);
+        // if(isNaN(rotation)){
+        //     rotation = 0;
+        // }
+        // var height = size,
+        // width = size,
+        // sideLen = size/2;
+        // // sideNumb = numSides,
+        // // rotation = r;
+        // rotation *= Math.PI/180;
         var xCenter = mutationCanvas.width/2;
         var yCenter = mutationCanvas.height/2;
         mutationctx.beginPath();
-        if(sideNumb == 0){
-            mutationctx.arc(xCenter, yCenter, sideLen, 0, 2 * Math.PI);
-        }
-        else{
-            mutationctx.moveTo (xCenter +  sideLen * Math.cos(rotation), yCenter +  sideLen *  Math.sin(rotation));           
+        // if(sideNumb == 0){
+        //     mutationctx.arc(xCenter, yCenter, sideLen, 0, 2 * Math.PI);
+        // }
+        // else{
+        //     mutationctx.moveTo (xCenter +  sideLen * Math.cos(rotation), yCenter +  sideLen *  Math.sin(rotation));           
 
-        }
-        for (var i = 1; i <= sideNumb; i += 1) {
-            mutationctx.lineTo (xCenter +  sideLen * Math.cos(rotation + (i * 2 * Math.PI / sideNumb)), yCenter +  sideLen *  Math.sin(rotation + (i * 2 * Math.PI / sideNumb)));
-        }
+        // }
+        // for (var i = 1; i <= sideNumb; i += 1) {
+        //     mutationctx.lineTo (xCenter +  sideLen * Math.cos(rotation + (i * 2 * Math.PI / sideNumb)), yCenter +  sideLen *  Math.sin(rotation + (i * 2 * Math.PI / sideNumb)));
+        // }
         var color2 = 'rgba('+randInt(0,255)+
         ','+randInt(0,255)+
         ','+randInt(0,255)+
         ','+opacity+
         ')';
-        // mutationctx.strokeStyle = color1;
+        var color2 = masterColor;
+        // // mutationctx.strokeStyle = color1;
         mutationctx.fillStyle = color2;
-        var lineWidth = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
-        if(isNaN(lineWidth)){
-            lineWidth = 0;
+        // var lineWidth = parseInt(share.mutate(Math.floor(Math.random() * 9) + 1 + '', ''), 10);
+        // if(isNaN(lineWidth)){
+        //     lineWidth = 0;
+        // }
+        // mutationctx.lineWidth = lineWidth;
+        // if(sideNumb == 2){
+        //     mutationctx.stroke();
+        // }
+        // mutationctx.fill();
+        //Draw a random trapezoid
+       //  var height = randInt(1, mutationCanvas.width);
+       //  var height2 = randInt(1, mutationCanvas.width);
+       //  var variableLength = randInt(1, mutationCanvas.width);
+       //  var variableLength2 = randInt(1, mutationCanvas.width);
+       //  var constantLength = mutationCanvas.width;
+       //  mutationctx.moveTo(mutationCanvas.width - variableLength, mutationCanvas.height - height);
+       //  mutationctx.lineTo(variableLength, mutationCanvas.height - height);
+       // mutationctx.lineTo(variableLength2, height2);
+       //  mutationctx.lineTo(mutationCanvas.width - variableLength2, height2);
+
+       //  mutationctx.fill();
+        //get a random rotation
+        masterRotate = randInt(0, 360);
+        //random scale
+        // masterScale = randInt(0, 10);
+        //random opacity
+        // opacity = '0.' + randInt(0, 9);
+
+        //ALGORITHM 3
+        var height = randInt(1, mutationCanvas.height/2);
+        var height2 = randInt(1, mutationCanvas.width);
+        var variableLength = randInt(1, mutationCanvas.width/2);
+        var variableLength2 = randInt(1, mutationCanvas.width/2);
+        var x = randInt(0, mutationCanvas.width - variableLength*2);
+        var x2 = randInt(0, mutationCanvas.width - variableLength*2);
+        var y = 20;
+        var width = variableLength2;
+        var radius;
+        radius = 0;
+        if(mutationRounded){
+            radius = randInt(0, variableLength);
         }
-        mutationctx.lineWidth = lineWidth;
-        if(sideNumb == 2){
-            mutationctx.stroke();
-        }
-        mutationctx.fill();
+          mutationctx.beginPath();
+          mutationctx.moveTo(x + radius, y);
+            mutationctx.lineTo(x + width - radius, y);
+            mutationctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            mutationctx.lineTo(x + variableLength, y + height - radius);
+            mutationctx.quadraticCurveTo(x + variableLength, y + height, x + variableLength - radius, y + height);
+            mutationctx.lineTo(x + radius, y + height);
+            mutationctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            mutationctx.lineTo(x2, y + radius);
+            mutationctx.quadraticCurveTo(x, y, x2 + radius, y);
+          mutationctx.closePath();
+            mutationctx.fill();
+
         drawCursor();
     });
     function drawCursor(){
@@ -325,6 +377,7 @@ function ppe(){
     $(document).on('keydown', function(e){
         if($('.graphic_mode').attr('title') == 'Book Mode (b)'){
             if(e.keyCode == 80 || e.keyCode == 78){
+                masterRotate = 0;
                 //p for previous
                 if(e.keyCode == 80){
                 queuePos = queuePos - 1;

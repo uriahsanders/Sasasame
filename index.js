@@ -204,6 +204,9 @@ app.get(/\/user\/?(:user_id)?/, function(req, res) {
 app.get('/friend', function(req, res){
   res.render('friend');
 });
+app.get('/true', function(req, res){
+  res.render('true');
+});
 //HOME/INDEX
 app.get(/\/?(:category\/:category_ID)?/, function(req, res) {
     //scripts.renderBookPage(req, res);
@@ -413,7 +416,10 @@ app.post('/add_from_queue', (req, res) =>{
     .exec()
     .then(function(passage){
       //remove from authors queue
-      passage.author.queue = passage.author.queue.filter(e => e !== passage._id);
+      //but might be anon
+      if(passage.author){
+        passage.author.queue = passage.author.queue.filter(e => e !== passage._id);
+      }
       //no longer in queue
       passage.queue = false;
       //remove from old chapter (shouldn't be an old chapter)
@@ -424,7 +430,9 @@ app.post('/add_from_queue', (req, res) =>{
       //change chapter location
       passage.chapter = chapter;
       //then save all
-      passage.author.save();
+      if(passage.author){
+        passage.author.save();        
+      }
       passage.save();
       chapter.save();
       res.send('Done');

@@ -125,6 +125,7 @@
         <option>Include</option>
         <!-- Displays chapter contents as sub passages, puts in the TOC -->
         <option>Chapter</option>
+        <option>Webpage</option>
 
         <!-- Currently Inactive -->
         <option>Animation</option>

@@ -96,6 +96,14 @@ const passageSchema = mongoose.Schema({
     firstLine: {
         type: String,
         default: null
+    },
+    offsetX: {
+        type: Number,
+        default: 0
+    },
+    offsetY: {
+        type: Number,
+        default: 0
     }
 });
 var autoPopulateChildren = function(next) {
