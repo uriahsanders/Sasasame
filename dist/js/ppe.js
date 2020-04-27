@@ -204,7 +204,7 @@ function ppe(){
 
        //  mutationctx.fill();
         //get a random rotation
-        masterRotate = randInt(0, 360);
+        //masterRotate = randInt(0, 360);
         //random scale
         // masterScale = randInt(0, 10);
         //random opacity
@@ -216,14 +216,16 @@ function ppe(){
         var variableLength = randInt(1, mutationCanvas.width/2);
         var variableLength2 = randInt(1, mutationCanvas.width/2);
         var x = randInt(0, mutationCanvas.width - variableLength*2);
+        x = mutationCanvas.width/2;
         var x2 = randInt(0, mutationCanvas.width - variableLength*2);
-        var y = 20;
+        var y = mutationCanvas.height/2 - height/2;
         var width = variableLength2;
         var radius;
         radius = 0;
-        if(mutationRounded){
-            radius = randInt(0, variableLength);
-        }
+        // radius = randInt(0, mutationCanvas.width);
+        // if(mutationRounded){
+        //     radius = randInt(0, mutationCanvas.width);
+        // }
           mutationctx.beginPath();
           mutationctx.moveTo(x + radius, y);
             mutationctx.lineTo(x + width - radius, y);
@@ -235,7 +237,8 @@ function ppe(){
             mutationctx.lineTo(x2, y + radius);
             mutationctx.quadraticCurveTo(x, y, x2 + radius, y);
           mutationctx.closePath();
-            mutationctx.fill();
+            // mutationctx.fill();
+            mutationctx.stroke();
 
         drawCursor();
     });
