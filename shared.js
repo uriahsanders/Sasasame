@@ -74,7 +74,7 @@
     return ret;
   };
   exports.printPropertySelect = function(key, value){
-    key = key || 'Color';
+    key = key ? '<option selected="selected">'+key+'</option><option>NLP</option>' : '<option>NLP</option>';
     value = value || '';
     return `
 <div class="property_select">
@@ -82,7 +82,7 @@
     <ion-icon title="Help"class="property_info"src="/images/ionicons/help-circle-sharp.svg"></ion-icon> 
     <!-- For Passages -->
     <select name="property_key"class="property_key" autocomplete="off">
-        <option selected="selected">`+key+`</option>
+        `+key+`
         <!-- Currently Active or Pending -->
         <option>Hyperlink</option>
         <option>Markdown</option>
@@ -173,6 +173,7 @@
           ret += exports.printAddForm('', false, '', passage._id)
          ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
+            ret += `<input id="passage_metadata_NLP_`+passage._id+`"class="metadataNLP"type="hidden" value='`+passage.content.split('@sasame@')+`'/>`;
             ret += `<div class="passage_author">`;
                     ret += '<div class="star_container"><span title="Stars"class="star_count_'+passage._id+' gold">'+(passage.stars || 0 )+'</span></div>';
 

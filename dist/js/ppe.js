@@ -31,6 +31,8 @@ function ppe(){
     var hardOpacity = false;
     var increasingOpacity = false;
     var decreasingOpacity = true;
+    var mutationQueue = [];
+    var mutationQueuePos = 0;
     var opacity = 1;
     var elements = [];
     const baseSize = 100;
@@ -121,20 +123,11 @@ function ppe(){
         cursorctx.rect(posx, posy, baseSize*masterScale, baseSize*masterScale);
         cursorctx.stroke();
     }
-    // Returns an random integer, positive or negative
-    // between the given value
-    function randInt(min, max, positive) {
-
-      let num;
-      if (positive === false) {
-        num = Math.floor(Math.random() * max) - min;
-        num *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
-      } else {
-        num = Math.floor(Math.random() * max) + min;
-      }
-
-      return num;
-
+    function randInt(min, max) {
+       return Math.floor(Math.random() * max) + min;
+    }
+    function randFloat(min, max) {
+       return Math.random() * (max-min) + min;
     }
     $(document).on('click', '#ppe_mutate', function(){
         var mutationCanvas = $('#ppe_mutation')[0];
@@ -163,7 +156,7 @@ function ppe(){
         // rotation *= Math.PI/180;
         var xCenter = mutationCanvas.width/2;
         var yCenter = mutationCanvas.height/2;
-        mutationctx.beginPath();
+        // mutationctx.beginPath();
         // if(sideNumb == 0){
         //     mutationctx.arc(xCenter, yCenter, sideLen, 0, 2 * Math.PI);
         // }
@@ -205,26 +198,39 @@ function ppe(){
        //  mutationctx.fill();
         //get a random rotation
         //masterRotate = randInt(0, 360);
+        masterRotate = 135;
         //random scale
         // masterScale = randInt(0, 10);
         //random opacity
         // opacity = '0.' + randInt(0, 9);
-
         //ALGORITHM 3
-        var height = randInt(1, mutationCanvas.height/2);
-        var height2 = randInt(1, mutationCanvas.width);
-        var variableLength = randInt(1, mutationCanvas.width/2);
-        var variableLength2 = randInt(1, mutationCanvas.width/2);
-        var x = randInt(0, mutationCanvas.width - variableLength*2);
+        var height = randFloat(1, mutationCanvas.height/2);
+        var height2 = randFloat(1, mutationCanvas.width);
+        var variableLength = randFloat(1, mutationCanvas.width/2);
+        var variableLength2 = randFloat(1, mutationCanvas.width/2);
+        var x = randFloat(0, mutationCanvas.width - variableLength*2);
         x = mutationCanvas.width/2;
-        var x2 = randInt(0, mutationCanvas.width - variableLength*2);
+        var x2 = randFloat(0, mutationCanvas.width - variableLength*2);
         var y = mutationCanvas.height/2 - height/2;
         var width = variableLength2;
         var radius;
         radius = 0;
-        // radius = randInt(0, mutationCanvas.width);
+        mutationQueue.push({
+            height: height,
+            x: x,
+            x2: x2,
+            y: y,
+            width: width,
+            radius: radius,
+            variableLength: variableLength
+        });
+        if(mutationQueue.length > 100){
+            mutationQueue.shift();
+        }
+        console.log(mutationQueue.length);
+        radius = randFloat(0, variableLength/2);
         // if(mutationRounded){
-        //     radius = randInt(0, mutationCanvas.width);
+        //     radius = randFloat(0, mutationCanvas.width);
         // }
           mutationctx.beginPath();
           mutationctx.moveTo(x + radius, y);
@@ -237,11 +243,53 @@ function ppe(){
             mutationctx.lineTo(x2, y + radius);
             mutationctx.quadraticCurveTo(x, y, x2 + radius, y);
           mutationctx.closePath();
-            // mutationctx.fill();
-            mutationctx.stroke();
+            mutationctx.fill();
+            // mutationctx.stroke();
 
         drawCursor();
     });
+    function drawMutationQueue(pos){
+        var item = mutationQueue[pos];
+        var x = item.x;
+        var y = item.y;
+        var x2 = item.x2;
+        var variableLength = item.variableLength;
+        var height = item.height;
+        var radius = item.radius;
+        var width = item.width;
+        // mutationQueue.push({
+        //     height: height,
+        //     x: x,
+        //     x2: x2,
+        //     y: y,
+        //     width: width,
+        //     radius: radius,
+        //     variableLength: variableLength
+        // });
+        var mutationCanvas = $('#ppe_mutation')[0];
+        var mutationctx = mutationCanvas.getContext('2d');
+        mutationctx.clearRect(0, 0, mutationCanvas.width, mutationCanvas.height);
+        var color2 = masterColor;
+        // // mutationctx.strokeStyle = color1;
+        mutationctx.fillStyle = color2;
+        masterRotate = 135;
+        mutationctx.beginPath();
+          mutationctx.moveTo(x + radius, y);
+            mutationctx.lineTo(x + width - radius, y);
+            mutationctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            mutationctx.lineTo(x + variableLength, y + height - radius);
+            mutationctx.quadraticCurveTo(x + variableLength, y + height, x + variableLength - radius, y + height);
+            mutationctx.lineTo(x + radius, y + height);
+            mutationctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            mutationctx.lineTo(x2, y + radius);
+            mutationctx.quadraticCurveTo(x, y, x2 + radius, y);
+          mutationctx.closePath();
+            mutationctx.fill();
+            // mutationctx.stroke();
+
+        drawCursor();
+
+    }
     function drawCursor(){
         //Queue Item
         $('#ppe_queue').find(".ppe_queue_selected").show();
@@ -414,7 +462,16 @@ function ppe(){
                 if($('#ppe_select').data('select') == 'on'){
                     $('#ppe_select').click();
                 }
-                $('#ppe_mutate').click();
+                if(e.shiftKey){
+                    //start at the end of the queue (most recent)
+                    drawMutationQueue(mutationQueue.length - 2 - mutationQueuePos);
+                    // drawMutationQueue(mutationQueuePos);
+                    mutationQueuePos += 1;
+                }
+                else{
+                    $('#ppe_mutate').click();
+                    mutationQueuePos = 0;
+                }
                 $('#ppe_queue').find(".ppe_queue_selected").removeClass('ppe_queue_selected');
                 $('#ppe_queue').children().eq(0).addClass('ppe_queue_selected');
                 drawCursor();

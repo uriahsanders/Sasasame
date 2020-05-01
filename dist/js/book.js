@@ -648,6 +648,48 @@ function readPassageMetadata(thiz){
             }
             var canvasInfo = '';
             switch(key){
+                case 'NLP':
+                thiz.siblings('.passage_content').on('mouseup', function(e){
+                    var metadataNLP = {};
+                    var selectedText = getSelectionText();
+                    metadataNLP.content = thiz.siblings('.passage_content').html().replace(
+                        selectedText, 
+                        '@sa@' + selectedText + '@same@'
+                    );
+                    thiz.siblings('.passage_content').html(playNLP(metadataNLP.content));
+                    thiz.siblings('.metadataNLP').val(JSON.stringify(metadataNLP));
+                    //open menu with search for selected text
+                    $('#side_panel').show();
+                });
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
+                    var metadataNLP = thiz.siblings('.metadataNLP').val();
+                    compileNLP(JSON.parse(metadataNLP));
+                });
+                function playNLP(content){
+                    //replace @sasame@''@sasame chunks with clickable items
+                    var ret = '';
+                    ret = content.replace('@sa@', '<div class="sasame">');
+                    ret = ret.replace('@same@', '</div>');
+                    return ret;
+                }
+                function parseNLP(content){
+                    //by default, 
+                }
+                function compileNLP(metadata){
+                    //metadata is simply the list of associated code blocks with each chunk
+                    var metadata = metadata || {
+                        content: '',
+                        delimiter: '@sasame@',
+                        codeBlocks: []
+                    };
+                    var chunks = metadata.content.split(metadata.delimiter);
+                    for(var i = 0; i < chunks.length; ++i){
+                        //execute the function
+                        eval(metadata.codeBlocks[i]);
+                    }
+                }
+                break;
                 case 'Hyperlink':
                 thiz.siblings('.passage_content').attr('title', value);
                 thiz.siblings('.passage_content').css('cursor', 'pointer');

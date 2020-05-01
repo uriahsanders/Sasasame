@@ -142,6 +142,9 @@ app.get('/quill.snow.css', function(req, res) {
 app.get('/tone.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/tone/build/Tone.js');
 });
+app.get('/fabric.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/fabric/dist/fabric.min.js');
+});
 //CRON
 var cron = require('node-cron');
 cron.schedule('0 12 * * *', () => {
