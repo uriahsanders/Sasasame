@@ -15,8 +15,19 @@ function ppe(){
     var ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth - 10;
     canvas.height = window.innerHeight;
-    cursor.width = window.innerWidth - 10;
-    cursor.height = window.innerHeight;
+    console.log(canvas.width);
+     console.log(canvas.height);
+    // cursor.width = window.innerWidth - 10;
+    // cursor.height = window.innerHeight;
+    var fabricCanvas = new fabric.Canvas('ppe_canvas', {
+        isDrawingMode: true
+    });
+    $('#ppe_cursor').appendTo('.canvas-container');
+    //must be the same for both el and css (weird I know)
+    cursor.width = canvas.width;
+    cursor.height = canvas.height;
+    $('#ppe_cursor').css('height', $('#ppe_canvas').css('height'));
+    $('#ppe_cursor').css('width', $('#ppe_canvas').css('width'));
     var queuePos = 0;
     var masterScale = 1;
     var masterRotate = 0;

@@ -2,13 +2,14 @@
 	display: none;
 }
 #ppe_canvas{
-	cursor: none;
+	/*cursor: none;*/
 	position: absolute;
 	/*z-index: 1;*/
 }
 #ppe_cursor{
-	cursor: none;
+	/*cursor: none;*/
 	position: absolute;
+	/*display: none;*/
 	/*z-index: 1;*/
 }
 #ppe_queue{
