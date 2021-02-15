@@ -97,6 +97,9 @@ app.get('/jquery.modal.min.css', function(req, res) {
 app.get('/shared.js', function(req, res) {
     res.sendFile(__dirname + '/shared.js');
 });
+app.get('/data.json', function(req, res) {
+    res.sendFile(__dirname + '/data.json');
+});
 app.get('/ionicons.esm.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/ionicons/dist/ionicons/ionicons.esm.js');
 });
@@ -141,6 +144,12 @@ app.get('/quill.snow.css', function(req, res) {
 });
 app.get('/tone.js', function(req, res) {
     res.sendFile(__dirname + '/node_modules/tone/build/Tone.js');
+});
+app.get('/sigma.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/sigma/build/sigma.min.js');
+});
+app.get('/sigma.parsers.json.js', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/sigma/build/plugins/sigma.parsers.json.min.js');
 });
 //CRON
 var cron = require('node-cron');

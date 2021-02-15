@@ -1,3 +1,9 @@
+
+ #container {
+    max-width: 400px;
+    height: 400px;
+    margin: auto;
+  }
 #little_seed {
     width: 35px;
     margin-left: 30px;
@@ -51,7 +57,7 @@
 }
 #control_nav{
     padding-top: 15px;
-    background: #353535;
+    background: #89CFF0;
     color: #fff;
     height: 60px;
 }
@@ -73,7 +79,7 @@
     font-weight: bold;
 }
 .control_input, .property_value{
-    border: 1px solid #353535;
+    border: 1px solid #fff;
     padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
@@ -81,7 +87,7 @@
     background: #fff;
 }
 .control_textarea{
-    border: 1px solid #353535;
+    border: 1px solid #fff;
     padding: 10px;
     font-size: 1em;
     width: 100%;
@@ -154,7 +160,7 @@
 }
 #side_panel{
     display: none;
-    border-left: 1px solid black;
+    /*border-left: 1px solid black;*/
 }
 #side_panel_close{
     /*display: none;*/
@@ -199,7 +205,7 @@
     padding: 10px;
     z-index: 2;
     width: 30%;
-    background: #353535;
+    background: #89CFF0;
     color: #fff;
     /*border: 1px solid #ccc;*/
     height: 100%;
@@ -236,7 +242,7 @@
     text-align: left;
     /*line-height: 30px;*/
     font-size: 1.2em;
-    background: #353535;
+    background: #89CFF0;
     color: #fff;
     margin-bottom: 10px;
     padding: 15px;
@@ -509,9 +515,12 @@
     resize: vertical;
 }
 #perm_chapter{
-    position: absolute;
+    /*position: absolute;
     left: 78px;
-    top: 25px;
+    top: 25px;*/
+    float: left;
+    margin-left: 20px;
+    font-size: 1.5em;
 }
 #right_select_help{
     font-size: 0.8em;
@@ -664,7 +673,7 @@ select {
   width: 150px;
   padding: 5px 35px 5px 5px;
   font-size: 16px;
-  border: 1px solid #353535;
+  border: 1px solid #fff;
   height: 34px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -824,9 +833,10 @@ ion-icon{
 #options{
     width: 50%;
     margin: auto;
-    color: white;
+    color: #fff;
     padding-top: 10px;
     text-align: center;
+    font-size: 1.5em;
 }
 .option_distraction_free{
     color: #fff;

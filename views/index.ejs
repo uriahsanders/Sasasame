@@ -22,18 +22,10 @@
         <link rel="stylesheet" type="text/css" href="/css/fonts.css">
         <script src="/codemirror.js"></script>
         <script type="text/javascript" src="/mode/javascript/javascript.js"></script>
+        <script src="/sigma.js"></script>
+        <script src="/sigma.parsers.json.js"></script>
     </head>
     <body>
-        <div id="dev_modal" class="modal">
-          <p class="header">Sasame <span class="alpha">alpha</span></p>
-          <p>Sasame is very new and under live development.</p>
-          <p>Some features may not be working and there is risk of data loss. Sasame will be stable when this message is gone -- So keep checking back!</p>
-          <a target="_blank"href="https://github.com/uriahsanders/Sasasame">Github</a></p>
-        </div>
-        <div id="graphic_dev_modal" class="modal">
-          <p class="header">Sasame <span class="alpha">alpha</span></p>
-          <p>Graphic Mode is not yet optimized for mobile!</p>
-        </div>
         <div id="login_modal" class="modal">
           <p class="header">Login</p>
           <form id="login_form" action="/login/" method="POST">
@@ -91,7 +83,7 @@
                 <br/>
                 <br/>
                 <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
-                <a class="link white" rel="modal:open"href="#login_modal">Enter</a> 
+                <a class="link white" rel="modal:open"href="#login_modal">Download</a> 
                 <input id="logged_in"value="false"type="hidden" name="">
             </div>
         <%} %>
@@ -214,9 +206,6 @@
         <div id="control_panel">
             <div id="control_nav">
                     <div id="main_header">
-                        <a href="/">
-                            <img id="little_seed" title="Sasame (h)"alt="" src="/images/test.png"/>
-                        </a>
                         <a href="/" class="basic_link">
                         <%if(parentChapter != null){%>
                           <div id="perm_chapter"><%=parentChapter.title%></div>
@@ -245,7 +234,7 @@
                               <p>Let's make our dreams a reality!</p>
                               <p class="help_read_more"><a class="basic_link" href="#">Read more...</a></p>
                             </div>
-                            <a class="basic_link white" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
+                            <a class="basic_link" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
                             <ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
                              <ion-icon class="book_option"id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
                              <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
