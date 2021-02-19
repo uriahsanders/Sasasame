@@ -169,9 +169,9 @@
          ret +=   `</div>`;
             ret += `<input id="passage_metadata_`+passage._id+`"class="metadata"type="hidden" value='`+passage.metadata+`'/>`;
             ret += `<div class="passage_author">`;
-            ret += `<div title="Useful"class="special_mark">
-        <ion-icon class="special_icon" src="/images/ionicons/checkmark-circle-sharp.svg"></ion-icon>
-        </div>`;
+        //     ret += `<div title="Useful"class="special_mark">
+        // <ion-icon class="special_icon" src="/images/ionicons/checkmark-circle-sharp.svg"></ion-icon>
+        // </div>`;
 
             ret += `<ion-icon class="profile_image"src="/images/ionicons/person-circle-sharp.svg"></ion-icon>`;
             if(passage.author){
@@ -182,8 +182,6 @@
             ret += `<div class="proteins">
              <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
              `;
-            ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon> `;
-
              if(user){
                 ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
@@ -200,15 +198,14 @@
               ret += `<div class="passage_label"><a class="basic_link passage_label_link"></a></div>`;
             }
             else if (passage.chapter && passage.chapter.title){
-              ret += `<div class="passage_label"><a href="/`+passage.chapter.title+`/`+passage.chapter._id+`" class="basic_link passage_label_link">`+passage.chapter.title+`/</a></div>`;
+              ret += `<div class="passage_label"><a href="/`+passage.chapter.title+`/`+passage.chapter._id+`" class="basic_link passage_label_link">`+passage.chapter.title+`</a></div>`;
               ret += '<input class="passage_chapter_id"type="hidden"value="'+passage.chapter._id+'">';
             }
             else{
-              ret += `<div class="passage_label"><a class="basic_link passage_label_link" href="/">Sasame/</a></div>`;
+              ret += `<div class="passage_label"><a class="basic_link passage_label_link" href="/">General</a></div>`;
 
             }
             ret += `<div id="modal_`+passage._id+`" class="modal">
-                <div class="view_details">View Details</div>
                 <div class="passage_details">`;
                     //date.toDateString() in future
                     ret += `<p>Created: `+passage.date.toString().split(' ').splice(0,4).join(' ')+`</p>`;
@@ -308,8 +305,7 @@
              <ion-icon id="passage_details_`+passage.id+`"class="passage_details_icon"title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon>
              `;
              if(user){
-                ret += `<ion-icon class="square_icon"title="Add to Queue"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
-                <ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
+                ret += `<ion-icon id="star_`+passage._id+`"title="Star"class="star_icon" src="/images/ionicons/star-sharp.svg"></ion-icon> `;
              } 
              ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
              <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->
@@ -341,7 +337,7 @@
       `;
     }
     ret +=    `<div>
-            <a class="link" href="/`+chapter.title+`/`+chapter._id+`">`+chapter.title+`</a>
+            <a class="chapter_link" href="/`+chapter.title+`/`+chapter._id+`">`+chapter.title+`</a>
         </div>
         <div class="category_id">`+chapter._id+`</div>
     </div>`;

@@ -241,8 +241,8 @@ body {
 #login{
     position: absolute;
     right: 50px;
-    top: -20px;
-    font-size: 1em;
+    top: -40px;
+    font-size: 1.4em;
 }
 #login_desc{
     color: #353535;

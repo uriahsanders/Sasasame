@@ -489,6 +489,7 @@ app.post(/\/create_queue_chapter\/?/, (req, res) => {
         }
     });
 });
+//add passage or chapter
 app.post(/\/add_passage\/?/, (req, res) => {
     var chapterID = req.body.chapterID;
     var type = req.body.type;
@@ -555,6 +556,7 @@ app.post(/\/add_passage\/?/, (req, res) => {
         });
     }
     else if(type == 'chapter' && content != ''){
+        console.log(JSON.stringify(req.body));
         chapterController.addChapter({
             'title': content,
             'author': user,

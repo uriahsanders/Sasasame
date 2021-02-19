@@ -271,21 +271,25 @@ const recordAudio = () =>
 
 $(document).on('submit', '.codeform_add', function(e){
     e.preventDefault();
-    //first we need to change the textarea value,
-    //depending on the editor
-    var content = $(this).children('.add_passage_textarea');
-    if(content.prop('tagName') == 'TEXTAREA' && content.next('.CodeMirror').length){
-        editor = content.next('.CodeMirror').get(0).CodeMirror;
-        text = editor.getValue();
-    }
-    else if(content.children('.ql-editor').length){
-        text = content.children('.ql-editor').html();
-    }
-    else{
-        text = content.val();
-    }
+    // var text = '';
+    // alert(text);
+    // //first we need to change the textarea value,
+    // //depending on the editor
+    // var content = $(this).children('.add_passage_textarea');
+    // if(content.prop('tagName') == 'TEXTAREA' && content.next('.CodeMirror').length){
+    //     alert('bad');
+    //     editor = content.next('.CodeMirror').get(0).CodeMirror;
+    //     text = editor.getValue();
+    // }
+    // else if(content.children('.ql-editor').length){
+    //     text = content.children('.ql-editor').html();
+    // }
+    // else{
+    //     text = content.val();
+    // }
+    // alert(text);
     var formdata = new FormData(this);
-    formdata.set('passage', text);
+    // formdata.set('passage', text);
     var info = $(this).serializeObject();
     var thiz = $(this);
     $.ajax({
@@ -1673,7 +1677,10 @@ $('#play_all').on('click', function(){
     });
 });
 $('#option_menu').on('click', function(){
-    $('#side_panel').toggle();
+    if(!$('#side_panel').is(':visible') || $('#right_side_select').val() === 'chapters'){
+        $('#side_panel').toggle();
+    }
+    $('#right_side_select').val('chapters').change();
     //$(this).toggleClass('gold');
     flashIcon($(this));
     //$('.passage_adder').toggleClass('gold');
@@ -1682,7 +1689,9 @@ $('#side_panel_close').on('click', function(){
     $('#option_menu').click();
 });
 $('.passage_adder').on('click', function(){
-    $('#side_panel').toggle();
+    if(!$('#side_panel').is(':visible') || $('#right_side_select').val() === 'add'){
+        $('#side_panel').toggle();
+    }
     $('#right_side_select').val('add').change();
     //$(this).toggleClass('gold');
     flashIcon($(this));

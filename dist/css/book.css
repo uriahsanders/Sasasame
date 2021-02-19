@@ -140,13 +140,14 @@
     display: none;
 }
 .profile_image{
-    font-size: 3em;
+    font-size: 7em;
     float: left;
     margin-right: 10px;
     /*color: #353535;*/
 }
 .profile_author{
     padding-top: 2px;
+    font-size: 2.2em;
 }
 #side_panel_body{
     width: 90%;
@@ -220,17 +221,17 @@
 }
 .category{
     /* border-bottom: 1px dotted grey; */
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     margin: 0;
     text-align: center;
     /* white-space: pre-wrap; */
     line-height: 30px;
-    font-size: 1.2em;
+    font-size: 2em;
 }
-/*.category:hover{
-    border-bottom: 1px solid #353535;
-}*/
+.category:hover{
+    border-bottom: 1px solid #fff;
+}
 #side_panel_switcher > div:not(#categories){
     display: none;
 }
@@ -240,6 +241,7 @@
 .passage{
     /* border-bottom: 1px dotted grey; */
     text-align: left;
+    border-radius: 15px;
     /*line-height: 30px;*/
     font-size: 1.2em;
     background: #89CFF0;
@@ -300,7 +302,7 @@
 }
 .star_container{
     float: right;
-    font-size: 0.8em;
+    font-size: 2em;
 }
 .passage_author_image{
     width: 50px;
@@ -339,6 +341,7 @@
     font-weight: bold;
     margin-top: 10px;
     clear: both;
+    font-size: 3em;
     /*display: none;*/
 }
 .passage_content{
@@ -412,6 +415,10 @@
     font-style: italic;
     color: darkgrey;
 
+}
+.chapter_link{
+    color: #fff;
+    text-decoration: none;
 }
 .up_one_level_link{
     text-decoration: none;
@@ -515,12 +522,13 @@
     resize: vertical;
 }
 #perm_chapter{
-    /*position: absolute;
-    left: 78px;
-    top: 25px;*/
+    position: absolute;
+    left: 30px;
+    top: 1px;
     float: left;
     margin-left: 20px;
-    font-size: 1.5em;
+    font-size: 2em;
+    font-weight: bolder;
 }
 #right_select_help{
     font-size: 0.8em;
@@ -791,8 +799,8 @@ select::-ms-expand {
 .passage_details{
     margin-bottom: 10px;
     padding: 5px;
-    display: none;
-    border: 1px solid #000;
+    /*display: none;*/
+    border: 1px solid #fff;
 }
 .passage_details p{
     font-size: 0.8em;
@@ -800,7 +808,7 @@ select::-ms-expand {
     margin-top: 5px;
 }
 .proteins{
-    font-size: 0.9em;
+    font-size: 2em;
     text-align: left;
     margin-top: 5px;
 }

@@ -83,7 +83,8 @@
                 <br/>
                 <br/>
                 <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
-                <a class="link white" rel="modal:open"href="#login_modal">Download</a> 
+                <a class="link white">Download</a>&emsp;&emsp;
+                <a class="link white" rel="modal:open"href="#login_modal">Login</a> 
                 <input id="logged_in"value="false"type="hidden" name="">
             </div>
         <%} %>
@@ -98,10 +99,8 @@
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
                             <option value="passages">Passages</option>
-                            <option value="queue">Queue</option>
-                            <option value="brief">Brief</option>
-                            <option value="console">Console</option>
                             <option value="add">Add</option>
+                            <option value="brief">Brief</option>
                             <option value="edit">Edit</option>
                             <option value="leaderboard">Leaderboard</option>
                             <option value="help">Help</option>
@@ -117,6 +116,7 @@
                               <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
                           </div>
                           <div id="chapters">
+                            <br>
                               <%if(chapters){%>
                                   <%chapters.forEach(function(f) { %>
                                       <%- scripts.printChapter(f) %>
