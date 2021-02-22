@@ -7,7 +7,8 @@ const chapterSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    title: String, //name of the category
+    title: String, //name of the category,
+    description: String,
     //passages that belong to this category
     passages: [{
         type: mongoose.Schema.Types.ObjectId,

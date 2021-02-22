@@ -159,13 +159,16 @@
 #console{
     /*height: 100px;*/
 }
+#profile_page_image{
+    font-size: 5em;
+}
 #side_panel{
     display: none;
     /*border-left: 1px solid black;*/
 }
 #side_panel_close{
     /*display: none;*/
-    font-size: 1em;
+    font-size: 2em;
     float: left;
 }
 #right_passages, #cats{
@@ -177,7 +180,7 @@
 }
 #right_passages .passage{
     font-size: 0.5em;
-    padding: 5px;
+    padding: 15px;
     line-height: 10px;
 }
 .none{
@@ -347,7 +350,7 @@
 .passage_content{
     background: #fff;
     color: #353535;
-    white-space: pre-line;
+    /*white-space: pre-line;*/
     overflow-x: auto;
     padding-bottom: 10px;
     min-height: 30px;
@@ -398,6 +401,7 @@
 }
 .add_passage_icons{
     color: inherit;
+    font-size: 2em;
 }
 .queue_item > .CodeMirror{
     height: 100px;
@@ -471,6 +475,9 @@
 .no_cursive{
    /* font-family: 'Patua One';
     font-family: 'Montserrat', sans-serif;*/
+}
+.chapter_tools{
+    font-size: 1.5em;
 }
 #control_panel_header{
     color: #353535;
@@ -743,6 +750,9 @@ select::-ms-expand {
 .queue_item:hover{
     color: gold;
 }
+pre, code{
+    margin-top: 0px;
+}
 #properties, #sub_properties{
     padding: 5px;
     text-align: left;
@@ -817,7 +827,7 @@ select::-ms-expand {
     text-align: center;
 }
 #parent_chapter_title{
-    cursor: pointer;
+    font-size: 2.5em;
 }
 
 .passage_audio{

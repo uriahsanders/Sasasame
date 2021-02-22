@@ -38,10 +38,11 @@
                         <ion-icon title="Add Image"class="image_upload_icon"src="/images/ionicons/images-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Attach File"name="attach"></ion-icon> -->
                         <ion-icon data-status="empty"title="Add Audio Recording"class="mic_record_icon"src="/images/ionicons/mic-circle-sharp.svg"></ion-icon>
-                        <ion-icon title="Choose Editor" class="editor_choose" src="/images/ionicons/newspaper-sharp.svg"></ion-icon>
+                        <!--<ion-icon title="Choose Editor" class="editor_choose" src="/images/ionicons/newspaper-sharp.svg"></ion-icon>-->
                         <ion-icon title="Add Tags" name="tags"class="tag_add" src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
                         <!-- <ion-icon title="Make Drawing"name="create"class="draw_icon"></ion-icon> -->
                         <ion-icon title="Content Warning" class="flag_icon add_flag" src="/images/ionicons/flag-sharp.svg"></ion-icon>
+                        <ion-icon title="Javascript" class="editor_choose"src="/images/ionicons/logo-javascript.svg"></ion-icon>
                         <!--<a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon></a>-->
                         <!--<ion-icon class="icon_top_add"title="Add to Top"src="/images/ionicons/caret-up-sharp.svg"></ion-icon>-->
                     </div>
@@ -50,6 +51,7 @@
                     <input name="chapterID" type="hidden" value="`+chapter+`"/>
                     <input class="dataURL"name="dataURL" type="hidden" value=""/>
                     <input class="flagged"name="flagged" type="hidden" value="false"/>
+                    <input class="javascript"name="javascript" type="hidden" value="false"/>
                     <input name="parentPassage" type="hidden" value="`+parentPassage+`"/>
                     <input name="_id" type="hidden" value="`+_id+`"/>
                      <input class="hidden_upload"name="file" type="file" autocomplete="off"/>
@@ -66,9 +68,9 @@
                     </div>
                     <button class="control_button" class="add_passage">`+bt_which+`</button>
                     `+after+`
-                    <div id="properties"class="properties">
+                    <!--<div id="properties"class="properties">
                         <div class="add_property"><ion-icon src="/images/ionicons/add-circle-sharp.svg"></ion-icon> Add Key</div> 
-                    </div>
+                    </div>-->
                     </form>
     `;
     return ret;
@@ -188,8 +190,10 @@
              ret += `<ion-icon id="passage_flag_`+passage._id+`"title="Content Warning" class="flag_icon`+(passage.flagged == true ? ' flagged': '')+`" src="/images/ionicons/flag-sharp.svg"></ion-icon>
              <!--<ion-icon class="passage_mutate"title="Mutate"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>-->
              <ion-icon class="passage_play"title="Play" src="/images/ionicons/play-circle-sharp.svg"></ion-icon>
-             <ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>
-             <ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>
+             <!--<ion-icon class="view_sub"title="View Sub Passages" src="/images/ionicons/caret-down-sharp.svg"></ion-icon>-->
+             <!--<ion-icon title="Update" id="passage_update_`+passage._id+`"src="/images/ionicons/share-sharp.svg"></ion-icon>-->
+             <ion-icon class=""title="Split" src="/images/ionicons/cut-sharp.svg"></ion-icon>
+             <ion-icon class=""title="Share" src="/images/ionicons/share-social-sharp.svg"></ion-icon>
              <ion-icon title="Donate to Author" class="passage_donate"src="/images/ionicons/card-sharp.svg"></ion-icon>
              <ion-icon title="Delete" id="passage_delete_`+passage._id+`"src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
              `;

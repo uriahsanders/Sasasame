@@ -95,12 +95,10 @@
             </div>
             <div id="side_panel_body">
               <div class="header">
-                      <ion-icon id="right_select_help"src="/images/ionicons/settings-sharp.svg"></ion-icon>
                         <select id="right_side_select" autocomplete="off">
                             <option value="chapters">Chapters</option>
-                            <option value="passages">Passages</option>
-                            <option value="add">Add</option>
                             <option value="brief">Brief</option>
+                            <option value="add">Add</option>
                             <option value="edit">Edit</option>
                             <option value="leaderboard">Leaderboard</option>
                             <option value="help">Help</option>
@@ -174,8 +172,7 @@
                           <p>Sasame is a versatile, modular, and merit-based Modern Library for worldwide collaboration.</p> 
                           <p>Sasame is fresh, open-source and always improving. Help out by adding, categorizing, and starring useful information. Sasame keeps track of who did what, so you can use little pieces of everyone's work in your own. Share what you want to share, and gain reputation and rewards everytime someone duplicates your work or finds it useful.</p>
                           <p>Create an account to get the most out of Sasame; this allows you to star and duplicate useful passages for your own purposes.</p>
-                          <p>Sasame has both a traditional and a graphic user interface. Instead of books, the Library of Sasame has passages. These passages can be text, music, images, code, animations, quizzes/challenges, etc. They can even modify Sasame itself. And they can all be sorted and resorted like the pieces of a puzzle to accomplish any task.</p>
-                          <p>Passages can be labeled with 'keys' to give them certain properties. You can read more about what keys do in the key reference, or learn by checking out the metadata of passages in Sasame. Keys are always being added, and can also be created via passages.</p>
+                          <p>Sasame has both a traditional and a graphic user interface. Instead of books, the Library of Sasame has passages. These passages can be text, music, images, code, animations, games, etc. They can even modify Sasame itself. And they can all be sorted and resorted like the pieces of a puzzle to accomplish any task.</p>
                           <p>Passages can also be grouped into Chapters, which can have their access controlled by the creator.</p>
                           <p>Information is ranked by 'usefulness'. This centralizes the flow of information towards productivity and prevents echo-chambers. Users can find passages and chapters sorted according to their wants and needs and curated by users with high reputations.</p>
                           <p>Sasame has an aggressive content flagging system that warns users without restricting access.</p>
@@ -207,13 +204,14 @@
             <div id="control_nav">
                     <div id="main_header">
                         <a href="/" class="basic_link">
-                        <%if(parentChapter != null){%>
-                          <div id="perm_chapter"><%=parentChapter.title%></div>
-                        <%}else if(locals.isProfile){%>
-                          <div id="perm_chapter"><%=profile.username%></div>
-                        <%}else{%>
+                          <!-- <%if(parentChapter != null){%>
+                            <div id="perm_chapter"><%=parentChapter.title%></div>
+                          <%}else if(locals.isProfile){%>
+                            <div id="perm_chapter"><%=profile.username%></div>
+                          <%}else{%>
+                            <div id="perm_chapter">Sasame</div>
+                          <%}%> -->
                           <div id="perm_chapter">Sasame</div>
-                        <%}%>
                         </a>
                        <!--  <div id="sasame_title">
                           <span id="parent_chapter_title">Sasame</span> <span id="alpha">Alpha</span>
@@ -221,24 +219,11 @@
                         <!-- 
                         <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">Sasame</a></div> -->
                         <div id="options">
-                            <!-- Book Options -->
-                            <div id="help_modal" class="help_modal modal">
-                              <p><b>Never do anything twice.</b></p>
-                              <p>Sasame is a modular and merit-based Modern Library for worldwide collaboration.</p> 
-                              <p>Let's make our dreams a reality!</p>
-                              <p class="help_read_more"><a class="basic_link" href="#">Read more...</a></p>
-                            </div>
-                             <div id="help_modal_graphic" class="help_modal modal">
-                              <p><b>Never do anything twice.</b></p>
-                              <p>Sasame is a modular and merit-based Modern Library for worldwide collaboration.</p> 
-                              <p>Let's make our dreams a reality!</p>
-                              <p class="help_read_more"><a class="basic_link" href="#">Read more...</a></p>
-                            </div>
-                            <a class="basic_link" rel="modal:open"href="#help_modal"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
+                            <a class="basic_link"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
                             <ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
                              <ion-icon class="book_option"id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
                              <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
-                             <ion-icon class="toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-sharp.svg"></ion-icon>
+                             <!-- <ion-icon class="toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-sharp.svg"></ion-icon> -->
                              <!-- PPE Options -->
                              <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
                              <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
@@ -271,19 +256,30 @@
                     <%if(parentChapter != null || locals.isProfile){%>
                     <div class="tool_header">
                         <%if(parentChapter != null){%>
+                          <span  class="chapter_tools"id="parent_chapter_title"><%=parentChapter.title%></span>
                             <div class="chapter_tools">
-                                  <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a>
+                                  <!-- <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a> -->
                                  <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
-                                 <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/list-circle-sharp.svg"></ion-icon>
+                                 <!-- <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/list-circle-sharp.svg"></ion-icon> -->
                                  <ion-icon id="chapter_star_<%=parentChapter._id%>"title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
                                  <ion-icon id="chapter_flag_<%=parentChapter._id%>"title="Content Warning" class="flag_icon<%=(parentChapter.flagged == true ? ' flagged' : '')%>" src="/images/ionicons/flag.svg"></ion-icon>
+                                 <ion-icon class=""title="Share" src="/images/ionicons/share-social-sharp.svg"></ion-icon>
                                  <ion-icon id="play_all"title="Play All" src="/images/ionicons/play-circle.svg"></ion-icon>
                                  <ion-icon title="Load All"src="/images/ionicons/reload-circle-sharp.svg"></ion-icon>
                                  <ion-icon title="Download as PDF"src="/images/ionicons/download-sharp.svg"></ion-icon>
                                  <ion-icon title="Update Order" id="update_order_<%=parentChapter._id%>"src="/images/ionicons/documents-sharp.svg"></ion-icon>
                             </div>
                             <br>
-                            <span  class="chapter_tools"id="parent_chapter_title"><%=parentChapter.title%></span>
+                            <div id="chapter_description">
+                              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </div>  
+                            <br>
+                            <!-- <span  class="chapter_tools"id="parent_chapter_title"><%=parentChapter.title%></span> -->
                                 <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
                                 <input id="page" type="hidden" value="2" autocomplete="off"/>
                             <div id="chapter_settings" class="modal">
@@ -317,8 +313,17 @@
                                 <p><%=profile.starsGiven%> Stars Given</p>
                             </div>
                             <input type="hidden" value="true", id="is_profile"/>
+                            <div><ion-icon id="profile_page_image"src="/images/ionicons/person-circle-sharp.svg"></ion-icon></div>
                             <a class="basic_link" href="#profile_modal" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
                             <span id="parent_chapter_title"><%=profile.username%></span>
+                            <div id="chapter_description">
+                              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </div> 
                             <%}%>
                         <%}%>
                     </div>

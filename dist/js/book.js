@@ -480,48 +480,25 @@ $(document).on('click', '.add_flag', function(){
     });
 });
 $(document).on('click', '.editor_choose', function(){
-    $('#add_passage_editor').modal({
-        closeExisting: false
-    });
-});
-$(document).on('click', '.editor_option', function(){
+    $(this).toggleClass('gold_color');
     var value = $(this).text();
     var thiz = $(this);
-    $('.blocker').click(); 
     var getTextarea = function(){
         //modal
-        var textarea = $('.blocker').children('.modal').children('.add_form').children('.add_passage_textarea');  
+        var textarea;  
         //side panel
-        if(textarea.length == 0 && $('#add_div').is(':visible')){
+        if($('#add_div').is(':visible')){
             textarea = $('#add_div').children('.add_form').children('.add_passage_textarea');
         }  
-        if(textarea.length == 0 && $('#edit_div').is(':visible')){
+        if($('#edit_div').is(':visible')){
             textarea = $('#edit_div').children('.add_form').children('.add_passage_textarea');
         }  
         return textarea;    
     };  
-    var textarea = getTextarea();       
+    var textarea = getTextarea();  
     var toolbar = textarea.prev('.ql-toolbar');
     toolbar.remove();
     var info = textarea.html();
-    // alert(textarea.html());
-    // alert(textarea.text());
-    switch(value){
-        case 'Plain':
-        textarea.siblings('.CodeMirror').remove();
-        textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+info+'</textarea>');
-        break;
-        case 'Rich':
-        textarea.siblings('.CodeMirror').remove();
-        textarea.replaceWith('<div class="add_passage_textarea">'+info+'</div>');
-        textarea = getTextarea();
-        textarea.css({
-            background: 'white',
-            color: 'black'
-        });
-        getQuillEditor(textarea[0]);
-        break;
-        case 'Code':
         textarea.siblings('.CodeMirror').remove();
         textarea.replaceWith('<textarea name="passage"class="add_passage_textarea">'+info+'</textarea>');
         textarea = getTextarea();
@@ -529,9 +506,7 @@ $(document).on('click', '.editor_option', function(){
                     .prev('.editor_code_select_container')
                     .children('.editor_code_select')
                     .val();
-        getCodeMirror(textarea[0], lang, info);
-        break;
-    }
+        getCodeMirror(textarea[0], 'javascript', info);
 });
 function getQuillEditor(textarea, content=null){
     $('head').append('<link rel="stylesheet" type="text/css" href="/quill.snow.css">');
@@ -866,6 +841,7 @@ function readPassageMetadata(thiz){
                 break;
                 case 'Hide Tools':
                 thiz.siblings('.proteins').hide();
+                thiz.siblings('.star_container').hide();
                 thiz.siblings('.passage_author').hide();
                 break;
                 case 'Audio':
@@ -919,18 +895,31 @@ function readPassageMetadata(thiz){
                 autoPlay(autoplay, thiz);
                 break;
                 case 'Markdown':
-                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
-                thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
-                    // alert('test');
-                    jqueryToggle(thiz, function(){
-                        thiz.siblings('.passage_content').html(marked(thiz.siblings('.passage_content').text()));
-                        thiz.siblings('.passage_content').css('white-space', 'initial');
-                    }, function(){
-                        thiz.siblings('.passage_content').html(content);
-                        thiz.siblings('.passage_content').css('white-space', 'pre-line');
-                    });
-                });
-                autoPlay(autoplay, thiz);
+                // marked.setOptions({
+                //   highlight: function(code) {
+                //     return hljs.highlightAuto(code).value;
+                //   }
+                // });
+                // var code = thiz.siblings('.passage_content').text();
+                // alert(code);
+                // alert(marked(code));
+                // thiz.siblings('.passage_content').html(marked(thiz.siblings('.passage_content').text()));
+                // thiz.siblings('.passage_content').css('white-space', 'initial');
+                // thiz.siblings('.passage_content').html(content);
+                // thiz.siblings('.passage_content').css('white-space', 'pre-line');
+
+                // thiz.siblings('.passage_author').children('.proteins').children('.passage_play').show();
+                // thiz.siblings('.passage_author').children('.proteins').children('.passage_play').on('click', function(){
+                //     // alert('test');
+                //     jqueryToggle(thiz, function(){
+                //         thiz.siblings('.passage_content').html(marked(thiz.siblings('.passage_content').text()));
+                //         thiz.siblings('.passage_content').css('white-space', 'initial');
+                //     }, function(){
+                //         thiz.siblings('.passage_content').html(content);
+                //         thiz.siblings('.passage_content').css('white-space', 'pre-line');
+                //     });
+                // });
+                // autoPlay(autoplay, thiz);
                 break;
                 case 'Syntax Highlight':
                 //syntax highlight
@@ -1059,6 +1048,29 @@ function runCanvasKey(canvas, content, canvas_size){
 }
 $('[id^=passage_metadata_]').each(function(){
     readPassageMetadata($(this));
+});
+// marked.setOptions({
+//       highlight: function(code) {
+//         return hljs.highlightAuto(code).value;
+//       }
+//     });
+$('.passage_content').each(function(){
+    var code = $(this).text();
+    // console.log(code);
+    try{
+        $(this).html(marked(code));
+        // hljs.highlightAuto($(this).html());
+        document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                  });
+    }
+    catch{
+        console.log('fail');
+    }
+    // $(this).html(code);
+    // $(this).css('white-space', 'pre-line');
+    // $(this).html(marked($(this).text()));
+    // $(this).css('white-space', 'initial');
 });
 function flashIcon(thiz, color='gold'){
     thiz.css('color', color);
@@ -1640,13 +1652,15 @@ $('.toggle_tools').on('click', function(){
         $('.chapter_tools').show();
         $('.passage_author').show();
         $('.passage').css('padding-bottom', '32px');
-        $('.passage').css('background', '#353535');
-        $('.passage').css('color', '#ccc');
+        $('.passage').css('background', '#89CFF0');
+        $('.passage').css('color', '#fff');
         $('.passage').css('resize', 'both');
         $('.passage_content').css('padding', '10px');
         $('.passage').css('padding', '20px');
         $('.passage').css('margin-bottom', '10px');
         $('.passage_content').css('margin-top', '15px');
+        $('.passage_content').css('max-height', '300px');
+        $('.star_container').hide();
         $(this).css('color', 'gold');
 
         $(this).data('hidden', 'false')
@@ -1661,9 +1675,11 @@ $('.toggle_tools').on('click', function(){
         $('.passage').css('background', '#fff');
         $('.passage').css('color', '#353535');
         $('.proteins').hide();
+        $('.passage_content').css('max-height', 'initial');
         $('.tool_header').hide();
         $('.chapter_tools').hide();
         $('.passage_author').hide();
+        $('.star_container').hide();
         $(this).data('hidden', 'true')
     }
 });
@@ -1693,6 +1709,15 @@ $('.passage_adder').on('click', function(){
         $('#side_panel').toggle();
     }
     $('#right_side_select').val('add').change();
+    //$(this).toggleClass('gold');
+    flashIcon($(this));
+    //$('#option_menu').toggleClass('gold');
+});
+$('#help').on('click', function(){
+    if(!$('#side_panel').is(':visible') || $('#right_side_select').val() === 'help'){
+        $('#side_panel').toggle();
+    }
+    $('#right_side_select').val('help').change();
     //$(this).toggleClass('gold');
     flashIcon($(this));
     //$('#option_menu').toggleClass('gold');
