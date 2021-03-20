@@ -394,7 +394,7 @@ function isMobile(){
     }
   } );
 //search
-$('#chapter_search').on('keypress', function(e){
+$('[id^="chapter_search_"]').on('keypress', function(e){
     $('#search_val').val($(this).val());
     if(e.which == 13){
         $.ajax({
@@ -1230,14 +1230,15 @@ $(document).on('click', '[id^=passage_update_]', function(){
         }
     });
 });
+$('.hljs').css('color', '#000');
 $('#parent_chapter_title').css('cursor', 'default');
 
-$('.category').on('mouseover', function(){
-    $(this).find('.chapter_flag').show();
-});
-$('.category').on('mouseout', function(){
-    $(this).find('.chapter_flag').hide();
-});
+// $('.category').on('mouseover', function(){
+//     $(this).find('.chapter_flag').show();
+// });
+// $('.category').on('mouseout', function(){
+//     $(this).find('.chapter_flag').hide();
+// });
 $('.category_delete').on('click', function(){
     $(this).parent().fadeOut();
 });

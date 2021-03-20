@@ -1,4 +1,6 @@
-
+body{
+    /*background: #000;*/
+}
  #container {
     max-width: 400px;
     height: 400px;
@@ -46,6 +48,10 @@
     justify-content: center;
     padding-top: 15px;
     font-size: 1.1em;
+    background: #fff;
+}
+.hljs{
+    color: #000;
 }
 .control_block{
     /* border: 1px solid black; */
@@ -58,13 +64,16 @@
 #control_nav{
     padding-top: 15px;
     background: #89CFF0;
-    color: #fff;
+    color: #000;
     height: 60px;
+    border-top: 2px solid #353535;
+    border-bottom: 2px solid #353535;
+    font-weight: bolder;
 }
 .control_button{
     padding: 5px;
     font-size: 1em;
-    border: 1px solid #353535;
+    border: 2px solid #000;
     margin-bottom: 20px;
     width: 100%;
     cursor: pointer;
@@ -79,7 +88,7 @@
     font-weight: bold;
 }
 .control_input, .property_value{
-    border: 1px solid #fff;
+    border: 2px solid #000;
     padding: 10px;
     font-size: 1em;
     margin-bottom: 10px;
@@ -87,7 +96,7 @@
     background: #fff;
 }
 .control_textarea{
-    border: 1px solid #fff;
+    border: 2px solid #000;
     padding: 10px;
     font-size: 1em;
     width: 100%;
@@ -107,6 +116,11 @@
     font-weight: bold;
     text-align: center;
     font-size: 1.2em;
+}
+.tool_header{
+    /*background: #89CFF0;*/
+    color: #000;
+    border-radius: 15px;
 }
 .header{
     font-size: 1.3em;
@@ -165,6 +179,7 @@
 #side_panel{
     display: none;
     /*border-left: 1px solid black;*/
+    border-left: 2px solid #353535;
 }
 #side_panel_close{
     /*display: none;*/
@@ -208,9 +223,9 @@
     float: right;
     padding: 10px;
     z-index: 2;
-    width: 30%;
+    width: 50%;
     background: #89CFF0;
-    color: #fff;
+    color: #000;
     /*border: 1px solid #ccc;*/
     height: 100%;
     /*position: fixed;
@@ -230,10 +245,14 @@
     text-align: center;
     /* white-space: pre-wrap; */
     line-height: 30px;
-    font-size: 2em;
+    font-size: 2.5em;
+    background: #89CFF0;
+    border: 2px solid #000;
+    margin-bottom: 10px;
 }
 .category:hover{
-    border-bottom: 1px solid #fff;
+    font-weight: bolder;
+    border: 4px solid #000;
 }
 #side_panel_switcher > div:not(#categories){
     display: none;
@@ -248,7 +267,7 @@
     /*line-height: 30px;*/
     font-size: 1.2em;
     background: #89CFF0;
-    color: #fff;
+    color: #000;
     margin-bottom: 10px;
     padding: 15px;
     /*not for mobile*/
@@ -258,6 +277,7 @@
     /*width: 160px;
     height: 200px;*/
     /*width: 96%;*/
+    border: 2px solid #353535;
 }
 .help_modal{
     font-size: 1.3em;
@@ -280,6 +300,15 @@
     padding: 5px;
     padding-left: 40px;
     padding-right: 40px;
+}
+#chapter_description{
+    color: #000;
+    /*background: #fff;*/
+    font-weight: bolder;
+    /*width: 75%;*/
+    margin: auto;
+    text-align: left;
+    /*border: 2px solid #000;*/
 }
 [class^="passage_delete"], [class^="passage_update"], [class^="chapter_delete"], [class^="chapter_update"], .passage_link{
     font-size: 0.8em;
@@ -349,7 +378,8 @@
 }
 .passage_content{
     background: #fff;
-    color: #353535;
+    border: 2px solid #000;
+    color: #000;
     /*white-space: pre-line;*/
     overflow-x: auto;
     padding-bottom: 10px;
@@ -421,7 +451,7 @@
 
 }
 .chapter_link{
-    color: #fff;
+    color: #000;
     text-decoration: none;
 }
 .up_one_level_link{
@@ -478,6 +508,7 @@
 }
 .chapter_tools{
     font-size: 1.5em;
+    color: #000;
 }
 #control_panel_header{
     color: #353535;
@@ -655,12 +686,13 @@
 .category_id{
     display: none;
 }
-#chapter_search{
+[id^="chapter_search"]{
     /*border: 0px;*/
     /*border-bottom: 1px solid #353535;*/
     background: #fff;
     margin: auto;
     display: block;
+    font-size: 1.5em;
 }
 #brief{
     position: relative;
@@ -687,9 +719,10 @@
 select {
   width: 150px;
   padding: 5px 35px 5px 5px;
-  font-size: 16px;
-  border: 1px solid #fff;
-  height: 34px;
+  font-size: 1em;
+  font-weight: bolder;
+  border: 2px solid #000;
+  height: 50px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -777,6 +810,15 @@ pre, code{
     margin-top: 12px;
     padding: 10px;
 }
+#chap{
+    background: #89CFF0;
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    font-size: 3em;
+    margin-bottom: 10px;
+    border: 2px solid #353535;
+}
 .sub_passages{
     display: none;
 }
@@ -785,7 +827,7 @@ pre, code{
 }
 .chapter_flag{
     position:absolute;
-    color:crimson;
+    color:#000;
 }
 .crimson_color{
     color: crimson;
@@ -851,7 +893,7 @@ ion-icon{
 #options{
     width: 50%;
     margin: auto;
-    color: #fff;
+    color: #000;
     padding-top: 10px;
     text-align: center;
     font-size: 1.5em;

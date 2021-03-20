@@ -72,26 +72,26 @@
             <div id="login">
                 <br/>
                 <br/>
-                <ion-icon class="notifications_icon"title="Notifications"src="/images/ionicons/notifications-sharp.svg"></ion-icon>&nbsp;&nbsp;
-                <ion-icon class="messages_icon"title="Messages"src="/images/ionicons/mail-sharp.svg"></ion-icon>&emsp;
-                <a class="link white" href="/user/<%=user._id%>">Profile</a>&emsp;
-                <a class="link white" href="/logout">Logout</a>
+                <ion-icon class="notifications_icon"title="Notifications"src="/images/ionicons/notifications-outline.svg"></ion-icon>&nbsp;&nbsp;
+                <ion-icon class="messages_icon"title="Messages"src="/images/ionicons/mail-outline.svg"></ion-icon>&emsp;
+                <a class="link" href="/user/<%=user._id%>">Profile</a>&emsp;
+                <a class="link" href="/logout">Logout</a>
                 <input id="logged_in"value="true"type="hidden" name="">
             </div>
         <%} else{ %>
             <div id="login">
                 <br/>
                 <br/>
-                <!-- <a class="link white" target="_blank"href="/help">Help</a> | -->
-                <a class="link white">Download</a>&emsp;&emsp;
-                <a class="link white" rel="modal:open"href="#login_modal">Login</a> 
+                <!-- <a class="link" target="_blank"href="/help">Help</a> | -->
+                <a class="link">Download</a>&emsp;&emsp;
+                <a class="link" rel="modal:open"href="#login_modal">Login</a> 
                 <input id="logged_in"value="false"type="hidden" name="">
             </div>
         <%} %>
         <div id="side_panel">
           <div id="side_panel_inner">
             <div id="side_panel_close">
-              <ion-icon src="/images/ionicons/close-circle-sharp.svg"></ion-icon>
+              <ion-icon src="/images/ionicons/close-circle-outline.svg"></ion-icon>
             </div>
             <div id="side_panel_body">
               <div class="header">
@@ -102,6 +102,7 @@
                             <option value="edit">Edit</option>
                             <option value="leaderboard">Leaderboard</option>
                             <option value="help">Help</option>
+                            <option value="bookmarks">Bookmarks</option>
                         </select>
                     </div>
                     <!-- For Pagination -->
@@ -111,7 +112,7 @@
                       <!-- For Chapters -->
                       <div id="categories">
                           <div>
-                              <input class="control_input"id="chapter_search"placeholder="Search Sasame" type="" name="" autocomplete="off">
+                              <input class="control_input"id="chapter_search_right"placeholder="Search Sasame" type="" name="" autocomplete="off">
                           </div>
                           <div id="chapters">
                             <br>
@@ -164,10 +165,6 @@
                       </div>
                       <!-- Help -->
                       <div id="help_div">
-                          <select autocomplete="off">
-                            <option>Overview</option>
-                            <option>Key Reference</option>
-                          </select>
                           <p><b>Never do anything twice.</b></p>
                           <p>Sasame is a versatile, modular, and merit-based Modern Library for worldwide collaboration.</p> 
                           <p>Sasame is fresh, open-source and always improving. Help out by adding, categorizing, and starring useful information. Sasame keeps track of who did what, so you can use little pieces of everyone's work in your own. Share what you want to share, and gain reputation and rewards everytime someone duplicates your work or finds it useful.</p>
@@ -219,18 +216,19 @@
                         <!-- 
                         <div><a style="font-size:0.5em"class="basic_link"href="https://github.com/uriahsanders/Sasasame">Sasame</a></div> -->
                         <div id="options">
-                            <a class="basic_link"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-sharp.svg"></ion-icon></a>
-                            <ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-sharp.svg"></ion-icon>
-                             <ion-icon class="book_option"id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-sharp.svg"></ion-icon>
-                             <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-sharp.svg"></ion-icon>
-                             <!-- <ion-icon class="toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-sharp.svg"></ion-icon> -->
+                            <a class="basic_link"><ion-icon id="help"title="Help"src="/images/ionicons/help-circle-outline.svg"></ion-icon></a>
+                            <ion-icon class="passage_adder book_option"title="Add (a)"src="/images/ionicons/add-circle-outline.svg"></ion-icon>
+                             <ion-icon class="book_option"id="option_menu"title="Menu (m)"src="/images/ionicons/browsers-outline.svg"></ion-icon>
+                             <ion-icon class="toggle_tools book_option"title="Tools (t)"src="/images/ionicons/build-outline.svg"></ion-icon>
+                             <!-- <ion-icon class="toggle_resize book_option"title="Resize (r)"src="/images/ionicons/albums-outline.svg"></ion-icon> -->
                              <!-- PPE Options -->
-                             <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/square-sharp.svg"></ion-icon>
-                             <ion-icon id="ppe_search_icon"class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-sharp.svg"></ion-icon>
+                             <ion-icon data-select="off"id="ppe_select"class="ppe_option"title="Select (q)"src="/images/ionicons/scan-outline.svg"></ion-icon>
+                             <ion-icon id="ppe_mutate"class="ppe_option"title="Mutate (m)"src="/images/ionicons/color-palette-outline.svg"></ion-icon>
+                             <ion-icon id="ppe_erase"class="ppe_option"title="Erase (e)"src="/images/ionicons/square-outline.svg"></ion-icon>
+                             <ion-icon id="ppe_search_icon"class="ppe_option"title="Search (SPC)"src="/images/ionicons/search-outline.svg"></ion-icon>
 
-                             <ion-icon class="graphic_mode"title="Graphic Mode (g)"src="/images/ionicons/brush-sharp.svg"></ion-icon>
+                             <ion-icon class="graphic_mode"title="Graphic Mode (g)"src="/images/ionicons/brush-outline.svg"></ion-icon>
+                             <ion-icon class="model_mode"title="Model Mode"src="/images/ionicons/prism-outline.svg"></ion-icon>
                         </div>
             
                     </div>
@@ -256,55 +254,7 @@
                     <%if(parentChapter != null || locals.isProfile){%>
                     <div class="tool_header">
                         <%if(parentChapter != null){%>
-                          <span  class="chapter_tools"id="parent_chapter_title"><%=parentChapter.title%></span>
-                            <div class="chapter_tools">
-                                  <!-- <a class="basic_link" rel="modal:open"href="#stream_palette"><ion-icon title="Mutate"src="/images/ionicons/color-palette.svg"></ion-icon></a> -->
-                                 <a class="basic_link" rel="modal:open"href="#chapter_settings"><ion-icon title="Chapter Settings"src="/images/ionicons/settings.svg"></ion-icon></a>
-                                 <!-- <ion-icon title="Add to Queue"class="square_icon"src="/images/ionicons/list-circle-sharp.svg"></ion-icon> -->
-                                 <ion-icon id="chapter_star_<%=parentChapter._id%>"title="Star"class="star_icon"src="/images/ionicons/star-sharp.svg"></ion-icon>
-                                 <ion-icon id="chapter_flag_<%=parentChapter._id%>"title="Content Warning" class="flag_icon<%=(parentChapter.flagged == true ? ' flagged' : '')%>" src="/images/ionicons/flag.svg"></ion-icon>
-                                 <ion-icon class=""title="Share" src="/images/ionicons/share-social-sharp.svg"></ion-icon>
-                                 <ion-icon id="play_all"title="Play All" src="/images/ionicons/play-circle.svg"></ion-icon>
-                                 <ion-icon title="Load All"src="/images/ionicons/reload-circle-sharp.svg"></ion-icon>
-                                 <ion-icon title="Download as PDF"src="/images/ionicons/download-sharp.svg"></ion-icon>
-                                 <ion-icon title="Update Order" id="update_order_<%=parentChapter._id%>"src="/images/ionicons/documents-sharp.svg"></ion-icon>
-                            </div>
-                            <br>
-                            <div id="chapter_description">
-                              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </div>  
-                            <br>
-                            <!-- <span  class="chapter_tools"id="parent_chapter_title"><%=parentChapter.title%></span> -->
-                                <input id="parent_chapter_id"type="hidden" value="<%=parentChapter._id%>"/>
-                                <input id="page" type="hidden" value="2" autocomplete="off"/>
-                            <div id="chapter_settings" class="modal">
-                              <p class="modal_title">Chapter Options</p>
-                              <p><%=(parentChapter.stars || 0 )%> Stars </p>
-                              <form id="update_chapter_form">
-                                  Title:
-                                  <p><input class="control_input"value="<%=parentChapter.title%>"type="" name="title" autocomplete="off"></p>
-                                  Access (Currently <%=parentChapter.access%>):<br><br>
-                                  <div>
-                                      <select class="modal_select" name="access" autocomplete="off">
-                                      <option value="public">Public (Everyone can add and edit/delete everything)</option>
-                                      <option value="protected">Protected (Users can add and edit/delete their own work)</option>
-                                      <option value="private">Private (Only Author can add/edit/delete)</option>
-                                      <option value="exclusive">Exclusive (Only Author can see Chapter)</option>
-                                  </select>
-                                  <br><br>
-                                  <input id="is_tools_active"type="checkbox" name="tools"  <%=(parentChapter.tools == true ? 'checked' : '')%> autocomplete="off"> Tools
-                                  <br><br>
-                                  </div>
-                                  <input type="hidden" name="_id" value="<%=parentChapter._id%>" autocomplete="off">
-                                  <button class="control_button">Update</button>
-                              </form>
-                              <p class="chapter_delete_<%=parentChapter._id%>">Delete Chapter</p>
-                            </div>
+                          <%-scripts.displayWholeChapter(parentChapter)%>
                         <%}else{%>
                             <%if(locals.isProfile){%>
                             <div id="profile_modal" class="modal">
@@ -313,8 +263,8 @@
                                 <p><%=profile.starsGiven%> Stars Given</p>
                             </div>
                             <input type="hidden" value="true", id="is_profile"/>
-                            <div><ion-icon id="profile_page_image"src="/images/ionicons/person-circle-sharp.svg"></ion-icon></div>
-                            <a class="basic_link" href="#profile_modal" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-sharp.svg"></ion-icon></a>
+                            <div><ion-icon id="profile_page_image"src="/images/ionicons/person-circle-outline.svg"></ion-icon></div>
+                            <a class="basic_link" href="#profile_modal" rel="modal:open"><ion-icon title="Details"src="/images/ionicons/settings-outline.svg"></ion-icon></a>
                             <span id="parent_chapter_title"><%=profile.username%></span>
                             <div id="chapter_description">
                               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -335,7 +285,16 @@
                     <%}%>
                     <!-- Add upon scroll -->
                     <%if(book){%>
+                      <%if(parentChapter == null){%>
+                        <div>
+                              <input style="font-size: 1.5em;"class="control_input"id="chapter_search_left"placeholder="Search Sasame" type="" name="" autocomplete="off">
+                          </div>
+                        <%}%>
                         <div id="passages">
+                        <!-- <%if(chapters && parentChapter == null){%>
+                            <%chapters.forEach(function(f) { %>
+                              <%- scripts.printChap(f, user); %>
+                        <%});} %> -->
                         <% book.forEach(function(f) { %>
                             <%if(!f.deleted && !f.queue){%>
                               <%- scripts.printPassage(f, user); %>

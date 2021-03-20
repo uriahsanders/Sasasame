@@ -57,7 +57,8 @@ body {
 }
 .link{
     text-decoration: none;
-    color: #ccc;
+    color: #000;
+    cursor: pointer;
 }
 .link:hover, .basic_link:hover{
   opacity: 0.6;
@@ -243,6 +244,8 @@ body {
     right: 50px;
     top: -40px;
     font-size: 1.4em;
+    font-weight: bolder;
+    color: #000;
 }
 #login_desc{
     color: #353535;
