@@ -1,6 +1,20 @@
 body{
     /*background: #000;*/
 }
+#full_screen{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background: #87CEEB;
+    color: #000;
+    z-index: 200;
+}
+#full_screen_close{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 2px solid black;
+    font-size: 3em;
+}
  #container {
     max-width: 400px;
     height: 400px;
@@ -63,12 +77,15 @@ body{
 }
 #control_nav{
     padding-top: 15px;
-    background: #89CFF0;
+    background: #87CEEB;
     color: #000;
     height: 60px;
     border-top: 2px solid #353535;
     border-bottom: 2px solid #353535;
     font-weight: bolder;
+    position: fixed;
+    width: 100%;
+    z-index: 30000000;
 }
 .control_button{
     padding: 5px;
@@ -118,7 +135,7 @@ body{
     font-size: 1.2em;
 }
 .tool_header{
-    /*background: #89CFF0;*/
+    /*background: #87CEEB;*/
     color: #000;
     border-radius: 15px;
 }
@@ -224,7 +241,7 @@ body{
     padding: 10px;
     z-index: 2;
     width: 50%;
-    background: #89CFF0;
+    background: #87CEEB;
     color: #000;
     /*border: 1px solid #ccc;*/
     height: 100%;
@@ -246,7 +263,7 @@ body{
     /* white-space: pre-wrap; */
     line-height: 30px;
     font-size: 2.5em;
-    background: #89CFF0;
+    background: #87CEEB;
     border: 2px solid #000;
     margin-bottom: 10px;
 }
@@ -254,9 +271,9 @@ body{
     font-weight: bolder;
     border: 4px solid #000;
 }
-#side_panel_switcher > div:not(#categories){
+/* #side_panel_switcher > div:not(#categories){
     display: none;
-}
+} */
 #side_panel_switcher{
     padding-bottom: 20px;
 }
@@ -266,7 +283,7 @@ body{
     border-radius: 15px;
     /*line-height: 30px;*/
     font-size: 1.2em;
-    background: #89CFF0;
+    background: #87CEEB;
     color: #000;
     margin-bottom: 10px;
     padding: 15px;
@@ -811,7 +828,7 @@ pre, code{
     padding: 10px;
 }
 #chap{
-    background: #89CFF0;
+    background: #87CEEB;
     color: #000;
     text-align: center;
     padding: 10px;
